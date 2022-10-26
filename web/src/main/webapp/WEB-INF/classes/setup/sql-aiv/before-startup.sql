@@ -2,6 +2,7 @@ DELETE FROM cswservercapabilitiesinfo;
 DELETE FROM Settings WHERE name = 'system/csw/contactId';
 INSERT INTO Settings (name, value, datatype, position, internal) VALUES ('system/csw/capabilityRecordUuid', '-1', 0, 1220, 'y');
 
+
 UPDATE Settings SET value='3.10.1' WHERE name='system/platform/version';
 UPDATE Settings SET value='SNAPSHOT' WHERE name='system/platform/subVersion';
 
@@ -207,8 +208,10 @@ UPDATE Settings SET value='SNAPSHOT' WHERE name='system/platform/subVersion';
 
 
 -- AIV Specific
-DELETE settings_ui;
+DELETE FROM settings_ui;
 
 CREATE TABLE metadatastatus_383 AS SELECT * FROM metadatastatus;
 
 DROP TABLE metadatastatus;
+
+UPDATE settings SET value = '' WHERE encrypted = 'y';
