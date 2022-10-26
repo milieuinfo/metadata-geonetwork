@@ -13,6 +13,7 @@ git*.properties
 */*/target/
 */target/
 .*/
+!.run/
 GeoNetwork*
 /geonetwork*
 camel-harvesters/wfsfeature-harvester/logs
@@ -39,6 +40,7 @@ schemas/*/doc/*/*.rst
 schematrons/.build
 target/
 transifex/transifex-format/
+.env
 
 # web-app, clear using: mvn -f web/pom.xml clean:clean@reset
 
