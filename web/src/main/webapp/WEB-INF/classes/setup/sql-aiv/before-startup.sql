@@ -216,7 +216,7 @@ DROP TABLE metadatastatus;
 
 UPDATE settings SET value = '' WHERE encrypted = 'y';
 
-INSERT INTO Settings (name, value, datatype, position, internal) VALUES ('system/server/timeZone', 'Europe/Brussels', 0, 260, 'n');
+UPDATE Settings SET value = 'Europe/Brussels' WHERE name = 'system/server/timeZone';
 
 
 
