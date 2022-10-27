@@ -16,18 +16,19 @@
       </Policies>
       <DefaultRolloverStrategy max="3" fileIndex="min"/>
     </RollingFile>
-    <Routing name="Harvester">
-      <Routes pattern="$${ctx:logfile}">
-        <!-- value dynamically determines the name of the log file. -->
-        <Route>
-          <File name="harvester-${ctx:harvester}" fileName="${sys:log_dir:-log_dir}/${ctx:logfile}">
-            <PatternLayout>
-              <pattern>%date{ISO8601}{${ctx:timeZone}} %-5level [%logger] - %message%n</pattern>
-            </PatternLayout>
-          </File>
-        </Route>
-      </Routes>
-    </Routing>
+<!--    TODO Commented out as it causes problems on windows? -->
+<!--    <Routing name="Harvester">-->
+<!--      <Routes pattern="$${ctx:logfile}">-->
+<!--        &lt;!&ndash; value dynamically determines the name of the log file. &ndash;&gt;-->
+<!--        <Route>-->
+<!--          <File name="harvester-${ctx:harvester}" fileName="${sys:log_dir:-log_dir}/${ctx:logfile}">-->
+<!--            <PatternLayout>-->
+<!--              <pattern>%date{ISO8601}{${ctx:timeZone}} %-5level [%logger] - %message%n</pattern>-->
+<!--            </PatternLayout>-->
+<!--          </File>-->
+<!--        </Route>-->
+<!--      </Routes>-->
+<!--    </Routing>-->
   </Appenders>
   <Loggers>
     <!-- Geonetwork module (and submodule) logging -->

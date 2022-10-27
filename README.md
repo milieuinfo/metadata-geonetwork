@@ -24,6 +24,16 @@ The `docs` folder includes [geonetwork/doc](https://github.com/geonetwork/doc) a
 Developer documentation located in README.md files in the code-base:
 
 * General documentation for the project as a whole is in this README.md
-* [Software Development Documentation](/software_development/) provides instructions for setting up a development environment, building Geonetwork, compiling user documentation, and making a releases
+* [Software Development Documentation](/software_development/README.md) provides instructions for setting up a development environment, building Geonetwork, compiling user documentation, and making a releases
 * Module specific documentation can be found in each module (assuming there is module specific documentation required)
 
+
+# Metadata Vlaanderen
+
+It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or comments. This section could serve as an appendix to the curernt Geonetwork documentation.
+
+## Setup
+- Run `git submodule update --init --recursive` before building.
+- Run `mvn clean package -DskipTests -Pwar` for a clean package that can be run on Jetty.
+- Run `docker-compose build geonetwork` to build the docker image for geonetwork.
+- Run `docker-compose up` to bring a complete dev stack up, based on the above image.
