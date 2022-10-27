@@ -37,3 +37,5 @@ It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or c
 - Run `mvn clean package -DskipTests -Pwar` for a clean package that can be run on Jetty.
 - Run `docker-compose build geonetwork` to build the docker image for geonetwork.
 - Run `docker-compose up` to bring a complete dev stack up, based on the above image.
+  - use `docker-compose --profile dev up` to exclude geonetwork, but run all other services
+  - use `docker-compose --profile full up` to run the full stack, including the geonetwork image
