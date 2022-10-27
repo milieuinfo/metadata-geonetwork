@@ -18,6 +18,7 @@ Start the application. While starting, hibernate update the database model (eg. 
 
 After startup, run the [after startup script](after-startup.sql) to update sequences to current values and migrate status.
 
+Copy data directory to the new application. Then run [after-datadirectory-move.sql](after-datadirectory-move.sql) to update attachments URLs.
 
 ## Admin console
 
