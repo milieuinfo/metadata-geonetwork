@@ -41,7 +41,7 @@ TODO:
 
 ## Questions
 
-* Some metadata status refer to non existing records?
+* Some metadata status refer to non existing records (only in metadata center db)?
 
 ```sql
 SELECT * FROM metadatastatus WHERE metadataid NOT IN (SELECT id FROM metadata);

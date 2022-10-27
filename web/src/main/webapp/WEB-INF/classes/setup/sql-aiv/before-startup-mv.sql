@@ -7,3 +7,6 @@ ALTER TABLE metadata DROP COLUMN "[data]";
 
 UPDATE metadata SET source = "[source]" WHERE "[source]" IS NOT NULL;
 ALTER TABLE metadata DROP COLUMN "[source]";
+
+UPDATE statusvalues SET type = "[type]" WHERE "[type]" IS NOT NULL;
+ALTER TABLE statusvalues DROP COLUMN "[type]";
