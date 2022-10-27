@@ -1,0 +1,4 @@
+# Ignore everything except the files needed for an image build. This speeds up the docker build context process.
+*
+!target/geonetwork.war
+!docker-entrypoint.sh

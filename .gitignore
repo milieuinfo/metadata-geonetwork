@@ -83,3 +83,6 @@ web/src/main/webapp/WEB-INF/server.prop
 web/src/main/webapp/data/
 web/src/main/webapp/doc/en
 web/src/main/webapp/doc/fr
+
+# Metadata Vlaanderen additions
+docker-compose.dev.yml
