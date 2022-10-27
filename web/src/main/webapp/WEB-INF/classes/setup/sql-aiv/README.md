@@ -10,11 +10,11 @@ SELECT value FROM settings WHERE name LIKE '%platform/version%';
 
 ## The SQL migration 
 
-For Metadata Vlaanderen run [before-startup-mv.sql](before-startup-mv.sql) first.
+For Metadata Vlaanderen, run [before-startup-mv.sql](before-startup-mv.sql) first.
 
 Run [migration script](before-startup.sql) to move from 3.8.3 to 4.2.2.
 
-Start the application. While start hibernate update the database model (eg. creating new sequences per table).
+Start the application. While starting, hibernate update the database model (eg. creating new sequences per table).
 
 After startup, run the [after startup script](after-startup.sql) to update sequences to current values and migrate status.
 
@@ -28,15 +28,22 @@ INSERT INTO Users (id, username, password, name, surname, profile, kind, organis
 ```
 
 Update the following depending on host environment in Admin > Settings:
-* update host and port
+* update host and port (important if you want to use the OpenAPI test page http://localhost:8080/geonetwork/doc/api - restart is needed)
 * reset password (proxy/mail/...)
+
+
+
 
 ## API migration
 
+* Remove unused language - keep only dut, fre, ger, eng
+  * After the script check remaining languages in http://localhost:8080/geonetwork/srv/eng/admin.console#/settings/languages
+* Remove GeoNetwork default categories
 
-TODO: 
-* DateTimeMigrationTask
-* Attachements
+  * Check if any records attached to categories (and if any unassigned them)
+  http://localhost:8080/geonetwork/srv/eng/catalog.edit#/board?sortBy=dateStamp&sortOrder=desc&isTemplate=%5B%22y%22,%22n%22%5D&resultType=manager&from=1&to=30&languageStrategy=searchInAllLanguages&any=q(_exists_:cat)
+
+  * After the script, check that there is no category anymore http://localhost:8080/geonetwork/srv/eng/admin.console#/classification/categories
 
 
 ## Questions

@@ -215,3 +215,36 @@ CREATE TABLE metadatastatus_383 AS SELECT * FROM metadatastatus;
 DROP TABLE metadatastatus;
 
 UPDATE settings SET value = '' WHERE encrypted = 'y';
+
+INSERT INTO Settings (name, value, datatype, position, internal) VALUES ('system/server/timeZone', 'Europe/Brussels', 0, 260, 'n');
+
+
+
+UPDATE metadata SET data = replace(data,
+                                   '&amp;fname=',
+                                   '/attachments/')
+WHERE data LIKE '%&amp;fname=%' AND isharvested = 'n';
+
+UPDATE metadata SET data = replace(data,
+                                   '>https://dev.metadata.vlaanderen.be/srv/dut/resources.get?uuid=',
+                                   '>https://dev.metadata.vlaanderen.be/srv/api/records/')
+WHERE data LIKE '%>https://dev.metadata.vlaanderen.be/srv/dut/resources.get?uuid=%' AND isharvested = 'n';
+
+UPDATE metadata SET data = replace(data,
+                                   '>https://dev.metadata.vlaanderen.be/metadatacenter/srv/dut/resources.get?uuid=',
+                                   '>https://dev.metadata.vlaanderen.be/metadatacenter/srv/api/records/')
+WHERE data LIKE '%>https://dev.metadata.vlaanderen.be/metadatacenter/srv/dut/resources.get?uuid=%' AND isharvested = 'n';
+
+
+UPDATE metadata SET data = replace(data,
+                                   '>https://metadata.vlaanderen.be/srv/dut/resources.get?uuid=',
+                                   '>https://metadata.vlaanderen.be/srv/api/records/')
+WHERE data LIKE '%>https://metadata.vlaanderen.be/srv/dut/resources.get?uuid=%' AND isharvested = 'n';
+
+UPDATE metadata SET data = replace(data,
+                                   '>https://metadata.vlaanderen.be/metadatacenter/srv/dut/resources.get?uuid=',
+                                   '>https://metadata.vlaanderen.be/metadatacenter/srv/api/records/')
+WHERE data LIKE '%>https://metadata.vlaanderen.be/metadatacenter/srv/dut/resources.get?uuid=%' AND isharvested = 'n';
+
+
+
