@@ -1,0 +1,24 @@
+# make a copy of this file for your own purposes,
+# run it with `docker-compose -f docker-compose.yml -f docker-compose.dev.yml`
+
+# bind geonetwork to your local disk
+volumes:
+  geonetwork:
+    driver_opts:
+      type: none
+      device: /tmp/metadata/geonetwork # requires full path
+      o: bind
+
+# example to override the service ports to your liking
+services:
+  database:
+    ports:
+      - "2345:5432"
+
+  geonetwork:
+    ports:
+      - "8080:8080"
+
+  elasticsearch:
+    ports:
+      - "9200:9200"

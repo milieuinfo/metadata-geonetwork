@@ -36,6 +36,9 @@ It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or c
 - Run `git submodule update --init --recursive` before building.
 - Run `mvn clean package -DskipTests -Pwar` for a clean package that can be run on Jetty.
 - Run `docker-compose build geonetwork` to build the docker image for geonetwork.
-- Run `docker-compose up` to bring a complete dev stack up, based on the above image.
-  - use `docker-compose --profile dev up` to exclude geonetwork, but run all other services
+- Run `docker-compose` to bring a complete dev stack up, based on the above image.
+  - use `docker-compose up` to exclude geonetwork, but run all other services
   - use `docker-compose --profile full up` to run the full stack, including the geonetwork image
+- Override settings (see, e.g., `docker-compose.dev.example.yaml`)
+  - make a copy and remove `.example` (this file is ignored in `.gitignore`) 
+  - use `docker compose -f docker-compose.yml -f docker-compose.dev.yml` to override settings to your liking

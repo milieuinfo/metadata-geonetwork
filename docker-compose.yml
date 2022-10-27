@@ -11,10 +11,7 @@ volumes:
 services:
   database:
     image: postgres:15.0
-    profiles: [ "full", "dev" ]
     restart: always
-    ports:
-      - "2345:5432"
     environment:
       POSTGRES_PASSWORD: geonetwork
       POSTGRES_USER: geonetwork
@@ -37,8 +34,6 @@ services:
       context: web/
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "8080:8080"
     environment:
       DATA_DIR: /catalogue-data
 
@@ -73,7 +68,6 @@ services:
 
   ogc-api-records-service:
     image: geonetwork/gn-cloud-ogc-api-records-service:0.2.0
-    profiles: [ "full", "dev" ]
     environment:
       SPRING_PROFILES_ACTIVE: standalone
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
@@ -91,9 +85,6 @@ services:
   elasticsearch:
     # TODO: upgrade elasticsearch to latest v7
     image: elasticsearch:7.11.1
-    profiles: [ "full", "dev" ]
-    ports:
-      - "9200:9200"
     ulimits:
       memlock:
         soft: -1
@@ -110,7 +101,6 @@ services:
   kibana:
     # TODO: upgrade kibana
     image: kibana:7.11.1
-    profiles: [ "full", "dev" ]
     environment:
       SERVER_NAME: 'kibana'
       ELASTICSEARCH_URL: http://elasticsearch:9200/
