@@ -13,6 +13,7 @@ git*.properties
 */*/target/
 */target/
 .*/
+!.run/
 GeoNetwork*
 /geonetwork*
 camel-harvesters/wfsfeature-harvester/logs
@@ -39,6 +40,7 @@ schemas/*/doc/*/*.rst
 schematrons/.build
 target/
 transifex/transifex-format/
+.env
 
 # web-app, clear using: mvn -f web/pom.xml clean:clean@reset
 
@@ -86,3 +88,4 @@ web/src/main/webapp/doc/fr
 
 # Metadata Vlaanderen additions
 docker-compose.dev.yml
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/dcat2
