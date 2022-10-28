@@ -1,2 +1,8 @@
 {
+  "facet-domain": "Domain",
+  "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Access rights",
+  "facet-th_GDI-VlaanderenTrefwoorden": "GDI Vlaanderen keywords",
+  "facet-th_GEMET-INSPIREthemesversion1-0.link": "INSPIRE themes",
+  "facet-resolutionDistance": "Resolution",
+  "facet-standardNameObject.default.keyword": "Metadata profile"
 }

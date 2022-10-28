@@ -82,19 +82,7 @@
               eng: "en",
               dut: "nl",
               fre: "fr",
-              ger: "de",
-              kor: "ko",
-              spa: "es",
-              cze: "cs",
-              cat: "ca",
-              fin: "fi",
-              ice: "is",
-              ita: "it",
-              por: "pt",
-              rus: "ru",
-              chi: "zh",
-              slo: "sk",
-              swe: "sv"
+              ger: "de"
             },
             isLogoInHeader: false,
             logoInHeaderPosition: "left",
@@ -116,9 +104,9 @@
             showMosaic: true,
             showMaps: true,
             facetConfig: {
-              "th_httpinspireeceuropaeutheme-theme_tree.key": {
+              "th_GEMET-INSPIREthemesversion1-0.link": {
                 terms: {
-                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
+                  field: "th_GEMET-INSPIREthemesversion1-0.link",
                   size: 34
                   // "order" : { "_key" : "asc" }
                 },
@@ -161,6 +149,19 @@
                     prefix: "fa fa-2x pull-left gn-icon-"
                   }
                 }
+              },
+              serviceType: {
+                terms: {
+                  field: "serviceType"
+                }
+              },
+              // For now we can't have radio for the 2 last
+              // facets using config. Adding a last one with
+              // no match to have all choices as tab.
+              unused: {
+                terms: {
+                  field: "unused"
+                }
               }
             },
             fluidLayout: true
@@ -196,7 +197,7 @@
               fullText: true,
               titleOnly: true,
               exactMatch: true,
-              language: true
+              language: false
             },
             // Language strategy can be:
             // * searchInUILanguage: search in UI languages
@@ -207,7 +208,7 @@
             // based on user search. If language detection fails, search in all languages.
             // * searchInThatLanguage: Force a language using searchInThatLanguage:fre
             // 'languageStrategy': 'searchInThatLanguage:fre',
-            languageStrategy: "searchInAllLanguages",
+            languageStrategy: "searchInThatLanguage:dut",
             // Limit language detection to some languages only.
             // If empty, the list of languages in catalogue records is used
             // and if none found, mods.header.languages is used.
@@ -334,13 +335,6 @@
                 terms: {
                   field: "resourceType"
                 },
-                aggs: {
-                  format: {
-                    terms: {
-                      field: "format"
-                    }
-                  }
-                },
                 meta: {
                   decorator: {
                     type: "icon",
@@ -361,6 +355,15 @@
                 terms: {
                   field: "cl_spatialRepresentationType.key",
                   size: 10
+                }
+              },
+              format: {
+                terms: {
+                  field: "format",
+                  size: 10
+                },
+                meta: {
+                  collapsed: true
                 }
               },
               availableInServices: {
@@ -391,16 +394,37 @@
                   }
                 }
               },
-              // GEMET configuration for non multilingual catalog
-              "th_gemet_tree.default": {
+              serviceType: {
                 terms: {
-                  field: "th_gemet_tree.default",
-                  size: 100,
-                  order: { _key: "asc" },
-                  include: "[^^]+^?[^^]+"
-                  // Limit to 2 levels
+                  field: "serviceType",
+                  size: 10
                 }
               },
+              "th_GDI-VlaanderenTrefwoorden.default": {
+                terms: {
+                  field: "th_GDI-VlaanderenTrefwoorden.default",
+                  order: { _key: "asc" }
+                }
+              },
+              "cl_status.key": {
+                terms: {
+                  field: "cl_status.key",
+                  size: 15
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // GEMET configuration for non multilingual catalog
+              // "th_gemet_tree.default": {
+              //   terms: {
+              //     field: "th_gemet_tree.default",
+              //     size: 100,
+              //     order: { _key: "asc" },
+              //     include: "[^^]+^?[^^]+"
+              //     // Limit to 2 levels
+              //   }
+              // },
               // GEMET configuration for multilingual catalog
               // The key is translated on client side by loading
               // required concepts
@@ -429,15 +453,15 @@
               //   }
               // },
 
-              "th_httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset_tree.default":
-                {
-                  terms: {
-                    field:
-                      "th_httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset_tree.default",
-                    size: 100,
-                    order: { _key: "asc" }
-                  }
-                },
+              // "th_httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset_tree.default":
+              //   {
+              //     terms: {
+              //       field:
+              //         "th_httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset_tree.default",
+              //       size: 100,
+              //       order: { _key: "asc" }
+              //     }
+              //   },
               "th_httpinspireeceuropaeutheme-theme_tree.key": {
                 terms: {
                   field: "th_httpinspireeceuropaeutheme-theme_tree.key",
@@ -456,20 +480,25 @@
                 terms: {
                   field: "tag.default",
                   include: ".*",
+                  // Exclude GDI keywords from the global list of keywords
+                  // because we have a specific agg for it
+                  exclude:
+                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data",
                   size: 10
                 },
                 meta: {
                   caseInsensitiveInclude: true
                 }
               },
-              "th_regions_tree.default": {
-                terms: {
-                  field: "th_regions_tree.default",
-                  size: 100,
-                  order: { _key: "asc" }
-                  //"include": "EEA.*"
-                }
-              },
+
+              // "th_regions_tree.default": {
+              //   terms: {
+              //     field: "th_regions_tree.default",
+              //     size: 100,
+              //     order: { _key: "asc" }
+              //     //"include": "EEA.*"
+              //   }
+              // },
               // "resolutionScaleDenominator": {
               //   "terms": {
               //     "field": "resolutionScaleDenominator",
@@ -485,6 +514,15 @@
                   interval: 10000,
                   keyed: true,
                   min_doc_count: 1
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              resolutionDistance: {
+                terms: {
+                  field: "resolutionDistance",
+                  include: ".* (m|km)"
                 },
                 meta: {
                   collapsed: true
@@ -524,6 +562,23 @@
               //     }
               //   }
               // },
+              domain: {
+                filters: {
+                  filters: {
+                    "Open data": {
+                      query_string: {
+                        query: '+th_GDI-VlaanderenTrefwoorden.default:"Vlaamse Open data"'
+                      }
+                    },
+                    Geografisch: {
+                      query_string: {
+                        query:
+                          '+th_GDI-VlaanderenTrefwoorden.default:"Geografische gegevens"'
+                      }
+                    }
+                  }
+                }
+              },
               OrgForResource: {
                 terms: {
                   field: "OrgForResource",
@@ -590,6 +645,25 @@
                 //     'userHasRole': 'isReviewerOrMore',
                 //     'collapsed': true
                 //   }
+              },
+              documentStandard: {
+                terms: {
+                  field: "documentStandard",
+                  size: 10
+                },
+                meta: {
+                  collapsed: true,
+                  userHasRole: "isReviewerOrMore"
+                }
+              },
+              "standardNameObject.default.keyword": {
+                terms: {
+                  field: "standardNameObject.default.keyword"
+                },
+                meta: {
+                  collapsed: true,
+                  userHasRole: "isReviewerOrMore"
+                }
               }
             },
             filters: null,
@@ -914,6 +988,70 @@
               resourceType: {
                 terms: {
                   field: "resourceType"
+                }
+              },
+              availableInServices: {
+                filters: {
+                  //"other_bucket_key": "others",
+                  // But does not support to click on it
+                  filters: {
+                    availableInViewService: {
+                      query_string: {
+                        query: "+linkProtocol:/OGC:WMS.*/"
+                      }
+                    },
+                    availableInDownloadService: {
+                      query_string: {
+                        query: "+linkProtocol:/OGC:WFS.*/"
+                      }
+                    }
+                  }
+                },
+                meta: {
+                  decorator: {
+                    type: "icon",
+                    prefix: "fa fa-fw ",
+                    map: {
+                      availableInViewService: "fa-globe",
+                      availableInDownloadService: "fa-download"
+                    }
+                  }
+                }
+              },
+              serviceType: {
+                terms: {
+                  field: "serviceType",
+                  size: 10
+                }
+              },
+              "th_GDI-VlaanderenTrefwoorden.default": {
+                terms: {
+                  field: "th_GDI-VlaanderenTrefwoorden.default",
+                  order: { _key: "asc" }
+                }
+              },
+              domain: {
+                filters: {
+                  filters: {
+                    "Open data": {
+                      query_string: {
+                        query: '+th_GDI-VlaanderenTrefwoorden.default:"Vlaamse Open data"'
+                      }
+                    },
+                    Geografisch: {
+                      query_string: {
+                        query:
+                          '+th_GDI-VlaanderenTrefwoorden.default:"Geografische gegevens"'
+                      }
+                    }
+                  }
+                }
+              },
+              "MD_LegalConstraintsUseLimitationObject.default.keyword": {
+                // TODO MDC: Needs custom index field probably
+                // See https://agiv.visualstudio.com/Metadata/_git/Metadata?path=/schemas/iso19139/src/main/plugin/iso19139/index-fields/default.xsl&version=GBclients/aiv/dcat2&line=566&lineEnd=572&lineStartColumn=19&lineEndColumn=25&lineStyle=plain&_a=contents
+                terms: {
+                  field: "MD_LegalConstraintsUseLimitationObject.default.keyword"
                 }
               },
               mdStatus: {
