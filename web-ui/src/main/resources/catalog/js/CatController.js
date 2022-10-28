@@ -357,7 +357,7 @@
                   size: 10
                 }
               },
-              "format": {
+              format: {
                 terms: {
                   field: "format",
                   size: 10
@@ -394,7 +394,7 @@
                   }
                 }
               },
-              "serviceType": {
+              serviceType: {
                 terms: {
                   field: "serviceType",
                   size: 10
@@ -403,7 +403,7 @@
               "th_GDI-VlaanderenTrefwoorden.default": {
                 terms: {
                   field: "th_GDI-VlaanderenTrefwoorden.default",
-                  order: {"_key": "asc"}
+                  order: { _key: "asc" }
                 }
               },
               "cl_status.key": {
@@ -482,7 +482,8 @@
                   include: ".*",
                   // Exclude GDI keywords from the global list of keywords
                   // because we have a specific agg for it
-                  exclude: "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data",
+                  exclude:
+                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data",
                   size: 10
                 },
                 meta: {
@@ -566,12 +567,13 @@
                   filters: {
                     "Open data": {
                       query_string: {
-                        query: "+th_GDI-VlaanderenTrefwoorden.default:\"Vlaamse Open data\""
+                        query: '+th_GDI-VlaanderenTrefwoorden.default:"Vlaamse Open data"'
                       }
                     },
                     Geografisch: {
                       query_string: {
-                        query: "+th_GDI-VlaanderenTrefwoorden.default:\"Geografische gegevens\""
+                        query:
+                          '+th_GDI-VlaanderenTrefwoorden.default:"Geografische gegevens"'
                       }
                     }
                   }
@@ -1016,7 +1018,7 @@
                   }
                 }
               },
-              "serviceType": {
+              serviceType: {
                 terms: {
                   field: "serviceType",
                   size: 10
@@ -1025,7 +1027,7 @@
               "th_GDI-VlaanderenTrefwoorden.default": {
                 terms: {
                   field: "th_GDI-VlaanderenTrefwoorden.default",
-                  order: {"_key": "asc"}
+                  order: { _key: "asc" }
                 }
               },
               domain: {
@@ -1033,12 +1035,13 @@
                   filters: {
                     "Open data": {
                       query_string: {
-                        query: "+th_GDI-VlaanderenTrefwoorden.default:\"Vlaamse Open data\""
+                        query: '+th_GDI-VlaanderenTrefwoorden.default:"Vlaamse Open data"'
                       }
                     },
                     Geografisch: {
                       query_string: {
-                        query: "+th_GDI-VlaanderenTrefwoorden.default:\"Geografische gegevens\""
+                        query:
+                          '+th_GDI-VlaanderenTrefwoorden.default:"Geografische gegevens"'
                       }
                     }
                   }
