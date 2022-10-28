@@ -38,3 +38,6 @@ jobs:
       containerRegistry: 'joadevcontainerregistry'
       repository: 'metadata/geonetwork'
       command: 'push'
+      tags: |
+        latest
+        develop
