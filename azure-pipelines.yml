@@ -27,27 +27,13 @@ jobs:
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       goals: 'package'
       options: ' -DskipTests -Pwar'
-  - task: DockerCompose@0
-    displayName: Build geonetwork image
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'dvl-dev-infocat-ARM'
-      azureContainerRegistry: '{"loginServer":"joadevcontainerregistry.azurecr.io", "id" : "/subscriptions/8765c145-857e-40e9-a184-c69d80e2ba64/resourceGroups/joa-dev-playground/providers/Microsoft.ContainerRegistry/registries/joadevcontainerregistry"}'
-      dockerComposeFile: 'docker-compose.yml'
-      action: 'Run a Docker Compose command'
-      dockerComposeCommand: 'build'
-      arguments: 'geonetwork'
-      abortOnContainerExit: true
-      additionalImageTags: |
-        latest
-        develop
-        $(GIT_COMMIT_SHA)
   - task: Docker@2
-    displayName: Push geonetwork image
+    displayName: Build web image and push to registry
     inputs:
       containerRegistry: 'joadevcontainerregistry'
       repository: 'metadata/geonetwork'
-      command: 'push'
+      command: 'buildAndPush'
+      Dockerfile: 'web/Dockerfile'
       tags: |
         latest
         develop
