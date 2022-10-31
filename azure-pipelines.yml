@@ -10,17 +10,6 @@ jobs:
   - checkout: self
     displayName: Set up repository
     submodules: recursive
-  - task: Kubernetes@1
-    displayName: Testing the rollout
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscriptionEndpoint: 'dvl-dev-infocat-ARM'
-      azureResourceGroup: 'joa-dev-playground'
-      kubernetesCluster: 'joa-dev-test-cluster'
-      namespace: 'metadata'
-      command: 'rollout'
-      arguments: 'restart deployment/geonetwork'
-      containerRegistryType: 'Azure Container Registry'
   - task: Bash@3
     displayName: Set git sha as environment variable
     inputs:
@@ -52,3 +41,18 @@ jobs:
       tags: |
         latest
         develop
+
+- job: rollout
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - task: Kubernetes@1
+    displayName: Rolling update of Geonetwork
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscriptionEndpoint: 'dvl-dev-infocat-ARM'
+      azureResourceGroup: 'joa-dev-playground'
+      kubernetesCluster: 'joa-dev-test-cluster'
+      namespace: 'metadata'
+      command: 'rollout'
+      arguments: 'restart deployment/geonetwork'
