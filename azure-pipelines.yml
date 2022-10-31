@@ -3,16 +3,13 @@ trigger:
 
 jobs:
 - job: publish
-  timeoutInMinutes: 60
+  timeoutInMinutes: "60"
   pool:
     vmImage: ubuntu-latest
   steps:
-  - task: Bash@3
-    displayName: Initialise submodules
-    inputs:
-      targetType: 'inline'
-      script: |
-        git submodule update --init --recursive
+  - checkout: self
+    displayName: Set up repository
+    submodules: recursive
   - task: Bash@3
     displayName: Set git sha as environment variable
     inputs:
@@ -40,7 +37,17 @@ jobs:
       repository: 'metadata/geonetwork'
       command: 'buildAndPush'
       Dockerfile: 'web/Dockerfile'
+      # $(GIT_COMMIT_SHA) -> add this tag when the container registry is configured with retention policies
       tags: |
         latest
         develop
-        $(GIT_COMMIT_SHA)
+  - task: Kubernetes@1
+    displayName: Rolling update of Geonetwork
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscriptionEndpoint: 'dvl-dev-infocat-ARM'
+      azureResourceGroup: 'joa-dev-playground'
+      kubernetesCluster: 'joa-dev-test-cluster'
+      namespace: 'metadata'
+      command: 'rollout'
+      arguments: 'restart deployment/geonetwork'
