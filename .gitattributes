@@ -34,3 +34,7 @@
 *.woff binary
 
 *.xsd text eol=lf
+
+# MD additions
+# force the docker-entrypoint.sh to be LF, otherwise it won't execute properly
+web/docker-entrypoint.sh eol=lf
