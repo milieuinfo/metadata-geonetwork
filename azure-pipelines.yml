@@ -37,7 +37,7 @@ jobs:
       repository: 'metadata/geonetwork'
       command: 'buildAndPush'
       Dockerfile: 'web/Dockerfile'
+      # $(GIT_COMMIT_SHA) -> add this tag when the container registry is configured with retention policies
       tags: |
         latest
         develop
-        $(GIT_COMMIT_SHA)
