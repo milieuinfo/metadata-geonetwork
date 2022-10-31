@@ -32,6 +32,9 @@ RUN cd /var/lib/jetty/webapps/geonetwork/ && \
 RUN ls /var/lib/jetty/webapps/geonetwork/
 
 COPY ./docker-entrypoint.sh /geonetwork-entrypoint.sh
+
+RUN ls -lsa /geonetwork-entrypoint.sh
+
 ENTRYPOINT ["/geonetwork-entrypoint.sh"]
 
 CMD ["java","-jar","/usr/local/jetty/start.jar"]
