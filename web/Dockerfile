@@ -23,16 +23,14 @@ ENV GN_FILE geonetwork.war
 
 COPY ./target/geonetwork.war /var/lib/jetty/webapps/geonetwork/geonetwork.war
 
-RUN ls /var/lib/jetty/webapps/geonetwork/
-
 RUN cd /var/lib/jetty/webapps/geonetwork/ && \
      unzip -q geonetwork.war && \
      rm geonetwork.war
 
-RUN ls /var/lib/jetty/webapps/geonetwork/
-
 COPY ./docker-entrypoint.sh /geonetwork-entrypoint.sh
 
+# necessary on DevOps, +x flag is lost there
+RUN chmod 755 /geonetwork-entrypoint.sh
 RUN ls -lsa /geonetwork-entrypoint.sh
 
 ENTRYPOINT ["/geonetwork-entrypoint.sh"]
