@@ -7,12 +7,15 @@ jobs:
   pool:
     vmImage: ubuntu-latest
   steps:
-  - task: Bash@3
-    displayName: Initialise submodules
-    inputs:
-      targetType: 'inline'
-      script: |
-        git submodule update --init --recursive
+  - checkout: self
+    displayName: Set up repository
+    submodules: recursive
+  # - task: Bash@3
+  #   displayName: Initialise submodules
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       git submodule update --init --recursive
   - task: Bash@3
     displayName: Set git sha as environment variable
     inputs:
