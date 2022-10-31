@@ -1,8 +1,3 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - develop
 
@@ -13,6 +8,7 @@ jobs:
     vmImage: ubuntu-latest
   steps:
   - task: Maven@3
+    displayName: Build project artifacts
     inputs:
       mavenPomFile: 'pom.xml'
       mavenOptions: '-Xmx3072m'
@@ -24,6 +20,7 @@ jobs:
       goals: 'package'
       options: ' -DskipTests -Pwar'
   - task: DockerCompose@0
+    displayName: Build geonetwork image
     inputs:
       containerregistrytype: 'Azure Container Registry'
       azureSubscription: 'dvl-dev-infocat-ARM'
@@ -34,9 +31,11 @@ jobs:
       arguments: 'geonetwork'
       abortOnContainerExit: true
   - task: Docker@2
+    displayName: Push geonetwork image
     inputs:
       containerRegistry: 'joadevcontainerregistry'
       repository: 'metadata/geonetwork'
       command: 'push'
       tags: |
         latest
+        develop
