@@ -256,5 +256,10 @@ WHERE data LIKE '%external.theme.TopicCategory%' AND isHarvested = 'n';
 
 UPDATE metadata
   SET data = replace(data, '>GEMET - Concepten, versie 2.4<', '>GEMET<')
-  WHERE data LIKE '%>GEMET - Concepten, versie 2.4<%';
+  WHERE data LIKE '%>GEMET - Concepten, versie 2.4<%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+  SET data = replace(data, '>INSPIRE - Spatial scope<', '>Spatial scope<')
+  WHERE data LIKE '%>INSPIRE - Spatial scope<%' AND isHarvested = 'n';
 
