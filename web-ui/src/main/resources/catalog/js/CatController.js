@@ -1091,6 +1091,32 @@
                   }
                 }
               },
+              accessRights:{
+                filters: {
+                  filters: {
+                    "Publiek": {
+                      query_string: {
+                        query: '+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service'
+                      }
+                    },
+                    "Toegang zonder voorwaarden": {
+                      query_string: {
+                        query: '+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service'
+                      }
+                    },
+                    "Niet publiek": {
+                      query_string: {
+                        query: '-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service'
+                      }
+                    },
+                    "Toegang met voorwaarden": {
+                      query_string: {
+                        query: '-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service'
+                      }
+                    }
+                  }
+                }
+              },
               "MD_LegalConstraintsUseLimitationObject.default.keyword": {
                 // TODO MDC: Needs custom index field probably
                 // See https://agiv.visualstudio.com/Metadata/_git/Metadata?path=/schemas/iso19139/src/main/plugin/iso19139/index-fields/default.xsl&version=GBclients/aiv/dcat2&line=566&lineEnd=572&lineStartColumn=19&lineEndColumn=25&lineStyle=plain&_a=contents
