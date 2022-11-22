@@ -366,6 +366,15 @@
                   collapsed: true
                 }
               },
+              linkProtocol: {
+                terms: {
+                  field: "linkProtocol",
+                  size: 10
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
               availableInServices: {
                 filters: {
                   //"other_bucket_key": "others",
@@ -406,6 +415,19 @@
                   order: { _key: "asc" }
                 }
               },
+              sourceCatalogue: {
+                terms: {
+                  field: "sourceCatalogue",
+                  size: 100,
+                  include: ".*"
+                },
+                meta: {
+                  orderByTranslation: true,
+                  filterByTranslation: true,
+                  displayFilter: true,
+                  collapsed: true
+                }
+              },
               "cl_status.key": {
                 terms: {
                   field: "cl_status.key",
@@ -413,6 +435,18 @@
                 },
                 meta: {
                   collapsed: true
+                }
+              },
+              "cl_topic.key": {
+                terms: {
+                  field: "cl_topic.key",
+                  size: 20
+                },
+                meta: {
+                  decorator: {
+                    type: "icon",
+                    prefix: "fa fa-fw gn-icon-"
+                  }
                 }
               },
               // GEMET configuration for non multilingual catalog
@@ -490,6 +524,26 @@
                   caseInsensitiveInclude: true
                 }
               },
+              OrgForResource: {
+                terms: {
+                  field: "OrgForResource",
+                  include: ".*",
+                  size: 15
+                },
+                meta: {
+                  // Always display filter even no more elements
+                  // This can be used when all facet values are loaded
+                  // with a large size and you want to provide filtering.
+                  // 'displayFilter': true,
+                  caseInsensitiveInclude: true
+                  // decorator: {
+                  //   type: 'img',
+                  //   map: {
+                  //     'EEA': 'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/EEA_agency_logo.svg/220px-EEA_agency_logo.svg.png'
+                  //   }
+                  // }
+                }
+              },
 
               // "th_regions_tree.default": {
               //   terms: {
@@ -547,7 +601,7 @@
                   field: "creationYearForResource",
                   interval: 5,
                   keyed: true,
-                  min_doc_count: 1
+                  min_doc_count: 0
                 },
                 meta: {
                   collapsed: true
@@ -577,26 +631,6 @@
                       }
                     }
                   }
-                }
-              },
-              OrgForResource: {
-                terms: {
-                  field: "OrgForResource",
-                  include: ".*",
-                  size: 15
-                },
-                meta: {
-                  // Always display filter even no more elements
-                  // This can be used when all facet values are loaded
-                  // with a large size and you want to provide filtering.
-                  // 'displayFilter': true,
-                  caseInsensitiveInclude: true
-                  // decorator: {
-                  //   type: 'img',
-                  //   map: {
-                  //     'EEA': 'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/EEA_agency_logo.svg/220px-EEA_agency_logo.svg.png'
-                  //   }
-                  // }
                 }
               },
               "cl_maintenanceAndUpdateFrequency.key": {
@@ -1019,6 +1053,15 @@
                   }
                 }
               },
+              "standardNameObject.default.keyword": {
+                terms: {
+                  field: "standardNameObject.default.keyword"
+                },
+                meta: {
+                  collapsed: true,
+                  userHasRole: "isReviewerOrMore"
+                }
+              },
               serviceType: {
                 terms: {
                   field: "serviceType",
@@ -1055,6 +1098,12 @@
                   field: "MD_LegalConstraintsUseLimitationObject.default.keyword"
                 }
               },
+              "cl_status.key": {
+                terms: {
+                  field: "cl_status.key",
+                  size: 15
+                }
+              },
               mdStatus: {
                 terms: {
                   field: "statusWorkflow",
@@ -1064,10 +1113,25 @@
                   field: "statusWorkflow"
                 }
               },
-              "cl_status.key": {
+              "cl_topic.key": {
                 terms: {
-                  field: "cl_status.key",
-                  size: 15
+                  field: "cl_topic.key",
+                  size: 20
+                },
+                meta: {
+                  decorator: {
+                    type: "icon",
+                    prefix: "fa fa-fw gn-icon-"
+                  }
+                }
+              },
+              linkProtocol: {
+                terms: {
+                  field: "linkProtocol",
+                  size: 10
+                },
+                meta: {
+                  collapsed: true
                 }
               },
               valid: {
