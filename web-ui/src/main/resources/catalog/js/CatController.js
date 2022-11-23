@@ -104,9 +104,9 @@
             showMosaic: true,
             showMaps: true,
             facetConfig: {
-              "th_GEMET-INSPIREthemesversion1-0.link": {
+              "th_httpinspireeceuropaeutheme-theme_tree.key": {
                 terms: {
-                  field: "th_GEMET-INSPIREthemesversion1-0.link",
+                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
                   size: 34
                   // "order" : { "_key" : "asc" }
                 },

@@ -220,3 +220,46 @@ UPDATE Settings SET value = 'Europe/Brussels' WHERE name = 'system/server/timeZo
 
 
 
+-- Thesaurus update
+UPDATE metadata
+  SET data = replace(data, 'external.theme.inspire-theme', 'external.theme.httpinspireeceuropaeutheme-theme')
+  WHERE data LIKE '%external.theme.inspire-theme%' AND isHarvested = 'n';
+
+UPDATE metadata
+  SET data = replace(data, 'external.theme.SpatialScope', 'external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope')
+  WHERE data LIKE '%external.theme.SpatialScope%' AND isHarvested = 'n';
+
+UPDATE metadata
+  SET data = replace(data, 'external.theme.featureconcept', 'external.theme.httpinspireeceuropaeufeatureconcept-featureconcept')
+  WHERE data LIKE '%external.theme.featureconcept%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+SET data = replace(data, 'external.theme.PriorityDataset', 'external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset')
+WHERE data LIKE '%external.theme.PriorityDataset%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+SET data = replace(data, 'external.theme.inspire-service-taxonomy', 'external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory')
+WHERE data LIKE '%external.theme.inspire-service-taxonomy%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+SET data = replace(data, 'external.theme.inspire-service-type', 'external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceType-SpatialDataServiceType')
+WHERE data LIKE '%external.theme.inspire-service-type%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+SET data = replace(data, 'external.theme.TopicCategory', 'external.theme.httpinspireeceuropaeumetadatacodelistTopicCategory-TopicCategory')
+WHERE data LIKE '%external.theme.TopicCategory%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+  SET data = replace(data, '>GEMET - Concepten, versie 2.4<', '>GEMET<')
+  WHERE data LIKE '%>GEMET - Concepten, versie 2.4<%' AND isHarvested = 'n';
+
+
+UPDATE metadata
+  SET data = replace(data, '>INSPIRE - Spatial scope<', '>Spatial scope<')
+  WHERE data LIKE '%>INSPIRE - Spatial scope<%' AND isHarvested = 'n';
+
