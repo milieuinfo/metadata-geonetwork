@@ -42,7 +42,7 @@ jobs:
         latest
         develop
   - task: Docker@2
-    displayName: Build web image and push to registry demo (joadevcontainerregistry)
+    displayName: Build web image and push to registry demo (premdacr)
     inputs:
       containerRegistry: 'premdacr'
       repository: 'metadata/geonetwork'
