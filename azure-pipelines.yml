@@ -33,7 +33,17 @@ jobs:
   - task: Docker@2
     displayName: Build web image and push to registry demo (joadevcontainerregistry)
     inputs:
-      #containerRegistry: 'joadevcontainerregistry'
+      containerRegistry: 'joadevcontainerregistry'
+      repository: 'metadata/geonetwork'
+      command: 'buildAndPush'
+      Dockerfile: 'web/Dockerfile'
+      # $(GIT_COMMIT_SHA) -> add this tag when the container registry is configured with retention policies
+      tags: |
+        latest
+        develop
+  - task: Docker@2
+    displayName: Build web image and push to registry demo (joadevcontainerregistry)
+    inputs:
       containerRegistry: 'premdacr'
       repository: 'metadata/geonetwork'
       command: 'buildAndPush'
