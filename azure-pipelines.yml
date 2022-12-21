@@ -4,8 +4,8 @@ trigger:
 jobs:
 - job: publish
   timeoutInMinutes: "60"
-  pool:
-    vmImage: ubuntu-latest
+  # ITSS linux build server 
+  pool: dv-alex-adobuildserves-ubuntu-vmss
   steps:
   - checkout: self
     displayName: Set up repository
