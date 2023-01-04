@@ -31,17 +31,6 @@ jobs:
       goals: 'package'
       options: ' -DskipTests -Pwar'
   - task: Docker@2
-    displayName: Build web image and push to registry demo (joadevcontainerregistry)
-    inputs:
-      containerRegistry: 'joadevcontainerregistry'
-      repository: 'metadata/geonetwork'
-      command: 'buildAndPush'
-      Dockerfile: 'web/Dockerfile'
-      # $(GIT_COMMIT_SHA) -> add this tag when the container registry is configured with retention policies
-      tags: |
-        latest
-        develop
-  - task: Docker@2
     displayName: Build web image and push to registry demo (premdacr)
     inputs:
       containerRegistry: 'premdacr'
@@ -57,8 +46,8 @@ jobs:
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscriptionEndpoint: 'dvl-dev-infocat-ARM'
-      azureResourceGroup: 'joa-dev-playground'
-      kubernetesCluster: 'joa-dev-test-cluster'
-      namespace: 'metadata'
+      azureResourceGroup: 'pre-md-cluster-rg'
+      kubernetesCluster: 'pre-md-cluster-aks'
+      namespace: 'dev'
       command: 'rollout'
       arguments: 'restart deployment/geonetwork'
