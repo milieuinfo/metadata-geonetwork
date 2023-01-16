@@ -77,11 +77,15 @@
                 scope.lang,
                 gnCurrentEdit.mdLanguage
               );
-              scope.relations = scope.isOverview
-                ? res.relations[scope.type]
-                : res.relations[scope.type].filter(function (l) {
-                    return l.protocol === scope.protocol;
-                  });
+              if (angular.isArray(res.relations[scope.type])) {
+                scope.relations = scope.isOverview
+                  ? res.relations[scope.type]
+                  : res.relations[scope.type].filter(function (l) {
+                      return l.protocol === scope.protocol;
+                    });
+              } else {
+                scope.relations = {};
+              }
             });
           };
 
@@ -1139,7 +1143,7 @@
               };
 
               /**
-               * Build the multingual structure if need for the onlinesrc
+               * Build the multilingual structure if needed for the onlinesrc
                * param (name, desc, url).
                * Struct like {'ger':'', 'eng': ''}
                *
@@ -1909,7 +1913,7 @@
                 scope.mode = iAttrs["gnLinkToMetadata"];
                 scope.popupid = "#linkto" + scope.mode + "-popup";
                 scope.btn = {};
-                
+
                 scope.updateParams = function () {
                   scope.searchObj.params.any = scope.searchObj.any;
                 };
