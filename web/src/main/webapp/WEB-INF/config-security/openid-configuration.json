@@ -1,5 +1,5 @@
 {
-  "authorization_endpoint": "https://localhost/auth",
+  "authorization_endpoint": "https://oidcmock.localhost/auth",
   "claims_parameter_supported": true,
   "claims_supported": [
     "auth_time",
@@ -29,8 +29,8 @@
     "PS512"
   ],
   "issuer": "http://simple-oidc-provider",
-  "jwks_uri": "https://localhost/certs",
-  "registration_endpoint": "https://localhost/reg",
+  "jwks_uri": "https://oidcmock.localhost/certs",
+  "registration_endpoint": "https://oidcmock.localhost/reg",
   "request_object_signing_alg_values_supported": [
     "none",
     "HS256",
@@ -72,7 +72,7 @@
   "subject_types_supported": [
     "public"
   ],
-  "token_endpoint": "https://localhost/token",
+  "token_endpoint": "https://oidcmock.localhost/token",
   "token_endpoint_auth_methods_supported": [
     "none",
     "client_secret_basic",
@@ -94,7 +94,7 @@
     "ES384",
     "ES512"
   ],
-  "userinfo_endpoint": "https://localhost/me",
+  "userinfo_endpoint": "https://oidcmock.localhost/me",
   "userinfo_signing_alg_values_supported": [
     "none",
     "HS256",
@@ -111,7 +111,7 @@
     "plain",
     "S256"
   ],
-  "introspection_endpoint": "https://localhost/token/introspection",
+  "introspection_endpoint": "https://oidcmock.localhost/token/introspection",
   "introspection_endpoint_auth_methods_supported": [
     "none",
     "client_secret_basic",
@@ -133,7 +133,7 @@
     "ES384",
     "ES512"
   ],
-  "revocation_endpoint": "https://localhost/token/revocation",
+  "revocation_endpoint": "https://oidcmock.localhost/token/revocation",
   "revocation_endpoint_auth_methods_supported": [
     "none",
     "client_secret_basic",
@@ -220,8 +220,8 @@
     "A256CBC-HS512",
     "A256GCM"
   ],
-  "check_session_iframe": "https://localhost/session/check",
-  "end_session_endpoint": "https://localhost/session/end",
+  "check_session_iframe": "https://oidcmock.localhost/session/check",
+  "end_session_endpoint": "https://oidcmock.localhost/session/end",
   "claim_types_supported": [
     "normal"
   ]
