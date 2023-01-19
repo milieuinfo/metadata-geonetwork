@@ -6,8 +6,11 @@
       "client_id": "foo",
       "client_secret": "bar",
       "redirect_uris": [
-        "http://localhost:9055/v1/authenticate/callback"
-        ]
+        "http://localhost:8080/geonetwork/login/oauth2/code/geonetwork-oicd"
+      ],
+      "post_logout_redirect_uris": [
+        "http://localhost:8080/geonetwork"
+      ]
     }
   ],
   "claim_mapping": {
