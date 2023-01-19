@@ -1,0 +1,1 @@
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -out cert.crt -keyout cert.key -subj "/CN=localhost/O=Metadata" -addext "subjectAltName = DNS:localhost" -addext "keyUsage = digitalSignature" -addext "extendedKeyUsage = serverAuth"
