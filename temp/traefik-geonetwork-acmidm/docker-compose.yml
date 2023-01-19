@@ -11,12 +11,15 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
     ports:
       - "80:80"
       - "8080:8080"
       - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/certs"
+      - "./dynamic.yml:/etc/traefik/dynamic.yml"
 
   whoami:
     image: "traefik/whoami"
