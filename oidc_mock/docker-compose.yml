@@ -1,9 +1,8 @@
-version: "3.3"
-
+version: '3'
 services:
   traefik:
     image: "traefik:v2.9"
-    container_name: "traefik"
+    container_name: oidc_proxy
     command:
       #- "--log.level=DEBUG"
       - "--api.insecure=true"
@@ -14,36 +13,33 @@ services:
       - "--providers.file.filename=/etc/traefik/dynamic.yml"
     ports:
       - "80:80"
-      - "8080:8080"
+      - "8081:8080"
       - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./certs:/certs"
       - "./dynamic.yml:/etc/traefik/dynamic.yml"
 
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`) || Host(`127.0.0.1`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls"
-
   oidc_mock:
     image: qlik/simple-oidc-provider
-    container_name: "simple-oidc"
+    container_name: oidc_mock
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.oidc.rule=Host(`oidc.localhost`)"
+      - "traefik.http.routers.oidc.rule=Host(`localhost`)"
       - "traefik.http.routers.oidc.entrypoints=websecure"
       - "traefik.http.routers.oidc.tls"
-    # ports:
-    #   - "9000:80"
     environment:
       REDIRECTS: http://localhost:8080/geonetwork/login/oauth2/code/geonetwork-oicd
       CONFIG_FILE: /tmp/config/oidc-mock-config.json
       USERS_FILE: /tmp/config/oidc-mock-users.json
-      PORT: 80
     volumes:
       - ./config:/tmp/config
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: oidc_whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls"
