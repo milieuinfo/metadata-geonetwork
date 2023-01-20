@@ -1,123 +1,100 @@
 [
   {
-    "id": "SIMPLE_OIDC_USER_HARLEY",
-    "email": "harley@qlik.example",
+    "id": "SIMPLE_OIDC_USER_ADMIN",
+    "email": "admin@gim.be",
     "email_verified": true,
-    "name": "Harley Kiffe",
-    "nickname": "harley",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Sales"
+    "family_name": "GIM",
+    "given_name": "Admin",
+    "organization": "GIM",
+    "password": "admin",
+    "roles": [
+      "Administrator"
     ]
   },
   {
-    "id": "SIMPLE_OIDC_USER_BARB",
-    "email": "barb@qlik.example",
+    "id": "SIMPLE_OIDC_USER_ADMIN",
+    "email": "admin@vlaanderen.be",
     "email_verified": true,
-    "name": "Barb Stovin",
-    "nickname": "barb",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Support"
+    "family_name": "DV",
+    "given_name": "admin",
+    "password": "admin",
+    "roles": [
+      "Administrator"
     ]
   },
   {
     "id": "SIMPLE_OIDC_USER_QUINN",
     "email": "quinn@qlik.example",
     "email_verified": true,
-    "name": "Quinn Leeming",
-    "nickname": "quinn",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Accounting"
+    "family_name": "Leeming",
+    "given_name": "Quinn",
+    "organization": "Agentschap innoveren en ondernemen",
+    "password": "password",
+    "roles": [
+      "AIO:editor"
     ]
   },
   {
     "id": "SIMPLE_OIDC_USER_SIM",
     "email": "sim@qlik.example",
     "email_verified": true,
-    "name": "Sim Cleaton",
-    "nickname": "sim",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Accounting"
-    ]
+    "family_name": "Cleaton",
+    "given_name": "Sim",
+    "organization": "Digitaal Vlaanderen - Vlaamse overheid",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_PHILLIE",
     "email": "phillie@qlik.example",
     "email_verified": true,
-    "name": "Phillie Smeed",
-    "nickname": "phillie",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Marketing",
-      "Sales"
-    ]
+    "family_name": "Smeed",
+    "given_name": "Phillie",
+    "organization": "Departement Mobiliteit en Openbare Werken",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_PETA",
     "email": "peta@qlik.example",
     "email_verified": true,
-    "name": "Peta Sammon",
-    "nickname": "peta",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Engineering"
-    ]
+    "family_name": "Sammon",
+    "given_name": "Peta",
+    "organization": "GIM",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_MARNE",
     "email": "marne@qlik.example",
     "email_verified": true,
-    "name": "Marne Probetts",
-    "nickname": "marne",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Marketing"
-    ]
+    "family_name": "Probetts",
+    "given_name": "Marne",
+    "organization": "Stad Mechelen",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_SIBYLLA",
     "email": "sibylla@qlik.example",
     "email_verified": true,
-    "name": "Sibylla Meadows",
-    "nickname": "sibylla",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Accounting"
-    ]
+    "family_name": "Meadows",
+    "given_name": "Sibylla",
+    "organization": "Digitaal Vlaanderen",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_EVAN",
     "email": "evan@qlik.example",
     "email_verified": true,
-    "name": "Evan Highman",
-    "nickname": "evan",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Engineering"
-    ]
+    "family_name": "Highman",
+    "given_name": "Evan",
+    "organization": "Departement Kanselarij en Buitenlandse Zaken",
+    "password": "password"
   },
   {
     "id": "SIMPLE_OIDC_USER_FRANKLIN",
     "email": "franklin@qlik.example",
     "email_verified": true,
-    "name": "Franklin Glamart",
-    "nickname": "franklin",
-    "password": "Password1!",
-    "groups": [
-      "Everyone",
-      "Sales"
-    ]
+    "family_name": "Glamart",
+    "given_name": "Franklin",
+    "organization": "Stad Menen",
+    "password": "password"
   }
 ]
