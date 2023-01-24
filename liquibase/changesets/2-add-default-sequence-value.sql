@@ -1,0 +1,27 @@
+-- improve upon default behaviour where no sequence is used when id is omitted
+alter table only address alter column id set default nextval('address_id_seq'::regclass);
+alter table only cswservercapabilitiesinfo alter column idfield set default nextval('csw_server_capabilities_info_id_seq'::regclass);
+alter table only files alter column id set default nextval('files_id_seq'::regclass);
+alter table only groups alter column id set default nextval('group_id_seq'::regclass);
+alter table only guf_keywords alter column id set default nextval('gufkey_id_seq'::regclass);
+alter table only guf_rating alter column id set default nextval('gufrat_id_seq'::regclass);
+alter table only harvesthistory alter column id set default nextval('harvest_history_id_seq'::regclass);
+alter table only harvestersettings alter column id set default nextval('harvester_setting_id_seq'::regclass);
+alter table only inspireatomfeed alter column id set default nextval('inspire_atom_feed_id_seq'::regclass);
+alter table only isolanguages alter column id set default nextval('iso_language_id_seq'::regclass);
+alter table only links alter column id set default nextval('link_id_seq'::regclass);
+alter table only linkstatus alter column id set default nextval('linkstatus_id_seq'::regclass);
+alter table only mapservers alter column id set default nextval('mapserver_id_seq'::regclass);
+alter table only categories alter column id set default nextval('metadata_category_id_seq'::regclass);
+alter table only metadatafiledownloads alter column id set default nextval('metadata_filedownload_id_seq'::regclass);
+alter table only metadatafileuploads alter column id set default nextval('metadata_fileupload_id_seq'::regclass);
+alter table only metadata alter column id set default nextval('metadata_id_seq'::regclass);
+alter table only metadataidentifiertemplate alter column id set default nextval('metadata_identifier_template_id_seq'::regclass);
+alter table only operations alter column id set default nextval('operation_id_seq'::regclass);
+alter table only guf_ratingcriteria alter column id set default nextval('rating_criteria_id_seq'::regclass);
+alter table only schematroncriteria alter column id set default nextval('schematron_criteria_id_seq'::regclass);
+alter table only schematron alter column id set default nextval('schematron_id_seq'::regclass);
+alter table only selections alter column id set default nextval('selection_id_seq'::regclass);
+alter table only statusvalues alter column id set default nextval('status_value_id_seq'::regclass);
+alter table only users alter column id set default nextval('user_id_seq'::regclass);
+alter table only usersearch alter column id set default nextval('user_search_id_seq'::regclass);

@@ -42,3 +42,7 @@ It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or c
 - Override settings (see, e.g., `docker-compose.dev.example.yaml`)
   - make a copy and remove `.example` (this file is ignored in `.gitignore`) 
   - use `docker compose -f docker-compose.yml -f docker-compose.dev.yml` to override settings to your liking
+
+## Load test database
+Using Liquibase, it's possible to have an initial database set, based on metadata.vlaanderen.be. 
+See [the liquibase documentation](/liquibase/README.md) for further info.
