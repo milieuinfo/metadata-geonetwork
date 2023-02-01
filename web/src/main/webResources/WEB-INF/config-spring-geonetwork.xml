@@ -113,6 +113,8 @@
     <entry key="hibernate.jdbc.batch_size" value="3"/>
     <entry key="hibernate.jdbc.batch_versioned_data" value="true"/>
     <entry key="hibernate.enable_lazy_load_no_trans" value="true"/>
+    <!-- disable automatic updates, but notify changes -->
+    <entry key="hibernate.hbm2ddl.auto" value="validate"/>
     <!-- If a specific schema has to be used
     <entry key="hibernate.default_schema" value="catalog"/>
 
