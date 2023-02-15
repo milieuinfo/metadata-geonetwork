@@ -22,10 +22,10 @@ To disable hibernate, check the file `config-spring-geonetwork.xml`. Modify the 
 Make sure you have a clean database:
 
 ```sql
-drop schema if exists public
-drop schema if exists liquibase
-create schema public
-create schema liquibase
+drop schema if exists public;
+drop schema if exists liquibase;
+create schema public;
+create schema liquibase;
 ```
 
 Afterwards, run `mvn liquibase:update` in the folder `liquibase/`.
