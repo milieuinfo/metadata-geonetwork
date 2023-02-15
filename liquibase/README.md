@@ -6,11 +6,27 @@ A database versioning tool. It applies a set of changes to a given database and 
 - Include in a pipeline, automated deployments
 - Provide a clean dev environment easily
 
+# Geonetwork's Hibernate
+
+Hibernate should be completely disabled once Liquibase is used for the migrations. Automated population of the database will be replaced by relevant scripts handled by Liquibase. This way, changes can be controlled in-order, in a versioned fashion.
+
+To disable hibernate, check the file `config-spring-geonetwork.xml`. Modify the following snippet:
+
+```xml
+<!-- options: none, validate, update, create, create-drop, create-only -->
+<entry key="hibernate.hbm2ddl.auto" value="none"/>
+```
+
 # Initial run
 
 Make sure you have a clean database:
-- delete/create schema 'public' (not necessary if geonetwork hasn't started yet)
-- create schema 'liquibase'
+
+```sql
+drop schema if exists public
+drop schema if exists liquibase
+create schema public
+create schema liquibase
+```
 
 Afterwards, run `mvn liquibase:update` in the folder `liquibase/`.
 
