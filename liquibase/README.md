@@ -30,6 +30,23 @@ create schema liquibase;
 
 Afterwards, run `mvn liquibase:update` in the folder `liquibase/`.
 
+
+# Useful commands 
+
+## Rollback
+Undo one update. Handy when testing things in development. Can only be applied to changesets that have an 'undo' operation specified.
+```bash
+mvn liquibase:rollback "-Dliquibase.rollbackCount=1"
+```
+
+## Reset checksums
+This will clear the checksums in the database. Useful when you changed a changeset and are sure that the database won't be messed up.
+Probably not a good idea in beta or dev.
+```bash
+mvn liquibase:clearCheckSums
+```
+
+
 # Sync data from Azure
 
 Before moving completely to postgres we need to be able to sync data from the Azure SQL databases into our Postgres database.

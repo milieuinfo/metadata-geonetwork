@@ -10,12 +10,17 @@
   <version>1.0.0</version>
   <name>Liquibase db versioning for Metadata Vlaanderen</name>
 
+  <properties>
+    <rootProjectDir>${basedir}/..</rootProjectDir>
+    <liquibase.version>4.18.0</liquibase.version>
+  </properties>
+
   <dependencies>
     <!-- liquibase database versioning tool-->
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
-      <version>4.18.0</version>
+      <version>${liquibase.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.liquibase</groupId>
@@ -32,7 +37,7 @@
         include <groupId>, <artifactID>, and <version> elements-->
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-maven-plugin</artifactId>
-        <version>4.18.0</version>
+        <version>${liquibase.version}</version>
         <configuration>
           <!--set values for Liquibase properties and settings
           for example, the location of a properties file to use-->
@@ -43,14 +48,11 @@
           <dependency>
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-postgresql</artifactId>
-            <version>4.18.0</version>
+            <version>${liquibase.version}</version>
           </dependency>
         </dependencies>
       </plugin>
     </plugins>
   </build>
 
-  <properties>
-    <rootProjectDir>${basedir}/..</rootProjectDir>
-  </properties>
 </project>
