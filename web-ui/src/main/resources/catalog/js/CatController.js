@@ -520,7 +520,7 @@
                   // Exclude GDI keywords from the global list of keywords
                   // because we have a specific agg for it
                   exclude:
-                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data",
+                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data|Vlaamse Open data Service",
                   size: 10
                 },
                 meta: {
@@ -1091,7 +1091,7 @@
                     "Open data": {
                       query_string: {
                         query:
-                          '+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data"'
+                          '(+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data") OR (+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data Service")'
                       }
                     },
                     Geografisch: {
