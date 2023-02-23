@@ -6,8 +6,8 @@ ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC \
         -Dgeonetwork.resources.dir=${DATA_DIR}/resources \
         -Dgeonetwork.data.dir=${DATA_DIR} \
-        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/codelist \
-        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/geonetwork/WEB-INF/data/config/schema_plugins
+        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist \
+        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
 
 USER root
 RUN apt-get -y update && \
@@ -15,16 +15,18 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /${DATA_DIR} && \
     chown -R jetty:jetty ${DATA_DIR} && \
-    mkdir -p /var/lib/jetty/webapps/geonetwork && \
-    chown -R jetty:jetty /var/lib/jetty/webapps/geonetwork
+    rm -rf /var/lib/jetty/webapps/root && \
+    mkdir -p /var/lib/jetty/webapps/root && \
+    chown -R jetty:jetty /var/lib/jetty/webapps/root
 
 USER jetty
-ENV GN_FILE geonetwork.war
-COPY ./target/${GN_FILE} /var/lib/jetty/webapps/geonetwork/${GN_FILE}
+ENV SOURCE_WAR geonetwork.war
+ENV TARGET_WAR root.war
+COPY ./target/${SOURCE_WAR} /var/lib/jetty/webapps/root/${TARGET_WAR}
 
-RUN cd /var/lib/jetty/webapps/geonetwork/ && \
-     unzip -q ${GN_FILE} && \
-     rm ${GN_FILE}
+RUN cd /var/lib/jetty/webapps/root/ && \
+     unzip -q ${TARGET_WAR} && \
+     rm ${TARGET_WAR}
 
 COPY ./docker-entrypoint.sh /geonetwork-entrypoint.sh
 
