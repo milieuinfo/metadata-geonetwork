@@ -14,8 +14,18 @@
     }
   ],
   "claim_mapping": {
-    "openid": [ "sub" ],
-    "email": [ "email", "email_verified" ],
-    "profile": [ "name", "nickname" ]
+    "openid": [
+      "sub"
+    ],
+    "email": [
+      "email",
+      "email_verified"
+    ],
+    "profile": [
+      "family_name",
+      "given_name",
+      "organization",
+      "roles"
+    ]
   }
 }
