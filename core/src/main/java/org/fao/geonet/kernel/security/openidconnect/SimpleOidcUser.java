@@ -22,6 +22,7 @@
  */
 package org.fao.geonet.kernel.security.openidconnect;
 
+import org.apache.commons.digester.SimpleRegexMatcher;
 import org.fao.geonet.domain.Address;
 import org.fao.geonet.domain.Profile;
 import org.fao.geonet.domain.User;
@@ -59,7 +60,7 @@ class SimpleOidcUser {
      * @param oidcConfiguration OIDC Configuration (mostly controlled by environment vars)
      * @param oidcRoleProcessor Processes roles from the ID Token
      * @param idToken  The User's ID token
-     * @param attributes All the user's claims (ID Token claims + USERINFO claims)
+     * @param userAttributes All the user's claims (ID Token claims + USERINFO claims)
      */
     SimpleOidcUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, OidcIdToken idToken, Map userAttributes) throws Exception {
         Map attributes = (userAttributes == null) ? new HashMap() : userAttributes;
@@ -100,8 +101,9 @@ class SimpleOidcUser {
             email = idToken.getEmail();
             if ( (email == null) && (attributes.containsKey(StandardClaimNames.EMAIL)) ) {
                 email = (String) attributes.get(StandardClaimNames.EMAIL);
+            } else if(email == null && username.matches("^[A-Za-z0-9._%+]+@[A-Za-z0-9.]+\\.[A-Za-z]{2,}$")) {
+                email = username;
             }
-
 
             if (idToken.getClaims() != null && idToken.getClaims().containsKey(oidcConfiguration.organizationProperty)) {
                 organisation = (String) idToken.getClaims().get(oidcConfiguration.organizationProperty);
