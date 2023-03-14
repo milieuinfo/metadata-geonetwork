@@ -269,7 +269,7 @@
         <xsl:for-each select="gmd:citation/gmd:CI_Citation">
 
           <xsl:copy-of select="gn-fn-index:add-multilingual-field('resourceTitle', gmd:title, $allLanguages)"/>
-          <xsl:copy-of select="gn-fn-index:add-multilingual-field('resourceAltTitle', gmd:resourceAltTitle, $allLanguages)"/>
+          <xsl:copy-of select="gn-fn-index:add-multilingual-field('resourceAltTitle', gmd:alternateTitle, $allLanguages)"/>
 
           <xsl:for-each select="gmd:date/gmd:CI_Date[gn-fn-index:is-isoDate(gmd:date/*/text())]">
             <xsl:variable name="dateType"
@@ -602,7 +602,7 @@
         </xsl:call-template>
 
 
-        <xsl:for-each select="gmd:topicCategory/gmd:MD_TopicCategoryCode">
+        <xsl:for-each select="gmd:topicCategory/gmd:MD_TopicCategoryCode[string(.)]">
           <xsl:variable name="value" as="node()">
             <xsl:copy>
               <xsl:attribute name="codeListValue" select="."/>
@@ -988,9 +988,10 @@
 
       <xsl:for-each select="gmd:distributionInfo/*">
         <xsl:for-each
-          select="gmd:distributionFormat/*/gmd:name/gco:CharacterString[. != '']">
+          select="gmd:distributionFormat/*/gmd:name/*[. != '']">
           <xsl:copy-of select="gn-fn-index:add-field('format', .)"/>
         </xsl:for-each>
+
 
         <!-- Indexing distributor contact -->
         <xsl:for-each select="gmd:distributor/*[gmd:distributorContact]">
@@ -1001,6 +1002,11 @@
           </xsl:apply-templates>
         </xsl:for-each>
 
+        <xsl:for-each select="gmd:distributor/*
+                                  /gmd:distributionOrderProcess/*/gmd:orderingInstructions">
+          <xsl:copy-of select="gn-fn-index:add-multilingual-field('orderingInstructions', ., $allLanguages)"/>
+        </xsl:for-each>
+        
         <xsl:for-each select="gmd:transferOptions/*/
                                 gmd:onLine/*[gmd:linkage/gmd:URL != '']">
 
