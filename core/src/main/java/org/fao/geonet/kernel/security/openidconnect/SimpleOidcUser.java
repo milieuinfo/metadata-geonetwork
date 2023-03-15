@@ -22,7 +22,6 @@
  */
 package org.fao.geonet.kernel.security.openidconnect;
 
-import org.apache.commons.digester.SimpleRegexMatcher;
 import org.fao.geonet.domain.Address;
 import org.fao.geonet.domain.Profile;
 import org.fao.geonet.domain.User;
@@ -43,7 +42,7 @@ import java.util.Map;
  * <p>
  * parts taken from BaselUser (GN keycloak plugin)
  */
-class SimpleOidcUser {
+public class SimpleOidcUser {
 
 
     private String username;
@@ -60,9 +59,9 @@ class SimpleOidcUser {
      * @param oidcConfiguration OIDC Configuration (mostly controlled by environment vars)
      * @param oidcRoleProcessor Processes roles from the ID Token
      * @param idToken  The User's ID token
-     * @param userAttributes All the user's claims (ID Token claims + USERINFO claims)
+     * @param attributes All the user's claims (ID Token claims + USERINFO claims)
      */
-    SimpleOidcUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, OidcIdToken idToken, Map userAttributes) throws Exception {
+    public SimpleOidcUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, OidcIdToken idToken, Map userAttributes) throws Exception {
         Map attributes = (userAttributes == null) ? new HashMap() : userAttributes;
 
         username = (String) idToken.getClaims().get(oidcConfiguration.getUserNameAttribute());
@@ -101,9 +100,8 @@ class SimpleOidcUser {
             email = idToken.getEmail();
             if ( (email == null) && (attributes.containsKey(StandardClaimNames.EMAIL)) ) {
                 email = (String) attributes.get(StandardClaimNames.EMAIL);
-            } else if(email == null && username.matches("^[A-Za-z0-9._%+]+@[A-Za-z0-9.]+\\.[A-Za-z]{2,}$")) {
-                email = username;
             }
+
 
             if (idToken.getClaims() != null && idToken.getClaims().containsKey(oidcConfiguration.organizationProperty)) {
                 organisation = (String) idToken.getClaims().get(oidcConfiguration.organizationProperty);
@@ -134,7 +132,7 @@ class SimpleOidcUser {
         }
     }
 
-    SimpleOidcUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, Map attributes) throws Exception {
+    public SimpleOidcUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, Map attributes) throws Exception {
         username = (String) attributes.get(oidcConfiguration.getUserNameAttribute());
         if (username == null) {
             username = (String) attributes.get(StandardClaimNames.PREFERRED_USERNAME);

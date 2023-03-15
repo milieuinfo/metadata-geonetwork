@@ -158,7 +158,7 @@ public class OidcUser2GeonetworkUser {
      * @param user          to apply the changes to.
      */
     //from keycloak
-    private void updateGroups(Map<Profile, List<String>> profileGroups, User user) {
+    protected void updateGroups(Map<Profile, List<String>> profileGroups, User user) {
         // First we remove all previous groups
         userGroupRepository.deleteAll(UserGroupSpecs.hasUserId(user.getId()));
 
