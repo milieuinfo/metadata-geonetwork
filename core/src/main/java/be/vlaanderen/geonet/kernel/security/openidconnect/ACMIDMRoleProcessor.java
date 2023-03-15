@@ -22,20 +22,11 @@
  */
 package be.vlaanderen.geonet.kernel.security.openidconnect;
 
-import org.fao.geonet.constants.Geonet;
+import com.google.common.collect.Lists;
 import org.fao.geonet.domain.Profile;
-import org.fao.geonet.kernel.security.openidconnect.OIDCConfiguration;
 import org.fao.geonet.kernel.security.openidconnect.OIDCRoleProcessor;
-import org.fao.geonet.utils.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -48,22 +39,41 @@ public class ACMIDMRoleProcessor extends OIDCRoleProcessor {
         String roleGroupSeparator = oidcConfiguration.groupPermissionSeparator;
         String prefix = "DVMetadataVlaanderenGebruiker-";
         List<String> converted = originalRoleNames.stream()
-                .filter(s -> s.startsWith(prefix) || s.equals(oidcConfiguration.minimumProfile))
+                .filter(s -> s.startsWith(prefix) && s.contains(roleGroupSeparator))
                 .map(s -> s.replaceFirst(prefix, ""))
-                .map(s -> {
+                .flatMap(s -> {
                     String[] split = s.split(roleGroupSeparator);
-                    return split[1] + roleGroupSeparator + convertProfile(split[0]);
+                    String group = split[1];
+                    String profile = convertProfile(split[0]);
+                    return getProfiles(group, profile).stream();
                 })
                 .collect(Collectors.toList());
-        return super.simpleConvertRoles(converted);
+    }
+
+    private List<String> getProfiles(String group, String profile) {
+        String roleGroupSeparator = oidcConfiguration.groupPermissionSeparator;
+        String mdcPrefix = "Datapublicatie " + group + roleGroupSeparator;
+        String mdvPrefix = group + roleGroupSeparator;
+        if (profile.equals(Profile.Administrator.name())) {
+            return Lists.newArrayList(mdcPrefix + profile,
+                    mdvPrefix + profile);
+        } else if (profile.equals(Profile.Reviewer.name())) {
+            return Lists.newArrayList(mdcPrefix + Profile.Editor.name(),
+                    mdvPrefix + Profile.Reviewer.name());
+        }
+        return Lists.newArrayList();
     }
 
     private String convertProfile(String s) {
         switch (s) {
-            case "hoofdeditor": return "Reviewer";
-            case "editor": return "Editor";
-            case "admin": return "Administrator";
-            default: return s;
+            case "hoofdeditor":
+                return "Reviewer";
+            case "editor":
+                return "Editor";
+            case "admin":
+                return "Administrator";
+            default:
+                return s;
         }
     }
 }
