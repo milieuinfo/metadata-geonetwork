@@ -38,7 +38,7 @@ public class ACMIDMRoleProcessor extends OIDCRoleProcessor {
     public List<String> simpleConvertRoles(List<String> originalRoleNames) {
         String roleGroupSeparator = oidcConfiguration.groupPermissionSeparator;
         String prefix = "DVMetadataVlaanderenGebruiker-";
-        List<String> converted = originalRoleNames.stream()
+        return originalRoleNames.stream()
                 .filter(s -> s.startsWith(prefix) && s.contains(roleGroupSeparator))
                 .map(s -> s.replaceFirst(prefix, ""))
                 .flatMap(s -> {
