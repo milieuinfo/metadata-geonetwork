@@ -43,17 +43,17 @@ public class ACMIDMRoleProcessor extends OIDCRoleProcessor {
                 .map(s -> s.replaceFirst(prefix, ""))
                 .flatMap(s -> {
                     String[] split = s.split(roleGroupSeparator);
-                    String group = split[1];
-                    String profile = convertProfile(split[0]);
-                    return getProfiles(group, profile).stream();
+                    String orgCode = split[1];
+                    String idmProfile = convertProfile(split[0]);
+                    return getProfiles(orgCode, idmProfile).stream();
                 })
                 .collect(Collectors.toList());
     }
 
     private List<String> getProfiles(String group, String profile) {
         String roleGroupSeparator = oidcConfiguration.groupPermissionSeparator;
-        String mdcPrefix = "Datapublicatie " + group + roleGroupSeparator;
-        String mdvPrefix = group + roleGroupSeparator;
+        String mdcPrefix = "mdc-" + group + roleGroupSeparator;
+        String mdvPrefix = "mdv-" + group + roleGroupSeparator;
         if (profile.equals(Profile.Administrator.name())) {
             return Lists.newArrayList(mdcPrefix + profile,
                     mdvPrefix + profile);

@@ -106,7 +106,7 @@
 
   <bean id="openidconnectOAuth2SecurityProviderUtil" class="org.fao.geonet.kernel.security.openidconnect.OAuth2SecurityProviderUtil"/>
 
-  <bean id="openidconnectOidcUser2GeonetworkUser" class="org.fao.geonet.kernel.security.openidconnect.OidcUser2GeonetworkUser"/>
+  <bean id="openidconnectOidcUser2GeonetworkUser" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMUser2GeonetworkUser"/>
 
   <bean id="openidconnectLogoutSuccessHandlerBase" class="org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler">
     <constructor-arg ref="openidconnectClientRegistrationRepository"/>
