@@ -57,7 +57,7 @@ jobs:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
-        options: ' -DskipTests -Pwar'
+        options: ' -DskipTests -Pwar -Pwro4j-prebuild-cache'
     - task: Docker@2
       displayName: Build web image and push to preprod container registry (premdacr)
       inputs:
