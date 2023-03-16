@@ -643,7 +643,7 @@
 	            <prefix>git</prefix>
 	            <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
 	            <dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
-	            <verbose>false</verbose>
+	            <verbose>true</verbose>
 	            <generateGitPropertiesFile>true</generateGitPropertiesFile>
 	            <generateGitPropertiesFilename>src/main/webResources/WEB-INF/classes/git.properties</generateGitPropertiesFilename>
 	            <!-- Denotes the format to save properties in. Valid options are "properties" (default) and "json". Properties will be saved to the generateGitPropertiesFilename if generateGitPropertiesFile is set to `true`. -->
