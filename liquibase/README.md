@@ -30,6 +30,8 @@ create schema liquibase;
 
 Afterwards, run `mvn liquibase:update` in the folder `liquibase/`.
 
+This procedure is also contained in the script `reset-db.sh` for convenience.
+
 
 # Useful commands 
 
