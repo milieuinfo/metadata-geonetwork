@@ -11,7 +11,7 @@ variables:
   - name: mavenCacheFolder
     value: $(Pipeline.Workspace)/.m2/repository
   - name: mavenCacheOpts
-    value: '-Dmaven.repo.local=${{ mavenCacheFolder }}'
+    value: '-Dmaven.repo.local=$(mavenCacheFolder)'
 
 jobs:
 - job: publish
@@ -62,7 +62,7 @@ jobs:
       displayName: Build project artifacts
       inputs:
         mavenPomFile: 'pom.xml'
-        mavenOptions: '-Xmx3072m ${{ mavenCacheOpts }}'
+        mavenOptions: '-Xmx3072m $(mavenCacheOpts)'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
         jdkArchitectureOption: 'x64'
