@@ -1,8 +1,8 @@
 FROM jetty:9.4.49-jdk8
 
-ENV DATA_DIR /catalogue-data
+ARG DATA_DIR=/var/lib/geonetwork_data
 # run in '/' instead of '/geonetwork' (the default)
-ENV WEBAPP_NAME root
+ARG WEBAPP_NAME=root
 ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true \
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC \
