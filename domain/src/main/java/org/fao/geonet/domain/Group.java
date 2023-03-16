@@ -23,8 +23,6 @@
 
 package org.fao.geonet.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +82,8 @@ public class Group extends Localized implements Serializable {
     private MetadataCategory defaultCategory;
     private List<MetadataCategory> allowedCategories;
     private Boolean enableAllowedCategories;
+    private String orgCode;
+    private Boolean mdc;
 
     /**
      * Get the id of the group.
@@ -121,7 +121,7 @@ public class Group extends Localized implements Serializable {
      *
      * @return group name
      */
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, length = 255)
     public String getName() {
         return _name;
     }
@@ -341,11 +341,29 @@ public class Group extends Localized implements Serializable {
      * Should we use the enableAllowedCategories list on this group? If false, we allow all
      * categories.
      *
-     * @param enableCategoriesRestriction
+     * @param enableAllowedCategories
      * @return this group entity object
      */
     public Group setEnableAllowedCategories(Boolean enableAllowedCategories) {
         this.enableAllowedCategories = enableAllowedCategories;
         return this;
+    }
+
+    @Column(name = "orgcode", nullable = true)
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
+
+    @Column(name = "ismdc", nullable = true)
+    public Boolean isMdc() {
+        return mdc;
+    }
+
+    public void setMdc(Boolean mdc) {
+        this.mdc = mdc;
     }
 }

@@ -56,4 +56,13 @@ public interface GroupRepository extends GeonetRepository<Group, Integer>, Group
     public
     @Nullable
     List<Group> findByLogo(@Nonnull String logo);
+
+    /**
+     * Look up a group by its orgCode
+     *
+     * @param orgCode the orgCode of the group
+     * @param isMdc whether the group is a metadatacenter group
+     */
+    @Nullable
+    Group findByOrgCodeAndMdc(@Nonnull String orgCode, @Nonnull Boolean isMdc);
 }
