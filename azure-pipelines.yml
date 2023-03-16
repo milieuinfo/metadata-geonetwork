@@ -56,7 +56,7 @@ jobs:
         restoreKeys: |
           maven | "$(Agent.OS)"
           maven
-        path: ${{ mavenCacheFolder }}
+        path: $(mavenCacheFolder)
       displayName: Cache Maven local repo
     - task: Maven@3
       displayName: Build project artifacts
