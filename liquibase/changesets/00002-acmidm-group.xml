@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+  <changeSet author="joachim" id="00002">
+    <addColumn tableName="groups">
+      <column name="orgcode" type="varchar"/>
+      <column name="ismdc" type="bool"/>
+    </addColumn>
+    <sql>COMMENT ON COLUMN public."groups".orgcode IS 'the org code for this group, as returned by acm/idm';</sql>
+    <sql>COMMENT ON COLUMN public."groups".ismdc IS 'whether this group is a metadatacenter group or not';</sql>
+    <addUniqueConstraint tableName="groups" columnNames="ismdc,orgcode" constraintName="unq_groups_orgcode_mdc"/>
+    <modifyDataType tableName="groups" columnName="name" newDataType="varchar(255)"/>
+  </changeSet>
+</databaseChangeLog>

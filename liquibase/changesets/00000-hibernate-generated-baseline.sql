@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset joachim:00000
+
 --
 -- PostgreSQL database dump
 --
