@@ -10,11 +10,11 @@ import java.util.Map;
 public class SimpleACMIDMUser extends SimpleOidcUser {
     SimpleACMIDMUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, OidcIdToken idToken, Map userAttributes) throws Exception {
         super(oidcConfiguration, oidcRoleProcessor, idToken, userAttributes);
-        super.setUsername(super.getEmail());
+        super.setEmail(super.getUsername());
     }
 
     SimpleACMIDMUser(OIDCConfiguration oidcConfiguration, OIDCRoleProcessor oidcRoleProcessor, Map attributes) throws Exception {
         super(oidcConfiguration, oidcRoleProcessor, attributes);
-        super.setUsername(super.getEmail());
+        super.setEmail(super.getUsername());
     }
 }
