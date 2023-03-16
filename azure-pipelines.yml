@@ -11,7 +11,7 @@ variables:
   - name: mavenCacheFolder
     value: $(Pipeline.Workspace)/.m2/repository
   - name: mavenCacheOpts
-    value: '-Dmaven.repo.local=${{ mavenCacheFolder }}'
+    value: '-Dmaven.repo.local=$(mavenCacheFolder)'
 
 jobs:
 - job: publish
