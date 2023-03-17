@@ -17,6 +17,9 @@ import java.util.Map;
 public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
 
     public UserDetails getUserDetails(OidcIdToken idToken, Map attributes, boolean withDbUpdate) throws Exception {
+
+        System.out.println("JOACHIM getUserDetails "+attributes);
+
         SimpleOidcUser simpleUser = simpleOidcUserFactory.create(idToken, attributes);
         if (!StringUtils.hasText(simpleUser.getUsername()))
             return null;

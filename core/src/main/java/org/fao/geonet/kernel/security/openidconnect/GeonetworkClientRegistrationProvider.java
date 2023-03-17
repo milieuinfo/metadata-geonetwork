@@ -230,6 +230,7 @@ public class GeonetworkClientRegistrationProvider {
         String json = jsonServerConfig;
         String issuer = "issuer: " + fname;
 
+        System.out.println("JOACHIM createclientregistration");
 
         //from spring ClientRegistrations#withProviderConfiguration
         OIDCProviderMetadata oidcMetadata = OIDCProviderMetadata.parse(json);

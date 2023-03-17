@@ -69,7 +69,12 @@ public class HardcodedRegistrationIdOAuth2AuthorizationRequestResolver implement
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
 
+        System.out.println("JOACHIM ");
+        System.out.println(" > request.getRequestURL() = " + request.getRequestURL());
+        System.out.println(" > request.getRequestURL() = " + request.getRequestURL());
+
         if (!this.authorizationRequestMatcher.matches(request)) {
+            System.out.println(" > JOACHIM MATCHES request.getRequestURL() = " + request.getRequestURL());
             return null;
         }
         // defaults the "action" to "login"
