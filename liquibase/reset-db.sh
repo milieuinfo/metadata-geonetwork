@@ -5,4 +5,5 @@ POSTGRESUSER=geonetwork
 docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "drop schema if exists public, liquibase cascade"
 docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "create schema public"
 docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "create schema liquibase"
+# make sure this goes to the local db
 mvn liquibase:update
