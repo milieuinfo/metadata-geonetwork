@@ -86,14 +86,14 @@ public class HardcodedRegistrationIdOAuth2AuthorizationRequestResolver implement
         };
         OAuth2AuthorizationRequest resolve = wrappedResolver.resolve(wrappedRequest, CLIENTREGISTRATION_NAME);
 
-        org.apache.commons.logging.Log log = LogFactory.getLog(this.getClass());
-        log.info("resolve = " + resolve);
-        log.info("request.getRequestURL() = " + request.getRequestURL());
-        log.info("resolve.getRedirectUri() = " + resolve.getRedirectUri());
-        log.info("resolve.getAuthorizationUri() = " + resolve.getAuthorizationUri());
-        log.info("resolve.getAuthorizationRequestUri() = " + resolve.getAuthorizationRequestUri());
+        System.out.println("JOACHIM");
+        System.out.println("request.getRequestURL() = " + request.getRequestURL());
+        System.out.println("resolve.getRedirectUri() = " + resolve.getRedirectUri());
+        System.out.println("resolve.getAuthorizationUri() = " + resolve.getAuthorizationUri());
+        System.out.println("resolve.getAuthorizationRequestUri() = " + resolve.getAuthorizationRequestUri());
+        System.out.println("resolve = " + resolve);
+        System.out.println("request = " + request);
 
-        Log.error("testmodule", "testmessage");
         return resolve;
     }
 
