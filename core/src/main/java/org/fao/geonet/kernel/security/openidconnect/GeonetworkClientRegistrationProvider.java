@@ -252,7 +252,7 @@ public class GeonetworkClientRegistrationProvider {
             .clientAuthenticationMethod(method)
             // TODO fix this so https is not hardcoded
             // .redirectUri("{baseScheme}://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}")
-            .redirectUri("https://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}")
+            .redirectUri("https://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}francois")
             // .redirectUriTemplate("{baseUrl}/{action}/oauth2/code/{registrationId}")
             .authorizationUri(oidcMetadata.getAuthorizationEndpointURI().toASCIIString())
             .providerConfigurationMetadata(configurationMetadata)

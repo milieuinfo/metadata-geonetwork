@@ -22,6 +22,10 @@
  */
 package org.fao.geonet.kernel.security.openidconnect;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.logging.LogFactory;
+import org.fao.geonet.Logger;
+import org.fao.geonet.utils.Log;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
@@ -80,7 +84,17 @@ public class HardcodedRegistrationIdOAuth2AuthorizationRequestResolver implement
                 return value;
             }
         };
-        return wrappedResolver.resolve(wrappedRequest, CLIENTREGISTRATION_NAME);
+        OAuth2AuthorizationRequest resolve = wrappedResolver.resolve(wrappedRequest, CLIENTREGISTRATION_NAME);
+
+        org.apache.commons.logging.Log log = LogFactory.getLog(this.getClass());
+        log.info("resolve = " + resolve);
+        log.info("request.getRequestURL() = " + request.getRequestURL());
+        log.info("resolve.getRedirectUri() = " + resolve.getRedirectUri());
+        log.info("resolve.getAuthorizationUri() = " + resolve.getAuthorizationUri());
+        log.info("resolve.getAuthorizationRequestUri() = " + resolve.getAuthorizationRequestUri());
+
+        Log.error("testmodule", "testmessage");
+        return resolve;
     }
 
     //defaults the "action" to "authorize" and uses the GN default oidc provider name
