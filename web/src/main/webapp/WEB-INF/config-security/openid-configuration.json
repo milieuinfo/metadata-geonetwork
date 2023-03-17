@@ -1,14 +1,50 @@
-# IDP server metadata configuration is available from your IDP server;
-#     keycloak: http://localhost:8080/realms/{realm}/.well-known/openid-configuration
-#     azure AD: https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0/.well-known/openid-configuration
-#               where 00000000-0000-0000-0000-000000000000 is the directory (tenant) ID
-#
-#
-# download that file and put it here!
-#
-#
-#
-# Alternatively, you can put the actual text of the .json file in the environment variable;
-#  OPENIDCONNECT_SERVERMETADATA_JSON_TEXT
-#  NOTE: if you specify both OPENIDCONNECT_SERVERMETADATA_FNAME and OPENIDCONNECT_SERVERMETADATA_JSON_TEXT
-
+{
+  "authorization_endpoint": "https://authenticatie-ti.vlaanderen.be/op/v1/auth",
+  "claims_supported": [
+    "sub",
+    "webid"
+  ],
+  "code_challenge_methods_supported": [
+    "plain",
+    "S256"
+  ],
+  "dpop_signing_alg_values_supported": [
+    "RS256",
+    "RS384",
+    "RS512",
+    "ES256",
+    "ES384",
+    "ES512"
+  ],
+  "end_session_endpoint": "https://authenticatie-ti.vlaanderen.be/op/v1/logout",
+  "grant_types_supported": [
+    "authorization_code"
+  ],
+  "id_token_signing_alg_values_supported": [
+    "RS256"
+  ],
+  "issuer": "https://authenticatie-ti.vlaanderen.be/op",
+  "jwks_uri": "https://authenticatie-ti.vlaanderen.be/op/v1/keys",
+  "response_modes_supported": [
+    "query",
+    "fragment",
+    "form_post"
+  ],
+  "response_types_supported": [
+    "code"
+  ],
+  "scopes_supported": [
+    "openid",
+    "webid"
+  ],
+  "subject_types_supported": [
+    "public"
+  ],
+  "token_endpoint": "https://authenticatie-ti.vlaanderen.be/op/v1/token",
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt"
+  ],
+  "userinfo_endpoint": "https://authenticatie-ti.vlaanderen.be/op/v1/userinfo"
+}

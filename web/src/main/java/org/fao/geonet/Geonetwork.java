@@ -78,11 +78,18 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
@@ -110,6 +117,31 @@ public class Geonetwork implements ApplicationHandler {
      * Inits the engine, loading all needed data.
      */
     public Object start(Element config, ServiceContext context) throws Exception {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                public void checkClientTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+
+                public void checkServerTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (GeneralSecurityException e) {}
+
+
         context.setAsThreadLocal();
         this._applicationContext = context.getApplicationContext();
         ApplicationContextHolder.set(this._applicationContext);

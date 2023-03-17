@@ -61,7 +61,7 @@
   </bean>
 
 
-  <bean id="opidconnectSimpleOidcUserFactory" class="org.fao.geonet.kernel.security.openidconnect.SimpleOidcUserFactory"/>
+  <bean id="opidconnectSimpleOidcUserFactory" class="be.vlaanderen.geonet.kernel.security.openidconnect.SimpleACMIDMUserFactory"/>
 
   <bean id="openidconnectOAuth2AuthorizationRequestRedirectFilter" class="org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter">
     <constructor-arg ref ="openidconnectAuthorizationRequestResolver" />
@@ -80,7 +80,7 @@
 
   <bean id="openidconnectDefaultAuthorizationCodeTokenResponseClient" class="org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient"/>
 
-  <bean id ="openidconnectOIDCRoleProcessor" class="org.fao.geonet.kernel.security.openidconnect.OIDCRoleProcessor"/>
+  <bean id ="openidconnectOIDCRoleProcessor" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMRoleProcessor"/>
 
   <bean id="openidconnectUserService" class="org.fao.geonet.kernel.security.openidconnect.GeonetworkOidcUserService">
   </bean>
@@ -106,7 +106,7 @@
 
   <bean id="openidconnectOAuth2SecurityProviderUtil" class="org.fao.geonet.kernel.security.openidconnect.OAuth2SecurityProviderUtil"/>
 
-  <bean id="openidconnectOidcUser2GeonetworkUser" class="org.fao.geonet.kernel.security.openidconnect.OidcUser2GeonetworkUser"/>
+  <bean id="openidconnectOidcUser2GeonetworkUser" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMUser2GeonetworkUser"/>
 
   <bean id="openidconnectLogoutSuccessHandlerBase" class="org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler">
     <constructor-arg ref="openidconnectClientRegistrationRepository"/>
