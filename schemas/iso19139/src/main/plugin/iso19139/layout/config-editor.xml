@@ -713,7 +713,9 @@
         <section name="gmd:lineage" required="true()">
           <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:statement"/>
 
-          <section name="gmd:processStep" forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep">
+          <section name="gmd:processStep"
+                   forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep"
+                   del=".">
             <field xpath="gmd:LI_ProcessStep/gmd:description"/>
             <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
             <section xpath="gmd:LI_ProcessStep/gmd:processor" />
