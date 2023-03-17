@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+  <changeSet author="mathieu" id="00003">
+    <update tableName="settings">
+      <column name="position" value="9165"/>
+      <where>name = 'system/server/sitemapLinkUrl'</where>
+    </update>
+    <update tableName="settings">
+      <column name="name" value="metadata/url/sitemapLinkUrl"/>
+      <where>name = 'system/server/sitemapLinkUrl'</where>
+    </update>
+
+    <insert tableName="settings">
+      <column name="name" value="metadata/url/sitemapDoiFirst"/>
+      <column name="value" value="false"/>
+      <column name="datatype" value="2"/>
+      <column name="position" value="9166"/>
+      <column name="internal" value="y"/>
+    </insert>
+    <insert tableName="settings">
+      <column name="name" value="metadata/url/dynamicAppLinkUrl"/>
+      <column name="value"/>
+      <column name="datatype" value="0"/>
+      <column name="position" value="9167"/>
+      <column name="internal" value="y"/>
+    </insert>
+
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'gmiTogmd', 'iso19139:convert/fromISO19115-2')"/>
+      <where>value LIKE 'gmiTogmd%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'DIF-to-ISO19139', 'iso19139:convert/fromDIF-GCMD')"/>
+      <where>value LIKE 'DIF-to-ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'EsriGeosticker-to-ISO19139', 'iso19139:convert/fromESRI-Geosticker')"/>
+      <where>value LIKE 'EsriGeosticker-to-ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'ISO19115-to-ISO19139', 'iso19139:convert/fromISO19115')"/>
+      <where>value LIKE 'ISO19115-to-ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCCSWGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCCSWGetCapabilities')"/>
+      <where>value LIKE 'OGCCSWGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCSLD-to-ISO19139', 'iso19139:convert/fromOGCSLD')"/>
+      <where>value LIKE 'OGCSLD-to-ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCSOSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCSOSGetCapabilities')"/>
+      <where>value LIKE 'OGCSOSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWCSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCWCSGetCapabilities')"/>
+      <where>value LIKE 'OGCWCSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWFSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCWFSGetCapabilities')"/>
+      <where>value LIKE 'OGCWFSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWMC-OR-OWSC-to-ISO19139', 'iso19139:convert/fromOGCWMC-OR-OWSC')"/>
+      <where>value LIKE 'OGCWMC-OR-OWSC-to-ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWMSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCWMSGetCapabilities')"/>
+      <where>value LIKE 'OGCWMSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWPSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCWPSGetCapabilities')"/>
+      <where>value LIKE 'OGCWPSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWxSGetCapabilities-to-ISO19119_ISO19139', 'iso19139:convert/fromOGCWxSGetCapabilities')"/>
+      <where>value LIKE 'OGCWxSGetCapabilities-to-ISO19119_ISO19139%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OGCWFSDescribeFeatureType-to-ISO19110', 'iso19110:convert/fromOGCWFSDescribeFeatureType')"/>
+      <where>value LIKE 'OGCWFSDescribeFeatureType-to-ISO19110%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'CKAN-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromJsonCkan')"/>
+      <where>value LIKE 'CKAN-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'DKAN-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromJsonDkan')"/>
+      <where>value LIKE 'DKAN-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'ESRIDCAT-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromJsonLdEsri')"/>
+      <where>value LIKE 'ESRIDCAT-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'ISO19115-3-2014-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromISO19115-3.2014')"/>
+      <where>value LIKE 'ISO19115-3-2014-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'ISO19139-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromISO19139')"/>
+      <where>value LIKE 'ISO19139-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'ISO19139-to-ISO19115-3-2018-with-languages-refactor', 'iso19115-3.2018:convert/fromISO19139-with-languages-refactor')"/>
+      <where>value LIKE 'ISO19139-to-ISO19115-3-2018-with-languages-refactor%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'OPENDATASOFT-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromJsonOpenDataSoft')"/>
+      <where>value LIKE 'OPENDATASOFT-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'SPARQL-DCAT-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromSPARQL-DCAT')"/>
+      <where>value LIKE 'SPARQL-DCAT-to-ISO19115-3-2018%'</where>
+    </update>
+    <update tableName="harvestersettings">
+      <column name="value" valueComputed="replace(value, 'udata-to-ISO19115-3-2018', 'iso19115-3.2018:convert/fromJsonUdata')"/>
+      <where>value LIKE 'udata-to-ISO19115-3-2018%'</where>
+    </update>
+
+    <dropTable tableName="thesaurus"/>
+
+    <update tableName="settings">
+      <column name="value" value="4.2.3"/>
+      <where>name = 'system/platform/version'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="SNAPSHOT"/>
+      <where>name = 'system/platform/subVersion'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

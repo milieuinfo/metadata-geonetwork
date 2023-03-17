@@ -59,6 +59,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -199,6 +200,39 @@ public class MetadataApi {
             return "forward:" + (metadataUuid + "/formatters/" + defaultFormatter);
         }
     }
+
+    @io.swagger.v3.oas.annotations.Operation(summary = "Get metadata record permalink",
+        description = "Permalink is by default the landing page formatter but can be configured in the admin console > settings. If the record as a DOI and if enabled in the settings, then it takes priority.")
+    @GetMapping(value = "/{metadataUuid:.+}/permalink",
+        consumes = MediaType.ALL_VALUE,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Return the permalink URL."),
+        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_VIEW),
+        @ApiResponse(responseCode = "404", description = ApiParams.API_RESPONSE_RESOURCE_NOT_FOUND)
+    })
+    public ResponseEntity<String> getRecordPermalink(
+        @Parameter(description = API_PARAM_RECORD_UUID,
+            required = true)
+        @PathVariable
+        String metadataUuid,
+        HttpServletResponse response,
+        HttpServletRequest request
+    )
+        throws Exception {
+        AbstractMetadata metadata;
+        try {
+            metadata = ApiUtils.canViewRecord(metadataUuid, request);
+        } catch (SecurityException e) {
+            Log.debug(API.LOG_MODULE_NAME, e.getMessage(), e);
+            throw new NotAllowedException(ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_VIEW);
+        }
+
+        String language = languageUtils.getIso3langCode(request.getLocales());
+
+        return new ResponseEntity<>(metadataUtils.getPermalink(metadata.getUuid(), language), HttpStatus.OK);
+    }
+
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Get a metadata record as XML or JSON",
         description = "")
@@ -473,20 +507,52 @@ public class MetadataApi {
             .map(i -> i.getId()).collect(Collectors.toList());
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Get record popularity",
+        description = "")
+    @GetMapping(value = "/{metadataUuid:.+}/popularity",
+        consumes = MediaType.ALL_VALUE,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Popularity."),
+        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_VIEW),
+        @ApiResponse(responseCode = "404", description = ApiParams.API_RESPONSE_RESOURCE_NOT_FOUND)
+    })
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<String> getRecordPopularity(
+        @Parameter(description = API_PARAM_RECORD_UUID,
+            required = true)
+        @PathVariable
+        String metadataUuid,
+        HttpServletRequest request
+    )
+        throws Exception {
+        AbstractMetadata metadata;
+        try {
+            metadata = ApiUtils.canViewRecord(metadataUuid, request);
+        } catch (ResourceNotFoundException e) {
+            Log.debug(API.LOG_MODULE_NAME, e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            Log.debug(API.LOG_MODULE_NAME, e.getMessage(), e);
+            throw new NotAllowedException(ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_VIEW);
+        }
+        return new ResponseEntity<>(metadata.getDataInfo().getPopularity() + "", HttpStatus.OK);
+    }
+
     @io.swagger.v3.oas.annotations.Operation(summary = "Increase record popularity",
         description = "Used when a view is based on the search results content and does not really access the record. Record is then added to the indexing queue and popularity will be updated soon.")
-    @RequestMapping(value = "/{metadataUuid:.+}/popularity",
-        method = RequestMethod.POST,
-        consumes = {
-            MediaType.ALL_VALUE
-        })
+    @PostMapping(value = "/{metadataUuid:.+}/popularity",
+        consumes = MediaType.ALL_VALUE,
+        produces = MediaType.TEXT_PLAIN_VALUE
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Popularity updated."),
         @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_VIEW),
         @ApiResponse(responseCode = "404", description = ApiParams.API_RESPONSE_RESOURCE_NOT_FOUND)
     })
     @ResponseStatus(HttpStatus.CREATED)
-    public void getRecord(
+    @ResponseBody
+    public ResponseEntity<String> increaseRecordPopularity(
         @Parameter(description = API_PARAM_RECORD_UUID,
             required = true)
         @PathVariable
@@ -507,6 +573,9 @@ public class MetadataApi {
         ServiceContext context = ApiUtils.createServiceContext(request);
 
         dataManager.increasePopularity(context, metadata.getId() + "");
+
+        return new ResponseEntity<>(metadata.getDataInfo().getPopularity() + "",
+            HttpStatus.CREATED);
     }
 
     @io.swagger.v3.oas.annotations.Operation(

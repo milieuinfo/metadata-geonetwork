@@ -161,7 +161,8 @@
     ["isTemplate", "recordType"],
     ["groupOwner", "group"],
     ["groupPublishedId", "group"],
-    ["sourceCatalogue", "source"]
+    ["sourceCatalogue", "source"],
+    ["statusWorkflow", "mdStatus"]
   ]);
 
   module.service("gnFacetSorter", [
@@ -460,7 +461,7 @@
           );
         },
         link: function (scope, element, attrs) {
-          scope.iso2lang = gnLangs.getIso2Lang();
+          scope.iso2lang = gnLangs.getIso2Lang(gnLangs.getCurrent());
 
           function init() {
             scope.missingValue =
