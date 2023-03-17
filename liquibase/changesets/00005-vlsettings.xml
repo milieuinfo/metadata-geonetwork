@@ -1,0 +1,75 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet author="joachim" id="00005" contextFilter="dev,bet,prd">
+  </changeSet>
+
+  <!-- dev/beta/prod, just not local dev -->
+  <changeSet author="joachim" id="00006notloc" contextFilter="dev,bet,prd">
+    <update tableName="settings">
+      <column name="value" value="https"/>
+      <where>name = 'system/server/protocol'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="443"/>
+      <where>name = 'system/server/port'</where>
+    </update>
+  </changeSet>
+
+  <!-- dev only -->
+  <changeSet author="joachim" id="00006dev" contextFilter="dev">
+    <update tableName="settings">
+      <column name="value" value="metadata.dev-vlaanderen.be"/>
+      <where>name = 'system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.dev-vlaanderen.be/srv/resources"/>
+      <where>name = 'metadata/resourceIdentifierPrefix'</where>
+    </update>
+  </changeSet>
+
+  <!-- beta only -->
+  <changeSet author="joachim" id="00006bet" contextFilter="bet">
+    <update tableName="settings">
+      <column name="value" value="metadata.beta-vlaanderen.be"/>
+      <where>name = 'system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.beta-vlaanderen.be/srv/resources"/>
+      <where>name = 'metadata/resourceIdentifierPrefix'</where>
+    </update>
+  </changeSet>
+
+  <!-- prod only -->
+  <changeSet author="joachim" id="00006prd" contextFilter="prd">
+    <update tableName="settings">
+      <column name="value" value="metadata.vlaanderen.be"/>
+      <where>name = 'system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.vlaanderen.be/srv/resources"/>
+      <where>name = 'metadata/resourceIdentifierPrefix'</where>
+    </update>
+  </changeSet>
+
+  <!-- local development only -->
+  <changeSet author="joachim" id="00006loc" contextFilter="loc">
+    <update tableName="settings">
+      <column name="value" value="localhost"/>
+      <where>name = 'system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="http"/>
+      <where>name = 'system/server/protocol'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="8080"/>
+      <where>name = 'system/server/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://localhost:8080/geonetwork/srv/resources"/>
+      <where>name = 'metadata/resourceIdentifierPrefix'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
