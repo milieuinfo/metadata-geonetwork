@@ -22,10 +22,6 @@
  */
 package org.fao.geonet.kernel.security.openidconnect;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.logging.LogFactory;
-import org.fao.geonet.Logger;
-import org.fao.geonet.utils.Log;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
@@ -69,12 +65,7 @@ public class HardcodedRegistrationIdOAuth2AuthorizationRequestResolver implement
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
 
-        System.out.println("JOACHIM ");
-        System.out.println(" > request.getRequestURL() = " + request.getRequestURL());
-        System.out.println(" > request.getRequestURL() = " + request.getRequestURL());
-
         if (!this.authorizationRequestMatcher.matches(request)) {
-            System.out.println(" > JOACHIM MATCHES request.getRequestURL() = " + request.getRequestURL());
             return null;
         }
         // defaults the "action" to "login"
@@ -89,17 +80,7 @@ public class HardcodedRegistrationIdOAuth2AuthorizationRequestResolver implement
                 return value;
             }
         };
-        OAuth2AuthorizationRequest resolve = wrappedResolver.resolve(wrappedRequest, CLIENTREGISTRATION_NAME);
-
-        System.out.println("JOACHIM");
-        System.out.println("request.getRequestURL() = " + request.getRequestURL());
-        System.out.println("resolve.getRedirectUri() = " + resolve.getRedirectUri());
-        System.out.println("resolve.getAuthorizationUri() = " + resolve.getAuthorizationUri());
-        System.out.println("resolve.getAuthorizationRequestUri() = " + resolve.getAuthorizationRequestUri());
-        System.out.println("resolve = " + resolve);
-        System.out.println("request = " + request);
-
-        return resolve;
+        return wrappedResolver.resolve(wrappedRequest, CLIENTREGISTRATION_NAME);
     }
 
     //defaults the "action" to "authorize" and uses the GN default oidc provider name

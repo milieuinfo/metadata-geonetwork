@@ -64,10 +64,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response, AuthenticationException failed)
-            throws IOException, ServletException {
-        System.out.println("JOACHIM - unsuccessfulauthentation");
-        System.out.println("request.getRequestURL() = " + request.getRequestURL());
-        System.out.println("response.getStatus() = " + response.getStatus());
+        throws IOException, ServletException {
         super.unsuccessfulAuthentication(request, response, failed);
     }
 
@@ -83,9 +80,8 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
 
-        System.out.println("JOACHIM successfulAuthentication");
         if (authResult == null) {
             throw new IOException("authresult is null!"); // this shouldn't happen
         }
@@ -111,33 +107,30 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
 
-
         //cf GN keycloak
         String redirectURL = findQueryParameter(request, "redirectUrl");
-        System.out.println("JOACHIM redirectURL = " + redirectURL);
+        String fallbackRedirect = request.getContextPath();
+        if (request.getContextPath() == null || request.getContextPath().isEmpty()) {
+            // if the context path is empty, jetty seems to redirect to http and oauth2 login redirect goes wrong
+            // this is a fix, perhaps temporary?
+            fallbackRedirect = "/";
+        }
         if (redirectURL != null) {
             try {
                 URI redirectUri = new URI(redirectURL);
-                if (redirectUri != null && !redirectUri.isAbsolute()) {
-                    System.out.println("JOACHIM response.sendredirect = " + redirectUri.toString());
+                if (!redirectUri.isAbsolute()) {
                     response.sendRedirect(redirectUri.toString());
                 } else {
                     // If the redirect url ends up being null or absolute url then lets redirect back to the context home.
                     Log.warning(Geonet.SECURITY, "Failed to perform login redirect to '" + redirectURL + "'. Redirected to context home");
-                    System.out.println("JOACHIM response.sendredirect 2 = " + request.getContextPath());
-                    response.sendRedirect(request.getContextPath());
+                    response.sendRedirect(fallbackRedirect);
                 }
             } catch (URISyntaxException e) {
-                System.out.println("JOACHIM response.sendredirect 3 = " + request.getContextPath());
-                response.sendRedirect(request.getContextPath());
+                response.sendRedirect(fallbackRedirect);
             }
-        }
-        if (request.getContextPath() == null || request.getContextPath().isEmpty()) {
-            System.out.println("JOACHIM REDIRECT TO /");
-            response.sendRedirect("/");
         } else {
-            System.out.println("JOACHIM response.sendredirect 4 = " + request.getContextPath());
-            response.sendRedirect(request.getContextPath());
+            // we send empty, which becomes something relative, then jetty interprets that
+            response.sendRedirect(fallbackRedirect);
         }
 
         // Set users preferred locale if it exists. - cf. keycloak
@@ -169,7 +162,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
         try {
             String uri = request.getContextPath() + "?" + request.getQueryString();
             MultiValueMap<String, String> parameters =
-                    UriComponentsBuilder.fromUriString(uri).build().getQueryParams();
+                UriComponentsBuilder.fromUriString(uri).build().getQueryParams();
 
             if (!parameters.containsKey(parmName)) {
                 return null;
