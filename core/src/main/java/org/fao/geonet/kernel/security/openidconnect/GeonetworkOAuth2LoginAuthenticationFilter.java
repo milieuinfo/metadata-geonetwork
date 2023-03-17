@@ -82,6 +82,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
                                             Authentication authResult)
         throws IOException, ServletException {
 
+        System.out.println("JOACHIM ");
         if (authResult == null) {
             throw new IOException("authresult is null!"); // this shouldn't happen
         }
@@ -110,20 +111,25 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
 
         //cf GN keycloak
         String redirectURL = findQueryParameter(request, "redirectUrl");
+        System.out.println("JOACHIM redirectURL = " + redirectURL);
         if (redirectURL != null) {
             try {
                 URI redirectUri = new URI(redirectURL);
                 if (redirectUri != null && !redirectUri.isAbsolute()) {
+                    System.out.println("JOACHIM response.sendredirect = " + redirectUri.toString());
                     response.sendRedirect(redirectUri.toString());
                 } else {
                     // If the redirect url ends up being null or absolute url then lets redirect back to the context home.
                     Log.warning(Geonet.SECURITY, "Failed to perform login redirect to '" + redirectURL + "'. Redirected to context home");
+                    System.out.println("JOACHIM response.sendredirect 2 = " + request.getContextPath());
                     response.sendRedirect(request.getContextPath());
                 }
             } catch (URISyntaxException e) {
+                System.out.println("JOACHIM response.sendredirect 3 = " + request.getContextPath());
                 response.sendRedirect(request.getContextPath());
             }
         } else {
+            System.out.println("JOACHIM response.sendredirect 4 = " + request.getContextPath());
             response.sendRedirect(request.getContextPath());
         }
 
