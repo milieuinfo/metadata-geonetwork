@@ -64,7 +64,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response, AuthenticationException failed)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         System.out.println("JOACHIM - unsuccessfulauthentation");
         System.out.println("request.getRequestURL() = " + request.getRequestURL());
         System.out.println("response.getStatus() = " + response.getStatus());
@@ -83,7 +83,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
 
         System.out.println("JOACHIM successfulAuthentication");
         if (authResult == null) {
@@ -106,7 +106,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
         try {
             UserDetails userDetails = oAuth2SecurityProviderUtil.getUserDetails(authResult, true);
         } catch (Exception e) {
-            throw new IOException("OIDC: couldnt save user details",e);
+            throw new IOException("OIDC: couldnt save user details", e);
         }
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
@@ -131,6 +131,10 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
                 System.out.println("JOACHIM response.sendredirect 3 = " + request.getContextPath());
                 response.sendRedirect(request.getContextPath());
             }
+        }
+        if (request.getContextPath() == null || request.getContextPath().isEmpty()) {
+            System.out.println("JOACHIM REDIRECT TO /");
+            response.sendRedirect("/");
         } else {
             System.out.println("JOACHIM response.sendredirect 4 = " + request.getContextPath());
             response.sendRedirect(request.getContextPath());
@@ -165,7 +169,7 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
         try {
             String uri = request.getContextPath() + "?" + request.getQueryString();
             MultiValueMap<String, String> parameters =
-                UriComponentsBuilder.fromUriString(uri).build().getQueryParams();
+                    UriComponentsBuilder.fromUriString(uri).build().getQueryParams();
 
             if (!parameters.containsKey(parmName)) {
                 return null;
