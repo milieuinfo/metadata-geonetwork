@@ -23,14 +23,9 @@ To disable the automatic migrations, start Geonetwork with the following environ
 GEONETWORK_DB_MIGRATION_ONSTARTUP=false
 ```
 
-## Properties file
-Modify the `liquibase.properties` file to your liking. This defines:
-- the database to be modified
-- the context to consider
-- ..
-
 ## Config
-General config of liquibase is done using `pom.xml`. Here, the driver is added as a dependency and the `liquibase.properties` file is selected for sourcing the arguments for liquibase.
+General config of liquibase is done using `pom.xml`. Here, the driver is added as a dependency. Necessary liquibase properties
+are defined in de pom, and also available as profiles.
 
 
 # Contexts
@@ -42,6 +37,13 @@ Multiple contexts are available when running liquibase. These are defined, e.g.,
 - `prd`
 
 Changesets that are context-aware use this, allowing specific parts to be executed on a limited set of environments.
+
+Select a context during execution by specifying it as a maven profile or by passing the relevant properties:
+
+```bash
+# Example for dev (maven profile / liquibase context)
+mvn liquibase:update -P dev
+```
 
 
 # Initial run
@@ -55,7 +57,8 @@ create schema public;
 create schema liquibase;
 ```
 
-Afterwards, run `mvn liquibase:update` in the folder `liquibase/`. This makes use of the `liquibase.properties` file!
+Afterwards, run `mvn liquibase:update` in the folder `liquibase/`. Pass `-P context` to select the desired context, or override
+properties by adding `-Dliquibase.attribute=value`. For available values, see `mvn liquibase:help -Ddetail=true`.
 
 This procedure is also contained in the script `reset-db.sh` for convenience, when running the docker compose version. Make sure you are using the right properties file. 
 

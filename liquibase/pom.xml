@@ -13,7 +13,40 @@
   <properties>
     <rootProjectDir>${basedir}/..</rootProjectDir>
     <liquibase.version>4.20.0</liquibase.version>
+    <liquibase.changeLogFile>changelog.xml</liquibase.changeLogFile>
+    <liquibase.changelogSchemaName>liquibase</liquibase.changelogSchemaName>
+    <liquibase.hub.mode>off</liquibase.hub.mode>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>loc</id>
+      <properties>
+        <liquibase.url>jdbc:postgresql://localhost:5432/geonetwork</liquibase.url>
+        <liquibase.username>geonetwork</liquibase.username>
+        <liquibase.password>geonetwork</liquibase.password>
+        <liquibase.contexts>loc</liquibase.contexts>
+      </properties>
+    </profile>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <liquibase.url>jdbc:postgresql://localhost:5433/geonetwork</liquibase.url>
+        <liquibase.username>geonetwork</liquibase.username>
+        <liquibase.password>geonetwork</liquibase.password>
+        <liquibase.contexts>dev</liquibase.contexts>
+      </properties>
+    </profile>
+    <profile>
+      <id>bet</id>
+      <properties>
+        <liquibase.url>jdbc:postgresql://localhost:5434/geonetwork</liquibase.url>
+        <liquibase.username>geonetwork</liquibase.username>
+        <liquibase.password>geonetwork</liquibase.password>
+        <liquibase.contexts>bet</liquibase.contexts>
+      </properties>
+    </profile>
+  </profiles>
 
   <dependencies>
     <!-- liquibase database versioning tool-->
@@ -38,11 +71,6 @@
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>${liquibase.version}</version>
-        <configuration>
-          <!--set values for Liquibase properties and settings
-          for example, the location of a properties file to use-->
-          <propertyFile>liquibase.properties</propertyFile>
-        </configuration>
         <dependencies>
           <!--set up any dependencies for Liquibase to function in your environment for example, a database-specific plugin-->
           <dependency>

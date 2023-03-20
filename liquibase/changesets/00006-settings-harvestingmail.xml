@@ -37,7 +37,7 @@
   </changeSet>
 
   <!-- dev only -->
-  <changeSet author="joachim" id="00006-bet" contextFilter="dev">
+  <changeSet author="joachim" id="00006-dev" contextFilter="dev">
     <update tableName="settings">
       <column name="value" value="b488982d.groepen.vlaanderen.be@emea.teams.ms"/>
       <where>name='system/harvesting/mail/recipient'</where>

@@ -6,4 +6,4 @@ docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "drop schema if exis
 docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "create schema public"
 docker exec -it $POSTGRESCONTAINER psql -U $POSTGRESUSER -c "create schema liquibase"
 # make sure this goes to the local db
-mvn liquibase:update
+mvn liquibase:update -P loc
