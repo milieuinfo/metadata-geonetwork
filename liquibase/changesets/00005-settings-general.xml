@@ -2,9 +2,8 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-
   <!-- applicable to all environments -->
-  <changeSet author="joachim" id="00005-all">
+  <changeSet author="joachim" id="00005-shared">
     <update tableName="settings">
       <column name="value" value="Metadata Vlaanderen"/>
       <where>name='system/site/name'</where>
@@ -13,17 +12,69 @@
       <column name="value" value="agentschap Digitaal Vlaanderen"/>
       <where>name='system/site/organization'</where>
     </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowPublishInvalidMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowPublishNonApprovedMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowSumitApproveInvalidMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value=".*"/>
+      <where>name='metadata/workflow/draftWhenInGroup'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='metadata/workflow/enable'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='metadata/workflow/forceValidationOnMdSave'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="aiv_noreply@kb.vlaanderen.be"/>
+      <where>name='system/feedback/email'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="smtp.sendgrid.net"/>
+      <where>name='system/feedback/mailServer/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/feedback/mailServer/ignoreSslCertificateErrors'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="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"/>
+      <where>name='system/feedback/mailServer/password'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="587"/>
+      <where>name='system/feedback/mailServer/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="apikey"/>
+      <where>name='system/feedback/mailServer/username'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/inspire/enable'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://inspire.geopunt.be/validator/"/>
+      <where>name='system/inspire/remotevalidation/url'</where>
+    </update>
   </changeSet>
 
-  <!-- dev/beta/prod, just not local dev -->
-  <changeSet author="joachim" id="00005-notloc" contextFilter="dev,bet,prd">
+  <!-- cluster environments, not local dev -->
+  <changeSet author="joachim" id="00005-cluster" contextFilter="dev,bet,prd">
     <update tableName="settings">
       <column name="value" value="https"/>
       <where>name='system/server/protocol'</where>
-    </update>
-    <update tableName="settings">
-      <column name="value" value="443"/>
-      <where>name='system/server/port'</where>
     </update>
     <update tableName="settings">
       <column name="value" value="443"/>

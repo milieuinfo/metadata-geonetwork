@@ -1,0 +1,74 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <!-- shared -->
+  <changeSet author="joachim" id="00006-shared" contextFilter="dev,bet,prd">
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/harvesting/mail/enabled'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='system/harvesting/mail/level1'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/harvesting/mail/level2'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/harvesting/mail/level3'</where>
+    </update>
+    <!-- messages-->
+    <!-- xml transformation: https://gchq.github.io/CyberChef/#recipe=Find_/_Replace(%7B'option':'Simple%20string','string':'%26'%7D,'%26amp;',true,false,true,false)Find_/_Replace(%7B'option':'Simple%20string','string':'%22'%7D,'%26quot;',true,false,true,false)Find_/_Replace(%7B'option':'Simple%20string','string':'%5C''%7D,'%26apos;',true,false,true,false)Find_/_Replace(%7B'option':'Simple%20string','string':'%3E'%7D,'%26gt;',true,false,true,false)Find_/_Replace(%7B'option':'Regex','string':'%3C'%7D,'%26lt;',true,false,true,false)Find_/_Replace(%7B'option':'Regex','string':'%5C%5Cn'%7D,'%5C%5C%5C%5Cn',true,false,true,false)&input=PHA%2BPGI%2BU1VDQ0VTUzwvYj4gLSBUaGUgaGFydmVzdC1qb2Igb2YgJCRoYXJ2ZXN0ZXJUeXBlJCQtaGFydmVzdGVyICc8Yj4kJGhhcnZlc3Rlck5hbWUkJDwvYj4nIHdhcyBzdWNjZXNzZnVsIGFuZCBoYXMgaW1wb3J0ZWQgJCR0b3RhbCQkIHJlY29yZHMuIFRoZXJlIHdlcmUgJCRkb2VzTm90VmFsaWRhdGUkJCByZWNvcmRzIHRoYXQgYXJlIG5vdCB2YWxpZCBhZ2FpbnN0IHRoZSB2YWxpZGF0aW9uIHJ1bGVzLjwvcD4KPHVsIHN0eWxlPSJsaXN0LXN0eWxlLXR5cGU6IG5vbmU7IHBhZGRpbmctaW5saW5lLXN0YXJ0OiAwOyI%2BCiAgPGxpPlRvdGFsIG51bWJlciBvZiBtZXRhZGF0YSBpbXBvcnRlZDogJCR0b3RhbCQkLjwvbGk%2BCiAgPGxpPk51bWJlciBvZiBtZXRhZGF0YSBhZGRlZDogJCRhZGRlZCQkLjwvbGk%2BCiAgPGxpPk51bWJlciBvZiBtZXRhZGF0YSB1cGRhdGVkOiAkJHVwZGF0ZWQkJC48L2xpPgogIDxsaT5OdW1iZXIgb2YgbWV0YWRhdGEgdW5jaGFuZ2VkOiAkJHVuY2hhbmdlZCQkLjwvbGk%2BCiAgPGxpPk51bWJlciBvZiBtZXRhZGF0YSB1bnJldHJpZXZhYmxlOiAkJHVucmV0cmlldmFibGUkJC48L2xpPgogIDxsaT5OdW1iZXIgb2YgbWV0YWRhdGEgcmVtb3ZlZDogJCRyZW1vdmVkJCQuPC9saT4KICA8bGk%2BTnVtYmVyIG9mIGludmFsaWQgbWV0YWRhdGEgcmVjb3JkczogJCRkb2VzTm90VmFsaWRhdGUkJC48L2xpPgo8L3VsPgo8dWwgc3R5bGU9Imxpc3Qtc3R5bGUtdHlwZTogbm9uZTsgcGFkZGluZy1pbmxpbmUtc3RhcnQ6IDA7Ij4KICA8bGk%2BSGFydmVzdGVyIE5hbWU6ICQkaGFydmVzdGVyTmFtZSQkLjwvbGk%2BCiAgPGxpPkhhcnZlc3RlciBUeXBlOiAkJGhhcnZlc3RlclR5cGUkJC48L2xpPgogIDxsaT5IYXJ2ZXN0ZXIgVmFsaWRhdGlvbjogJCRoYXJ2ZXN0VmFsaWRhdGUkJDwvbGk%2BCjwvdWw%2BCjxwPgogIEZ1cnRoZXIgaW5mb3JtYXRpb24gaXMgYXZhaWxhYmxlIGluIHRoZSBsb2cgZmlsZSBhdCA8YSBocmVmPSIkJGxvZ1VSTCQkIj4kJGxvZ1VSTCQkPC9hPi4KPC9wPg -->
+    <update tableName="settings">
+      <column name="value" value="&lt;p&gt;&lt;b&gt;SUCCESS&lt;/b&gt; - The harvest-job of $$harvesterType$$-harvester &apos;&lt;b&gt;$$harvesterName$$&lt;/b&gt;&apos; was successful and has imported $$total$$ records. There were $$doesNotValidate$$ records that are not valid against the validation rules.&lt;/p&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Total number of metadata imported: $$total$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata added: $$added$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata updated: $$updated$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unchanged: $$unchanged$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unretrievable: $$unretrievable$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata removed: $$removed$$.&lt;/li&gt;\n  &lt;li&gt;Number of invalid metadata records: $$doesNotValidate$$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Harvester Name: $$harvesterName$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Type: $$harvesterType$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Validation: $$harvestValidate$$&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;\n  Further information is available in the log file at &lt;a href=&quot;$$logURL$$&quot;&gt;$$logURL$$&lt;/a&gt;.\n&lt;/p&gt;"/>
+      <where>name='system/harvesting/mail/template'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="&lt;p&gt;&lt;b&gt;ERROR&lt;/b&gt; - The harvest-job of $$harvesterType$$-harvester &apos;&lt;b&gt;$$harvesterName$$&lt;/b&gt;&apos; was NOT successful&lt;br&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Total number of metadata imported: $$total$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata added: $$added$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata updated: $$updated$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unchanged: $$unchanged$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unretrievable: $$unretrievable$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata removed: $$removed$$.&lt;/li&gt;\n  &lt;li&gt;Number of invalid metadata records: $$doesNotValidate$$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Harvester Name: $$harvesterName$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Type: $$harvesterType$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Validation: $$harvestValidate$$&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;\n  Further information is available in the log file at &lt;a href=&quot;$$logURL$$&quot;&gt;$$logURL$$&lt;/a&gt;.\n&lt;/p&gt;"/>
+      <where>name='system/harvesting/mail/templateError'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="&lt;p&gt;&lt;b&gt;WARNING&lt;/b&gt; - The harvest-job of $$harvesterType$$-harvester &apos;&lt;b&gt;$$harvesterName$$&lt;/b&gt;&apos; was NOT successful&lt;/p&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Total number of metadata imported: $$total$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata added: $$added$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata updated: $$updated$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unchanged: $$unchanged$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata unretrievable: $$unretrievable$$.&lt;/li&gt;\n  &lt;li&gt;Number of metadata removed: $$removed$$.&lt;/li&gt;\n  &lt;li&gt;Number of invalid metadata records: $$doesNotValidate$$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;ul style=&quot;list-style-type: none; padding-inline-start: 0;&quot;&gt;\n  &lt;li&gt;Harvester Name: $$harvesterName$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Type: $$harvesterType$$.&lt;/li&gt;\n  &lt;li&gt;Harvester Validation: $$harvestValidate$$&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;\n  Further information is available in the log file at &lt;a href=&quot;$$logURL$$&quot;&gt;$$logURL$$&lt;/a&gt;.\n&lt;/p&gt;"/>
+      <where>name='system/harvesting/mail/templateWarning'</where>
+    </update>
+  </changeSet>
+
+  <!-- dev only -->
+  <changeSet author="joachim" id="00006-bet" contextFilter="dev">
+    <update tableName="settings">
+      <column name="value" value="b488982d.groepen.vlaanderen.be@emea.teams.ms"/>
+      <where>name='system/harvesting/mail/recipient'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="[dev] [$$harvesterType$$] $$harvesterName$$ finished harvesting."/>
+      <where>name='system/harvesting/mail/subject'</where>
+    </update>
+  </changeSet>
+
+  <!-- beta only -->
+  <changeSet author="joachim" id="00006-bet" contextFilter="bet">
+    <update tableName="settings">
+      <column name="value" value="b488982d.groepen.vlaanderen.be@emea.teams.ms"/>
+      <where>name='system/harvesting/mail/recipient'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="[bet] [$$harvesterType$$] $$harvesterName$$ finished harvesting."/>
+      <where>name='system/harvesting/mail/subject'</where>
+    </update>
+  </changeSet>
+
+  <!-- prod only -->
+  <changeSet author="joachim" id="00006-prd" contextFilter="prd">
+    <update tableName="settings">
+      <column name="value" value="c2c2afee.groepen.vlaanderen.be@emea.teams.ms"/>
+      <where>name='system/harvesting/mail/recipient'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="[prd] [$$harvesterType$$] $$harvesterName$$ finished harvesting."/>
+      <where>name='system/harvesting/mail/subject'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
