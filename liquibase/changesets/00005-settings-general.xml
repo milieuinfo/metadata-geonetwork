@@ -105,6 +105,10 @@
       <column name="value" value="https://metadata.dev-vlaanderen.be/srv/resources"/>
       <where>name='metadata/resourceIdentifierPrefix'</where>
     </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.dev-vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
+    </update>
   </changeSet>
 
   <!-- beta only -->
@@ -117,6 +121,10 @@
       <column name="value" value="https://metadata.beta-vlaanderen.be/srv/resources"/>
       <where>name='metadata/resourceIdentifierPrefix'</where>
     </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.beta-vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
+    </update>
   </changeSet>
 
   <!-- prod only -->
@@ -128,6 +136,10 @@
     <update tableName="settings">
       <column name="value" value="https://metadata.vlaanderen.be/srv/resources"/>
       <where>name='metadata/resourceIdentifierPrefix'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
     </update>
   </changeSet>
 
