@@ -70,9 +70,7 @@ public class GeonetworkACMIDMLogoutHandler implements LogoutSuccessHandler {
         String host = request.getServerName();
         // int port = request.getServerPort();
         String path = servletContext.getContextPath();
-        System.out.println("path = " + path);
         String result = protocol + "://" + host + path;
-        System.out.println("XOXOXOX = logout redirect url " +result);
         return result;
     }
 }
