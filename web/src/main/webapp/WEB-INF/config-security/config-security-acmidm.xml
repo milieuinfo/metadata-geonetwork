@@ -113,7 +113,7 @@
     <property name="postLogoutRedirectUri" value="REPLACE"/>
   </bean>
 
-  <bean id="openidconnectLogoutSuccessHandler" class="org.fao.geonet.kernel.security.openidconnect.GeonetworkOidcLogoutHandler">
+  <bean id="openidconnectLogoutSuccessHandler" class="be.vlaanderen.geonet.kernel.security.openidconnect.GeonetworkACMIDMLogoutHandler">
     <constructor-arg ref="openidconnectLogoutSuccessHandlerBase"/>
   </bean>
 
