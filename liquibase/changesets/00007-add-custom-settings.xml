@@ -1,0 +1,71 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet author="mathieu" id="00007">
+    <insert tableName="settings">
+      <column name="name" value="system/site/organizationMail"/>
+      <column name="value" value="digitaal.vlaanderen@vlaanderen.be"/>
+      <column name="datatype" value="0"/>
+      <column name="internal" value="n"/>
+      <column name="position" value="131"/>
+    </insert>
+    <insert tableName="settings">
+      <column name="name" value="system/site/organizationUrl"/>
+      <column name="value" value="https://www.vlaanderen.be/digitaal-vlaanderen"/>
+      <column name="datatype" value="0"/>
+      <column name="internal" value="n"/>
+      <column name="position" value="132"/>
+    </insert>
+
+    <insert tableName="translations">
+      <column name="idfield" value="100"/>
+      <column name="field" value="system/site/organizationMail"/>
+      <column name="langid" value="dut"/>
+      <column name="label" value="E-mail van de organisatie"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="101"/>
+      <column name="field" value="system/site/organizationMail"/>
+      <column name="langid" value="eng"/>
+      <column name="label" value="Email of the organization"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="102"/>
+      <column name="field" value="system/site/organizationMail"/>
+      <column name="langid" value="fre"/>
+      <column name="label" value="Email de l'organisation"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="103"/>
+      <column name="field" value="system/site/organizationMail"/>
+      <column name="langid" value="ger"/>
+      <column name="label" value="E-Mail der Organisation"/>
+    </insert>
+
+    <insert tableName="translations">
+      <column name="idfield" value="110"/>
+      <column name="field" value="system/site/organizationUrl"/>
+      <column name="langid" value="dut"/>
+      <column name="label" value="URL van de organisatie"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="111"/>
+      <column name="field" value="system/site/organizationUrl"/>
+      <column name="langid" value="eng"/>
+      <column name="label" value="URL of the organization"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="112"/>
+      <column name="field" value="system/site/organizationUrl"/>
+      <column name="langid" value="fre"/>
+      <column name="label" value="URL de l'organisation"/>
+    </insert>
+    <insert tableName="translations">
+      <column name="idfield" value="113"/>
+      <column name="field" value="system/site/organizationUrl"/>
+      <column name="langid" value="ger"/>
+      <column name="label" value="URL der Organisation"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

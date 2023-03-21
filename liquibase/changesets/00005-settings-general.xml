@@ -1,0 +1,165 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <!-- applicable to all environments -->
+  <changeSet author="joachim" id="00005-shared">
+    <update tableName="settings">
+      <column name="value" value="Metadata Vlaanderen"/>
+      <where>name='system/site/name'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="agentschap Digitaal Vlaanderen"/>
+      <where>name='system/site/organization'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowPublishInvalidMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowPublishNonApprovedMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="false"/>
+      <where>name='metadata/workflow/allowSumitApproveInvalidMd'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value=".*"/>
+      <where>name='metadata/workflow/draftWhenInGroup'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='metadata/workflow/enable'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='metadata/workflow/forceValidationOnMdSave'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="aiv_noreply@kb.vlaanderen.be"/>
+      <where>name='system/feedback/email'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="smtp.sendgrid.net"/>
+      <where>name='system/feedback/mailServer/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/feedback/mailServer/ignoreSslCertificateErrors'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="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"/>
+      <where>name='system/feedback/mailServer/password'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="587"/>
+      <where>name='system/feedback/mailServer/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="apikey"/>
+      <where>name='system/feedback/mailServer/username'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="true"/>
+      <where>name='system/inspire/enable'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://inspire.geopunt.be/validator/"/>
+      <where>name='system/inspire/remotevalidation/url'</where>
+    </update>
+  </changeSet>
+
+  <!-- cluster environments, not local dev -->
+  <changeSet author="joachim" id="00005-cluster" contextFilter="dev,bet,prd">
+    <update tableName="settings">
+      <column name="value" value="https"/>
+      <where>name='system/server/protocol'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="443"/>
+      <where>name='system/server/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value"
+              value="https://ows.terrestris.de/osm/service?SERVICE=WMS&amp;REQUEST=GetMap&amp;VERSION=1.1.0&amp;LAYERS=OSM-WMS&amp;STYLES=default&amp;SRS={srs}&amp;BBOX={minx},{miny},{maxx},{maxy}&amp;WIDTH={width}&amp;HEIGHT={height}&amp;FORMAT=image/png"/>
+      <where>name='region/getmap/background'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="aiv_noreply@kb.vlaanderen.be"/>
+      <where>name='system/feedback/email'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="10000"/>
+      <where>name='system/selectionmanager/maxrecords'</where>
+    </update>
+  </changeSet>
+
+  <!-- dev only -->
+  <changeSet author="joachim" id="00005-dev" contextFilter="dev">
+    <update tableName="settings">
+      <column name="value" value="metadata.dev-vlaanderen.be"/>
+      <where>name='system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.dev-vlaanderen.be/srv/resources"/>
+      <where>name='metadata/resourceIdentifierPrefix'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.dev-vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
+    </update>
+  </changeSet>
+
+  <!-- beta only -->
+  <changeSet author="joachim" id="00005-bet" contextFilter="bet">
+    <update tableName="settings">
+      <column name="value" value="metadata.beta-vlaanderen.be"/>
+      <where>name='system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.beta-vlaanderen.be/srv/resources"/>
+      <where>name='metadata/resourceIdentifierPrefix'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.beta-vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
+    </update>
+  </changeSet>
+
+  <!-- prod only -->
+  <changeSet author="joachim" id="00005-prd" contextFilter="prd">
+    <update tableName="settings">
+      <column name="value" value="metadata.vlaanderen.be"/>
+      <where>name='system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.vlaanderen.be/srv/resources"/>
+      <where>name='metadata/resourceIdentifierPrefix'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://metadata.vlaanderen.be/srv/resources/records/{{uuid}}"/>
+      <where>name='system/publication/doi/doilandingpagetemplate'</where>
+    </update>
+  </changeSet>
+
+  <!-- local development only -->
+  <changeSet author="joachim" id="00005-loc" contextFilter="loc">
+    <update tableName="settings">
+      <column name="value" value="localhost"/>
+      <where>name='system/server/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="http"/>
+      <where>name='system/server/protocol'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="8080"/>
+      <where>name='system/server/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="https://localhost:8080/geonetwork/srv/resources"/>
+      <where>name='metadata/resourceIdentifierPrefix'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

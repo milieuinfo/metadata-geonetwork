@@ -6,16 +6,45 @@ A database versioning tool. It applies a set of changes to a given database and 
 - Include in a pipeline, automated deployments
 - Provide a clean dev environment easily
 
-# Geonetwork's Hibernate
 
+# Setup
+
+## Geonetwork's Hibernate
 Hibernate should be completely disabled once Liquibase is used for the migrations. Automated population of the database will be replaced by relevant scripts handled by Liquibase. This way, changes can be controlled in-order, in a versioned fashion.
 
 To disable hibernate, check the file `config-spring-geonetwork.xml`. Modify the following snippet:
-
 ```xml
 <!-- options: none, validate, update, create, create-drop, create-only -->
 <entry key="hibernate.hbm2ddl.auto" value="none"/>
 ```
+
+To disable the automatic migrations, start Geonetwork with the following environment variable:
+```bash
+GEONETWORK_DB_MIGRATION_ONSTARTUP=false
+```
+
+## Config
+General config of liquibase is done using `pom.xml`. Here, the driver is added as a dependency. Necessary liquibase properties
+are defined in de pom, and also available as profiles.
+
+
+# Contexts
+
+Multiple contexts are available when running liquibase. These are defined, e.g., in the properties file. Possible values are:
+- `loc` for local development
+- `dev`
+- `bet`
+- `prd`
+
+Changesets that are context-aware use this, allowing specific parts to be executed on a limited set of environments.
+
+Select a context during execution by specifying it as a maven profile or by passing the relevant properties:
+
+```bash
+# Example for dev (maven profile / liquibase context)
+mvn liquibase:update -P dev
+```
+
 
 # Initial run
 
@@ -28,9 +57,10 @@ create schema public;
 create schema liquibase;
 ```
 
-Afterwards, run `mvn liquibase:update` in the folder `liquibase/`.
+Afterwards, run `mvn liquibase:update` in the folder `liquibase/`. Pass `-P context` to select the desired context, or override
+properties by adding `-Dliquibase.attribute=value`. For available values, see `mvn liquibase:help -Ddetail=true`.
 
-This procedure is also contained in the script `reset-db.sh` for convenience.
+This procedure is also contained in the script `reset-db.sh` for convenience, when running the docker compose version. Make sure you are using the right properties file. 
 
 
 # Useful commands 
