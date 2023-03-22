@@ -8,10 +8,10 @@ ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC \
         # managed by geonetwork.dir
         # -Dgeonetwork.resources.dir=${DATA_DIR}/resources \
-        -Dgeonetwork.dir=${DATA_DIR} \
-        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist \
+        -Dgeonetwork.dir=${DATA_DIR}
+#        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist \
         # we prefer to pick up the ones from build time, not persisted
-        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
+#        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
 
 USER root
 RUN apt-get -y update && \
