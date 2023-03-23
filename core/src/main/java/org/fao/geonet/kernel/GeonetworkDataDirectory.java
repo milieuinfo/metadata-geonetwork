@@ -40,9 +40,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 
 import static org.fao.geonet.constants.Geonet.Path.IMPORT_STYLESHEETS_SCHEMA_PREFIX;
@@ -307,7 +309,8 @@ public class GeonetworkDataDirectory {
             try {
                 final Path testFile = this.systemDataDir.resolve("testDD.txt");
                 Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
-                IO.touch(testFile);
+                Files.write(testFile, "GeonetworkDataDirectory Test".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+//                IO.touch(testFile);
                 Log.debug(Geonet.DATA_DIRECTORY, "Deleting the test file...");
                 Files.delete(testFile);
                 Log.debug(Geonet.DATA_DIRECTORY, "After deletion of the test file.");
