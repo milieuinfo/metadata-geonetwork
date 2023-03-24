@@ -38,7 +38,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -307,9 +309,11 @@ public class GeonetworkDataDirectory {
             }
 
             try {
+                debuggingWrites();
                 final Path testFile = this.systemDataDir.resolve("testDD.txt");
-                Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
+                Log.debug(Geonet.DATA_DIRECTORY, "Writing to a file.");
                 Files.write(testFile, "GeonetworkDataDirectory Test".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+//                Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
 //                IO.touch(testFile);
                 Log.debug(Geonet.DATA_DIRECTORY, "Deleting the test file...");
                 Files.delete(testFile);
@@ -394,6 +398,40 @@ public class GeonetworkDataDirectory {
         initDataDirectory();
 
         return this.systemDataDir;
+    }
+
+    private void debuggingWrites() {
+        Log.debug(Geonet.DATA_DIRECTORY, "===== Debugging Writes");
+        try {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1");
+            final Path testFile = this.systemDataDir.resolve("test1.txt");
+            Log.debug(Geonet.DATA_DIRECTORY, "===== " + testFile.toAbsolutePath());
+            BufferedWriter bw = new BufferedWriter(new FileWriter(testFile.toFile()));
+            bw.write("test1");
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1 failure: " + e.getMessage() + e.getCause().getMessage());
+            e.printStackTrace();
+        }
+        try {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2");
+            final Path testFile = this.systemDataDir.resolve("test2.txt");
+            IO.touch(testFile);
+        } catch (Exception e) {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2 failure: " + e.getMessage() + e.getCause().getMessage());
+            e.printStackTrace();
+        }
+        try {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3");
+            final Path testFile = this.systemDataDir.resolve("test3.txt");
+            FileWriter fw = new FileWriter(testFile.toFile());
+            fw.write("test3");
+            fw.close();
+        } catch (Exception e) {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3 failure: " + e.getMessage() + e.getCause().getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
