@@ -35,16 +35,14 @@ services:
       dockerfile: Dockerfile
     restart: always
     environment:
-      DATA_DIR: /catalogue-data
-
+      DATA_DIR: /geonetwork-data
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC
-        -Dgeonetwork.dir=/catalogue-data
+        -Dgeonetwork.dir=/geonetwork-data
         -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
-
       ES_HOST: elasticsearch
       ES_PROTOCOL: http
       ES_PORT: 9200
@@ -60,7 +58,7 @@ services:
 
       GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
     volumes:
-      - geonetwork:/catalogue-data
+      - geonetwork:/geonetwork-data
     depends_on:
       - elasticsearch
       - database
