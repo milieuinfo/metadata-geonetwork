@@ -38,17 +38,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.FileTime;
-import java.time.Instant;
 import java.util.Iterator;
 
 import static org.fao.geonet.constants.Geonet.Path.IMPORT_STYLESHEETS_SCHEMA_PREFIX;
@@ -184,9 +178,9 @@ public class GeonetworkDataDirectory {
             }
         }
         Log.warning(Geonet.GEONETWORK, "Error when getting logger file for the " + "appender named '" + FILE_APPENDER_NAME + "'. "
-                + "Check your log configuration file. "
-                + "A FileAppender or RollingFileAppender is required to return last activity to the user interface."
-                + "Appender file not found.");
+            + "Check your log configuration file. "
+            + "A FileAppender or RollingFileAppender is required to return last activity to the user interface."
+            + "Appender file not found.");
 
         if (System.getProperties().containsKey("log_dir")) {
             File logDir = new File(System.getProperty("log_dir"));
@@ -224,7 +218,7 @@ public class GeonetworkDataDirectory {
     private Path lookupProperty(JeevesServlet jeevesServlet, ServiceConfig handlerConfig, String key) {
 
         final String[] typeStrs = {"Java environment variable ",
-                "Servlet context parameter ", "Config.xml appHandler parameter", "System environment variable "};
+            "Servlet context parameter ", "Config.xml appHandler parameter", "System environment variable "};
 
         String dataDirStr = null;
 
@@ -246,7 +240,7 @@ public class GeonetworkDataDirectory {
                 case 1:
                     if (jeevesServlet != null) {
                         value = jeevesServlet.getInitParameter(keyToUse);
-                        if ((value == null) && (jeevesServlet.getServletContext() != null)) {
+                        if ( (value == null) && (jeevesServlet.getServletContext() != null) ){
                             value = jeevesServlet.getServletContext().getInitParameter(keyToUse);
                         }
                     }
@@ -266,7 +260,7 @@ public class GeonetworkDataDirectory {
 
             if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY)) {
                 Log.debug(Geonet.DATA_DIRECTORY, " Found " + typeStr + "for " + keyToUse
-                        + " with value " + value);
+                    + " with value " + value);
             }
 
             dataDirStr = value;
@@ -292,9 +286,9 @@ public class GeonetworkDataDirectory {
 
         if (this.systemDataDir == null) {
             Log.warning(Geonet.DATA_DIRECTORY,
-                    "    - Data directory properties is not set. Use "
-                            + webappName + KEY_SUFFIX + " or " + GEONETWORK_DIR_KEY
-                            + " properties.");
+                "    - Data directory properties is not set. Use "
+                    + webappName + KEY_SUFFIX + " or " + GEONETWORK_DIR_KEY
+                    + " properties.");
             useDefaultDataDir = true;
         } else {
             try {
@@ -306,46 +300,37 @@ public class GeonetworkDataDirectory {
 
             if (!Files.exists(this.systemDataDir)) {
                 Log.warning(Geonet.DATA_DIRECTORY,
-                        "    - Data directory does not exist. Create it first.");
+                    "    - Data directory does not exist. Create it first.");
                 useDefaultDataDir = true;
             }
 
             try {
-                debuggingWrites();
                 final Path testFile = this.systemDataDir.resolve("testDD.txt");
-                Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
                 IO.touch(testFile);
-                Log.debug(Geonet.DATA_DIRECTORY, "Deleting the test file...");
                 Files.delete(testFile);
-                Log.debug(Geonet.DATA_DIRECTORY, "After deletion of the test file.");
             } catch (IOException e) {
-                Log.debug(Geonet.DATA_DIRECTORY, "Failure while doing testDD.txt: " + e.getMessage());
                 Log.warning(
-                        Geonet.DATA_DIRECTORY,
-                        "    - Data directory is not writable. Set read/write privileges to user starting the catalogue (ie. "
-                                + System.getProperty("user.name") + ").");
-                if(e.getCause() != null) {
-                    Log.debug(Geonet.DATA_DIRECTORY, "Failure while doing testDD.txt: " + e.getCause().getMessage());
-                }
-                e.printStackTrace();
+                    Geonet.DATA_DIRECTORY,
+                    "    - Data directory is not writable. Set read/write privileges to user starting the catalogue (ie. "
+                        + System.getProperty("user.name") + ").");
                 useDefaultDataDir = true;
             }
 
             if (!this.systemDataDir.isAbsolute()) {
                 Log.warning(
-                        Geonet.DATA_DIRECTORY,
-                        "    - Data directory is not an absolute path. Relative path is not recommended.\n"
-                                + "Update "
-                                + webappName
-                                + KEY_SUFFIX + " or geonetwork.dir environment variable.");
+                    Geonet.DATA_DIRECTORY,
+                    "    - Data directory is not an absolute path. Relative path is not recommended.\n"
+                        + "Update "
+                        + webappName
+                        + KEY_SUFFIX + " or geonetwork.dir environment variable.");
             }
         }
 
         if (useDefaultDataDir) {
             systemDataDir = getDefaultDataDir(webappDir);
             Log.warning(Geonet.DATA_DIRECTORY,
-                    "    - Data directory provided could not be used. Using default location: "
-                            + systemDataDir);
+                "    - Data directory provided could not be used. Using default location: "
+                    + systemDataDir);
         }
 
 
@@ -358,43 +343,43 @@ public class GeonetworkDataDirectory {
             Log.warning(Geonet.DATA_DIRECTORY, "Unable to make a canonical path from: " + systemDataDir);
         }
         Log.info(Geonet.DATA_DIRECTORY, "   - Data directory is: "
-                + systemDataDir);
+            + systemDataDir);
 
         // Set subfolder data directory
         indexConfigDir = setDir(jeevesServlet, webappName, handlerConfig, indexConfigDir, ".indexConfig" + KEY_SUFFIX,
-                Geonet.Config.INDEX_CONFIG_DIR, "config", "index");
+            Geonet.Config.INDEX_CONFIG_DIR, "config","index");
 
         configDir = setDir(jeevesServlet, webappName, handlerConfig, configDir, ".config" + KEY_SUFFIX,
-                Geonet.Config.CONFIG_DIR, "config");
+            Geonet.Config.CONFIG_DIR, "config");
         thesauriDir = setDir(jeevesServlet, webappName, handlerConfig, thesauriDir,
-                ".codeList" + KEY_SUFFIX, Geonet.Config.CODELIST_DIR, "config", "codelist"
+            ".codeList" + KEY_SUFFIX, Geonet.Config.CODELIST_DIR, "config", "codelist"
         );
         schemaPluginsDir = setDir(jeevesServlet, webappName, handlerConfig, schemaPluginsDir, ".schema" + KEY_SUFFIX,
-                Geonet.Config.SCHEMAPLUGINS_DIR, "config", "schema_plugins"
+            Geonet.Config.SCHEMAPLUGINS_DIR, "config", "schema_plugins"
         );
         metadataDataDir = setDir(jeevesServlet, webappName, handlerConfig, metadataDataDir, ".data" + KEY_SUFFIX,
-                Geonet.Config.DATA_DIR, "data", "metadata_data"
+            Geonet.Config.DATA_DIR, "data", "metadata_data"
         );
         metadataRevisionDir = setDir(jeevesServlet, webappName, handlerConfig, metadataRevisionDir, ".svn" + KEY_SUFFIX,
-                Geonet.Config.SUBVERSION_PATH, "data", "metadata_subversion"
+            Geonet.Config.SUBVERSION_PATH, "data", "metadata_subversion"
         );
         resourcesDir = setDir(jeevesServlet, webappName, handlerConfig, resourcesDir,
-                ".resources" + KEY_SUFFIX, Geonet.Config.RESOURCES_DIR, "data", "resources"
+            ".resources" + KEY_SUFFIX, Geonet.Config.RESOURCES_DIR, "data", "resources"
         );
         uploadDir = setDir(jeevesServlet, webappName, handlerConfig, uploadDir,
-                ".upload" + KEY_SUFFIX, Geonet.Config.UPLOAD_DIR, "data", "upload"
+            ".upload" + KEY_SUFFIX, Geonet.Config.UPLOAD_DIR, "data", "upload"
         );
         formatterDir = setDir(jeevesServlet, webappName, handlerConfig, formatterDir,
-                ".formatter" + KEY_SUFFIX, Geonet.Config.FORMATTER_PATH, "data", "formatter");
+            ".formatter" + KEY_SUFFIX, Geonet.Config.FORMATTER_PATH, "data", "formatter");
 
         htmlCacheDir = setDir(jeevesServlet, webappName, handlerConfig, htmlCacheDir,
-                ".htmlcache" + KEY_SUFFIX, Geonet.Config.HTMLCACHE_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "htmlcache"
+            ".htmlcache" + KEY_SUFFIX, Geonet.Config.HTMLCACHE_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "htmlcache"
         );
         backupDir = setDir(jeevesServlet, webappName, handlerConfig, backupDir,
-                ".backup" + KEY_SUFFIX, Geonet.Config.BACKUP_DIR, "data", "backup"
+            ".backup" + KEY_SUFFIX, Geonet.Config.BACKUP_DIR, "data", "backup"
         );
         nodeLessFiles = setDir(jeevesServlet, webappName, handlerConfig, nodeLessFiles,
-                ".node_less_files" + KEY_SUFFIX, Geonet.Config.NODE_LESS_DIR, "data", "node_less_files"
+            ".node_less_files" + KEY_SUFFIX, Geonet.Config.NODE_LESS_DIR, "data", "node_less_files"
         );
 
         handlerConfig.setValue(Geonet.Config.SYSTEM_DATA_DIR, this.systemDataDir.toString());
@@ -402,79 +387,6 @@ public class GeonetworkDataDirectory {
         initDataDirectory();
 
         return this.systemDataDir;
-    }
-
-    private void debuggingWrites() {
-        Log.debug(Geonet.DATA_DIRECTORY, "===== Debugging Writes");
-        try {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1");
-            final Path testFile = this.systemDataDir.resolve("test1.txt");
-            Log.debug(Geonet.DATA_DIRECTORY, "===== " + testFile.toAbsolutePath());
-            BufferedWriter bw = new BufferedWriter(new FileWriter(testFile.toFile()));
-            bw.write("test1");
-            bw.flush();
-            bw.close();
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1 finished.");
-        } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1 failure: " + e.getMessage() + e.getCause().getMessage());
-            e.printStackTrace();
-        }
-        try {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b");
-            final Path testFile = this.systemDataDir.resolve("test1b.txt");
-            Log.debug(Geonet.DATA_DIRECTORY, "===== " + testFile.toAbsolutePath());
-            BufferedWriter bw = new BufferedWriter(new FileWriter(testFile.toFile()));
-            bw.write("test1");
-            bw.flush();
-            bw.close();
-            Files.delete(testFile);
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b finished.");
-        } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b failure: " + e.getMessage());
-            if(e.getCause() != null) {
-                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
-            }
-            e.printStackTrace();
-        }
-        try {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2");
-            final Path testFile = this.systemDataDir.resolve("test2.txt");
-            IO.touch(testFile);
-        } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2 failure: " + e.getMessage());
-            if(e.getCause() != null) {
-                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
-            }
-            e.printStackTrace();
-        }
-        try {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3");
-            final Path testFile = this.systemDataDir.resolve("test3.txt");
-            FileWriter fw = new FileWriter(testFile.toFile());
-            fw.write("test3");
-            fw.close();
-        } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3 failure: " + e.getMessage());
-            if(e.getCause() != null) {
-                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
-            }
-            e.printStackTrace();
-        }
-        try {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4");
-            final Path testFile = this.systemDataDir.resolve("test4.txt");
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 creating file");
-            Files.createFile(testFile);
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 Setting last modified");
-            Files.setLastModifiedTime(testFile, FileTime.from(Instant.now()));
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 done.");
-        } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 failure: " + e.getMessage());
-            if(e.getCause() != null) {
-                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
-            }
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -501,7 +413,7 @@ public class GeonetworkDataDirectory {
 
             try {
                 final Path srcMap = webappDir.resolve("WEB-INF").resolve("data").
-                        resolve("data").resolve("resources").resolve("map");
+                    resolve("data").resolve("resources").resolve("map");
 
                 if (Files.exists(srcMap)) {
                     try (DirectoryStream<Path> paths = Files.newDirectoryStream(srcMap)) {
@@ -528,9 +440,9 @@ public class GeonetworkDataDirectory {
                 IO.copyDirectoryOrFile(srcFile, imagesDir, false);
             } catch (IOException e) {
                 Log.info(
-                        Geonet.DATA_DIRECTORY,
-                        "      - Error copying images folder: "
-                                + e.getMessage());
+                    Geonet.DATA_DIRECTORY,
+                    "      - Error copying images folder: "
+                        + e.getMessage());
             }
         }
 
@@ -540,9 +452,9 @@ public class GeonetworkDataDirectory {
                 Files.createDirectories(logoDir);
             } catch (IOException e) {
                 Log.info(
-                        Geonet.DATA_DIRECTORY,
-                        "      - Error creating images/logos folder: "
-                                + e.getMessage());
+                    Geonet.DATA_DIRECTORY,
+                    "      - Error creating images/logos folder: "
+                        + e.getMessage());
             }
         }
 
@@ -577,9 +489,9 @@ public class GeonetworkDataDirectory {
                 IO.copyDirectoryOrFile(srcFile, this.indexConfigDir, false);
             } catch (IOException e) {
                 Log.info(
-                        Geonet.DATA_DIRECTORY,
-                        "      - Error copying index configuration: "
-                                + e.getMessage());
+                    Geonet.DATA_DIRECTORY,
+                    "      - Error copying index configuration: "
+                        + e.getMessage());
             }
         }
 
@@ -605,9 +517,9 @@ public class GeonetworkDataDirectory {
 
             } catch (IOException e) {
                 Log.info(
-                        Geonet.DATA_DIRECTORY,
-                        "      - Error copying schema plugin catalogue: "
-                                + e.getMessage());
+                    Geonet.DATA_DIRECTORY,
+                    "      - Error copying schema plugin catalogue: "
+                        + e.getMessage());
             }
         }
 
@@ -623,9 +535,9 @@ public class GeonetworkDataDirectory {
 
         } catch (IOException e) {
             Log.info(
-                    Geonet.DATA_DIRECTORY,
-                    "      - Error copying encryptor.propeties file: "
-                            + e.getMessage());
+                Geonet.DATA_DIRECTORY,
+                "      - Error copying encryptor.propeties file: "
+                    + e.getMessage());
             throw e;
         }
 
@@ -659,7 +571,7 @@ public class GeonetworkDataDirectory {
         if (dir != null) {
             if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY)) {
                 Log.debug(Geonet.DATA_DIRECTORY, "path for " + envKey + " set to " + dir.toString()
-                        + " via bean properties, not looking up");
+                    + " via bean properties, not looking up");
             }
         } else {
             dir = lookupProperty(jeevesServlet, handlerConfig, envKey);
@@ -676,8 +588,8 @@ public class GeonetworkDataDirectory {
         } else {
             if (!dir.isAbsolute()) {
                 Log.info(Geonet.DATA_DIRECTORY, "    - " + envKey
-                        + " for directory " + dir
-                        + " is relative path. Use absolute path instead.");
+                    + " for directory " + dir
+                    + " is relative path. Use absolute path instead.");
             }
         }
         if (handlerKey != null) {
@@ -912,12 +824,12 @@ public class GeonetworkDataDirectory {
             String[] pathToken = conversionId.split(":");
             if (pathToken.length == 3) {
                 return this.getSchemaPluginsDir()
-                        .resolve(pathToken[1])
-                        .resolve(pathToken[2] + ".xsl");
+                    .resolve(pathToken[1])
+                    .resolve(pathToken[2] + ".xsl");
             }
         } else {
             return this.getWebappDir().resolve(Geonet.Path.IMPORT_STYLESHEETS).
-                    resolve(conversionId + ".xsl");
+                resolve(conversionId + ".xsl");
         }
         return null;
     }
