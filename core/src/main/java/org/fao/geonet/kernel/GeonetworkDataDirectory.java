@@ -410,8 +410,26 @@ public class GeonetworkDataDirectory {
             bw.write("test1");
             bw.flush();
             bw.close();
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1 finished.");
         } catch (Exception e) {
             Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1 failure: " + e.getMessage() + e.getCause().getMessage());
+            e.printStackTrace();
+        }
+        try {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b");
+            final Path testFile = this.systemDataDir.resolve("test1b.txt");
+            Log.debug(Geonet.DATA_DIRECTORY, "===== " + testFile.toAbsolutePath());
+            BufferedWriter bw = new BufferedWriter(new FileWriter(testFile.toFile()));
+            bw.write("test1");
+            bw.flush();
+            bw.close();
+            Files.delete(testFile);
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b finished.");
+        } catch (Exception e) {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 1b failure: " + e.getMessage());
+            if(e.getCause() != null) {
+                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
+            }
             e.printStackTrace();
         }
         try {
@@ -419,7 +437,10 @@ public class GeonetworkDataDirectory {
             final Path testFile = this.systemDataDir.resolve("test2.txt");
             IO.touch(testFile);
         } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2 failure: " + e.getMessage() + e.getCause().getMessage());
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 2 failure: " + e.getMessage());
+            if(e.getCause() != null) {
+                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
+            }
             e.printStackTrace();
         }
         try {
@@ -429,7 +450,10 @@ public class GeonetworkDataDirectory {
             fw.write("test3");
             fw.close();
         } catch (Exception e) {
-            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3 failure: " + e.getMessage() + e.getCause().getMessage());
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3 failure: " + e.getMessage());
+            if(e.getCause() != null) {
+                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
+            }
             e.printStackTrace();
         }
     }
