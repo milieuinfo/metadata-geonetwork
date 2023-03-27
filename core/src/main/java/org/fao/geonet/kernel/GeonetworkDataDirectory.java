@@ -47,6 +47,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 import java.util.Iterator;
 
 import static org.fao.geonet.constants.Geonet.Path.IMPORT_STYLESHEETS_SCHEMA_PREFIX;
@@ -451,6 +453,21 @@ public class GeonetworkDataDirectory {
             fw.close();
         } catch (Exception e) {
             Log.debug(Geonet.DATA_DIRECTORY, "===== Test 3 failure: " + e.getMessage());
+            if(e.getCause() != null) {
+                Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
+            }
+            e.printStackTrace();
+        }
+        try {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4");
+            final Path testFile = this.systemDataDir.resolve("test4.txt");
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 creating file");
+            Files.createFile(testFile);
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 Setting last modified");
+            Files.setLastModifiedTime(testFile, FileTime.from(Instant.now()));
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 done.");
+        } catch (Exception e) {
+            Log.debug(Geonet.DATA_DIRECTORY, "===== Test 4 failure: " + e.getMessage());
             if(e.getCause() != null) {
                 Log.debug(Geonet.DATA_DIRECTORY, "==== > "+e.getCause().getMessage());
             }
