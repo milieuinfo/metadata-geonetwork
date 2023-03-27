@@ -313,10 +313,8 @@ public class GeonetworkDataDirectory {
             try {
                 debuggingWrites();
                 final Path testFile = this.systemDataDir.resolve("testDD.txt");
-                Log.debug(Geonet.DATA_DIRECTORY, "Writing to a file.");
-                Files.write(testFile, "GeonetworkDataDirectory Test".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-//                Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
-//                IO.touch(testFile);
+                Log.debug(Geonet.DATA_DIRECTORY, "Touching the test file...");
+                IO.touch(testFile);
                 Log.debug(Geonet.DATA_DIRECTORY, "Deleting the test file...");
                 Files.delete(testFile);
                 Log.debug(Geonet.DATA_DIRECTORY, "After deletion of the test file.");
@@ -326,6 +324,10 @@ public class GeonetworkDataDirectory {
                         Geonet.DATA_DIRECTORY,
                         "    - Data directory is not writable. Set read/write privileges to user starting the catalogue (ie. "
                                 + System.getProperty("user.name") + ").");
+                if(e.getCause() != null) {
+                    Log.debug(Geonet.DATA_DIRECTORY, "Failure while doing testDD.txt: " + e.getCause().getMessage());
+                }
+                e.printStackTrace();
                 useDefaultDataDir = true;
             }
 
