@@ -69,7 +69,7 @@ jobs:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'clean install'
-        options: ' -DskipTests -Pwar '
+        options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
     - task: Docker@2
       displayName: Build web image and push to preprod container registry (premdacr)
       inputs:
