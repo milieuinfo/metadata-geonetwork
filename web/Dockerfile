@@ -18,7 +18,9 @@ ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Dgeonetwork.resources.dir=${DATA_DIR}/resources \
         -Dgeonetwork.upload.dir=${DATA_DIR}/upload \
         -Dgeonetwork.config.dir=${DATA_DIR}/config \
-        -Dgeonetwork.data.dir=${DATA_DIR}/data
+        -Dgeonetwork.data.dir=${DATA_DIR}/data \
+        # separate this, otherwise it lands within the geonetwork.resources.dir folder
+        -Dgeonetwork.htmlcache.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/resources/htmlcache
 
 USER root
 RUN apt-get -y update && \
