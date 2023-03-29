@@ -16,7 +16,7 @@ variables:
 jobs:
 - job: publish
   timeoutInMinutes: "30"
-  # itss linux build server 
+  # itss linux build server
   pool: dv-alex-adobuildserves-ubuntu-vmss
   steps:
     - checkout: self
@@ -32,7 +32,7 @@ jobs:
         inlineScript: |
           # download kubectl and kubelogin
           sudo az aks install-cli --subscription ${{ variables.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
-          
+
           # download ~/.kube/config file
           az aks get-credentials --resource-group ${{ variables.clusterRg }} --name ${{ variables.clusterName }} --only-show-errors
 
@@ -69,7 +69,7 @@ jobs:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'clean install'
-        options: ' -DskipTests -Pwar -Pwro4j-prebuild-cache '
+        options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
     - task: Docker@2
       displayName: Build web image and push to preprod container registry (premdacr)
       inputs:
