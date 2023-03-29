@@ -7,11 +7,12 @@ ENV WEBAPP_NAME root
 ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true \
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC \
-        -Dgeonetwork.dir=${DATA_DIR}
+        -Denv=prod \
+        -Dgeonetwork.dir=${DATA_DIR} \
         # unused, to specify the subfolders
         # -Dgeonetwork.resources.dir=${DATA_DIR}/resources
-        # -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist
-        # -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
+        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist \
+        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
 
 USER root
 RUN apt-get -y update && \
