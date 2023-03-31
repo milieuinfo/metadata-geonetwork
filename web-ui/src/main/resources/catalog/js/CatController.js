@@ -864,6 +864,7 @@
             is3DModeAllowed: false,
             isSaveMapInCatalogAllowed: true,
             isExportMapAsImageEnabled: false,
+            isAccessible: false,
             storage: "sessionStorage",
             bingKey: "",
             listOfServices: {
