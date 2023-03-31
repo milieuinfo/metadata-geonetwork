@@ -34,7 +34,7 @@
           http://www.springframework.org/schema/util/spring-util.xsd">
 
   <context:property-override
-    location="WEB-INF/config-security/config-security-openidconnect-overrides.properties"
+    location="WEB-INF/config-security/config-security-acmidm-overrides.properties"
     ignore-resource-not-found="true"/>
 
   <bean id ="openidconnectConfiguration" class="org.fao.geonet.kernel.security.openidconnect.OIDCConfiguration"/>
