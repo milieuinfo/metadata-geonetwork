@@ -24,12 +24,19 @@
             <div class="pull-left">
               <a
                 href=""
-                data-ng-show="md.isTemplate != 's'"
+                data-ng-show="md.isTemplate == 'n'"
                 data-ng-href="catalog.search#/{{(md.draft == 'y')?'metadraf':'metadata'}}/{{md.uuid}}"
                 title="{{md.resourceAbstract}}"
                 class="gn-break"
                 >{{md.resourceTitle}}</a
               >
+              <a
+                href=""
+                data-ng-show="md.isTemplate == 'y'"
+                data-ng-href="catalog.search#/{{(md.draft == 'y')?'metadraf':'metadata'}}/{{md.getUuid()}}"
+                title="{{md.abstract}}"
+                ng-bind-html="md.resourceTitle"
+              ></a>
               <span data-ng-show="md.isTemplate == 's'">{{md.resourceTitle}}</span>
               <div class="gn-record-details text-muted">
                 <small><span data-translate="">owner</span>:</small>

@@ -50,7 +50,7 @@
       <div class="panel-default panel">
         <div class="panel-heading">
           <span data-translate="">fromTemplate</span>
-          <strong>{{(activeTpl.title || '...') | translate}}</strong>
+          <strong ng-bind-html="activeTpl.title || '...'"></strong>
         </div>
         <div class="panel-body">
           <input
@@ -70,8 +70,8 @@
               class="list-group-item"
               data-ng-click="setActiveTpl(tpl)"
               data-ng-class="{'active': tpl==activeTpl}"
-              >{{tpl.resourceTitle}}</a
-            >
+              ng-bind-html="tpl.resourceTitle"
+            ></a>
           </div>
         </div>
       </div>
