@@ -938,17 +938,99 @@
     <tab id="vl-qualityTab" mode="flat">
       <section name="qualityTab">
         <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:scope"/>
-        <action type="add" name="gmd:report"
-                or="report" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*"
-                addDirective="data-gn-directory-entry-selector">
-          <directiveAttributes
-            data-template-add-action="false"
-            data-search-action="true"
-            data-popup-action="false"
-            data-filter='{"_root": "gmd:report", "_typeReport": "DQ_ThematicClassificationCorrectness or DQ_CompletenessOmission or DQ_CompletenessCommission or DQ_AbsoluteExternalPositionalAccuracy"}'
-            data-insert-modes="text"
-            data-template-type="report"
-            data-transformation="removeRoot"/>
+
+        <action type="add" name="vl-measureType" btnLabel="vl-add-qualityReport"
+                or="report" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+          <template>
+            <snippet label="vl-add-DQ_AbsoluteExternalPositionalAccuracy">
+              <gmd:report>
+                <gmd:DQ_AbsoluteExternalPositionalAccuracy>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_2">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_AbsoluteExternalPositionalAccuracy>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_CompletenessCommission">
+              <gmd:report>
+                <gmd:DQ_CompletenessCommission>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_4">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_CompletenessCommission>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_ThematicClassificationCorrectness">
+              <gmd:report>
+                <gmd:DQ_ThematicClassificationCorrectness>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_3">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_ThematicClassificationCorrectness>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_CompletenessOmission">
+              <gmd:report>
+                <gmd:DQ_CompletenessOmission>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_1">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_CompletenessOmission>
+              </gmd:report>
+            </snippet>
+          </template>
         </action>
 
         <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_ThematicClassificationCorrectness" del=".."/>
@@ -956,7 +1038,7 @@
         <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_CompletenessCommission" del=".."/>
         <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_AbsoluteExternalPositionalAccuracy" del=".."/>
 
-        <section name="gmd:lineage" required="true()">
+        <section name="gmd:lineage">
           <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:statement"/>
 
           <section name="gmd:processStep"
@@ -965,16 +1047,6 @@
             <field xpath="gmd:LI_ProcessStep/gmd:description"/>
             <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
             <section xpath="gmd:LI_ProcessStep/gmd:processor" />
-            <action type="add" name="gmd:processor" or="processor" in="gmd:LI_ProcessStep"
-                    addDirective="data-gn-directory-entry-selector">
-              <directiveAttributes
-                data-template-add-action="false"
-                data-search-action="true"
-                data-popup-action="false"
-                data-template-type="contact"
-                data-filter='{"_roleCode": "processor"}'
-                data-insert-modes="text"/>
-            </action>
 
             <action type="add" btnLabel="vl-add-processor"
                     or="processor" in="gmd:LI_ProcessStep">
@@ -1039,21 +1111,85 @@
                 </snippet>
               </template>
             </action>
-
-
           </section>
 
-          <action type="add" name="gmd:processStep"
-                  or="processStep" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*"
-                  addDirective="data-gn-directory-entry-selector">
-            <directiveAttributes
-              data-template-add-action="false"
-              data-search-action="true"
-              data-popup-action="false"
-              data-filter='{"_root": "gmd:LI_ProcessStep"}'
-              data-only-one-subtemplate="true"
-              data-insert-modes="text"
-              data-template-type="processStep"/>
+          <action type="add" btnLabel="vl-add-processStep"
+                  or="processStep" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*">
+            <template>
+              <snippet>
+                <gmd:processStep>
+                  <gmd:LI_ProcessStep>
+                    <gmd:description>
+                      <gco:CharacterString/>
+                    </gmd:description>
+                    <gmd:dateTime gco:nilReason="missing">
+                      <gco:DateTime/>
+                    </gmd:dateTime>
+                    <gmd:processor>
+                      <gmd:CI_ResponsibleParty>
+                        <gmd:individualName>
+                          <gco:CharacterString/>
+                        </gmd:individualName>
+                        <gmd:organisationName>
+                          <gco:CharacterString/>
+                        </gmd:organisationName>
+                        <gmd:contactInfo>
+                          <gmd:CI_Contact>
+                            <gmd:phone>
+                              <gmd:CI_Telephone>
+                                <gmd:voice>
+                                  <gco:CharacterString/>
+                                </gmd:voice>
+                                <gmd:facsimile>
+                                  <gco:CharacterString/>
+                                </gmd:facsimile>
+                              </gmd:CI_Telephone>
+                            </gmd:phone>
+                            <gmd:address>
+                              <gmd:CI_Address>
+                                <gmd:deliveryPoint>
+                                  <gco:CharacterString/>
+                                </gmd:deliveryPoint>
+                                <gmd:city>
+                                  <gco:CharacterString/>
+                                </gmd:city>
+                                <gmd:postalCode>
+                                  <gco:CharacterString/>
+                                </gmd:postalCode>
+                                <gmd:country>
+                                  <gco:CharacterString/>
+                                </gmd:country>
+                                <gmd:electronicMailAddress>
+                                  <gco:CharacterString/>
+                                </gmd:electronicMailAddress>
+                              </gmd:CI_Address>
+                            </gmd:address>
+                            <gmd:onlineResource>
+                              <gmd:CI_OnlineResource>
+                                <gmd:linkage>
+                                  <gmd:URL/>
+                                </gmd:linkage>
+                                <gmd:function>
+                                  <gmd:CI_OnLineFunctionCode
+                                    codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_OnLineFunctionCode"
+                                    codeListValue=""/>
+                                </gmd:function>
+                              </gmd:CI_OnlineResource>
+                            </gmd:onlineResource>
+                          </gmd:CI_Contact>
+                        </gmd:contactInfo>
+                        <gmd:role>
+                          <gmd:CI_RoleCode
+                            codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                            codeListValue="processor">processor
+                          </gmd:CI_RoleCode>
+                        </gmd:role>
+                      </gmd:CI_ResponsibleParty>
+                    </gmd:processor>
+                  </gmd:LI_ProcessStep>
+                </gmd:processStep>
+              </snippet>
+            </template>
           </action>
 
           <section name="gmd:source"
