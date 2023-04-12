@@ -30,7 +30,6 @@
   <vl-add-status>Status</vl-add-status>
   <vl-constraintsSection>Inhoudelijke beperkingen</vl-constraintsSection>
   <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
-  <vl-add-pointOfContact>Contactgegevens dataset(serie)</vl-add-pointOfContact>
   <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
   <vl-add-representationType>Ruimtelijke schema</vl-add-representationType>
   <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
@@ -59,6 +58,9 @@
   <vl-add-DQ_AbsoluteExternalPositionalAccuracy>Geometrische nauwkeurigheid</vl-add-DQ_AbsoluteExternalPositionalAccuracy>
   <vl-add-DQ_ThematicClassificationCorrectness>Thematische classificatie</vl-add-DQ_ThematicClassificationCorrectness>
   <vl-add-processStep>Processtappen</vl-add-processStep>
+  <vl-add-source>Bron</vl-add-source>
+  <vl-sourceDescription>Inwinningsmethode</vl-sourceDescription>
+  <vl-add-pointOfContact>Contactgegevens</vl-add-pointOfContact>
 
   <understandResource>Informatie over de dataset</understandResource>
   <relatedResources>Gerelateerde services en gekoppelde data</relatedResources>
