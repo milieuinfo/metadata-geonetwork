@@ -1,17 +1,26 @@
 FROM jetty:9.4.49-jdk8
 
-ENV DATA_DIR /catalogue-data
+# data dir for geonetwork, to be shared across instances
+# subfolders are specified below, using the various env vars
+ENV DATA_DIR /geonetwork-data
 # run in '/' instead of '/geonetwork' (the default)
 ENV WEBAPP_NAME root
 ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true \
         -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC \
-        # managed by geonetwork.dir
-        # -Dgeonetwork.resources.dir=${DATA_DIR}/resources \
-        -Dgeonetwork.dir=${DATA_DIR} \
-        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist \
-        # we prefer to pick up the ones from build time, not persisted
-        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
+        -Denv=prod \
+        # don't use the geonetwork general data directory - default one is fine
+        # -Dgeonetwork.dir=${DATA_DIR} \
+        # don't override the following: they can be redeployed every time
+        # -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/codelist \
+        # -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/schema_plugins
+        # explicitly share these, these need to be present in the shared folder
+        -Dgeonetwork.resources.dir=${DATA_DIR}/resources \
+        -Dgeonetwork.upload.dir=${DATA_DIR}/upload \
+        -Dgeonetwork.config.dir=${DATA_DIR}/config \
+        -Dgeonetwork.data.dir=${DATA_DIR}/data \
+        # separate this, otherwise it lands within the geonetwork.resources.dir folder
+        -Dgeonetwork.htmlcache.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/resources/htmlcache
 
 USER root
 RUN apt-get -y update && \

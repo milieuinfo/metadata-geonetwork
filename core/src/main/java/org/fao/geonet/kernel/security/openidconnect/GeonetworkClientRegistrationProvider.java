@@ -242,15 +242,23 @@ public class GeonetworkClientRegistrationProvider {
         }
         List<String> scopes = getScopes(oidcMetadata);
 
-
         Map<String, Object> configurationMetadata = new LinkedHashMap<>(oidcMetadata.toJSONObject());
+
+        // ACMIDM / MetadataVlaanderen specific change. {baseScheme} does not resolve properly to https so
+        // on cluster we need to hardcode 'https', which doesn't work locally.
+        // This way we can override the scheme if necessary.
+        // TODO clean this way of working up, perhaps we are missing another configuration somewhere that sets this up properly
+        String redirectUriScheme = System.getenv("ACMIDM_REDIRECTURI_SCHEME");
+        if(redirectUriScheme==null) {
+            redirectUriScheme = "https";
+        }
 
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(CLIENTREGISTRATION_NAME)
             .userNameAttributeName(IdTokenClaimNames.SUB)
             .scope(scopes)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
             .clientAuthenticationMethod(method)
-            .redirectUriTemplate("{baseUrl}/{action}/oauth2/code/{registrationId}")
+            .redirectUri(redirectUriScheme+"://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}")
             .authorizationUri(oidcMetadata.getAuthorizationEndpointURI().toASCIIString())
             .providerConfigurationMetadata(configurationMetadata)
             .tokenUri(oidcMetadata.getTokenEndpointURI().toASCIIString())
@@ -265,8 +273,7 @@ public class GeonetworkClientRegistrationProvider {
             .clientSecret(clientSecret)
             .clientName("geonetwork via spring security");
 
-        ClientRegistration clientRegistration = builder.build();
-        return clientRegistration;
+        return builder.build();
     }
 
 }

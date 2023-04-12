@@ -65,7 +65,7 @@
     <Logger name="geonetwork.resources" level="error"/>
     <Logger name="geonetwork.schemamanager" level="debug"/>
     <Logger name="geonetwork.search" level="debug"/>
-    <Logger name="geonetwork.security" level="error"/>
+    <Logger name="geonetwork.security" level="debug"/>
     <Logger name="geonetwork.spatineo" level="error"/>
     <Logger name="geonetwork.sru" level="error"/>
     <Logger name="geonetwork.sru.search" level="debug"/>

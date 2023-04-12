@@ -102,29 +102,35 @@ public class GeonetworkOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthen
         try {
             UserDetails userDetails = oAuth2SecurityProviderUtil.getUserDetails(authResult, true);
         } catch (Exception e) {
-            throw new IOException("OIDC: couldnt save user details",e);
+            throw new IOException("OIDC: couldnt save user details", e);
         }
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
 
-
         //cf GN keycloak
         String redirectURL = findQueryParameter(request, "redirectUrl");
+        String fallbackRedirect = request.getContextPath();
+        if (request.getContextPath() == null || request.getContextPath().isEmpty()) {
+            // if the context path is empty, jetty seems to redirect to http and oauth2 login redirect goes wrong
+            // this is a fix, perhaps temporary?
+            fallbackRedirect = "/";
+        }
         if (redirectURL != null) {
             try {
                 URI redirectUri = new URI(redirectURL);
-                if (redirectUri != null && !redirectUri.isAbsolute()) {
+                if (!redirectUri.isAbsolute()) {
                     response.sendRedirect(redirectUri.toString());
                 } else {
                     // If the redirect url ends up being null or absolute url then lets redirect back to the context home.
                     Log.warning(Geonet.SECURITY, "Failed to perform login redirect to '" + redirectURL + "'. Redirected to context home");
-                    response.sendRedirect(request.getContextPath());
+                    response.sendRedirect(fallbackRedirect);
                 }
             } catch (URISyntaxException e) {
-                response.sendRedirect(request.getContextPath());
+                response.sendRedirect(fallbackRedirect);
             }
         } else {
-            response.sendRedirect(request.getContextPath());
+            // we send empty, which becomes something relative, then jetty interprets that
+            response.sendRedirect(fallbackRedirect);
         }
 
         // Set users preferred locale if it exists. - cf. keycloak

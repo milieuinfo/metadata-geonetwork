@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+  <changeSet author="mathieu" id="00004">
+    <update tableName="settings" >
+      <column name="value" value="4.2.4"/>
+      <where>name = 'system/platform/version'</where>
+    </update>
+    <update tableName="settings" >
+      <column name="value" value="SNAPSHOT"/>
+      <where>name = 'system/platform/subVersion'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

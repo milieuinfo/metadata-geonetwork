@@ -1,0 +1,45 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet author="mathieu" id="00008">
+    <update tableName="languages">
+      <column name="isdefault" value="n"/>
+      <where>id = 'eng'</where>
+    </update>
+    <update tableName="languages">
+      <column name="isdefault" value="y"/>
+      <where>id = 'dut'</where>
+    </update>
+
+
+    <!-- See language-delete.sql used during language deletion via LanguagesApi.java delete endpoint -->
+    <delete tableName="categoriesdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="groupsdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="isolanguagesdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="operationsdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="statusvaluesdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="sourcesdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="selectionsdes">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="guf_ratingcriteriades">
+      <where>langid not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+    <delete tableName="languages">
+      <where>id not in ('dut', 'eng', 'fre', 'ger')</where>
+    </delete>
+  </changeSet>
+</databaseChangeLog>
