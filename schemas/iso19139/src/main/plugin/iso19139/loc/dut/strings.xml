@@ -31,6 +31,7 @@
   <vl-constraintsSection>Inhoudelijke beperkingen</vl-constraintsSection>
   <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
   <vl-add-pointOfContact>Contactgegevens dataset(serie)</vl-add-pointOfContact>
+  <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
   <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
   <vl-add-scale>Noemer</vl-add-scale>
   <vl-referenceSystemTab>Referentiesysteem</vl-referenceSystemTab>

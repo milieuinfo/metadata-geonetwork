@@ -529,13 +529,10 @@
     </sidePanel>
 
     <tab id="vl-identificationTab" default="true" mode="flat">
-      <!-- AIVQUESTION: Do we need a label on top section if it is also the tab name?-->
-      <section name="vl-identificationTab">
-        <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:citation"/>
-      </section>
+      <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:citation"/>
     </tab>
     <tab id="vl-contentTab" mode="flat">
-      <section name="vl-contentTab">
+      <section>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:abstract"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:purpose"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:status"/>
@@ -623,26 +620,6 @@
         <section name="vl-constraintsSection">
           <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_Constraints]"/>
 
-          <!--
-          Current config
-          <section name="mdConstraintsSection" per="*[name(.)='gmd:MD_DataIdentification' or name(.)='srv:SV_ServiceIdentification']" required="true()">
-            <action type="add" name="resourceConstraints" or="resourceConstraints" in=""
-                    addDirective="data-gn-directory-entry-selector">
-              <directiveAttributes
-                data-template-add-action="false"
-                data-search-action="true"
-                data-popup-action="false"
-                data-filter='{"_root": "gmd:resourceConstraints", "_typeResourceConstraints": "MD_Constraints"}'
-                data-only-one-subtemplate="true"
-                data-insert-modes="text"
-                data-template-type="resourceConstraints"
-                data-transformation="rsrcConstrTransform"/>
-            </action>
-            <section name="gmd:resourceConstraints" per="gmd:resourceConstraints[gmd:MD_Constraints]">
-              <section xpath="gmd:MD_Constraints" del=".."/>
-            </section>
-          </section>
-  -->
           <action type="add"
                   btnLabel="vl-useLimitation-add"
                   or="resourceConstraints" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
@@ -662,17 +639,6 @@
 
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:pointOfContact"/>
 
-        <!--<action type="add" name="gmd:pointOfContact"
-                or="pointOfContact" in="/gmd:MD_Metadata/gmd:identificationInfo/*"
-                addDirective="data-gn-directory-entry-selector">
-          <directiveAttributes
-            data-template-add-action="false"
-            data-search-action="true"
-            data-popup-action="false"
-            data-template-type="contact"
-            data-filter='{"_roleCode": "pointOfContact"}'
-            data-insert-modes="text"/>
-        </action>-->
         <action type="add"
                 btnLabel="vl-add-pointOfContact"
                 or="pointOfContact" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
@@ -740,60 +706,56 @@
 
         <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceMaintenance"/>
 
-        <!-- CHECKME <section xpath="*/gmd:graphicOverview" or="graphicOverview" in="*[name(.)='gmd:MD_DataIdentification' or name(.)='srv:SV_ServiceIdentification']"/>
-        can be managed from the side bar -->
-
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:descriptiveKeywords"
                  or="descriptiveKeywords" in="/gmd:MD_Metadata/gmd:identificationInfo/*"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceSpecificUsage"/>
 
-        <!-- AIVQUESTION <section xpath="*/gmd:aggregationInfo"/>
-        can be managed from the side bar
 
-        <action type="associatedResource"
-                name="addAssociation"
-                process="sibling">
-          <directiveAttributes>{"associationType": "partOfSeamlessDatabase"}</directiveAttributes>
-        </action>-->
+        <section name="vl-type-and-resolution">
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
 
-        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
-        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"/>
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"/>
 
-        <action type="add"
-                btnLabel="vl-add-scale"
-                or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
-          <template>
-            <snippet>
-              <gmd:spatialResolution>
-                <gmd:MD_Resolution>
-                  <gmd:equivalentScale>
-                    <gmd:MD_RepresentativeFraction>
-                      <gmd:denominator>
-                        <gco:Integer>1000</gco:Integer>
-                      </gmd:denominator>
-                    </gmd:MD_RepresentativeFraction>
-                  </gmd:equivalentScale>
-                </gmd:MD_Resolution>
-              </gmd:spatialResolution>
-            </snippet>
-          </template>
-        </action>
+          <!-- TODO: only scale if vector or resolution if raster-->
+          <!-- TODO: do not display once set -->
+          <action type="add"
+                  btnLabel="vl-add-scale"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo[*/gmd:spatialRepresentationType/*/@codeListValue = 'vector']) = 1"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:spatialResolution>
+                  <gmd:MD_Resolution>
+                    <gmd:equivalentScale>
+                      <gmd:MD_RepresentativeFraction>
+                        <gmd:denominator>
+                          <gco:Integer>1000</gco:Integer>
+                        </gmd:denominator>
+                      </gmd:MD_RepresentativeFraction>
+                    </gmd:equivalentScale>
+                  </gmd:MD_Resolution>
+                </gmd:spatialResolution>
+              </snippet>
+            </template>
+          </action>
 
-        <action type="add"
-                btnLabel="vl-add-resolution"
-                or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
-          <template>
-            <snippet>
-              <gmd:spatialResolution>
-                <gmd:MD_Resolution>
-                  <gmd:distance>
-                    <gco:Distance uom="m">10</gco:Distance>
-                  </gmd:distance>
-                </gmd:MD_Resolution>
-              </gmd:spatialResolution>
-            </snippet>
-          </template>
-        </action>
+          <action type="add"
+                  btnLabel="vl-add-resolution"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo[*/gmd:spatialRepresentationType/*/@codeListValue = 'grid']) = 1"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:spatialResolution>
+                  <gmd:MD_Resolution>
+                    <gmd:distance>
+                      <gco:Distance uom="m">10</gco:Distance>
+                    </gmd:distance>
+                  </gmd:MD_Resolution>
+                </gmd:spatialResolution>
+              </snippet>
+            </template>
+          </action>
+        </section>
 
 
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:language"/>
@@ -988,34 +950,9 @@
                 data-filter='{"_roleCode": "processor"}'
                 data-insert-modes="text"/>
             </action>
-          </section>
 
-          <action type="add" name="gmd:processStep"
-                  or="processStep" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*"
-                  addDirective="data-gn-directory-entry-selector">
-            <directiveAttributes
-              data-template-add-action="false"
-              data-search-action="true"
-              data-popup-action="false"
-              data-filter='{"_root": "gmd:LI_ProcessStep"}'
-              data-only-one-subtemplate="true"
-              data-insert-modes="text"
-              data-template-type="processStep"/>
-          </action>
-
-          <section name="gmd:source"
-                   forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:source">
-            <field xpath="gmd:LI_Source/gmd:description"/>
-            <section name="sourceDescription"
-                     forEach="gmd:LI_Source/gmd:sourceStep" required="true()">
-              <field xpath="gmd:LI_ProcessStep/gmd:description"/>
-              <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
-            </section>
-
-            <field xpath="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor"/>
-
-            <action type="add" name="vl-add-processor"
-                    or="processor" in="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep">
+            <action type="add" btnLabel="vl-add-processor"
+                    or="processor" in="gmd:LI_ProcessStep">
               <template>
                 <snippet>
                   <gmd:processor>
@@ -1076,6 +1013,45 @@
                   </gmd:processor>
                 </snippet>
               </template>
+            </action>
+
+
+          </section>
+
+          <action type="add" name="gmd:processStep"
+                  or="processStep" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*"
+                  addDirective="data-gn-directory-entry-selector">
+            <directiveAttributes
+              data-template-add-action="false"
+              data-search-action="true"
+              data-popup-action="false"
+              data-filter='{"_root": "gmd:LI_ProcessStep"}'
+              data-only-one-subtemplate="true"
+              data-insert-modes="text"
+              data-template-type="processStep"/>
+          </action>
+
+          <section name="gmd:source"
+                   forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:source">
+            <field xpath="gmd:LI_Source/gmd:description"/>
+            <section name="sourceDescription"
+                     forEach="gmd:LI_Source/gmd:sourceStep" required="true()">
+              <field xpath="gmd:LI_ProcessStep/gmd:description"/>
+              <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
+            </section>
+
+            <field xpath="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor"/>
+
+            <action type="add" name="gmd:processor"
+                    or="processor" in="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep"
+                    addDirective="data-gn-directory-entry-selector">
+              <directiveAttributes
+                data-template-add-action="false"
+                data-search-action="true"
+                data-popup-action="false"
+                data-template-type="contact"
+                data-filter='{"_roleCode": "pointOfContact"}'
+                data-insert-modes="text"/>
             </action>
           </section>
 
