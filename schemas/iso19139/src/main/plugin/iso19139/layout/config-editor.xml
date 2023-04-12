@@ -959,7 +959,7 @@
         </template>
       </action>
     </tab>
-    <tab id="domainConsistancyTab" mode="flat">
+    <tab id="domainConsistencyTab" mode="flat">
       <section name="conformity" required="true()">
         <action type="add" name="addConformity"
                 or="report"
