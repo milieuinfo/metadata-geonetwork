@@ -714,10 +714,35 @@
         <section name="vl-type-and-resolution">
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
 
+          <action type="add"
+                  btnLabel="vl-add-representationType"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType) = 0"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet label="vl-representationType-is-a-vector">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue="vector"
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+              <snippet label="vl-representationType-is-a-grid">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue="grid"
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+              <snippet label="vl-representationType-is-other">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue=""
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+            </template>
+          </action>
+
+
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"/>
 
-          <!-- TODO: only scale if vector or resolution if raster-->
-          <!-- TODO: do not display once set -->
           <action type="add"
                   btnLabel="vl-add-scale"
                   if="count(gmd:MD_Metadata/gmd:identificationInfo[*/gmd:spatialRepresentationType/*/@codeListValue = 'vector']) = 1"

@@ -32,6 +32,10 @@
   <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
   <vl-add-pointOfContact>Contactgegevens dataset(serie)</vl-add-pointOfContact>
   <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
+  <vl-add-representationType>Ruimtelijke schema</vl-add-representationType>
+  <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
+  <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
+  <vl-representationType-is-other>other</vl-representationType-is-other>
   <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
   <vl-add-scale>Noemer</vl-add-scale>
   <vl-referenceSystemTab>Referentiesysteem</vl-referenceSystemTab>
