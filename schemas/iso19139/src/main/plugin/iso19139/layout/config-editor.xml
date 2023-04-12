@@ -159,7 +159,7 @@
 
     <for name="gmd:country" use="data-gn-country-picker"/>
 
-    <for name="gmd:referenceSystemInfo" addDirective="data-gn-crs-selector"/>
+    <!--    <for name="gmd:referenceSystemInfo" addDirective="data-gn-crs-selector"/>-->
 
 
     <!--
@@ -510,16 +510,10 @@
 
   <!-- View configuration -->
   <views>
-    <view name="aiv"
-          class="gn-label-above-input gn-indent-bluescale">
+    <view name="vl"
+          class="gn-label-above-input gn-indent-bluescale"
+          displayTooltips="true">
     <sidePanel>
-      <!-- Simple overview manager + online source manger for other types
-      Limit the max number of overviews with data-number-of-overviews="3" attribute.
-      In the full view, editor can access and manage the file store and
-      thumbnail name and description not supported by the overview manager.
-      -->
-      <directive data-gn-need-help="creating-metadata"/>
-
       <directive data-gn-overview-manager=""
                  data-file-types=".png,.gif,.jpeg,.jpg"/>
 
@@ -530,21 +524,22 @@
                  data-types="onlinesrc|parent|dataset|service|source|sibling|associated|fcats"/>
 
       <directive data-gn-validation-report=""/>
+
+      <directive data-gn-need-help="creating-metadata"/>
     </sidePanel>
 
-    <tab id="identificationTab" default="true" mode="flat">
+    <tab id="vl-identificationTab" default="true" mode="flat">
       <!-- AIVQUESTION: Do we need a label on top section if it is also the tab name?-->
-      <section name="identificationTab">
+      <section name="vl-identificationTab">
         <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:citation"/>
-        <!-- AIVTODO: gmd:code is disabled. -->
       </section>
     </tab>
-    <tab id="contentTab" mode="flat">
-      <section name="contentTab">
+    <tab id="vl-contentTab" mode="flat">
+      <section name="vl-contentTab">
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:abstract"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:purpose"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:status"/>
-        <action type="add" name="gmd:status"
+        <action type="add" btnLabel="vl-add-status"
                 or="status" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
           <template>
             <snippet>
@@ -557,7 +552,7 @@
         </action>
 
         <!-- Classification for services, serviceType = other -->
-        <section name="classificationSection"
+        <section name="vl-classificationSection"
                  displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) > 0">
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:serviceType" />
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:couplingType" />
@@ -625,25 +620,49 @@
 
 
         <!-- For dataset(series) and services-->
-        <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_Constraints]"/>
+        <section name="vl-constraintsSection">
+          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_Constraints]"/>
 
-        <action type="add" name="resourceConstraints"
-                or="resourceConstraints" in="/gmd:MD_Metadata/gmd:identificationInfo/*"
-                addDirective="data-gn-directory-entry-selector">
-          <directiveAttributes
-            data-template-add-action="false"
-            data-search-action="true"
-            data-popup-action="false"
-            data-filter='{"_root": "gmd:resourceConstraints", "_typeResourceConstraints": "MD_Constraints"}'
-            data-only-one-subtemplate="true"
-            data-insert-modes="text"
-            data-template-type="resourceConstraints"
-            data-transformation="rsrcConstrTransform"/>
-        </action>
+          <!--
+          Current config
+          <section name="mdConstraintsSection" per="*[name(.)='gmd:MD_DataIdentification' or name(.)='srv:SV_ServiceIdentification']" required="true()">
+            <action type="add" name="resourceConstraints" or="resourceConstraints" in=""
+                    addDirective="data-gn-directory-entry-selector">
+              <directiveAttributes
+                data-template-add-action="false"
+                data-search-action="true"
+                data-popup-action="false"
+                data-filter='{"_root": "gmd:resourceConstraints", "_typeResourceConstraints": "MD_Constraints"}'
+                data-only-one-subtemplate="true"
+                data-insert-modes="text"
+                data-template-type="resourceConstraints"
+                data-transformation="rsrcConstrTransform"/>
+            </action>
+            <section name="gmd:resourceConstraints" per="gmd:resourceConstraints[gmd:MD_Constraints]">
+              <section xpath="gmd:MD_Constraints" del=".."/>
+            </section>
+          </section>
+  -->
+          <action type="add"
+                  btnLabel="vl-useLimitation-add"
+                  or="resourceConstraints" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:resourceConstraints>
+                  <gmd:MD_Constraints>
+                    <gmd:useLimitation>
+                      <gco:CharacterString></gco:CharacterString>
+                    </gmd:useLimitation>
+                  </gmd:MD_Constraints>
+                </gmd:resourceConstraints>
+              </snippet>
+            </template>
+          </action>
+        </section>
 
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:pointOfContact"/>
 
-        <action type="add" name="gmd:pointOfContact"
+        <!--<action type="add" name="gmd:pointOfContact"
                 or="pointOfContact" in="/gmd:MD_Metadata/gmd:identificationInfo/*"
                 addDirective="data-gn-directory-entry-selector">
           <directiveAttributes
@@ -653,6 +672,70 @@
             data-template-type="contact"
             data-filter='{"_roleCode": "pointOfContact"}'
             data-insert-modes="text"/>
+        </action>-->
+        <action type="add"
+                btnLabel="vl-add-pointOfContact"
+                or="pointOfContact" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet>
+              <gmd:pointOfContact>
+                <gmd:CI_ResponsibleParty xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+                  <gmd:individualName>
+                    <gco:CharacterString/>
+                  </gmd:individualName>
+                  <gmd:organisationName>
+                    <gco:CharacterString/>
+                  </gmd:organisationName>
+                  <gmd:contactInfo>
+                    <gmd:CI_Contact>
+                      <gmd:phone>
+                        <gmd:CI_Telephone>
+                          <gmd:voice>
+                            <gco:CharacterString/>
+                          </gmd:voice>
+                          <gmd:facsimile>
+                            <gco:CharacterString/>
+                          </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                      </gmd:phone>
+                      <gmd:address>
+                        <gmd:CI_Address>
+                          <gmd:deliveryPoint>
+                            <gco:CharacterString/>
+                          </gmd:deliveryPoint>
+                          <gmd:city>
+                            <gco:CharacterString/>
+                          </gmd:city>
+                          <gmd:postalCode>
+                            <gco:CharacterString/>
+                          </gmd:postalCode>
+                          <gmd:country>
+                            <gco:CharacterString/>
+                          </gmd:country>
+                          <gmd:electronicMailAddress>
+                            <gco:CharacterString/>
+                          </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                      </gmd:address>
+                      <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                          <gmd:linkage>
+                            <gmd:URL/>
+                          </gmd:linkage>
+                        </gmd:CI_OnlineResource>
+                      </gmd:onlineResource>
+                    </gmd:CI_Contact>
+                  </gmd:contactInfo>
+                  <gmd:role>
+                    <gmd:CI_RoleCode
+                      codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                      codeListValue="pointOfContact">pointOfContact
+                    </gmd:CI_RoleCode>
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:pointOfContact>
+            </snippet>
+          </template>
         </action>
 
         <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceMaintenance"/>
@@ -663,18 +746,56 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:descriptiveKeywords"
                  or="descriptiveKeywords" in="/gmd:MD_Metadata/gmd:identificationInfo/*"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceSpecificUsage"/>
-        <!-- CHECKME <section xpath="*/gmd:aggregationInfo"/>
-        can be managed from the side bar -->
+
+        <!-- AIVQUESTION <section xpath="*/gmd:aggregationInfo"/>
+        can be managed from the side bar
 
         <action type="associatedResource"
                 name="addAssociation"
                 process="sibling">
           <directiveAttributes>{"associationType": "partOfSeamlessDatabase"}</directiveAttributes>
-        </action>
+        </action>-->
 
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
-        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"
-                 or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"/>
+
+        <action type="add"
+                btnLabel="vl-add-scale"
+                or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet>
+              <gmd:spatialResolution>
+                <gmd:MD_Resolution>
+                  <gmd:equivalentScale>
+                    <gmd:MD_RepresentativeFraction>
+                      <gmd:denominator>
+                        <gco:Integer>1000</gco:Integer>
+                      </gmd:denominator>
+                    </gmd:MD_RepresentativeFraction>
+                  </gmd:equivalentScale>
+                </gmd:MD_Resolution>
+              </gmd:spatialResolution>
+            </snippet>
+          </template>
+        </action>
+
+        <action type="add"
+                btnLabel="vl-add-resolution"
+                or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet>
+              <gmd:spatialResolution>
+                <gmd:MD_Resolution>
+                  <gmd:distance>
+                    <gco:Distance uom="m">10</gco:Distance>
+                  </gmd:distance>
+                </gmd:MD_Resolution>
+              </gmd:spatialResolution>
+            </snippet>
+          </template>
+        </action>
+
+
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:language"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:characterSet"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
@@ -682,14 +803,152 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"/>
       </section>
     </tab>
-    <tab id="referenceSystemTab" mode="flat">
-      <section xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo"
-               or="referenceSystemInfo" in="/gmd:MD_Metadata"/>
-      <!-- AIVQUESTION: If we have a shortlist of CRS, maybe hardcode them here?
-      eg. https://github.com/eea/geonetwork-eea/blob/eea-4.2.0/schemas/iso19139/src/main/plugin/iso19139/layout/config-editor.xml#L1243-L1261
-      -->
+    <tab id="vl-referenceSystemTab" mode="flat">
+      <section>
+        <section xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo"/>
+
+        <action type="add"
+                btnLabel="vl-add-crs"
+                or="referenceSystemInfo" in="/gmd:MD_Metadata">
+          <template>
+            <snippet label="vl-add-crs-21500">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/21500">Belge 1950 (Brussels) / Belge Lambert 50</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-31370">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/31370">Belge 1972 / Belgian Lambert 72</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-23031">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/23031">ED50 / UTM zone 31N</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-23032">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/23032">ED50 / UTM zone 32N</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-3812">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/3812">ETRS89 / Belgian Lambert 2008</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-4258">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/4258">ETRS89</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-1094">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://epsg.io/1094-datum">High Water</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-5710">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/5710">Ostend height</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-anchor">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href=""/>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-string">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gco:CharacterString/>
+                      </gmd:code>
+                      <gmd:codeSpace>
+                        <gco:CharacterString/>
+                      </gmd:codeSpace>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+          </template>
+        </action>
+      </section>
     </tab>
-    <tab id="qualityTab" mode="flat">
+    <tab id="vl-qualityTab" mode="flat">
       <section name="qualityTab">
         <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:scope"/>
         <action type="add" name="gmd:report"
@@ -755,16 +1014,68 @@
 
             <field xpath="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor"/>
 
-            <action type="add" name="gmd:processor"
-                    or="processor" in="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep"
-                    addDirective="data-gn-directory-entry-selector">
-              <directiveAttributes
-                data-template-add-action="false"
-                data-search-action="true"
-                data-popup-action="false"
-                data-template-type="contact"
-                data-filter='{"_roleCode": "pointOfContact"}'
-                data-insert-modes="text"/>
+            <action type="add" name="vl-add-processor"
+                    or="processor" in="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep">
+              <template>
+                <snippet>
+                  <gmd:processor>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:individualName>
+                        <gco:CharacterString/>
+                      </gmd:individualName>
+                      <gmd:organisationName>
+                        <gco:CharacterString/>
+                      </gmd:organisationName>
+                      <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                          <gmd:phone>
+                            <gmd:CI_Telephone>
+                              <gmd:voice>
+                                <gco:CharacterString/>
+                              </gmd:voice>
+                              <gmd:facsimile>
+                                <gco:CharacterString/>
+                              </gmd:facsimile>
+                            </gmd:CI_Telephone>
+                          </gmd:phone>
+                          <gmd:address>
+                            <gmd:CI_Address>
+                              <gmd:deliveryPoint>
+                                <gco:CharacterString/>
+                              </gmd:deliveryPoint>
+                              <gmd:city>
+                                <gco:CharacterString/>
+                              </gmd:city>
+                              <gmd:postalCode>
+                                <gco:CharacterString/>
+                              </gmd:postalCode>
+                              <gmd:country>
+                                <gco:CharacterString/>
+                              </gmd:country>
+                              <gmd:electronicMailAddress>
+                                <gco:CharacterString/>
+                              </gmd:electronicMailAddress>
+                            </gmd:CI_Address>
+                          </gmd:address>
+                          <gmd:onlineResource>
+                            <gmd:CI_OnlineResource>
+                              <gmd:linkage>
+                                <gmd:URL/>
+                              </gmd:linkage>
+                            </gmd:CI_OnlineResource>
+                          </gmd:onlineResource>
+                        </gmd:CI_Contact>
+                      </gmd:contactInfo>
+                      <gmd:role>
+                        <gmd:CI_RoleCode
+                          codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                          codeListValue="processor">processor
+                        </gmd:CI_RoleCode>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:processor>
+                </snippet>
+              </template>
             </action>
           </section>
 
@@ -4153,7 +4464,7 @@
     <!--
     Customize the editor layout by adding a class attribute
     <view name="default" class="gn-indent-bluescale gn-label-above-input">-->
-    <view name="default"
+    <view name="default" disabled="true"
           class="gn-label-above-input gn-indent-bluescale">
       <sidePanel>
         <!-- Simple overview manager + online source manger for other types

@@ -40,9 +40,11 @@
 
   <xsl:include href="layout-custom-fields-keywords.xsl"/>
   <xsl:include href="layout-custom-fields-sds.xsl"/>
-
+  
   <!-- Readonly elements -->
-  <xsl:template mode="mode-iso19139" priority="2100" match="gmd:fileIdentifier|gmd:dateStamp">
+  <xsl:template mode="mode-iso19139" priority="2100"
+                match="gmd:fileIdentifier|gmd:dateStamp
+                      |gmd:identificationInfo/*/gmd:citation/*/gmd:identifier/*/gmd:code">
     <xsl:param name="schema" select="$schema" required="no"/>
     <xsl:param name="labels" select="$labels" required="no"/>
     <xsl:param name="overrideLabel" select="''" required="no"/>

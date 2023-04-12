@@ -23,6 +23,31 @@
   -->
 
 <strings>
+  <vl>Standaard</vl>
+  <vl-identificationTab>Identificatie</vl-identificationTab>
+  <vl-contentTab>Inhoud</vl-contentTab>
+  <vl-classificationSection>Classification of data and services</vl-classificationSection>
+  <vl-add-status>Status</vl-add-status>
+  <vl-constraintsSection>Inhoudelijke beperkingen</vl-constraintsSection>
+  <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
+  <vl-add-pointOfContact>Contactgegevens dataset(serie)</vl-add-pointOfContact>
+  <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
+  <vl-add-scale>Noemer</vl-add-scale>
+  <vl-referenceSystemTab>Referentiesysteem</vl-referenceSystemTab>
+  <vl-add-crs>Horizontaal en/of verticaal referentiesysteem</vl-add-crs>
+  <vl-add-crs-21500>Belge 1950 (Brussels) / Belge Lambert 50 (EPSG:21500)</vl-add-crs-21500>
+  <vl-add-crs-31370>Belge 1972 / Belgian Lambert 72 (EPSG:31370)</vl-add-crs-31370>
+  <vl-add-crs-23031>ED50 / UTM zone 31N (EPSG:23031)</vl-add-crs-23031>
+  <vl-add-crs-23032>ED50 / UTM zone 32N (EPSG:23032)</vl-add-crs-23032>
+  <vl-add-crs-3812>ETRS89 / Belgian Lambert 2008</vl-add-crs-3812>
+  <vl-add-crs-4258>ETRS89</vl-add-crs-4258>
+  <vl-add-crs-1094>High Water (EPSG(version 8.0 released 10/8/2012):1094)</vl-add-crs-1094>
+  <vl-add-crs-5710>Ostend height (EPSG:5710)</vl-add-crs-5710>
+  <vl-add-crs-anchor>Vul uw eigen Anchor CRS in..</vl-add-crs-anchor>
+  <vl-add-crs-string>Vul uw eigen CharacterString CRS in...</vl-add-crs-string>
+  <vl-qualityTab>Kwaliteit</vl-qualityTab>
+  <vl-add-processor>Bewerker</vl-add-processor>
+
   <understandResource>Informatie over de dataset</understandResource>
   <relatedResources>Gerelateerde services en gekoppelde data</relatedResources>
   <techInfo>Technische informatie</techInfo>

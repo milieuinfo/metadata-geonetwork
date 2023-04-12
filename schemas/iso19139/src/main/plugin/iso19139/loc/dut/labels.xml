@@ -522,13 +522,12 @@
     <condition>mandatory</condition>
   </element>
   <element name="gmd:date">
-    <label>Datum</label>
-    <description>Datum van creatie, publicatie of wijziging. Het type
-      gebeurtenis waar de datum op slaat is weergegeven in datum type. Het
-      formaat van de datum is JJJJ-MM-DD(met streepjes).
+    <label>Versiedatum</label>
+    <description>Datum van creatie, publicatie of wijziging. Het type gebeurtenis waar de datum op slaat is weergegeven in het datum type. Het formaat van de datum is DD-MM-JJJJ.
     </description>
     <condition>mandatory</condition>
   </element>
+
   <element name="gmd:dateOfNextUpdate">
     <label>Datum volgende update</label>
     <description>Geplande datum van volgende update (YYYY-MM-DD)</description>
@@ -803,9 +802,10 @@
     <condition>mandatory</condition>
   </element>
   <element name="gmd:edition">
-    <label>Versie</label>
-    <description>versie cq editie.</description>
+    <label>Versie dataset(serie)</label>
+    <description>Versie of editie.</description>
   </element>
+
   <element name="gmd:editionDate">
     <label>Versie editie datum</label>
     <description>Datum versie editie (YYYY-MM-DD)</description>
@@ -2162,6 +2162,20 @@
       instantie/wijze waarop trefwoorden zijn gegroepeerd.
     </description>
   </element>
+
+  <element name="gmd:title"
+           context="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title">
+    <label>Titel dataset(serie)</label>
+    <description>Titel of naam</description>
+    <condition>mandatory</condition>
+    <mandatoryType>inspire</mandatoryType>
+    <mandatoryTooltip>INSPIRE B 1.1: titel is verplicht.</mandatoryTooltip>
+  </element>
+  <element name="gmd:alternateTitle" context="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:alternateTitle">
+    <label>Alternatieve titel dataset(serie)</label>
+    <description>Korte titel, afkorting of titel in een andere taal.</description>
+  </element>
+
   <element name="gmd:title">
     <label>Titel</label>
     <description>Titel</description>
