@@ -550,6 +550,7 @@
                    transformations="to-iso19139-keyword-with-anchor"/>
         <thesaurus key="external.theme.gemet"
                    fieldset="false"
+                   browsable="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
       </thesaurusList>
     <sidePanel>
