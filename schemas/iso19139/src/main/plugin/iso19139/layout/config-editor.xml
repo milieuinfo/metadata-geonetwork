@@ -514,7 +514,8 @@
     <view name="vl"
           default="true"
           class="gn-label-above-input gn-indent-bluescale"
-          displayTooltips="true">
+          displayTooltips="true"
+          hideTimeInCalendar="true">
     <sidePanel>
       <directive data-gn-overview-manager=""
                  data-file-types=".png,.gif,.jpeg,.jpg"/>

@@ -218,9 +218,15 @@
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
         <xsl:copy>
-          <gco:DateTime>
+          <!--<gco:DateTime>
             <xsl:value-of select="/root/env/changeDate"/>
-          </gco:DateTime>
+          </gco:DateTime>-->
+          <!-- VL / Force dateStamp to be
+           as defined in ISO PDF document
+           even if not the case in XSDs. -->
+          <gco:Date>
+            <xsl:value-of select="format-dateTime(/root/env/changeDate,'[Y0001]-[M01]-[D01]')"/>
+          </gco:Date>
         </xsl:copy>
       </xsl:when>
       <xsl:otherwise>
