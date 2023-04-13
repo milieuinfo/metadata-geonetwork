@@ -4722,7 +4722,7 @@
     <!--
     Customize the editor layout by adding a class attribute
     <view name="default" class="gn-indent-bluescale gn-label-above-input">-->
-    <view name="default" disabled="true"
+    <view name="default" default="true"
           class="gn-label-above-input gn-indent-bluescale">
       <sidePanel>
         <!-- Simple overview manager + online source manger for other types
