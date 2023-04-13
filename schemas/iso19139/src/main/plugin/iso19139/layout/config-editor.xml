@@ -515,6 +515,7 @@
           default="true"
           class="gn-label-above-input gn-indent-bluescale"
           displayTooltips="true"
+          displayTooltipsMode="onhover"
           hideTimeInCalendar="true">
       <thesaurusList>
         <thesaurus key="external.theme.datatheme"
