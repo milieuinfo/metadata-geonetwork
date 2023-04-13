@@ -312,3 +312,9 @@ UPDATE metadata
   SET data = replace(data, '>INSPIRE - Spatial scope<', '>Spatial scope<')
   WHERE data LIKE '%>INSPIRE - Spatial scope<%' AND isHarvested = 'n';
 
+
+TRUNCATE TABLE
+  schematrondes,
+  schematroncriteria,
+  schematroncriteriagroup,
+  schematron;
