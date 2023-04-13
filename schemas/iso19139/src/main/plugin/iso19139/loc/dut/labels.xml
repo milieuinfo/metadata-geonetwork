@@ -1010,8 +1010,6 @@
     <label>Metadata identificator (fileIdentifier)</label>
     <description>Unieke Identifier voor de metadata file.</description>
     <condition>mandatory</condition>
-    <mandatoryType>gdi</mandatoryType>
-    <mandatoryTooltip>GDI-Vlaanderen Best Practices SC-1</mandatoryTooltip>
   </element>
   <element name="gmd:fileName">
     <label>Voorbeeld</label>

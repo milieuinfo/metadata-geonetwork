@@ -1927,6 +1927,15 @@
     <tab id="vl-tab-metaMetadata" mode="flat">
       <section>
         <field xpath="/gmd:MD_Metadata/gmd:fileIdentifier"/>
+        <!-- AIVQUESTION: perhaps we can generalise this to make it a reusable component? do we add an icon? -->
+        <text>
+          <div class="row">
+            <div class="col-sm-9">
+              <div class="alert alert-info">GDI-Vlaanderen Best Practices SC-1</div>
+            </div>
+            <div class="col-sm-1"/>
+          </div>
+        </text>
         <field xpath="/gmd:MD_Metadata/gmd:language" or="language" in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:characterSet"/>
         <!-- AIVQUESTION : drop unused fields ?-->
