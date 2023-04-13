@@ -23,53 +23,66 @@
   -->
 
 <strings>
-  <vl>Standaard</vl>
-  <vl-identificationTab>Identificatie</vl-identificationTab>
-  <vl-contentTab>Inhoud</vl-contentTab>
-  <vl-classificationSection>Classification of data and services</vl-classificationSection>
-  <vl-add-status>Status</vl-add-status>
-  <vl-constraintsSection>Inhoudelijke beperkingen</vl-constraintsSection>
-  <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
-  <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
-  <vl-add-representationType>Ruimtelijke schema</vl-add-representationType>
-  <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
-  <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
-  <vl-representationType-is-other>other</vl-representationType-is-other>
-  <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
-  <vl-add-scale>Noemer</vl-add-scale>
-  <vl-referenceSystemTab>Referentiesysteem</vl-referenceSystemTab>
-  <vl-add-crs>Horizontaal en/of verticaal referentiesysteem</vl-add-crs>
+  <vl-add-DQ_AbsoluteExternalPositionalAccuracy>Geometrische nauwkeurigheid</vl-add-DQ_AbsoluteExternalPositionalAccuracy>
+  <vl-add-DQ_CompletenessCommission>Overbodige/aanvullende data</vl-add-DQ_CompletenessCommission>
+  <vl-add-DQ_CompletenessOmission>Volledigheid</vl-add-DQ_CompletenessOmission>
+  <vl-add-DQ_ThematicClassificationCorrectness>Thematische classificatie</vl-add-DQ_ThematicClassificationCorrectness>
+  <vl-add-crs-1094>High Water (EPSG(version 8.0 released 10/8/2012):1094)</vl-add-crs-1094>
   <vl-add-crs-21500>Belge 1950 (Brussels) / Belge Lambert 50 (EPSG:21500)</vl-add-crs-21500>
-  <vl-add-crs-31370>Belge 1972 / Belgian Lambert 72 (EPSG:31370)</vl-add-crs-31370>
   <vl-add-crs-23031>ED50 / UTM zone 31N (EPSG:23031)</vl-add-crs-23031>
   <vl-add-crs-23032>ED50 / UTM zone 32N (EPSG:23032)</vl-add-crs-23032>
+  <vl-add-crs-31370>Belge 1972 / Belgian Lambert 72 (EPSG:31370)</vl-add-crs-31370>
   <vl-add-crs-3812>ETRS89 / Belgian Lambert 2008</vl-add-crs-3812>
   <vl-add-crs-4258>ETRS89</vl-add-crs-4258>
-  <vl-add-crs-1094>High Water (EPSG(version 8.0 released 10/8/2012):1094)</vl-add-crs-1094>
   <vl-add-crs-5710>Ostend height (EPSG:5710)</vl-add-crs-5710>
   <vl-add-crs-anchor>Vul uw eigen Anchor CRS in..</vl-add-crs-anchor>
   <vl-add-crs-string>Vul uw eigen CharacterString CRS in...</vl-add-crs-string>
-  <vl-qualityTab>Kwaliteit</vl-qualityTab>
-  <vl-add-processor>Bewerker</vl-add-processor>
-  <vl-measureType>Type meting</vl-measureType>
-  <vl-add-qualityReport>Kwaliteitsrapport</vl-add-qualityReport>
-  <vl-add-DQ_CompletenessOmission>Volledigheid</vl-add-DQ_CompletenessOmission>
-  <vl-add-DQ_CompletenessCommission>Overbodige/aanvullende data</vl-add-DQ_CompletenessCommission>
-  <vl-add-DQ_AbsoluteExternalPositionalAccuracy>Geometrische nauwkeurigheid</vl-add-DQ_AbsoluteExternalPositionalAccuracy>
-  <vl-add-DQ_ThematicClassificationCorrectness>Thematische classificatie</vl-add-DQ_ThematicClassificationCorrectness>
-  <vl-add-processStep>Processtappen</vl-add-processStep>
-  <vl-add-source>Bron</vl-add-source>
-  <vl-sourceDescription>Inwinningsmethode</vl-sourceDescription>
+  <vl-add-crs>Horizontaal en/of verticaal referentiesysteem</vl-add-crs>
+  <vl-add-distributionFormat>Distributieformaat</vl-add-distributionFormat>
+  <vl-add-distributor>Verdeler</vl-add-distributor>
+  <vl-add-featureCatalog>Objectencatalogus</vl-add-featureCatalog>
+  <vl-add-featureCatalogueCitation>Objectencatalogus citaat</vl-add-featureCatalogueCitation>
   <vl-add-pointOfContact>Contactgegevens</vl-add-pointOfContact>
+  <vl-add-processStep>Processtappen</vl-add-processStep>
+  <vl-add-processor>Bewerker</vl-add-processor>
+  <vl-add-qualityReport>Kwaliteitsrapport</vl-add-qualityReport>
+  <vl-add-representationType>Ruimtelijke schema</vl-add-representationType>
+  <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
+  <vl-add-scale>Noemer</vl-add-scale>
+  <vl-add-source>Bron</vl-add-source>
+  <vl-add-status>Status</vl-add-status>
+  <vl-add-transferOptions>Online bron</vl-add-transferOptions>
+  <vl-measureType>Type meting</vl-measureType>
+  <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
+  <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
+  <vl-representationType-is-other>other</vl-representationType-is-other>
+  <vl-section-classification>Classificatie van data en services</vl-section-classification>
+  <vl-section-constraints>Inhoudelijke beperkingen</vl-section-constraints>
+  <vl-sourceDescription>Inwinningsmethode</vl-sourceDescription>
+  <vl-tab-constraints>Toegangs- en gebruiksbeperkingen</vl-tab-constraints>
+  <vl-tab-content>Inhoud</vl-tab-content>
+  <vl-tab-distribution>Distributie</vl-tab-distribution>
+  <vl-tab-domainConsistency>Conformiteit</vl-tab-domainConsistency>
+  <vl-tab-identification>Identificatie</vl-tab-identification>
+  <vl-tab-metaMetadata>Meta-metadata</vl-tab-metaMetadata>
+  <vl-tab-objectCatalogue>Objectencatalogus</vl-tab-objectCatalogue>
+  <vl-tab-quality>Kwaliteit</vl-tab-quality>
+  <vl-tab-referenceSystem>Referentiesysteem</vl-tab-referenceSystem>
+  <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
+  <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
+  <vl>Standaard</vl>
 
-  <understandResource>Informatie over de dataset</understandResource>
-  <relatedResources>Gerelateerde services en gekoppelde data</relatedResources>
-  <techInfo>Technische informatie</techInfo>
+  <addConformity>Conformiteit toevoegen</addConformity>
+  <constraintInfo>Toegang restrictie informatie</constraintInfo>
   <contactInfo>Contact informatie</contactInfo>
+  <featureCatalogueCitationUuidref>Objectencatalogus identificator</featureCatalogueCitationUuidref>
   <mdContactInfo>Metadata contact</mdContactInfo>
   <refDate>Referentie datum</refDate>
+  <relatedResources>Gerelateerde services en gekoppelde data</relatedResources>
+  <resourceConstraints>Beperkingen van de dataset(serie)</resourceConstraints>
+  <techInfo>Technische informatie</techInfo>
   <temporalRef>Temporele informatie</temporalRef>
-  <constraintInfo>Toegang restrictie informatie</constraintInfo>
+  <understandResource>Informatie over de dataset</understandResource>
 
   <!-- New strings added for the AngularJS editor -->
   <!-- View and tabs -->
@@ -82,7 +95,7 @@
   <overviews>Overviews</overviews>
   <metadataInXML>XML</metadataInXML>
   <providedBy>Provided by</providedBy>
-  <shareOnSocialSite>Share on social sites</shareOnSocialSite>
+  <shareOnSocialSite>Deel op social media</shareOnSocialSite>
   <viewMode>Views</viewMode>
   <keywordFrom>Trefwoord van </keywordFrom>
   <resource>Bron</resource>

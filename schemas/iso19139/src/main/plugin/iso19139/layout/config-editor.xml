@@ -530,10 +530,11 @@
       <directive data-gn-need-help="creating-metadata"/>
     </sidePanel>
 
-    <tab id="vl-identificationTab" default="true" mode="flat">
+    <tab id="vl-tab-identification" default="true" mode="flat">
       <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:citation"/>
     </tab>
-    <tab id="vl-contentTab" mode="flat">
+
+    <tab id="vl-tab-content" mode="flat">
       <section>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:abstract"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:purpose"/>
@@ -551,7 +552,7 @@
         </action>
 
         <!-- Classification for services, serviceType = other -->
-        <section name="vl-classificationSection"
+        <section name="vl-section-classification"
                  displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) > 0">
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:serviceType" />
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:couplingType" />
@@ -619,7 +620,7 @@
 
 
         <!-- For dataset(series) and services-->
-        <section name="vl-constraintsSection">
+        <section name="vl-section-constraints">
           <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_Constraints]"/>
 
           <action type="add"
@@ -792,7 +793,8 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"/>
       </section>
     </tab>
-    <tab id="vl-referenceSystemTab" mode="flat">
+
+    <tab id="vl-tab-referenceSystem" mode="flat">
       <section>
         <section xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo"/>
 
@@ -937,7 +939,8 @@
         </action>
       </section>
     </tab>
-    <tab id="vl-qualityTab" mode="flat">
+
+    <tab id="vl-tab-quality" mode="flat">
       <section>
         <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:scope"/>
 
@@ -1527,7 +1530,8 @@
         </action>
       </section>
     </tab>
-    <tab id="domainConsistencyTab" mode="flat">
+
+    <tab id="vl-tab-domainConsistency" mode="flat">
       <section name="conformity" required="true()">
         <action type="add" name="addConformity"
                 or="report"
@@ -1717,7 +1721,8 @@
         </action>
       </section>
     </tab>
-    <tab id="constraintsTab" mode="flat">
+
+    <tab id="vl-tab-constraints" mode="flat">
       <section name="mdLegalAndSecurityConstraintsSection" required="true()">
         <!-- For dataset and dataset series -->
         <action type="add" name="resourceConstraints"
@@ -1749,12 +1754,14 @@
       </section>
     </tab>
 
-    <tab id="distributionTab" mode="flat">
+    <tab id="vl-tab-distribution" mode="flat">
       <section name="gmd:distributionInfo">
         <!-- AIVTODO: format as an autocomplete list.
         We may be able to use something like https://github.com/geonetwork/core-geonetwork/blob/main/schemas/iso19139/src/main/plugin/iso19139/layout/config-editor.xml#L67-L71 -->
         <section xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:distributionFormat"/>
-        <action type="add" name="distributionFormat"
+        <action type="add"
+                btnLabel="vl-add-distributionFormat"
+                name="distributionFormat"
                 or="distributionFormat"
                 in="/gmd:MD_Metadata/gmd:distributionInfo/*">
           <template>
@@ -1773,7 +1780,9 @@
           </template>
         </action>
         <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:distributor"/>
-        <action type="add" name="distributor"
+        <action type="add"
+                btnLabel="vl-add-distributor"
+                name="distributor"
                 or="distributor" in="/gmd:MD_Metadata/gmd:distributionInfo/*"
                 required="true()">
           <template>
@@ -1861,7 +1870,12 @@
 
         <!-- AIVQUESTION: Not using the side panel?-->
         <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
-        <action type="add" name="transferOptions"
+        <!-- AIVQUESTION: how to modify "OnLine bronnen" to Online bronnen"? -->
+        <!-- AIVQUESTION: what to do with 'required' attribute? -->
+        <!-- AIVQUESTION: Should all custom labels be vl- prefixed? Should we keep the generic ones 'standard'? -->
+        <action type="add"
+                name="transferOptions"
+                btnLabel="vl-add-transferOptions"
                 or="transferOptions"
                 in="/gmd:MD_Metadata/gmd:distributionInfo/*"
                 required="true()">
@@ -1912,7 +1926,8 @@
         </action>
       </section>
     </tab>
-    <tab id="metaMetadataTab" mode="flat">
+
+    <tab id="vl-tab-metaMetadata" mode="flat">
       <section name="gmd:MD_Metadata">
         <field xpath="/gmd:MD_Metadata/gmd:fileIdentifier"/>
         <field xpath="/gmd:MD_Metadata/gmd:language" or="language" in="/gmd:MD_Metadata"/>
@@ -1937,12 +1952,13 @@
       </section>
     </tab>
 
-    <tab id="objectCatalogueTab" mode="flat"
+    <tab id="vl-tab-objectCatalogue" mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
       <!-- AIVQUESTION : Use side panel ?-->
       <section name="gmd:contentInfo">
 
         <action type="associatedResource"
+                btnLabel="vl-add-featureCatalog"
                 name="addFeatureCatalog"
                 process="fcats">
         </action>
@@ -1950,8 +1966,10 @@
         <section name="gmd:featureCatalogueCitation"
                  forEach="/gmd:MD_Metadata/gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation">
           <directive data-gn-feature-cat-name=""/>
+          <!-- AIVQUESTION: overriding the name doesn't work in strings.xml? -->
           <field name="featureCatalogueCitationUuidref"
-                 templateModeOnly="true" notDisplayedIfMissing="true"
+                 templateModeOnly="true"
+                 notDisplayedIfMissing="true"
                  xpath=".">
             <template>
               <values readonlyIf="true()">
@@ -1973,6 +1991,7 @@
 
       <section>
         <action type="add"
+                btnLabel="vl-add-featureCatalogueCitation"
                 name="gmd:featureCatalogueCitation" or="contentInfo"
                 in="/gmd:MD_Metadata">
           <template>
@@ -1991,13 +2010,13 @@
       </section>
     </tab>
 
-    <tab id="applicationSchemaInfoTab" mode="flat"
+    <tab id="vl-tab-applicationSchemaInfo" mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:applicationSchemaInfo) > 0"
          hideIfNotDisplayed="true">
       <section xpath="/gmd:MD_Metadata/gmd:applicationSchemaInfo"/>
     </tab>
 
-    <tab id="spatialRepresentationInfoTab" mode="flat"
+    <tab id="vl-tab-spatialRepresentationInfo" mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:spatialRepresentationInfo) > 0"
          hideIfNotDisplayed="true">
       <section xpath="/gmd:MD_Metadata/gmd:spatialRepresentationInfo"/>
