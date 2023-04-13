@@ -40,7 +40,7 @@
   <vl-add-crs>Horizontaal en/of verticaal referentiesysteem</vl-add-crs>
   <vl-add-distributionFormat>Distributieformaat</vl-add-distributionFormat>
   <vl-add-distributor>Verdeler</vl-add-distributor>
-  <vl-add-featureCatalog>Objectencatalogus</vl-add-featureCatalog>
+  <vl-add-featureCatalog>Objectencatalogus toevoegen</vl-add-featureCatalog>
   <vl-add-featureCatalogueCitation>Objectencatalogus citaat</vl-add-featureCatalogueCitation>
   <vl-add-pointOfContact>Contactgegevens</vl-add-pointOfContact>
   <vl-add-processStep>Processtappen</vl-add-processStep>

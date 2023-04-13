@@ -330,7 +330,7 @@
     <description>Datum type</description>
   </element>
   <element name="gmd:CI_OnLineFunctionCode">
-    <label>OnLine functie code</label>
+    <label>Online functie code</label>
     <description>Code voor functie die vervult wordt door de online bron.</description>
   </element>
   <element name="gmd:CI_PresentationFormCode">
@@ -1628,7 +1628,7 @@
     <description>De fysieke waarde die overeenkomt met een cel waarde die gelijk is aan nul.</description>
   </element>
   <element name="gmd:onLine">
-    <label>OnLine bronnen</label>
+    <label>Online bronnen</label>
     <description>Informatie over de online bronnen via dewelke de bron verkregen kan worden.</description>
   </element>
   <element name="gmd:orderingInstructions">

@@ -1532,7 +1532,7 @@
     </tab>
 
     <tab id="vl-tab-domainConsistency" mode="flat">
-      <section name="conformity" required="true()">
+      <section name="conformity">
         <action type="add" name="addConformity"
                 or="report"
                 in="/gmd:MD_Metadata/gmd:dataQualityInfo/*"
@@ -1723,7 +1723,7 @@
     </tab>
 
     <tab id="vl-tab-constraints" mode="flat">
-      <section name="mdLegalAndSecurityConstraintsSection" required="true()">
+      <section name="mdLegalAndSecurityConstraintsSection">
         <!-- For dataset and dataset series -->
         <action type="add" name="resourceConstraints"
                 or="resourceConstraints"
@@ -1783,8 +1783,7 @@
         <action type="add"
                 btnLabel="vl-add-distributor"
                 name="distributor"
-                or="distributor" in="/gmd:MD_Metadata/gmd:distributionInfo/*"
-                required="true()">
+                or="distributor" in="/gmd:MD_Metadata/gmd:distributionInfo/*">
           <template>
             <snippet>
               <gmd:distributor>
@@ -1871,14 +1870,11 @@
         <!-- AIVQUESTION: Not using the side panel?-->
         <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
         <!-- AIVQUESTION: how to modify "OnLine bronnen" to Online bronnen"? -->
-        <!-- AIVQUESTION: what to do with 'required' attribute? -->
-        <!-- AIVQUESTION: Should all custom labels be vl- prefixed? Should we keep the generic ones 'standard'? -->
         <action type="add"
                 name="transferOptions"
                 btnLabel="vl-add-transferOptions"
                 or="transferOptions"
-                in="/gmd:MD_Metadata/gmd:distributionInfo/*"
-                required="true()">
+                in="/gmd:MD_Metadata/gmd:distributionInfo/*">
           <template>
             <snippet>
               <gmd:transferOptions>
@@ -1928,7 +1924,7 @@
     </tab>
 
     <tab id="vl-tab-metaMetadata" mode="flat">
-      <section name="gmd:MD_Metadata">
+      <section>
         <field xpath="/gmd:MD_Metadata/gmd:fileIdentifier"/>
         <field xpath="/gmd:MD_Metadata/gmd:language" or="language" in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:characterSet"/>
@@ -1952,25 +1948,19 @@
       </section>
     </tab>
 
-    <tab id="vl-tab-objectCatalogue" mode="flat"
+    <!-- AIVQUESTION to check: remove object catalog tab and use the side panel instead? -->
+    <tab id="vl-tab-objectCatalogue"
+         mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
-      <!-- AIVQUESTION : Use side panel ?-->
-      <section name="gmd:contentInfo">
-
-        <action type="associatedResource"
-                btnLabel="vl-add-featureCatalog"
-                name="addFeatureCatalog"
-                process="fcats">
-        </action>
-        <field xpath="/gmd:MD_Metadata/gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:includedWithDataset"/>
+      <section>
         <section name="gmd:featureCatalogueCitation"
-                 forEach="/gmd:MD_Metadata/gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation">
+                 forEach="/gmd:MD_Metadata/gmd:contentInfo/gmd:MD_FeatureCatalogueDescription">
           <directive data-gn-feature-cat-name=""/>
-          <!-- AIVQUESTION: overriding the name doesn't work in strings.xml? -->
+          <field xpath="gmd:includedWithDataset"/>
           <field name="featureCatalogueCitationUuidref"
                  templateModeOnly="true"
                  notDisplayedIfMissing="true"
-                 xpath=".">
+                 xpath="gmd:featureCatalogueCitation">
             <template>
               <values readonlyIf="true()">
                 <key label="featureCatalogueCitationUuidref"
@@ -1986,26 +1976,9 @@
             </template>
           </field>
         </section>
-        <directive data-gim-add-feature-cat-src=""/>
-      </section>
-
-      <section>
-        <action type="add"
-                btnLabel="vl-add-featureCatalogueCitation"
-                name="gmd:featureCatalogueCitation" or="contentInfo"
-                in="/gmd:MD_Metadata">
-          <template>
-            <snippet>
-              <gmd:contentInfo>
-                <gmd:MD_FeatureCatalogueDescription>
-                  <gmd:includedWithDataset>
-                    <gco:Boolean>true</gco:Boolean>
-                  </gmd:includedWithDataset>
-                  <gmd:featureCatalogueCitation uuidref="" />
-                </gmd:MD_FeatureCatalogueDescription>
-              </gmd:contentInfo>
-            </snippet>
-          </template>
+        <action type="associatedResource"
+                name="vl-add-featureCatalog"
+                process="fcats">
         </action>
       </section>
     </tab>
