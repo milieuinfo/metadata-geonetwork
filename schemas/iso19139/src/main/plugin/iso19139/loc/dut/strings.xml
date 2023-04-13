@@ -27,6 +27,7 @@
   <vl-add-DQ_CompletenessCommission>Overbodige/aanvullende data</vl-add-DQ_CompletenessCommission>
   <vl-add-DQ_CompletenessOmission>Volledigheid</vl-add-DQ_CompletenessOmission>
   <vl-add-DQ_ThematicClassificationCorrectness>Thematische classificatie</vl-add-DQ_ThematicClassificationCorrectness>
+  <vl-add-conformity>Conformiteit</vl-add-conformity>
   <vl-add-crs-1094>High Water (EPSG(version 8.0 released 10/8/2012):1094)</vl-add-crs-1094>
   <vl-add-crs-21500>Belge 1950 (Brussels) / Belge Lambert 50 (EPSG:21500)</vl-add-crs-21500>
   <vl-add-crs-23031>ED50 / UTM zone 31N (EPSG:23031)</vl-add-crs-23031>
@@ -52,6 +53,44 @@
   <vl-add-source>Bron</vl-add-source>
   <vl-add-status>Status</vl-add-status>
   <vl-add-transferOptions>Online bron</vl-add-transferOptions>
+  <vl-inspire-ad>INSPIRE Data Specification on Addresses - Technical Guidelines</vl-inspire-ad>
+  <vl-inspire-au>INSPIRE Data Specification on Administrative Units - Technical Guidelines</vl-inspire-au>
+  <vl-inspire-cp>INSPIRE Data Specification on Cadastral Parcels - Technical Guidelines</vl-inspire-cp>
+  <vl-inspire-rs>INSPIRE Data Specification on Coordinate Reference Systems - Technical Guidelines</vl-inspire-rs>
+  <vl-inspire-gg>INSPIRE Data Specification on Geographical Grid Systems - Technical Guidelines</vl-inspire-gg>
+  <vl-inspire-gn>INSPIRE Data Specification on Geographical Names - Technical Guidelines</vl-inspire-gn>
+  <vl-inspire-hy>INSPIRE Data Specification on Hydrography - Technical Guidelines</vl-inspire-hy>
+  <vl-inspire-af>INSPIRE Data Specification on Agricultural and Aquaculture Facilities - Technical Guidelines</vl-inspire-af>
+  <vl-inspire-am>INSPIRE Data Specification on Area Management/Restriction/Regulation Zones and Reporting Units - Technical Guidelines</vl-inspire-am>
+  <vl-inspire-ac>INSPIRE Data Specification on Atmospheric Conditions and Meteorological Geographical Features - Technical Guidelines</vl-inspire-ac>
+  <vl-inspire-br>INSPIRE Data Specification on Bio-geographical Regions - Technical Guidelines</vl-inspire-br>
+  <vl-inspire-bu>INSPIRE Data Specification on Buildings - Technical Guidelines</vl-inspire-bu>
+  <vl-inspire-el>INSPIRE Data Specification on Elevation - Technical Guidelines</vl-inspire-el>
+  <vl-inspire-er>INSPIRE Data Specification on Energy Resources - Technical Guidelines</vl-inspire-er>
+  <vl-inspire-ef>INSPIRE Data Specification on Environmental Monitoring Facilities - Technical Guidelines</vl-inspire-ef>
+  <vl-inspire-ge>INSPIRE Data Specification on Geology - Technical Guidelines</vl-inspire-ge>
+  <vl-inspire-hb>INSPIRE Data Specification on Habitats and Biotopes - Technical Guidelines</vl-inspire-hb>
+  <vl-inspire-hh>INSPIRE Data Specification on Human Health and Safety - Technical Guidelines</vl-inspire-hh>
+  <vl-inspire-lc>INSPIRE Data Specification on Land Cover - Technical Guidelines</vl-inspire-lc>
+  <vl-inspire-lu>INSPIRE Data Specification on Land Use - Technical Guidelines</vl-inspire-lu>
+  <vl-inspire-tn>INSPIRE Data Specification on Transport Networks - Technical Guidelines</vl-inspire-tn>
+  <vl-inspire-oi>INSPIRE Data Specification on Orthoimagery - Technical Guidelines</vl-inspire-oi>
+  <vl-inspire-mf>INSPIRE Data Specification on Meteorological Features - Technical Guidelines</vl-inspire-mf>
+  <vl-inspire-mr>INSPIRE Data Specification on Mineral Resources - Technical Guidelines</vl-inspire-mr>
+  <vl-inspire-nz>INSPIRE Data Specification on Natural Risk Zones - Technical Guidelines</vl-inspire-nz>
+  <vl-inspire-of>INSPIRE Data Specification on Oceanographic geographical features - Technical Guidelines</vl-inspire-of>
+  <vl-inspire-pd>INSPIRE Data Specification on Population Distribution - Technical Guidelines</vl-inspire-pd>
+  <vl-inspire-pf>INSPIRE Data Specification on Production and Industrial Facilities - Technical Guidelines</vl-inspire-pf>
+  <vl-inspire-sr>INSPIRE Data Specification on Sea Regions - Technical Guidelines</vl-inspire-sr>
+  <vl-inspire-so>INSPIRE Data Specification on Soil - Technical Guidelines</vl-inspire-so>
+  <vl-inspire-sd>INSPIRE Data Specification on Species Distribution - Technical Guidelines</vl-inspire-sd>
+  <vl-inspire-su>INSPIRE Data Specification on Statistical Units - Technical Guidelines</vl-inspire-su>
+  <vl-inspire-us>INSPIRE Data Specification on Utility and Government Services - Technical Guidelines</vl-inspire-us>
+  <vl-inspire-download>Technical Guidance for the implementation of INSPIRE Download Services</vl-inspire-download>
+  <vl-inspire-view>Technical Guidance for the implementation of INSPIRE View Services</vl-inspire-view>
+  <vl-inspire-976>Verordening (EG) n r. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</vl-inspire-976>
+  <vl-inspire-sds>Technical Guidance for INSPIRE Spatial Data Services and services allowing spatial data services to be invoked</vl-inspire-sds>
+  <vl-inspire-1089>Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</vl-inspire-1089>
   <vl-measureType>Type meting</vl-measureType>
   <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
   <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
