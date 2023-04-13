@@ -571,7 +571,7 @@ USA.
             </sch:report>
         </sch:rule>
         <sch:rule context="/*/gmd:dateStamp">
-          <sch:let name="date" value="gco:Date/text()"/>
+          <sch:let name="date" value="gco:Date/text()|gco:DateTime/text()"/>
           <sch:let name="dateStamp" value="*/text()"/>
           <sch:assert test="$date">
             <sch:value-of select="$loc/strings/alert.requiredDateStamp"/>
