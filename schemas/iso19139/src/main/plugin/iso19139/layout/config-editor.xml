@@ -250,7 +250,11 @@
         data-template-type="report"/>
     </for>
 
-
+    <for name="gmd:name" xpath="/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+         use="data-gn-keyword-picker">
+      <directiveAttributes data-thesaurus-key="external.theme.file-type"
+                           data-thesaurus-concept-id-attribute="xlinkCOLONhref"/>
+    </for>
 
 
     <!-- Example configuration: Add onLine source from subtemplate
@@ -2035,9 +2039,7 @@
     </tab>
 
     <tab id="vl-tab-distribution" mode="flat">
-      <section name="gmd:distributionInfo">
-        <!-- AIVTODO: format as an autocomplete list.
-        We may be able to use something like https://github.com/geonetwork/core-geonetwork/blob/main/schemas/iso19139/src/main/plugin/iso19139/layout/config-editor.xml#L67-L71 -->
+      <section>
         <section xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:distributionFormat"/>
         <action type="add"
                 btnLabel="vl-add-distributionFormat"
@@ -2149,7 +2151,7 @@
 
         <!-- AIVQUESTION: Not using the side panel?-->
         <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
-        <!-- AIVQUESTION: how to modify "OnLine bronnen" to Online bronnen"? -->
+
         <action type="add"
                 name="transferOptions"
                 btnLabel="vl-add-transferOptions"
