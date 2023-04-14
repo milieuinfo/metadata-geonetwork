@@ -2149,8 +2149,11 @@
           </template>
         </action>
 
-        <!-- AIVQUESTION: Not using the side panel?-->
-        <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
+        <action type="associatedResource"
+                name="vl-add-transferOptions"
+                process="onlinesrc"/>
+
+        <!--<field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
 
         <action type="add"
                 name="transferOptions"
@@ -2188,20 +2191,11 @@
                       </gmd:function>
                     </gmd:CI_OnlineResource>
                   </gmd:onLine>
-                  <gmd:offLine>
-                    <gmd:MD_Medium>
-                      <gmd:name>
-                        <gmd:MD_MediumNameCode
-                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MediumNameCode"
-                          codeListValue=""/>
-                      </gmd:name>
-                    </gmd:MD_Medium>
-                  </gmd:offLine>
                 </gmd:MD_DigitalTransferOptions>
               </gmd:transferOptions>
             </snippet>
           </template>
-        </action>
+        </action>-->
       </section>
     </tab>
 
@@ -2310,8 +2304,8 @@
       </section>
     </tab>
 
-    <!-- AIVQUESTION to check: remove object catalog tab and use the side panel instead? -->
-    <tab id="vl-tab-objectCatalogue"
+
+    <!--<tab id="vl-tab-objectCatalogue"
          mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
       <section>
@@ -2343,7 +2337,7 @@
                 process="fcats">
         </action>
       </section>
-    </tab>
+    </tab>-->
 
     <tab id="vl-tab-applicationSchemaInfo" mode="flat"
          displayIfRecord="count(gmd:MD_Metadata/gmd:applicationSchemaInfo) > 0"
