@@ -1067,7 +1067,8 @@
               <recordOperatedByType>view</recordOperatedByType>
             </xsl:if>
             <xsl:if test="daobs:contains($protocol, 'wfs') or
-                          daobs:contains($protocol, 'wcs') or
+
+               daobs:contains($protocol, 'wcs') or
                           daobs:contains($protocol, 'download')">
               <recordOperatedByType>download</recordOperatedByType>
             </xsl:if>
