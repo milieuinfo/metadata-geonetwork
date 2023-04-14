@@ -159,7 +159,7 @@
 
     <for name="gmd:country" use="data-gn-country-picker"/>
 
-    <for name="gmd:referenceSystemInfo" addDirective="data-gn-crs-selector"/>
+    <!--    <for name="gmd:referenceSystemInfo" addDirective="data-gn-crs-selector"/>-->
 
 
     <!--
@@ -250,7 +250,11 @@
         data-template-type="report"/>
     </for>
 
-
+    <for name="gmd:name" xpath="/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+         use="data-gn-keyword-picker">
+      <directiveAttributes data-thesaurus-key="external.theme.file-type"
+                           data-thesaurus-concept-id-attribute="xlinkCOLONhref"/>
+    </for>
 
 
     <!-- Example configuration: Add onLine source from subtemplate
@@ -277,10 +281,10 @@
 
       Exclude all thesaurus already used in the metadata:
       -->
-      <directiveAttributes data-include="xpath::string-join(*
+      <directiveAttributes data-include="xpath::concat('external.place.GDI-Vlaanderenregios,external.theme.httpinspireeceuropaeutheme-theme,external.theme.gemet,external.theme.httpinspireeceuropaeufeatureconcept-featureconcept,external.theme.GDI-Vlaanderen-trefwoorden,external.theme.GDI-Vlaanderen-service-types,external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory,external.theme.datatheme,external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope,external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset,', string-join(*
                                           //gmd:thesaurusName/*/gmd:identifier/*/
                                             gmd:code/gmx:Anchor/
-                                              concat('-', substring-after(text()[. != ''], 'geonetwork.thesaurus.')), ',')"/>
+                                              concat('-', substring-after(text()[. != ''], 'geonetwork.thesaurus.')), ','))"/>
     </for>
   </fields>
 
@@ -296,6 +300,7 @@
     <name>gmd:spatialRepresentationInfo</name>
     <name>gmd:pointOfContact</name>
     <name>gmd:contact</name>
+    <name>gmd:processor</name>
     <name>gmd:userContactInfo</name>
     <name>gmd:resourceSpecificUsage</name>
     <name>gmd:graphicOverview</name>
@@ -421,7 +426,7 @@
   </multilingualFields>
 
   <tableFields>
-    <table for="gmd:CI_ResponsibleParty">
+    <table for="disabled:gmd:CI_ResponsibleParty">
       <header>
         <!-- TODO: Add label from strings.xml / label with context-->
         <col label="gmd:organisationName"/>
@@ -438,7 +443,7 @@
         <col del=".."/>
       </row>
     </table>
-    <table for="gmd:CI_OnlineResource">
+    <table for="disabled:gmd:CI_OnlineResource">
       <header>
         <col label="gmd:protocol"/>
         <col label="gmd:linkage"/>
@@ -510,11 +515,1911 @@
 
   <!-- View configuration -->
   <views>
+    <view name="vl"
+          default="true"
+          class="gn-label-above-input gn-indent-bluescale"
+          displayTooltips="true"
+          displayTooltipsMode="onhover"
+          hideTimeInCalendar="true">
+      <thesaurusList>
+        <thesaurus key="external.theme.datatheme"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.GDI-Vlaanderen-service-types"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.GDI-Vlaanderen-trefwoorden"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.place.GDI-Vlaanderenregios"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeufeatureconcept-featureconcept"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeutheme-theme"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope"
+                   fieldset="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+        <thesaurus key="external.theme.gemet"
+                   fieldset="false"
+                   browsable="false"
+                   transformations="to-iso19139-keyword-with-anchor"/>
+      </thesaurusList>
+    <sidePanel>
+      <directive data-gn-overview-manager=""
+                 data-file-types=".png,.gif,.jpeg,.jpg"/>
+
+      <!--<directive data-gn-file-uploader=""
+                 data-type="onlines"/>-->
+
+      <directive data-gn-onlinesrc-list=""
+                 data-types="onlinesrc|parent|dataset|service|source|sibling|associated|fcats"/>
+
+      <directive data-gn-validation-report=""/>
+
+      <directive data-gn-need-help="creating-metadata"/>
+    </sidePanel>
+
+    <tab id="vl-tab-identification" default="true" mode="flat">
+      <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:citation"/>
+    </tab>
+
+    <tab id="vl-tab-content" mode="flat">
+      <section>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:abstract"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:purpose"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:status"/>
+        <action type="add" btnLabel="vl-add-status"
+                or="status" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet>
+              <gmd:status>
+                <gmd:MD_ProgressCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_ProgressCode"
+                                     codeListValue=""/>
+              </gmd:status>
+            </snippet>
+          </template>
+        </action>
+
+        <!-- Classification for services, serviceType = other -->
+        <section name="vl-section-classification"
+                 displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) > 0">
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:serviceType" />
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:couplingType" />
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:accessProperties/gmd:MD_StandardOrderProcess/gmd:fees"
+                 del="../.."/>
+
+          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/srv:coupledResource"/>
+
+          <action type="add" name="srv:coupledResource"
+                  or="coupledResource" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <srv:coupledResource>
+                  <srv:SV_CoupledResource>
+                    <srv:operationName>
+                      <gco:CharacterString/>
+                    </srv:operationName>
+                    <srv:identifier>
+                      <gco:CharacterString/>
+                    </srv:identifier>
+                    <gco:ScopedName/>
+                  </srv:SV_CoupledResource>
+                </srv:coupledResource>
+              </snippet>
+            </template>
+          </action>
+
+          <section xpath="srv:containsOperations" />
+
+          <action type="add" name="srv:containsOperations"
+                  or="containsOperations" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <srv:containsOperations>
+                  <srv:SV_OperationMetadata>
+                    <srv:operationName>
+                      <gco:CharacterString/>
+                    </srv:operationName>
+                    <srv:DCP>
+                      <srv:DCPList codeListValue="" codeList="https://standards.iso.org/iso/19115/resources/Codelists/gml/DCPList.xml"/>
+                    </srv:DCP>
+                    <srv:connectPoint>
+                      <gmd:CI_OnlineResource>
+                        <gmd:linkage>
+                          <gmd:URL/>
+                        </gmd:linkage>
+                        <gmd:protocol>
+                          <gco:CharacterString/>
+                        </gmd:protocol>
+                        <gmd:name>
+                          <gco:CharacterString/>
+                        </gmd:name>
+                        <gmd:description>
+                          <gco:CharacterString/>
+                        </gmd:description>
+                      </gmd:CI_OnlineResource>
+                    </srv:connectPoint>
+                  </srv:SV_OperationMetadata>
+                </srv:containsOperations>
+              </snippet>
+            </template>
+          </action>
+          <section xpath="srv:operatesOn" />
+        </section>
+
+
+        <!-- For dataset(series) and services-->
+        <section name="vl-section-constraints">
+          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_Constraints]"/>
+
+          <action type="add"
+                  btnLabel="vl-useLimitation-add"
+                  or="resourceConstraints" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:resourceConstraints>
+                  <gmd:MD_Constraints>
+                    <gmd:useLimitation>
+                      <gco:CharacterString></gco:CharacterString>
+                    </gmd:useLimitation>
+                  </gmd:MD_Constraints>
+                </gmd:resourceConstraints>
+              </snippet>
+            </template>
+          </action>
+        </section>
+
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:pointOfContact"/>
+
+        <action type="add"
+                btnLabel="vl-add-pointOfContact"
+                or="pointOfContact" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet>
+              <gmd:pointOfContact>
+                <gmd:CI_ResponsibleParty xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+                  <gmd:individualName>
+                    <gco:CharacterString/>
+                  </gmd:individualName>
+                  <gmd:organisationName>
+                    <gco:CharacterString/>
+                  </gmd:organisationName>
+                  <gmd:contactInfo>
+                    <gmd:CI_Contact>
+                      <gmd:phone>
+                        <gmd:CI_Telephone>
+                          <gmd:voice>
+                            <gco:CharacterString/>
+                          </gmd:voice>
+                          <gmd:facsimile>
+                            <gco:CharacterString/>
+                          </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                      </gmd:phone>
+                      <gmd:address>
+                        <gmd:CI_Address>
+                          <gmd:deliveryPoint>
+                            <gco:CharacterString/>
+                          </gmd:deliveryPoint>
+                          <gmd:city>
+                            <gco:CharacterString/>
+                          </gmd:city>
+                          <gmd:postalCode>
+                            <gco:CharacterString/>
+                          </gmd:postalCode>
+                          <gmd:country>
+                            <gco:CharacterString/>
+                          </gmd:country>
+                          <gmd:electronicMailAddress>
+                            <gco:CharacterString/>
+                          </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                      </gmd:address>
+                      <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                          <gmd:linkage>
+                            <gmd:URL/>
+                          </gmd:linkage>
+                        </gmd:CI_OnlineResource>
+                      </gmd:onlineResource>
+                    </gmd:CI_Contact>
+                  </gmd:contactInfo>
+                  <gmd:role>
+                    <gmd:CI_RoleCode
+                      codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                      codeListValue="pointOfContact">pointOfContact
+                    </gmd:CI_RoleCode>
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:pointOfContact>
+            </snippet>
+          </template>
+        </action>
+
+        <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceMaintenance"/>
+
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:descriptiveKeywords"
+                 or="descriptiveKeywords" in="/gmd:MD_Metadata/gmd:identificationInfo/*"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceSpecificUsage"/>
+
+
+        <section name="vl-type-and-resolution">
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
+
+          <action type="add"
+                  btnLabel="vl-add-representationType"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType) = 0"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet label="vl-representationType-is-a-vector">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue="vector"
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+              <snippet label="vl-representationType-is-a-grid">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue="grid"
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+              <snippet label="vl-representationType-is-other">
+                <gmd:spatialRepresentationType gco:nilReason="missing">
+                  <gmd:MD_SpatialRepresentationTypeCode codeListValue=""
+                                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_SpatialRepresentationTypeCode"/>
+                </gmd:spatialRepresentationType>
+              </snippet>
+            </template>
+          </action>
+
+
+          <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialResolution"/>
+
+          <action type="add"
+                  btnLabel="vl-add-scale"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo[*/gmd:spatialRepresentationType/*/@codeListValue = 'vector']) = 1"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:spatialResolution>
+                  <gmd:MD_Resolution>
+                    <gmd:equivalentScale>
+                      <gmd:MD_RepresentativeFraction>
+                        <gmd:denominator>
+                          <gco:Integer>1000</gco:Integer>
+                        </gmd:denominator>
+                      </gmd:MD_RepresentativeFraction>
+                    </gmd:equivalentScale>
+                  </gmd:MD_Resolution>
+                </gmd:spatialResolution>
+              </snippet>
+            </template>
+          </action>
+
+          <action type="add"
+                  btnLabel="vl-add-resolution"
+                  if="count(gmd:MD_Metadata/gmd:identificationInfo[*/gmd:spatialRepresentationType/*/@codeListValue = 'grid']) = 1"
+                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+            <template>
+              <snippet>
+                <gmd:spatialResolution>
+                  <gmd:MD_Resolution>
+                    <gmd:distance>
+                      <gco:Distance uom="m">10</gco:Distance>
+                    </gmd:distance>
+                  </gmd:MD_Resolution>
+                </gmd:spatialResolution>
+              </snippet>
+            </template>
+          </action>
+        </section>
+
+
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:language"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:characterSet"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:supplementalInformation"/>
+        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"/>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-referenceSystem" mode="flat">
+      <section>
+        <section xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo"/>
+
+        <action type="add"
+                btnLabel="vl-add-crs"
+                or="referenceSystemInfo" in="/gmd:MD_Metadata">
+          <template>
+            <snippet label="vl-add-crs-21500">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/21500">Belge 1950 (Brussels) / Belge Lambert 50</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-31370">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/31370">Belge 1972 / Belgian Lambert 72</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-23031">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/23031">ED50 / UTM zone 31N</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-23032">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/23032">ED50 / UTM zone 32N</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-3812">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/3812">ETRS89 / Belgian Lambert 2008</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-4258">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/4258">ETRS89</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-1094">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://epsg.io/1094-datum">High Water</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-5710">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href="https://www.opengis.net/def/crs/EPSG/0/5710">Ostend height</gmx:Anchor>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-anchor">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gmx:Anchor xlink:href=""/>
+                      </gmd:code>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+            <snippet label="vl-add-crs-string">
+              <gmd:referenceSystemInfo>
+                <gmd:MD_ReferenceSystem>
+                  <gmd:referenceSystemIdentifier>
+                    <gmd:RS_Identifier>
+                      <gmd:code>
+                        <gco:CharacterString/>
+                      </gmd:code>
+                      <gmd:codeSpace>
+                        <gco:CharacterString/>
+                      </gmd:codeSpace>
+                    </gmd:RS_Identifier>
+                  </gmd:referenceSystemIdentifier>
+                </gmd:MD_ReferenceSystem>
+              </gmd:referenceSystemInfo>
+            </snippet>
+          </template>
+        </action>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-quality" mode="flat">
+      <section>
+        <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:scope"/>
+
+        <action type="add" name="vl-measureType" btnLabel="vl-add-qualityReport"
+                or="report" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+          <template>
+            <snippet label="vl-add-DQ_AbsoluteExternalPositionalAccuracy">
+              <gmd:report>
+                <gmd:DQ_AbsoluteExternalPositionalAccuracy>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_2">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_AbsoluteExternalPositionalAccuracy>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_CompletenessCommission">
+              <gmd:report>
+                <gmd:DQ_CompletenessCommission>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_4">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_CompletenessCommission>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_ThematicClassificationCorrectness">
+              <gmd:report>
+                <gmd:DQ_ThematicClassificationCorrectness>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_3">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_ThematicClassificationCorrectness>
+              </gmd:report>
+            </snippet>
+            <snippet label="vl-add-DQ_CompletenessOmission">
+              <gmd:report>
+                <gmd:DQ_CompletenessOmission>
+                  <gmd:measureDescription>
+                    <gco:CharacterString/>
+                  </gmd:measureDescription>
+                  <gmd:dateTime gco:nilReason="missing"/>
+                  <gmd:result>
+                    <gmd:DQ_QuantitativeResult>
+                      <gmd:valueUnit>
+                        <gml:UnitDefinition gml:id="UD_1">
+                          <gml:identifier codeSpace=""/>
+                        </gml:UnitDefinition>
+                      </gmd:valueUnit>
+                      <gmd:value>
+                        <gco:Record/>
+                      </gmd:value>
+                    </gmd:DQ_QuantitativeResult>
+                  </gmd:result>
+                </gmd:DQ_CompletenessOmission>
+              </gmd:report>
+            </snippet>
+          </template>
+        </action>
+
+        <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_ThematicClassificationCorrectness" del=".."/>
+        <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_CompletenessOmission" del=".."/>
+        <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_CompletenessCommission" del=".."/>
+        <section xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_AbsoluteExternalPositionalAccuracy" del=".."/>
+
+        <section name="gmd:lineage">
+          <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:statement"/>
+
+          <section name="gmd:processStep"
+                   forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep"
+                   del=".">
+            <field xpath="gmd:LI_ProcessStep/gmd:description"/>
+            <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
+            <section xpath="gmd:LI_ProcessStep/gmd:processor" />
+
+            <action type="add" btnLabel="vl-add-processor"
+                    or="processor" in="gmd:LI_ProcessStep">
+              <template>
+                <snippet>
+                  <gmd:processor>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:individualName>
+                        <gco:CharacterString/>
+                      </gmd:individualName>
+                      <gmd:organisationName>
+                        <gco:CharacterString/>
+                      </gmd:organisationName>
+                      <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                          <gmd:phone>
+                            <gmd:CI_Telephone>
+                              <gmd:voice>
+                                <gco:CharacterString/>
+                              </gmd:voice>
+                              <gmd:facsimile>
+                                <gco:CharacterString/>
+                              </gmd:facsimile>
+                            </gmd:CI_Telephone>
+                          </gmd:phone>
+                          <gmd:address>
+                            <gmd:CI_Address>
+                              <gmd:deliveryPoint>
+                                <gco:CharacterString/>
+                              </gmd:deliveryPoint>
+                              <gmd:city>
+                                <gco:CharacterString/>
+                              </gmd:city>
+                              <gmd:postalCode>
+                                <gco:CharacterString/>
+                              </gmd:postalCode>
+                              <gmd:country>
+                                <gco:CharacterString/>
+                              </gmd:country>
+                              <gmd:electronicMailAddress>
+                                <gco:CharacterString/>
+                              </gmd:electronicMailAddress>
+                            </gmd:CI_Address>
+                          </gmd:address>
+                          <gmd:onlineResource>
+                            <gmd:CI_OnlineResource>
+                              <gmd:linkage>
+                                <gmd:URL/>
+                              </gmd:linkage>
+                            </gmd:CI_OnlineResource>
+                          </gmd:onlineResource>
+                        </gmd:CI_Contact>
+                      </gmd:contactInfo>
+                      <gmd:role>
+                        <gmd:CI_RoleCode
+                          codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                          codeListValue="processor">processor
+                        </gmd:CI_RoleCode>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:processor>
+                </snippet>
+              </template>
+            </action>
+          </section>
+
+          <action type="add" btnLabel="vl-add-processStep"
+                  or="processStep" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*">
+            <template>
+              <snippet>
+                <gmd:processStep>
+                  <gmd:LI_ProcessStep>
+                    <gmd:description>
+                      <gco:CharacterString/>
+                    </gmd:description>
+                    <gmd:dateTime gco:nilReason="missing">
+                      <gco:DateTime/>
+                    </gmd:dateTime>
+                    <gmd:processor>
+                      <gmd:CI_ResponsibleParty>
+                        <gmd:individualName>
+                          <gco:CharacterString/>
+                        </gmd:individualName>
+                        <gmd:organisationName>
+                          <gco:CharacterString/>
+                        </gmd:organisationName>
+                        <gmd:contactInfo>
+                          <gmd:CI_Contact>
+                            <gmd:phone>
+                              <gmd:CI_Telephone>
+                                <gmd:voice>
+                                  <gco:CharacterString/>
+                                </gmd:voice>
+                                <gmd:facsimile>
+                                  <gco:CharacterString/>
+                                </gmd:facsimile>
+                              </gmd:CI_Telephone>
+                            </gmd:phone>
+                            <gmd:address>
+                              <gmd:CI_Address>
+                                <gmd:deliveryPoint>
+                                  <gco:CharacterString/>
+                                </gmd:deliveryPoint>
+                                <gmd:city>
+                                  <gco:CharacterString/>
+                                </gmd:city>
+                                <gmd:postalCode>
+                                  <gco:CharacterString/>
+                                </gmd:postalCode>
+                                <gmd:country>
+                                  <gco:CharacterString/>
+                                </gmd:country>
+                                <gmd:electronicMailAddress>
+                                  <gco:CharacterString/>
+                                </gmd:electronicMailAddress>
+                              </gmd:CI_Address>
+                            </gmd:address>
+                            <gmd:onlineResource>
+                              <gmd:CI_OnlineResource>
+                                <gmd:linkage>
+                                  <gmd:URL/>
+                                </gmd:linkage>
+                                <gmd:function>
+                                  <gmd:CI_OnLineFunctionCode
+                                    codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_OnLineFunctionCode"
+                                    codeListValue=""/>
+                                </gmd:function>
+                              </gmd:CI_OnlineResource>
+                            </gmd:onlineResource>
+                          </gmd:CI_Contact>
+                        </gmd:contactInfo>
+                        <gmd:role>
+                          <gmd:CI_RoleCode
+                            codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                            codeListValue="processor">processor
+                          </gmd:CI_RoleCode>
+                        </gmd:role>
+                      </gmd:CI_ResponsibleParty>
+                    </gmd:processor>
+                  </gmd:LI_ProcessStep>
+                </gmd:processStep>
+              </snippet>
+            </template>
+          </action>
+
+          <section name="gmd:source"
+                   forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:source">
+            <field xpath="gmd:LI_Source/gmd:description"/>
+            <section name="vl-sourceDescription"
+                     forEach="gmd:LI_Source/gmd:sourceStep">
+              <field xpath="gmd:LI_ProcessStep/gmd:description"/>
+              <field xpath="gmd:LI_ProcessStep/gmd:dateTime"/>
+            </section>
+
+            <field xpath="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor"/>
+
+            <action type="add" btnLabel="vl-add-pointOfContact"
+                    or="processor" in="gmd:LI_Source/gmd:sourceStep/gmd:LI_ProcessStep">
+              <template>
+                <snippet>
+                  <gmd:processor>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:individualName>
+                        <gco:CharacterString/>
+                      </gmd:individualName>
+                      <gmd:organisationName>
+                        <gco:CharacterString/>
+                      </gmd:organisationName>
+                      <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                          <gmd:phone>
+                            <gmd:CI_Telephone>
+                              <gmd:voice>
+                                <gco:CharacterString/>
+                              </gmd:voice>
+                              <gmd:facsimile>
+                                <gco:CharacterString/>
+                              </gmd:facsimile>
+                            </gmd:CI_Telephone>
+                          </gmd:phone>
+                          <gmd:address>
+                            <gmd:CI_Address>
+                              <gmd:deliveryPoint>
+                                <gco:CharacterString/>
+                              </gmd:deliveryPoint>
+                              <gmd:city>
+                                <gco:CharacterString/>
+                              </gmd:city>
+                              <gmd:postalCode>
+                                <gco:CharacterString/>
+                              </gmd:postalCode>
+                              <gmd:country>
+                                <gco:CharacterString/>
+                              </gmd:country>
+                              <gmd:electronicMailAddress>
+                                <gco:CharacterString/>
+                              </gmd:electronicMailAddress>
+                            </gmd:CI_Address>
+                          </gmd:address>
+                          <gmd:onlineResource>
+                            <gmd:CI_OnlineResource>
+                              <gmd:linkage>
+                                <gmd:URL/>
+                              </gmd:linkage>
+                            </gmd:CI_OnlineResource>
+                          </gmd:onlineResource>
+                        </gmd:CI_Contact>
+                      </gmd:contactInfo>
+                      <gmd:role>
+                        <gmd:CI_RoleCode
+                          codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                          codeListValue="pointOfContact">
+                        </gmd:CI_RoleCode>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:processor>
+                </snippet>
+              </template>
+            </action>
+          </section>
+
+          <action type="add" btnLabel="vl-add-source"
+                  or="source" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*">
+            <template>
+              <snippet>
+                <gmd:source>
+                  <gmd:LI_Source>
+                    <gmd:description>
+                      <gco:CharacterString/>
+                    </gmd:description>
+                    <gmd:sourceStep>
+                      <gmd:LI_ProcessStep>
+                        <gmd:description>
+                          <gco:CharacterString/>
+                        </gmd:description>
+                        <gmd:dateTime gco:nilReason="missing">
+                          <gco:DateTime/>
+                        </gmd:dateTime>
+                        <gmd:processor>
+                          <gmd:CI_ResponsibleParty>
+                            <gmd:individualName>
+                              <gco:CharacterString/>
+                            </gmd:individualName>
+                            <gmd:organisationName>
+                              <gco:CharacterString/>
+                            </gmd:organisationName>
+                            <gmd:contactInfo>
+                              <gmd:CI_Contact>
+                                <gmd:phone>
+                                  <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                      <gco:CharacterString/>
+                                    </gmd:voice>
+                                    <gmd:facsimile>
+                                      <gco:CharacterString/>
+                                    </gmd:facsimile>
+                                  </gmd:CI_Telephone>
+                                </gmd:phone>
+                                <gmd:address>
+                                  <gmd:CI_Address>
+                                    <gmd:deliveryPoint>
+                                      <gco:CharacterString/>
+                                    </gmd:deliveryPoint>
+                                    <gmd:city>
+                                      <gco:CharacterString/>
+                                    </gmd:city>
+                                    <gmd:postalCode>
+                                      <gco:CharacterString/>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                      <gco:CharacterString/>
+                                    </gmd:country>
+                                    <gmd:electronicMailAddress>
+                                      <gco:CharacterString/>
+                                    </gmd:electronicMailAddress>
+                                  </gmd:CI_Address>
+                                </gmd:address>
+                                <gmd:onlineResource>
+                                  <gmd:CI_OnlineResource>
+                                    <gmd:linkage>
+                                      <gmd:URL/>
+                                    </gmd:linkage>
+                                    <gmd:function>
+                                      <gmd:CI_OnLineFunctionCode
+                                        codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_OnLineFunctionCode"
+                                        codeListValue=""/>
+                                    </gmd:function>
+                                  </gmd:CI_OnlineResource>
+                                </gmd:onlineResource>
+                              </gmd:CI_Contact>
+                            </gmd:contactInfo>
+                            <gmd:role>
+                              <gmd:CI_RoleCode
+                                codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode"
+                                codeListValue=""/>
+                            </gmd:role>
+                          </gmd:CI_ResponsibleParty>
+                        </gmd:processor>
+                      </gmd:LI_ProcessStep>
+                    </gmd:sourceStep>
+                  </gmd:LI_Source>
+                </gmd:source>
+              </snippet>
+            </template>
+          </action>
+        </section>
+
+        <action type="add"
+                or="dataQualityInfo" in="/gmd:MD_Metadata"
+                if="count(gmd:MD_Metadata/gmd:dataQualityInfo) = 0">
+          <template>
+            <snippet>
+              <gmd:dataQualityInfo>
+                <gmd:DQ_DataQuality>
+                  <gmd:scope>
+                    <gmd:DQ_Scope>
+                      <gmd:level>
+                        <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+                      </gmd:level>
+                    </gmd:DQ_Scope>
+                  </gmd:scope>
+                  <gmd:lineage>
+                    <gmd:LI_Lineage>
+                      <gmd:statement>
+                        <gco:CharacterString/>
+                      </gmd:statement>
+                      <gmd:processStep>
+                        <gmd:LI_ProcessStep>
+                          <gmd:description>
+                            <gco:CharacterString/>
+                          </gmd:description>
+                          <gmd:dateTime gco:nilReason="missing">
+                            <gco:DateTime/>
+                          </gmd:dateTime>
+                          <gmd:processor>
+                            <gmd:CI_ResponsibleParty>
+                              <gmd:individualName>
+                                <gco:CharacterString/>
+                              </gmd:individualName>
+                              <gmd:organisationName>
+                                <gco:CharacterString/>
+                              </gmd:organisationName>
+                              <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                  <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                      <gmd:voice>
+                                        <gco:CharacterString/>
+                                      </gmd:voice>
+                                      <gmd:facsimile>
+                                        <gco:CharacterString/>
+                                      </gmd:facsimile>
+                                    </gmd:CI_Telephone>
+                                  </gmd:phone>
+                                  <gmd:address>
+                                    <gmd:CI_Address>
+                                      <gmd:deliveryPoint>
+                                        <gco:CharacterString/>
+                                      </gmd:deliveryPoint>
+                                      <gmd:city>
+                                        <gco:CharacterString/>
+                                      </gmd:city>
+                                      <gmd:postalCode>
+                                        <gco:CharacterString/>
+                                      </gmd:postalCode>
+                                      <gmd:country>
+                                        <gco:CharacterString/>
+                                      </gmd:country>
+                                      <gmd:electronicMailAddress>
+                                        <gco:CharacterString/>
+                                      </gmd:electronicMailAddress>
+                                    </gmd:CI_Address>
+                                  </gmd:address>
+                                  <gmd:onlineResource>
+                                    <gmd:CI_OnlineResource>
+                                      <gmd:linkage>
+                                        <gmd:URL/>
+                                      </gmd:linkage>
+                                      <gmd:function>
+                                        <gmd:CI_OnLineFunctionCode
+                                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                                          codeListValue=""/>
+                                      </gmd:function>
+                                    </gmd:CI_OnlineResource>
+                                  </gmd:onlineResource>
+                                </gmd:CI_Contact>
+                              </gmd:contactInfo>
+                              <gmd:role>
+                                <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="processor">processor</gmd:CI_RoleCode>
+                              </gmd:role>
+                            </gmd:CI_ResponsibleParty>
+                          </gmd:processor>
+                        </gmd:LI_ProcessStep>
+                      </gmd:processStep>
+                      <gmd:source>
+                        <gmd:LI_Source>
+                          <gmd:description>
+                            <gco:CharacterString/>
+                          </gmd:description>
+                          <gmd:sourceStep>
+                            <gmd:LI_ProcessStep>
+                              <gmd:description>
+                                <gco:CharacterString/>
+                              </gmd:description>
+                              <gmd:dateTime gco:nilReason="missing">
+                                <gco:DateTime/>
+                              </gmd:dateTime>
+                              <gmd:processor>
+                                <gmd:CI_ResponsibleParty>
+                                  <gmd:individualName>
+                                    <gco:CharacterString/>
+                                  </gmd:individualName>
+                                  <gmd:organisationName>
+                                    <gco:CharacterString/>
+                                  </gmd:organisationName>
+                                  <gmd:contactInfo>
+                                    <gmd:CI_Contact>
+                                      <gmd:phone>
+                                        <gmd:CI_Telephone>
+                                          <gmd:voice>
+                                            <gco:CharacterString/>
+                                          </gmd:voice>
+                                          <gmd:facsimile>
+                                            <gco:CharacterString/>
+                                          </gmd:facsimile>
+                                        </gmd:CI_Telephone>
+                                      </gmd:phone>
+                                      <gmd:address>
+                                        <gmd:CI_Address>
+                                          <gmd:deliveryPoint>
+                                            <gco:CharacterString/>
+                                          </gmd:deliveryPoint>
+                                          <gmd:city>
+                                            <gco:CharacterString/>
+                                          </gmd:city>
+                                          <gmd:postalCode>
+                                            <gco:CharacterString/>
+                                          </gmd:postalCode>
+                                          <gmd:country>
+                                            <gco:CharacterString/>
+                                          </gmd:country>
+                                          <gmd:electronicMailAddress>
+                                            <gco:CharacterString/>
+                                          </gmd:electronicMailAddress>
+                                        </gmd:CI_Address>
+                                      </gmd:address>
+                                      <gmd:onlineResource>
+                                        <gmd:CI_OnlineResource>
+                                          <gmd:linkage>
+                                            <gmd:URL/>
+                                          </gmd:linkage>
+                                          <gmd:function>
+                                            <gmd:CI_OnLineFunctionCode
+                                              codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                                              codeListValue=""/>
+                                          </gmd:function>
+                                        </gmd:CI_OnlineResource>
+                                      </gmd:onlineResource>
+                                    </gmd:CI_Contact>
+                                  </gmd:contactInfo>
+                                  <gmd:role>
+                                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode" codeListValue=""/>
+                                  </gmd:role>
+                                </gmd:CI_ResponsibleParty>
+                              </gmd:processor>
+                            </gmd:LI_ProcessStep>
+                          </gmd:sourceStep>
+                        </gmd:LI_Source>
+                      </gmd:source>
+                    </gmd:LI_Lineage>
+                  </gmd:lineage>
+                </gmd:DQ_DataQuality>
+              </gmd:dataQualityInfo>
+            </snippet>
+          </template>
+        </action>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-domainConsistency" mode="flat">
+      <section>
+        <action type="add"
+                btnLabel="vl-add-conformity"
+                if="not(contains(gmd:MD_Metadata/
+                                    gmd:hierarchyLevel/*/@codeListValue,
+                                    'service'))"
+                or="report"
+                in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+          <template>
+            <snippet label="vl-inspire-ad">
+              <gmd:report><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/ad">INSPIRE Data Specification on Addresses - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-au">
+              <gmd:report><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/au">INSPIRE Data Specification on Administrative Units - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-cp">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/cp">INSPIRE Data Specification on Cadastral Parcels - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-rs">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/rs">INSPIRE Data Specification on Coordinate Reference Systems - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-gg">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/gg">INSPIRE Data Specification on Geographical Grid Systems - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-gn">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/gn">INSPIRE Data Specification on Geographical Names - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-hy">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/hy">INSPIRE Data Specification on Hydrography - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-af">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/af">INSPIRE Data Specification on Agricultural and Aquaculture Facilities - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>v2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-am">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/am">INSPIRE Data Specification on Area Management/Restriction/Regulation Zones and Reporting Units - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-ac">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/ac">INSPIRE Data Specification on Atmospheric Conditions and Meteorological Geographical Features - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-br">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/br">INSPIRE Data Specification on Bio-geographical Regions - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-bu">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/bu">INSPIRE Data Specification on Buildings - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-el">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/el">INSPIRE Data Specification on Elevation - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-er">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/er">INSPIRE Data Specification on Energy Resources - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-ef">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/ef">INSPIRE Data Specification on Environmental Monitoring Facilities - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-ge">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/ge">INSPIRE Data Specification on Geology - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-hb">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/hb">INSPIRE Data Specification on Habitats and Biotopes - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-hh">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/hh">INSPIRE Data Specification on Human Health and Safety - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-lc">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/lc">INSPIRE Data Specification on Land Cover - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-lu">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/lu">INSPIRE Data Specification on Land Use - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-tn">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/tn">INSPIRE Data Specification on Transport Networks - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-oi">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/oi">INSPIRE Data Specification on Orthoimagery - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-mf">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="https://inspire-regadmin.jrc.ec.europa.eu/dataspecification/ThemeOverview.action?themeId1=mf">INSPIRE Data Specification on Meteorological Features - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2014-04-17</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-mr">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/mr">INSPIRE Data Specification on Mineral Resources - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-nz">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/nz">INSPIRE Data Specification on Natural Risk Zones - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-of">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/of">INSPIRE Data Specification on Oceanographic geographical features - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-pd">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/pd">INSPIRE Data Specification on Population Distribution - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-pf">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/pf">INSPIRE Data Specification on Production and Industrial Facilities - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-sr">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/sr">INSPIRE Data Specification on Sea Regions - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-so">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/so">INSPIRE Data Specification on Soil - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-sd">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/sd">INSPIRE Data Specification on Species Distribution - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-us">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/us">INSPIRE Data Specification on Utility and Government Services - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-su">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/su">INSPIRE Data Specification on Statistical Units - Technical Guidelines</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-12-10</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-1089">
+              <gmd:report xmlns:gml="http://www.opengis.net/gml"
+                          xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xmlns:gco="http://www.isotc211.org/2005/gco"
+                          xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                          xmlns:xlink="http://www.w3.org/1999/xlink">
+                <gmd:DQ_DomainConsistency>
+                  <gmd:result>
+                    <gmd:DQ_ConformanceResult>
+                      <gmd:specification>
+                        <gmd:CI_Citation>
+                          <gmd:title>
+                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</gmx:Anchor>
+                          </gmd:title>
+                          <gmd:alternateTitle>
+                            <gco:CharacterString/>
+                          </gmd:alternateTitle>
+                          <gmd:date>
+                            <gmd:CI_Date>
+                              <gmd:date>
+                                <gco:Date>2010-12-08</gco:Date>
+                              </gmd:date>
+                              <gmd:dateType>
+                                <gmd:CI_DateTypeCode
+                                  codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode"
+                                  codeListValue="publication">publication
+                                </gmd:CI_DateTypeCode>
+                              </gmd:dateType>
+                            </gmd:CI_Date>
+                          </gmd:date>
+                        </gmd:CI_Citation>
+                      </gmd:specification>
+                      <gmd:explanation>
+                        <gco:CharacterString>Geharmoniseerd volgens INSPIRE verordening</gco:CharacterString>
+                      </gmd:explanation>
+                      <gmd:pass>
+                        <gco:Boolean>false</gco:Boolean>
+                      </gmd:pass>
+                    </gmd:DQ_ConformanceResult>
+                  </gmd:result>
+                </gmd:DQ_DomainConsistency>
+              </gmd:report>
+            </snippet>
+          </template>
+        </action>
+
+        <action type="add"
+                btnLabel="vl-add-conformity"
+                if="contains(gmd:MD_Metadata/
+                                    gmd:hierarchyLevel/*/@codeListValue,
+                                    'service')"
+                or="report"
+                in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+          <template>
+            <snippet label="vl-inspire-download">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/documents/technical-guidance-implementation-inspire-download-services">Technical Guidance for the implementation of INSPIRE Download Services</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-08-09</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-view">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/documents/technical-guidance-implementation-inspire-view-services-1">Technical Guidance for the implementation of INSPIRE View Services</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2013-04-04</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-976">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2009/976">Verordening (EG) n r. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2009-10-19</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-sds">
+              <gmd:report xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink"><gmd:DQ_DomainConsistency><gmd:result><gmd:DQ_ConformanceResult><gmd:specification><gmd:CI_Citation><gmd:title><gmx:Anchor xlink:href="http://inspire.ec.europa.eu/id/document/tg/sds">Technical Guidance for INSPIRE Spatial Data Services and services allowing spatial data services to be invoked</gmx:Anchor></gmd:title><gmd:date><gmd:CI_Date><gmd:date><gco:Date>2016-12-16</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication"/></gmd:dateType></gmd:CI_Date></gmd:date></gmd:CI_Citation></gmd:specification><gmd:explanation><gco:CharacterString>Geharmoniseerd volgens INSPIRE richtlijn</gco:CharacterString></gmd:explanation><gmd:pass><gco:Boolean>false</gco:Boolean></gmd:pass></gmd:DQ_ConformanceResult></gmd:result></gmd:DQ_DomainConsistency></gmd:report>
+            </snippet>
+            <snippet label="vl-inspire-1089">
+              <gmd:report xmlns:gml="http://www.opengis.net/gml"
+                          xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xmlns:gco="http://www.isotc211.org/2005/gco"
+                          xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                          xmlns:xlink="http://www.w3.org/1999/xlink">
+                <gmd:DQ_DomainConsistency>
+                  <gmd:result>
+                    <gmd:DQ_ConformanceResult>
+                      <gmd:specification>
+                        <gmd:CI_Citation>
+                          <gmd:title>
+                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</gmx:Anchor>
+                          </gmd:title>
+                          <gmd:alternateTitle>
+                            <gco:CharacterString/>
+                          </gmd:alternateTitle>
+                          <gmd:date>
+                            <gmd:CI_Date>
+                              <gmd:date>
+                                <gco:Date>2010-12-08</gco:Date>
+                              </gmd:date>
+                              <gmd:dateType>
+                                <gmd:CI_DateTypeCode
+                                  codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode"
+                                  codeListValue="publication">publication
+                                </gmd:CI_DateTypeCode>
+                              </gmd:dateType>
+                            </gmd:CI_Date>
+                          </gmd:date>
+                        </gmd:CI_Citation>
+                      </gmd:specification>
+                      <gmd:explanation>
+                        <gco:CharacterString>Geharmoniseerd volgens INSPIRE verordening</gco:CharacterString>
+                      </gmd:explanation>
+                      <gmd:pass>
+                        <gco:Boolean>false</gco:Boolean>
+                      </gmd:pass>
+                    </gmd:DQ_ConformanceResult>
+                  </gmd:result>
+                </gmd:DQ_DomainConsistency>
+              </gmd:report>
+            </snippet>
+          </template>
+        </action>
+
+        <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:report/gmd:DQ_DomainConsistency"
+              del=".."/>
+      </section>
+      <section>
+        <action type="add"
+                or="dataQualityInfo" in="/gmd:MD_Metadata"
+                if="count(gmd:MD_Metadata/gmd:dataQualityInfo) = 0">
+          <template>
+            <snippet>
+              <gmd:dataQualityInfo xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+                <gmd:DQ_DataQuality>
+                  <gmd:scope>
+                    <gmd:DQ_Scope>
+                      <gmd:level>
+                        <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+                      </gmd:level>
+                    </gmd:DQ_Scope>
+                  </gmd:scope>
+                  <gmd:lineage>
+                    <gmd:LI_Lineage>
+                      <gmd:statement>
+                        <gco:CharacterString/>
+                      </gmd:statement>
+                      <gmd:processStep>
+                        <gmd:LI_ProcessStep>
+                          <gmd:description>
+                            <gco:CharacterString/>
+                          </gmd:description>
+                          <gmd:dateTime gco:nilReason="missing">
+                            <gco:DateTime/>
+                          </gmd:dateTime>
+                          <gmd:processor>
+                            <gmd:CI_ResponsibleParty>
+                              <gmd:individualName>
+                                <gco:CharacterString/>
+                              </gmd:individualName>
+                              <gmd:organisationName>
+                                <gco:CharacterString/>
+                              </gmd:organisationName>
+                              <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                  <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                      <gmd:voice>
+                                        <gco:CharacterString/>
+                                      </gmd:voice>
+                                      <gmd:facsimile>
+                                        <gco:CharacterString/>
+                                      </gmd:facsimile>
+                                    </gmd:CI_Telephone>
+                                  </gmd:phone>
+                                  <gmd:address>
+                                    <gmd:CI_Address>
+                                      <gmd:deliveryPoint>
+                                        <gco:CharacterString/>
+                                      </gmd:deliveryPoint>
+                                      <gmd:city>
+                                        <gco:CharacterString/>
+                                      </gmd:city>
+                                      <gmd:postalCode>
+                                        <gco:CharacterString/>
+                                      </gmd:postalCode>
+                                      <gmd:country>
+                                        <gco:CharacterString/>
+                                      </gmd:country>
+                                      <gmd:electronicMailAddress>
+                                        <gco:CharacterString/>
+                                      </gmd:electronicMailAddress>
+                                    </gmd:CI_Address>
+                                  </gmd:address>
+                                  <gmd:onlineResource>
+                                    <gmd:CI_OnlineResource>
+                                      <gmd:linkage>
+                                        <gmd:URL/>
+                                      </gmd:linkage>
+                                      <gmd:function>
+                                        <gmd:CI_OnLineFunctionCode
+                                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                                          codeListValue=""/>
+                                      </gmd:function>
+                                    </gmd:CI_OnlineResource>
+                                  </gmd:onlineResource>
+                                </gmd:CI_Contact>
+                              </gmd:contactInfo>
+                              <gmd:role>
+                                <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="processor">processor</gmd:CI_RoleCode>
+                              </gmd:role>
+                            </gmd:CI_ResponsibleParty>
+                          </gmd:processor>
+                        </gmd:LI_ProcessStep>
+                      </gmd:processStep>
+                      <gmd:source>
+                        <gmd:LI_Source>
+                          <gmd:description>
+                            <gco:CharacterString/>
+                          </gmd:description>
+                          <gmd:sourceStep>
+                            <gmd:LI_ProcessStep>
+                              <gmd:description>
+                                <gco:CharacterString/>
+                              </gmd:description>
+                              <gmd:dateTime gco:nilReason="missing">
+                                <gco:DateTime/>
+                              </gmd:dateTime>
+                              <gmd:processor>
+                                <gmd:CI_ResponsibleParty>
+                                  <gmd:individualName>
+                                    <gco:CharacterString/>
+                                  </gmd:individualName>
+                                  <gmd:organisationName>
+                                    <gco:CharacterString/>
+                                  </gmd:organisationName>
+                                  <gmd:contactInfo>
+                                    <gmd:CI_Contact>
+                                      <gmd:phone>
+                                        <gmd:CI_Telephone>
+                                          <gmd:voice>
+                                            <gco:CharacterString/>
+                                          </gmd:voice>
+                                          <gmd:facsimile>
+                                            <gco:CharacterString/>
+                                          </gmd:facsimile>
+                                        </gmd:CI_Telephone>
+                                      </gmd:phone>
+                                      <gmd:address>
+                                        <gmd:CI_Address>
+                                          <gmd:deliveryPoint>
+                                            <gco:CharacterString/>
+                                          </gmd:deliveryPoint>
+                                          <gmd:city>
+                                            <gco:CharacterString/>
+                                          </gmd:city>
+                                          <gmd:postalCode>
+                                            <gco:CharacterString/>
+                                          </gmd:postalCode>
+                                          <gmd:country>
+                                            <gco:CharacterString/>
+                                          </gmd:country>
+                                          <gmd:electronicMailAddress>
+                                            <gco:CharacterString/>
+                                          </gmd:electronicMailAddress>
+                                        </gmd:CI_Address>
+                                      </gmd:address>
+                                      <gmd:onlineResource>
+                                        <gmd:CI_OnlineResource>
+                                          <gmd:linkage>
+                                            <gmd:URL/>
+                                          </gmd:linkage>
+                                          <gmd:function>
+                                            <gmd:CI_OnLineFunctionCode
+                                              codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                                              codeListValue=""/>
+                                          </gmd:function>
+                                        </gmd:CI_OnlineResource>
+                                      </gmd:onlineResource>
+                                    </gmd:CI_Contact>
+                                  </gmd:contactInfo>
+                                  <gmd:role>
+                                    <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode" codeListValue=""/>
+                                  </gmd:role>
+                                </gmd:CI_ResponsibleParty>
+                              </gmd:processor>
+                            </gmd:LI_ProcessStep>
+                          </gmd:sourceStep>
+                        </gmd:LI_Source>
+                      </gmd:source>
+                    </gmd:LI_Lineage>
+                  </gmd:lineage>
+                </gmd:DQ_DataQuality>
+              </gmd:dataQualityInfo>
+            </snippet>
+          </template>
+        </action>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-constraints" mode="flat">
+      <section>
+        <action type="add"
+                btnLabel="vl-add-resourceConstraints"
+                or="resourceConstraints"
+                in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+          <template>
+            <snippet label="vl-constraints-use">
+              <gmd:resourceConstraints>
+                <gmd:MD_LegalConstraints>
+                  <gmd:useLimitation>
+                    <gco:CharacterString/>
+                  </gmd:useLimitation>
+                  <gmd:useConstraints>
+                    <gmd:MD_RestrictionCode
+                      codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_RestrictionCode"
+                      codeListValue="otherRestrictions">otherRestrictions
+                    </gmd:MD_RestrictionCode>
+                  </gmd:useConstraints>
+                  <gmd:otherConstraints>
+                    <gco:CharacterString/>
+                  </gmd:otherConstraints>
+                </gmd:MD_LegalConstraints>
+              </gmd:resourceConstraints>
+            </snippet>
+            <snippet label="vl-constraints-access">
+              <gmd:resourceConstraints>
+                <gmd:MD_LegalConstraints>
+                  <gmd:useLimitation>
+                    <gco:CharacterString/>
+                  </gmd:useLimitation>
+                  <gmd:accessConstraints>
+                    <gmd:MD_RestrictionCode
+                      codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_RestrictionCode"
+                      codeListValue="otherRestrictions">otherRestrictions
+                    </gmd:MD_RestrictionCode>
+                  </gmd:accessConstraints>
+                  <gmd:otherConstraints>
+                    <gco:CharacterString/>
+                  </gmd:otherConstraints>
+                </gmd:MD_LegalConstraints>
+              </gmd:resourceConstraints>
+            </snippet>
+            <snippet label="vl-constraints-security">
+              <gmd:resourceConstraints>
+                <gmd:MD_SecurityConstraints>
+                  <gmd:useLimitation>
+                    <gco:CharacterString/>
+                  </gmd:useLimitation>
+                  <gmd:classification>
+                    <gmd:MD_ClassificationCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xmll#MD_ClassificationCode" codeListValue="unclassified"/>
+                  </gmd:classification>
+                </gmd:MD_SecurityConstraints>
+              </gmd:resourceConstraints>
+            </snippet>
+          </template>
+        </action>
+        <section name="gmd:MD_LegalConstraints">
+          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_LegalConstraints]"/>
+        </section>
+        <section name="gmd:MD_SecurityConstraints">
+          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_SecurityConstraints]"/>
+        </section>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-distribution" mode="flat">
+      <section>
+        <section xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:distributionFormat"/>
+        <action type="add"
+                btnLabel="vl-add-distributionFormat"
+                name="distributionFormat"
+                or="distributionFormat"
+                in="/gmd:MD_Metadata/gmd:distributionInfo/*">
+          <template>
+            <snippet>
+              <gmd:distributionFormat>
+                <gmd:MD_Format>
+                  <gmd:name>
+                    <gmx:Anchor xlink:href=""/>
+                  </gmd:name>
+                  <gmd:version>
+                    <gco:CharacterString/>
+                  </gmd:version>
+                </gmd:MD_Format>
+              </gmd:distributionFormat>
+            </snippet>
+          </template>
+        </action>
+        <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:distributor"/>
+        <action type="add"
+                btnLabel="vl-add-distributor"
+                name="distributor"
+                or="distributor" in="/gmd:MD_Metadata/gmd:distributionInfo/*">
+          <template>
+            <snippet>
+              <gmd:distributor>
+                <gmd:MD_Distributor>
+                  <gmd:distributorContact>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:individualName>
+                        <gco:CharacterString/>
+                      </gmd:individualName>
+                      <gmd:organisationName>
+                        <gco:CharacterString/>
+                      </gmd:organisationName>
+                      <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                          <gmd:phone>
+                            <gmd:CI_Telephone>
+                              <gmd:voice>
+                                <gco:CharacterString/>
+                              </gmd:voice>
+                              <gmd:facsimile>
+                                <gco:CharacterString/>
+                              </gmd:facsimile>
+                            </gmd:CI_Telephone>
+                          </gmd:phone>
+                          <gmd:address>
+                            <gmd:CI_Address>
+                              <gmd:deliveryPoint>
+                                <gco:CharacterString/>
+                              </gmd:deliveryPoint>
+                              <gmd:city>
+                                <gco:CharacterString/>
+                              </gmd:city>
+                              <gmd:postalCode>
+                                <gco:CharacterString/>
+                              </gmd:postalCode>
+                              <gmd:country>
+                                <gco:CharacterString/>
+                              </gmd:country>
+                              <gmd:electronicMailAddress>
+                                <gco:CharacterString/>
+                              </gmd:electronicMailAddress>
+                            </gmd:CI_Address>
+                          </gmd:address>
+                          <gmd:onlineResource>
+                            <gmd:CI_OnlineResource>
+                              <gmd:linkage>
+                                <gmd:URL/>
+                              </gmd:linkage>
+                              <gmd:function>
+                                <gmd:CI_OnLineFunctionCode
+                                  codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                                  codeListValue=""/>
+                              </gmd:function>
+                            </gmd:CI_OnlineResource>
+                          </gmd:onlineResource>
+                        </gmd:CI_Contact>
+                      </gmd:contactInfo>
+                      <gmd:role>
+                        <gmd:CI_RoleCode
+                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode"
+                          codeListValue=""/>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:distributorContact>
+                  <gmd:distributionOrderProcess>
+                    <gmd:MD_StandardOrderProcess>
+                      <gmd:fees>
+                        <gco:CharacterString/>
+                      </gmd:fees>
+                      <gmd:orderingInstructions>
+                        <gco:CharacterString/>
+                      </gmd:orderingInstructions>
+                      <gmd:turnaround>
+                        <gco:CharacterString/>
+                      </gmd:turnaround>
+                    </gmd:MD_StandardOrderProcess>
+                  </gmd:distributionOrderProcess>
+                </gmd:MD_Distributor>
+              </gmd:distributor>
+            </snippet>
+          </template>
+        </action>
+
+        <!-- AIVQUESTION: Not using the side panel?-->
+        <field xpath="/gmd:MD_Metadata/gmd:distributionInfo/*/gmd:transferOptions"/>
+
+        <action type="add"
+                name="transferOptions"
+                btnLabel="vl-add-transferOptions"
+                or="transferOptions"
+                in="/gmd:MD_Metadata/gmd:distributionInfo/*">
+          <template>
+            <snippet>
+              <gmd:transferOptions>
+                <gmd:MD_DigitalTransferOptions>
+                  <gmd:unitsOfDistribution>
+                    <gco:CharacterString/>
+                  </gmd:unitsOfDistribution>
+                  <gmd:transferSize>
+                    <gco:Real>0</gco:Real>
+                  </gmd:transferSize>
+                  <gmd:onLine>
+                    <gmd:CI_OnlineResource>
+                      <gmd:linkage>
+                        <gmd:URL/>
+                      </gmd:linkage>
+                      <gmd:protocol>
+                        <gco:CharacterString/>
+                      </gmd:protocol>
+                      <gmd:name>
+                        <gco:CharacterString/>
+                      </gmd:name>
+                      <gmd:description>
+                        <gco:CharacterString/>
+                      </gmd:description>
+                      <gmd:function>
+                        <gmd:CI_OnLineFunctionCode
+                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                          codeListValue=""/>
+                      </gmd:function>
+                    </gmd:CI_OnlineResource>
+                  </gmd:onLine>
+                  <gmd:offLine>
+                    <gmd:MD_Medium>
+                      <gmd:name>
+                        <gmd:MD_MediumNameCode
+                          codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MediumNameCode"
+                          codeListValue=""/>
+                      </gmd:name>
+                    </gmd:MD_Medium>
+                  </gmd:offLine>
+                </gmd:MD_DigitalTransferOptions>
+              </gmd:transferOptions>
+            </snippet>
+          </template>
+        </action>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-metaMetadata" mode="flat">
+      <section>
+        <field xpath="/gmd:MD_Metadata/gmd:fileIdentifier"/>
+        <!-- AIVQUESTION: perhaps we can generalise this to make it a reusable component? do we add an icon? -->
+        <text>
+          <div class="row">
+            <div class="col-sm-9">
+              <div class="alert alert-info">GDI-Vlaanderen Best Practices SC-1</div>
+            </div>
+            <div class="col-sm-1"/>
+          </div>
+        </text>
+        <field xpath="/gmd:MD_Metadata/gmd:language" or="language" in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:characterSet"/>
+        <!-- AIVQUESTION : drop unused fields ?-->
+        <field xpath="/gmd:MD_Metadata/gmd:parentIdentifier" or="parentIdentifier"
+               in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:hierarchyLevel"/>
+        <field xpath="/gmd:MD_Metadata/gmd:hierarchyLevelName" or="hierarchyLevelName"
+               in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:dateStamp"/>
+        <field xpath="/gmd:MD_Metadata/gmd:metadataStandardName"/>
+        <field xpath="/gmd:MD_Metadata/gmd:metadataStandardVersion"/>
+        <field xpath="/gmd:MD_Metadata/gmd:contact"/>
+
+        <action type="add"
+                btnLabel="vl-add-metadataContact"
+                name="contact"
+                or="contact" in="/gmd:MD_Metadata">
+          <template>
+            <snippet>
+              <gmd:contact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:individualName>
+                    <gco:CharacterString/>
+                  </gmd:individualName>
+                  <gmd:organisationName>
+                    <gco:CharacterString/>
+                  </gmd:organisationName>
+                  <gmd:contactInfo>
+                    <gmd:CI_Contact>
+                      <gmd:phone>
+                        <gmd:CI_Telephone>
+                          <gmd:voice>
+                            <gco:CharacterString/>
+                          </gmd:voice>
+                          <gmd:facsimile>
+                            <gco:CharacterString/>
+                          </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                      </gmd:phone>
+                      <gmd:address>
+                        <gmd:CI_Address>
+                          <gmd:deliveryPoint>
+                            <gco:CharacterString/>
+                          </gmd:deliveryPoint>
+                          <gmd:city>
+                            <gco:CharacterString/>
+                          </gmd:city>
+                          <gmd:postalCode>
+                            <gco:CharacterString/>
+                          </gmd:postalCode>
+                          <gmd:country>
+                            <gco:CharacterString/>
+                          </gmd:country>
+                          <gmd:electronicMailAddress>
+                            <gco:CharacterString/>
+                          </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                      </gmd:address>
+                      <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                          <gmd:linkage>
+                            <gmd:URL/>
+                          </gmd:linkage>
+                          <gmd:function>
+                            <gmd:CI_OnLineFunctionCode
+                              codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                              codeListValue=""/>
+                          </gmd:function>
+                        </gmd:CI_OnlineResource>
+                      </gmd:onlineResource>
+                    </gmd:CI_Contact>
+                  </gmd:contactInfo>
+                  <gmd:role>
+                    <gmd:CI_RoleCode
+                      codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode"
+                      codeListValue="pointOfContact"/>
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:contact>
+            </snippet>
+          </template>
+        </action>
+
+        <field xpath="/gmd:MD_Metadata/gmd:dataSetURI" or="dataSetURI" in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:locale" or="locale" in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:series"/>
+        <field xpath="/gmd:MD_Metadata/gmd:describes"/>
+        <field xpath="/gmd:MD_Metadata/gmd:propertyType"/>
+        <field xpath="/gmd:MD_Metadata/gmd:featureType"/>
+        <field xpath="/gmd:MD_Metadata/gmd:featureAttribute"/>
+      </section>
+    </tab>
+
+    <!-- AIVQUESTION to check: remove object catalog tab and use the side panel instead? -->
+    <tab id="vl-tab-objectCatalogue"
+         mode="flat"
+         displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
+      <section>
+        <section name="gmd:featureCatalogueCitation"
+                 forEach="/gmd:MD_Metadata/gmd:contentInfo/gmd:MD_FeatureCatalogueDescription">
+          <directive data-gn-feature-cat-name=""/>
+          <field xpath="gmd:includedWithDataset"/>
+          <field name="featureCatalogueCitationUuidref"
+                 templateModeOnly="true"
+                 notDisplayedIfMissing="true"
+                 xpath="gmd:featureCatalogueCitation">
+            <template>
+              <values readonlyIf="true()">
+                <key label="featureCatalogueCitationUuidref"
+                     xpath="@uuidref"
+                     tooltip=".">
+                </key>
+              </values>
+              <snippet>
+                <gmd:featureCatalogueCitation uuidref="{{featureCatalogueCitationUuidref}}">
+                  <gn:copy select="gmd:CI_Citation"/>
+                </gmd:featureCatalogueCitation>
+              </snippet>
+            </template>
+          </field>
+        </section>
+        <action type="associatedResource"
+                name="vl-add-featureCatalog"
+                process="fcats">
+        </action>
+      </section>
+    </tab>
+
+    <tab id="vl-tab-applicationSchemaInfo" mode="flat"
+         displayIfRecord="count(gmd:MD_Metadata/gmd:applicationSchemaInfo) > 0"
+         hideIfNotDisplayed="true">
+      <section xpath="/gmd:MD_Metadata/gmd:applicationSchemaInfo"/>
+    </tab>
+
+    <tab id="vl-tab-spatialRepresentationInfo" mode="flat"
+         displayIfRecord="count(gmd:MD_Metadata/gmd:spatialRepresentationInfo) > 0"
+         hideIfNotDisplayed="true">
+      <section xpath="/gmd:MD_Metadata/gmd:spatialRepresentationInfo"/>
+    </tab>
+
+    <!-- Elements that should not use the "flat" mode -->
+    <flatModeExceptions>
+      <for name="gmd:descriptiveKeywords"/>
+      <for name="gmd:keyword"/>
+      <for name="gmd:spatialResolution"/>
+      <for name="gmd:pointOfContact"/>
+      <for name="gmd:distributor"/>
+      <for name="gmd:distributionFormat"/>
+      <for name="gmd:contact"/>
+      <for name="gmd:processor"/>
+      <for name="gmd:processStep"/>
+      <for name="gmd:source"/>
+      <for name="gmd:topicCategory"/>
+      <for name="srv:parameters"/>
+      <for name="gmd:function" xpath="/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource"/>
+      <for name="gmd:function" xpath="/gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource"/>
+      <for name="gmd:referenceSystemInfo"/>
+
+      <!--for name="gmd:alternateTitle"/-->
+      <for name="gmd:alternateTitle" xpath="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation"/>
+      <for name="gmd:alternateTitle" xpath="/gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:citation/gmd:CI_Citation"/>
+      <for name="gmd:alternateTitle" xpath="/gmd:MD_Metadata/gmd:applicationSchemaInfo/gmd:MD_ApplicationSchemaInformation/gmd:name/gmd:CI_Citation"/>
+      <for name="gmd:date" xpath="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation"/>
+      <for name="gmd:date" xpath="/gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:citation/gmd:CI_Citation"/>
+      <for name="gmd:graphicOverview" xpath="/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification"/>
+      <for name="gmd:code" xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier"/>
+      <for name="md:codeSpace" xpath="/gmd:MD_Metadata/gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier"/>
+      <for name="gmd:voice"/>
+      <for name="gmd:facsimile"/>
+      <for name="gmd:deliveryPoint"/>
+      <for name="gmd:electronicMailAddress"/>
+      <for name="gmd:address"/>
+      <for name="gmd:transferOptions"/>
+      <for name="gmd:temporalElement"/>
+      <for name="gmd:verticalElement"/>
+      <for name="gmd:useLimitation"/>
+      <for name="gmd:useConstraints"/>
+      <for name="gmd:accessConstraints"/>
+      <for name="gmd:otherConstraints"/>
+      <for name="gmd:fileDescription"/>
+      <for name="gmd:distributionOrderProcess"/>
+      <for name="gmd:onLine" xpath="/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions"/>
+
+      <for name="gmd:date"      xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation"/>
+      <for name="gmd:date"      xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_ThematicClassificationCorrectness/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation"/>
+      <for name="gmd:date"      xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessOmission/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation"/>
+      <for name="gmd:date"      xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessCommission/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation"/>
+      <for name="gmd:date"      xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_AbsoluteExternalPositionalAccuracy/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation"/>
+      <for name="gmd:dateTime"  xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency"/>
+      <for name="gmd:dateTime"  xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_ThematicClassificationCorrectness"/>
+      <for name="gmd:dateTime"  xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessOmission"/>
+      <for name="gmd:dateTime"  xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessCommission"/>
+      <for name="gmd:dateTime"  xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_AbsoluteExternalPositionalAccuracy"/>
+    </flatModeExceptions>
+  </view>
+
+
+
     <!--Turn on INSPIRE according to system settings
     WARNING: INSPIRE view is not compatible with ISO19139:2005 schema.
     You have to use the default ISO19139:2007 schema.
     -->
-    <view name="inspire" upAndDownControlHidden="true" displayIfServiceInfo="/settings/system/inspire/enable='true'">
+    <view name="inspire" disabled="true" upAndDownControlHidden="true" displayIfServiceInfo="/settings/system/inspire/enable='true'">
       <sidePanel>
         <directive data-gn-need-help="creating-metadata"/>
         <directive data-gn-validation-report=""/>
@@ -3172,7 +5077,7 @@
     <!--
     Customize the editor layout by adding a class attribute
     <view name="default" class="gn-indent-bluescale gn-label-above-input">-->
-    <view name="default" 
+    <view name="default" disabled="true"
           class="gn-label-above-input gn-indent-bluescale">
       <sidePanel>
         <!-- Simple overview manager + online source manger for other types
