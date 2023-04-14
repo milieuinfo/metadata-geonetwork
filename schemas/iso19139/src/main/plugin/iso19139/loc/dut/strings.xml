@@ -103,6 +103,7 @@
   <vl-section-classification>Classificatie van data en services</vl-section-classification>
   <vl-section-constraints>Inhoudelijke beperkingen</vl-section-constraints>
   <vl-sourceDescription>Inwinningsmethode</vl-sourceDescription>
+  <vl-tab-applicationSchemaInfo>Schema info</vl-tab-applicationSchemaInfo>
   <vl-tab-constraints>Toegangs- en gebruiksbeperkingen</vl-tab-constraints>
   <vl-tab-content>Inhoud</vl-tab-content>
   <vl-tab-distribution>Distributie</vl-tab-distribution>
