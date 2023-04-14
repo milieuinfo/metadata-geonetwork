@@ -43,6 +43,7 @@
   <vl-add-distributor>Verdeler</vl-add-distributor>
   <vl-add-featureCatalog>Objectencatalogus toevoegen</vl-add-featureCatalog>
   <vl-add-featureCatalogueCitation>Objectencatalogus citaat</vl-add-featureCatalogueCitation>
+  <vl-add-metadataContact>Metadata-auteur</vl-add-metadataContact>
   <vl-add-pointOfContact>Contactgegevens</vl-add-pointOfContact>
   <vl-add-processStep>Processtappen</vl-add-processStep>
   <vl-add-processor>Bewerker</vl-add-processor>

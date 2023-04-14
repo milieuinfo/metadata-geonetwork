@@ -2228,7 +2228,78 @@
         <field xpath="/gmd:MD_Metadata/gmd:dateStamp"/>
         <field xpath="/gmd:MD_Metadata/gmd:metadataStandardName"/>
         <field xpath="/gmd:MD_Metadata/gmd:metadataStandardVersion"/>
-        <field xpath="/gmd:MD_Metadata/gmd:contact" or="contact" in="/gmd:MD_Metadata"/>
+        <field xpath="/gmd:MD_Metadata/gmd:contact"/>
+
+        <action type="add"
+                btnLabel="vl-add-metadataContact"
+                name="contact"
+                or="contact" in="/gmd:MD_Metadata">
+          <template>
+            <snippet>
+              <gmd:contact>
+                <gmd:CI_ResponsibleParty>
+                  <gmd:individualName>
+                    <gco:CharacterString/>
+                  </gmd:individualName>
+                  <gmd:organisationName>
+                    <gco:CharacterString/>
+                  </gmd:organisationName>
+                  <gmd:contactInfo>
+                    <gmd:CI_Contact>
+                      <gmd:phone>
+                        <gmd:CI_Telephone>
+                          <gmd:voice>
+                            <gco:CharacterString/>
+                          </gmd:voice>
+                          <gmd:facsimile>
+                            <gco:CharacterString/>
+                          </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                      </gmd:phone>
+                      <gmd:address>
+                        <gmd:CI_Address>
+                          <gmd:deliveryPoint>
+                            <gco:CharacterString/>
+                          </gmd:deliveryPoint>
+                          <gmd:city>
+                            <gco:CharacterString/>
+                          </gmd:city>
+                          <gmd:postalCode>
+                            <gco:CharacterString/>
+                          </gmd:postalCode>
+                          <gmd:country>
+                            <gco:CharacterString/>
+                          </gmd:country>
+                          <gmd:electronicMailAddress>
+                            <gco:CharacterString/>
+                          </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                      </gmd:address>
+                      <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                          <gmd:linkage>
+                            <gmd:URL/>
+                          </gmd:linkage>
+                          <gmd:function>
+                            <gmd:CI_OnLineFunctionCode
+                              codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_OnLineFunctionCode"
+                              codeListValue=""/>
+                          </gmd:function>
+                        </gmd:CI_OnlineResource>
+                      </gmd:onlineResource>
+                    </gmd:CI_Contact>
+                  </gmd:contactInfo>
+                  <gmd:role>
+                    <gmd:CI_RoleCode
+                      codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode"
+                      codeListValue="pointOfContact"/>
+                  </gmd:role>
+                </gmd:CI_ResponsibleParty>
+              </gmd:contact>
+            </snippet>
+          </template>
+        </action>
+
         <field xpath="/gmd:MD_Metadata/gmd:dataSetURI" or="dataSetURI" in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:locale" or="locale" in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:series"/>
