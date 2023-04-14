@@ -49,10 +49,14 @@
   <vl-add-qualityReport>Kwaliteitsrapport</vl-add-qualityReport>
   <vl-add-representationType>Ruimtelijke schema</vl-add-representationType>
   <vl-add-resolution>Grondresolutie (Afstand)</vl-add-resolution>
+  <vl-add-resourceConstraints>Beperkingen</vl-add-resourceConstraints>
   <vl-add-scale>Noemer</vl-add-scale>
   <vl-add-source>Bron</vl-add-source>
   <vl-add-status>Status</vl-add-status>
   <vl-add-transferOptions>Online bron</vl-add-transferOptions>
+  <vl-constraints-use>Invulblok legale beperkingen voor gebruik</vl-constraints-use>
+  <vl-constraints-access>Invulblok legale beperkingen voor toegang</vl-constraints-access>
+  <vl-constraints-security>Invulblok veiligheidsbeperkingen</vl-constraints-security>
   <vl-inspire-ad>INSPIRE Data Specification on Addresses - Technical Guidelines</vl-inspire-ad>
   <vl-inspire-au>INSPIRE Data Specification on Administrative Units - Technical Guidelines</vl-inspire-au>
   <vl-inspire-cp>INSPIRE Data Specification on Cadastral Parcels - Technical Guidelines</vl-inspire-cp>
