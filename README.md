@@ -43,6 +43,10 @@ It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or c
   - make a copy and remove `.example` (this file is ignored in `.gitignore`) 
   - use `docker compose -f docker-compose.yml -f docker-compose.dev.yml` to override settings to your liking
 
-## Load test database
-Using Liquibase, it's possible to have an initial database set, based on metadata.vlaanderen.be. 
+## Liquibase
+Liquibase is used to version the Geonetwork database. It describes all updates in 'changesets'. There are three types:
+- `core-geonetwork` migrations (as we are disabling the native auto-migration of core-geonetwork)
+- hibernate model changes
+- our own custom changes, to be executed on top
+- 
 See [the liquibase documentation](/liquibase/README.md) for further info.
