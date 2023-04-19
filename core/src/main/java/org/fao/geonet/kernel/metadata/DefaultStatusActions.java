@@ -484,15 +484,16 @@ public class DefaultStatusActions implements StatusActions {
                 StatusValue.Status.SUBMITTED_FOR_RETIRED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.put(StatusValue.Status.SUBMITTED_FOR_RETIRED, Sets.newHashSet(
-                StatusValue.Status.DRAFT
-        ));
         result.put(StatusValue.Status.RETIRED, Sets.newHashSet(
                 StatusValue.Status.DRAFT,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
         result.put(StatusValue.Status.REJECTED_FOR_RETIRED, Sets.newHashSet());
+        result.put(StatusValue.Status.REJECTED_FOR_REMOVED, Sets.newHashSet());
         result.put(StatusValue.Status.SUBMITTED_FOR_REMOVED, Sets.newHashSet(
+                StatusValue.Status.DRAFT
+        ));
+        result.put(StatusValue.Status.SUBMITTED_FOR_RETIRED, Sets.newHashSet(
                 StatusValue.Status.DRAFT
         ));
         return result;
