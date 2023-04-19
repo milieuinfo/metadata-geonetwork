@@ -213,10 +213,20 @@ public class StatusValue extends Localized {
      * one for GeoNetwork and may be modified in the database.
      */
     public static final class Status {
+        // default core
         public static final String DRAFT = "1";
         public static final String APPROVED = "2";
         public static final String RETIRED = "3";
         public static final String SUBMITTED = "4";
+
+        // VL modifications
+        public static final String REJECTED = "5";
+        public static final String APPROVED_FOR_PUBLISHED  = "8";
+        public static final String SUBMITTED_FOR_RETIRED  = "10";
+        public static final String SUBMITTED_FOR_REMOVED  = "11";
+        public static final String REMOVED  = "12";
+        public static final String REJECTED_FOR_RETIRED = "13";
+        public static final String REJECTED_FOR_REMOVED = "14";
     }
 
     /**

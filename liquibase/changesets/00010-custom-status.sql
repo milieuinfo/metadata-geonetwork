@@ -33,3 +33,5 @@ INSERT INTO StatusValuesDes (iddes, langid, label) VALUES (11,'fre','Soumis à l
 INSERT INTO StatusValuesDes (iddes, langid, label) VALUES (12,'fre','Enlevé');
 INSERT INTO StatusValuesDes (iddes, langid, label) VALUES (13,'fre','Rejeté par le validateur de Digitaal Vlaanderen et non publié');
 INSERT INTO StatusValuesDes (iddes, langid, label) VALUES (14,'fre','Rejeté par le validateur de Digitaal Vlaanderen et non supprimé');
+
+-- TODO do we need to add displayorder for the statusvalues?
