@@ -141,20 +141,19 @@ public class DefaultStatusActions implements StatusActions {
 
         Set<Integer> unchanged = new HashSet<>();
 
-        // -- process the metadata records to set status
+        // process the metadata records to set status
         for (MetadataStatus status : listOfStatus) {
             MetadataStatus currentStatus = dm.getStatus(status.getMetadataId());
             String currentStatusId = (currentStatus != null) ?
                     String.valueOf(currentStatus.getStatusValue().getId()) : "";
-
 
             String statusId = status.getStatusValue().getId() + "";
             Set<Integer> listOfId = new HashSet<>(1);
             listOfId.add(status.getMetadataId());
 
 
-            // --- For the workflow, if the status is already set to value
-            // of status then do nothing. This does not apply to task and event.
+            // For the workflow, if the status is already set to value of status then do nothing.
+            // This does not apply to task and event.
             if (status.getStatusValue().getType().equals(StatusValueType.workflow) &&
                     (statusId).equals(currentStatusId)) {
                 if (context.isDebugEnabled())
@@ -164,10 +163,25 @@ public class DefaultStatusActions implements StatusActions {
                 continue;
             }
 
-            // --- set status, indexing is assumed to take place later
+            // if not possible to go from one status to the other, don't continue
+            // TODO what happens when the 'from statusid' is empty? always allow?
+            // TODO in the original: checks for possibility to take ownership - always necessary?
+            if (!isStatusChangePossible(session.getProfile(), currentStatusId, statusId)) {
+                // TODO check whether this is the right way of communicating error to client - use the id, or correct name?
+                throw new IllegalAccessException("Not allowed to change status from " + currentStatusId + " to " + statusId + ".");
+            }
+
+            // debug output if necessary
+            if (context.isDebugEnabled())
+                context.debug("Change status of metadata with id " + status.getMetadataId() + " from " + currentStatusId + " to " + statusId);
+
+            // we know we are allowed to do the change, apply any side effects
+            applySideEffects(status.getMetadataId(), status, statusId);
+
+            // set status, indexing is assumed to take place later
             metadataStatusManager.setStatusExt(status);
 
-            // --- inform content reviewers if the status is submitted
+            // inform content reviewers if the status is submitted
             try {
                 notify(getUserToNotify(status), status);
             } catch (Exception e) {
@@ -176,7 +190,7 @@ public class DefaultStatusActions implements StatusActions {
                         status.getMetadataId(), status.getStatusValue().getId(), e.getMessage()));
             }
 
-            //Throw events
+            // throw events
             Log.trace(Geonet.DATA_MANAGER, "Throw workflow events.");
             for (Integer mid : listOfId) {
                 if (!unchanged.contains(mid)) {
@@ -191,6 +205,40 @@ public class DefaultStatusActions implements StatusActions {
         }
 
         return unchanged;
+    }
+
+    private void applySideEffects(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
+        // in the case of rejected for retired/removed: fall back to the previous status
+        if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
+                .contains(toStatusId)) {
+            MetadataStatus previousStatus = metadataStatusManager.getPreviousStatus(metadataId);
+            if (previousStatus != null) {
+//                notificationProperties.put("previousStatus", previousStatus.getId().getStatusId() + "");
+                StatusValueRepository statusValueRepository = context.getBean(StatusValueRepository.class);
+//                StatusValue statusValue = statusValueRepository.findOneById(previousStatus.getStatusValue().getId());
+                // TODO is this sufficient?
+                StatusValue statusValue = previousStatus.getStatusValue();
+
+                MetadataStatus metadataStatus = new MetadataStatus();
+                metadataStatus.setStatusValue(statusValue);
+                metadataStatus.setChangeDate(new ISODate());
+                metadataStatus.setUserId(session.getUserIdAsInt());
+                metadataStatus.setMetadataId(status.getMetadataId());
+                metadataStatus.setChangeMessage(status.getChangeMessage());
+
+                metadataStatusManager.setStatusExt(metadataStatus);
+            }
+        }
+        // if we're approving, automatically publish
+        else if (toStatusId.equals(StatusValue.Status.APPROVED)) {
+            setAllOperations(String.valueOf(status.getMetadataId()));
+        }
+        // if we're rejecting, automatically unpublish
+        else if (toStatusId.equals(StatusValue.Status.RETIRED)) {
+            unsetAllOperations(metadataId);
+        }
+
+        // TODO necessary to handle the 'unchanged' metadata?
     }
 
 
@@ -360,6 +408,21 @@ public class DefaultStatusActions implements StatusActions {
         }
     }
 
+    /**
+     * Set all operations on 'All' Group. Used when status changes to approved.
+     *
+     * @param mdId The metadata id to set privileges on
+     */
+    protected void setAllOperations(String mdId) throws Exception {
+        String allGroup = "1";
+        // TODO these are deprecated - another way to do this? same for unsetAllOperations method
+        dm.setOperation(context, mdId, allGroup, ReservedOperation.view);
+        dm.setOperation(context, mdId, allGroup, ReservedOperation.download);
+        dm.setOperation(context, mdId, allGroup, ReservedOperation.notify);
+        dm.setOperation(context, mdId, allGroup, ReservedOperation.dynamic);
+        dm.setOperation(context, mdId, allGroup, ReservedOperation.featured);
+    }
+
     private String getTranslatedStatusName(int statusValueId) {
         String translatedStatusName = "";
         StatusValue s = statusValueRepository.findOneById(statusValueId);
@@ -497,20 +560,24 @@ public class DefaultStatusActions implements StatusActions {
 
     /**
      * Test whether a given status change for a given role is allowed or not.
-     *
+     * <p>
      * VL modification.
      *
-     * @param role the role that tries to execute the status change
+     * @param profile       the role that tries to execute the status change
      * @param fromStatus the status from which we start
-     * @param toStatus the status to which we'd like to change
+     * @param toStatus   the status to which we'd like to change
      * @return whether the change is allowed
      */
-    private boolean isStatusChangeAllowed(String role, String fromStatus, String toStatus) {
-        switch (role) {
-            case "editor" : return getEditorFlow().get(fromStatus).contains(toStatus);
-            case "admin" : return getAdminFlow().get(fromStatus).contains(toStatus);
-            case "reviewer" : return getReviewerFlow().get(fromStatus).contains(toStatus);
+    private boolean isStatusChangePossible(Profile profile, String fromStatus, String toStatus) {
+        switch (profile) {
+            case Editor:
+                return getEditorFlow().get(fromStatus).contains(toStatus);
+            case Administrator:
+                return getAdminFlow().get(fromStatus).contains(toStatus);
+            case Reviewer:
+                return getReviewerFlow().get(fromStatus).contains(toStatus);
         }
         return false;
     }
+
 }
