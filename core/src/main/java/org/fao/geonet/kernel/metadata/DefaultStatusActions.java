@@ -567,6 +567,10 @@ public class DefaultStatusActions implements StatusActions {
      * @return whether the change is allowed
      */
     private boolean isStatusChangePossible(Profile profile, String fromStatus, String toStatus) {
+        // special case: enabling the workflow sets the initial 'draft' status
+        if(StringUtils.isEmpty(fromStatus) && toStatus.equals(StatusValue.Status.DRAFT))
+            return true;
+        // figure out whether we can switch from status to status, depending on the profile
         switch (profile) {
             case Editor:
                 return getEditorFlow().get(fromStatus).contains(toStatus);
