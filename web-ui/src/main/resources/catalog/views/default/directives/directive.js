@@ -175,7 +175,7 @@
                     { from: "submitted", to: "approved_for_published" },
                     { from: "submitted", to: "rejected" },
                     { from: "submitted_for_retired", to: "rejected_for_retired" },
-                    { from: "submitted_for_retired", to: "retired" },
+                    { from: "submitted_for_retired", to: "retired" }
                   ]),
                   adminSteps = reviewerSteps.concat([
                     { from: "submitted_for_removed", to: "removed" }

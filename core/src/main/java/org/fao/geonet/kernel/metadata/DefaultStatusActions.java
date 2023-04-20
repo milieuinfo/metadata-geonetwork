@@ -168,7 +168,7 @@ public class DefaultStatusActions implements StatusActions {
             // TODO in the original: checks for possibility to take ownership - always necessary?
             if (!isStatusChangePossible(session.getProfile(), currentStatusId, statusId)) {
                 // TODO check whether this is the right way of communicating error to client - use the id, or correct name?
-                throw new IllegalAccessException("Not allowed to change status from " + currentStatusId + " to " + statusId + ".");
+                throw new IllegalAccessException("Not allowed to change status from " + currentStatus.getStatusValue().getName() + " to " + status.getStatusValue().getName() + ".");
             }
 
             // debug output if necessary
@@ -201,7 +201,6 @@ public class DefaultStatusActions implements StatusActions {
                             status.getUserId()));
                 }
             }
-
         }
 
         return unchanged;
@@ -214,12 +213,10 @@ public class DefaultStatusActions implements StatusActions {
             MetadataStatus previousStatus = metadataStatusManager.getPreviousStatus(metadataId);
             if (previousStatus != null) {
 //                notificationProperties.put("previousStatus", previousStatus.getId().getStatusId() + "");
-                StatusValueRepository statusValueRepository = context.getBean(StatusValueRepository.class);
-//                StatusValue statusValue = statusValueRepository.findOneById(previousStatus.getStatusValue().getId());
-                // TODO is this sufficient?
                 StatusValue statusValue = previousStatus.getStatusValue();
 
                 MetadataStatus metadataStatus = new MetadataStatus();
+                metadataStatus.setUuid(status.getUuid());
                 metadataStatus.setStatusValue(statusValue);
                 metadataStatus.setChangeDate(new ISODate());
                 metadataStatus.setUserId(session.getUserIdAsInt());
@@ -237,8 +234,6 @@ public class DefaultStatusActions implements StatusActions {
         else if (toStatusId.equals(StatusValue.Status.RETIRED)) {
             unsetAllOperations(metadataId);
         }
-
-        // TODO necessary to handle the 'unchanged' metadata?
     }
 
 
@@ -470,7 +465,9 @@ public class DefaultStatusActions implements StatusActions {
         result.put(StatusValue.Status.DRAFT, Sets.newHashSet(
                 StatusValue.Status.SUBMITTED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED));
-        result.put(StatusValue.Status.SUBMITTED, Sets.newHashSet());
+        result.put(StatusValue.Status.SUBMITTED, Sets.newHashSet(
+                StatusValue.Status.DRAFT
+        ));
         result.put(StatusValue.Status.REJECTED, Sets.newHashSet(
                 StatusValue.Status.DRAFT,
                 StatusValue.Status.SUBMITTED,
