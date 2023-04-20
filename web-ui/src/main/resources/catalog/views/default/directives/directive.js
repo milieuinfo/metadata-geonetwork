@@ -152,47 +152,48 @@
                   scope.status[s.name] = s.id;
                 });
 
-                scope.statusEffects = {
-                  editor: [
-                    {
-                      from: "draft",
-                      to: "submitted"
-                    },
-                    {
-                      from: "retired",
-                      to: "draft"
-                    },
-                    {
-                      from: "submitted",
-                      to: "draft"
-                    }
+                var editorSteps = [
+                    { from: "draft", to: "submitted" },
+                    { from: "draft", to: "submitted_for_removed" },
+                    { from: "draft", to: "removed" },
+                    { from: "submitted", to: "draft" },
+                    { from: "rejected", to: "draft" },
+                    { from: "rejected", to: "submitted" },
+                    { from: "rejected", to: "submitted_for_removed" },
+                    { from: "approved", to: "submitted_for_retired" },
+                    { from: "approved", to: "submitted_for_removed" },
+                    { from: "retired", to: "submitted_for_removed" },
+                    { from: "submitted_for_removed", to: "rejected_for_removed" }
                   ],
-                  reviewer: [
-                    {
-                      from: "draft",
-                      to: "submitted"
-                    },
-                    {
-                      from: "submitted",
-                      to: "approved"
-                    },
-                    {
-                      from: "submitted",
-                      to: "draft"
-                    },
-                    {
-                      from: "draft",
-                      to: "approved"
-                    },
-                    {
-                      from: "approved",
-                      to: "retired"
-                    },
-                    {
-                      from: "retired",
-                      to: "draft"
-                    }
-                  ]
+                  reviewerSteps = [
+                    { from: "draft", to: "submitted" },
+                    { from: "draft", to: "approved_for_published" },
+                    { from: "draft", to: "approved" },
+                    { from: "draft", to: "rejected" },
+                    { from: "draft", to: "submitted_for_removed" },
+                    { from: "draft", to: "removed" },
+                    { from: "submitted", to: "draft" },
+                    { from: "submitted", to: "rejected" },
+                    { from: "submitted", to: "approved_for_published" },
+                    { from: "submitted", to: "approved" },
+                    { from: "rejected", to: "draft" },
+                    { from: "rejected", to: "submitted" },
+                    { from: "rejected", to: "submitted_for_removed" },
+                    { from: "approved_for_published", to: "approved" },
+                    { from: "approved", to: "submitted_for_retired" },
+                    { from: "approved", to: "submitted_for_removed" },
+                    { from: "submitted_for_retired", to: "retired" },
+                    { from: "submitted_for_retired", to: "rejected_for_retired" },
+                    { from: "retired", to: "approved" },
+                    { from: "retired", to: "submitted_for_removed" },
+                    { from: "submitted_for_removed", to: "rejected_for_removed" }
+                  ];
+                scope.statusEffects = {
+                  editor: editorSteps,
+                  reviewer: reviewerSteps,
+                  admin: reviewerSteps.concat([
+                    { from: "submitted_for_removed", to: "removed" }
+                  ])
                 };
               });
           }
