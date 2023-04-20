@@ -205,7 +205,7 @@
         restrict: "A",
         replace: true,
         templateUrl:
-          "../../catalog/components/metadataactions/partials/" + "statusupdater.html",
+          "../../catalog/components/metadataactions/partials/statusupdater.html",
         scope: {
           md: "=gnMetadataStatusUpdater",
           statusType: "@",
@@ -226,6 +226,18 @@
             dueDate: null,
             changeMessage: ""
           };
+
+          scope.statusToBe = undefined;
+          $http.get("../api/status/workflow", { cache: true }).then(function (response) {
+            scope.status = {};
+            for (var i = 0; i < response.data.length; i++) {
+              var s = response.data[i];
+              if (s.id == scope.statusToSelect) {
+                scope.statusToBe = s;
+                break;
+              }
+            }
+          });
 
           // Retrieve last status to set it in the form
           function init() {
