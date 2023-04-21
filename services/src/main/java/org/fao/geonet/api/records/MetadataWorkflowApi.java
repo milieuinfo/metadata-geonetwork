@@ -424,6 +424,7 @@ public class MetadataWorkflowApi {
         boolean isAllowedSubmitApproveInvalidMd = settingManager
                 .getValueAsBool(Settings.METADATA_WORKFLOW_ALLOW_SUBMIT_APPROVE_INVALID_MD);
         if (((status.getStatus() == Integer.parseInt(StatusValue.Status.SUBMITTED))
+                // VL specific: custom status
                 || (status.getStatus() == Integer.parseInt(StatusValue.Status.APPROVED_FOR_PUBLISHED))
                 || (status.getStatus() == Integer.parseInt(StatusValue.Status.APPROVED)))
                 && !isAllowedSubmitApproveInvalidMd) {

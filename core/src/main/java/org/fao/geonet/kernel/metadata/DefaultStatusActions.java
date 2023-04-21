@@ -217,8 +217,8 @@ public class DefaultStatusActions implements StatusActions {
         if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
                 .contains(toStatusId)) {
             MetadataStatus previousStatus = metadataStatusManager.getPreviousStatus(metadataId);
+            // only if we actually have a previous state
             if (previousStatus != null) {
-//                notificationProperties.put("previousStatus", previousStatus.getId().getStatusId() + "");
                 StatusValue statusValue = previousStatus.getStatusValue();
 
                 MetadataStatus metadataStatus = new MetadataStatus();
