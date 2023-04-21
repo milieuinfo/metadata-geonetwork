@@ -472,27 +472,43 @@ public class DefaultStatusActions implements StatusActions {
      */
     private Map<String, Set<String>> getEditorFlow() {
         HashMap<String, Set<String>> result = new HashMap<>();
-        result.getOrDefault(StatusValue.Status.APPROVED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        // initialise the map
+        Sets.newHashSet(
+                StatusValue.Status.DRAFT,
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED_FOR_PUBLISHED,
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED,
+                StatusValue.Status.REMOVED,
+                StatusValue.Status.REJECTED_FOR_RETIRED,
+                StatusValue.Status.REJECTED_FOR_REMOVED
+        ).forEach(s -> result.put(s, new HashSet<>()));
+
+        // set the values for editor
+        result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
                 StatusValue.Status.SUBMITTED_FOR_RETIRED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.getOrDefault(StatusValue.Status.DRAFT, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
                 StatusValue.Status.REMOVED,
                 StatusValue.Status.SUBMITTED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.getOrDefault(StatusValue.Status.REJECTED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.REJECTED).addAll(Sets.newHashSet(
                 StatusValue.Status.DRAFT,
                 StatusValue.Status.SUBMITTED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.getOrDefault(StatusValue.Status.RETIRED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.getOrDefault(StatusValue.Status.SUBMITTED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
                 StatusValue.Status.DRAFT
         ));
-        result.getOrDefault(StatusValue.Status.SUBMITTED_FOR_REMOVED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
                 StatusValue.Status.REJECTED_FOR_REMOVED
         ));
         return result;
@@ -508,27 +524,27 @@ public class DefaultStatusActions implements StatusActions {
      */
     private Map<String, Set<String>> getReviewerFlow() {
         Map<String, Set<String>> result = getEditorFlow();
-        result.getOrDefault(StatusValue.Status.APPROVED_FOR_PUBLISHED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.APPROVED_FOR_PUBLISHED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
         ));
-        result.getOrDefault(StatusValue.Status.DRAFT, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
                 StatusValue.Status.REJECTED
         ));
-        result.getOrDefault(StatusValue.Status.RETIRED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
         ));
-        result.getOrDefault(StatusValue.Status.SUBMITTED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
                 StatusValue.Status.REJECTED
         ));
-        result.getOrDefault(StatusValue.Status.SUBMITTED_FOR_RETIRED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.REJECTED_FOR_RETIRED,
                 StatusValue.Status.RETIRED
         ));
-        result.getOrDefault(StatusValue.Status.REJECTED_FOR_RETIRED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.REJECTED_FOR_RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
         ));
         return result;
@@ -544,10 +560,12 @@ public class DefaultStatusActions implements StatusActions {
      */
     private Map<String, Set<String>> getAdminFlow() {
         Map<String, Set<String>> result = getReviewerFlow();
-        result.getOrDefault(StatusValue.Status.SUBMITTED_FOR_REMOVED, Sets.newHashSet()).addAll(Sets.newHashSet(
+
+
+        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
                 StatusValue.Status.REMOVED
         ));
-        result.getOrDefault(StatusValue.Status.REJECTED_FOR_REMOVED, Sets.newHashSet()).addAll(Sets.newHashSet(
+        result.get(StatusValue.Status.REJECTED_FOR_REMOVED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED,
                 StatusValue.Status.DRAFT,
                 StatusValue.Status.REJECTED,
@@ -572,14 +590,18 @@ public class DefaultStatusActions implements StatusActions {
         if (StringUtils.isEmpty(fromStatus) && toStatus.equals(StatusValue.Status.DRAFT))
             return true;
         // figure out whether we can switch from status to status, depending on the profile
+        Set<String> toProfiles = new HashSet<>();
         switch (profile) {
             case Editor:
-                return getEditorFlow().get(fromStatus).contains(toStatus);
+                toProfiles = getEditorFlow().get(fromStatus);
+                break;
             case Administrator:
-                return getAdminFlow().get(fromStatus).contains(toStatus);
+                toProfiles = getAdminFlow().get(fromStatus);
+                break;
             case Reviewer:
-                return getReviewerFlow().get(fromStatus).contains(toStatus);
+                toProfiles = getReviewerFlow().get(fromStatus);
+                break;
         }
-        return false;
+        return toProfiles != null && toProfiles.contains(toStatus);
     }
 }
