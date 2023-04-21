@@ -235,6 +235,7 @@
            * @returns {*|boolean|false|boolean}
            */
           scope.displayPublicationOption = function (md, user) {
+            return false; // VL specific. Publication is managed by workflow
             return (
               md.canReview &&
               md.draft != "y" &&
