@@ -111,7 +111,9 @@
         </a>
       </li>
       <li
-        data-ng-repeat="step in statusEffects[isReviewer ? 'reviewer' : 'editor']"
+        data-ng-repeat="step in statusEffects[
+                                  user.isAdmin() ? 'admin'
+                                  : (isReviewer ? 'reviewer' : 'editor')]"
         data-ng-show="user.canEditRecord(md)
                         && (user.isAdmin() || user[isReviewer ? 'isReviewerForGroup' : 'isEditorForGroup'](md.groupOwner))
                         && md.mdStatus == status[step.from]

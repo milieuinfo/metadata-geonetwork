@@ -41,6 +41,7 @@
   "mdStatusTitle-retired-to-submitted_for_removed-reviewer": "Submitted for removal",
   "mdStatusTitle-submitted_for_removed-to-rejected_for_removed-reviewer": "Rejected for removal",
   "mdStatusTitle-submitted_for_removed-to-removed-admin": "Deleted",
+  "mdStatusTitle-submitted_for_removed-to-removed-reviewer": "Deleted",
   "mdStatusButton-draft": "Draft",
   "mdStatusButton-submitted": "Submitted",
   "mdStatusButton-rejected": "Rejected",
