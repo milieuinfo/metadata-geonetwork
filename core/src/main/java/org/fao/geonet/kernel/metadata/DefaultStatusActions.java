@@ -32,14 +32,17 @@ import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.*;
 import org.fao.geonet.events.md.MetadataStatusChanged;
 import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.kernel.datamanager.IMetadataManager;
 import org.fao.geonet.kernel.datamanager.IMetadataStatus;
 import org.fao.geonet.kernel.datamanager.IMetadataUtils;
+import org.fao.geonet.kernel.datamanager.IMetadataValidator;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
 import org.fao.geonet.repository.*;
 import org.fao.geonet.repository.specification.GroupSpecs;
 import org.fao.geonet.util.MailUtil;
 import org.fao.geonet.utils.Log;
+import org.jdom.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -55,7 +58,6 @@ public class DefaultStatusActions implements StatusActions {
     protected ServiceContext context;
     protected String language;
     protected DataManager dm;
-
     @Autowired
     protected IMetadataUtils metadataUtils;
     protected String siteUrl;
@@ -66,6 +68,9 @@ public class DefaultStatusActions implements StatusActions {
     private String replyToDescr;
     private StatusValueRepository statusValueRepository;
     protected IMetadataStatus metadataStatusManager;
+    private IMetadataValidator metadataValidator;
+    private IMetadataUtils metadataRepository;
+    private IMetadataManager metadataManager;
 
     /**
      * Constructor.
@@ -106,6 +111,10 @@ public class DefaultStatusActions implements StatusActions {
         dm = applicationContext.getBean(DataManager.class);
         metadataStatusManager = applicationContext.getBean(IMetadataStatus.class);
         siteUrl = sm.getSiteURL(context);
+
+        metadataValidator = context.getBean(IMetadataValidator.class);
+        metadataManager = context.getBean(IMetadataManager.class);
+        metadataRepository = context.getBean(IMetadataUtils.class);
     }
 
     /**
@@ -151,7 +160,6 @@ public class DefaultStatusActions implements StatusActions {
             Set<Integer> listOfId = new HashSet<>(1);
             listOfId.add(status.getMetadataId());
 
-
             // For the workflow, if the status is already set to value of status then do nothing.
             // This does not apply to task and event.
             if (status.getStatusValue().getType().equals(StatusValueType.workflow) &&
@@ -164,11 +172,11 @@ public class DefaultStatusActions implements StatusActions {
             }
 
             // if not possible to go from one status to the other, don't continue
-            // TODO what happens when the 'from statusid' is empty? always allow?
             // TODO in the original: checks for possibility to take ownership - always necessary?
-            if (!isStatusChangePossible(session.getProfile(), currentStatusId, statusId)) {
-                // TODO check whether this is the right way of communicating error to client - use the id, or correct name?
-                throw new IllegalAccessException("Not allowed to change status from " + currentStatus.getStatusValue().getName() + " to " + status.getStatusValue().getName() + ".");
+            AbstractMetadata metadata = metadataRepository.findOne(status.getMetadataId());
+            if (!isStatusChangePossible(session.getProfile(), metadata, currentStatusId, statusId)) {
+                unchanged.add(status.getMetadataId());
+                continue;
             }
 
             // debug output if necessary
@@ -233,6 +241,10 @@ public class DefaultStatusActions implements StatusActions {
         // if we're rejecting, automatically unpublish
         else if (toStatusId.equals(StatusValue.Status.RETIRED)) {
             unsetAllOperations(metadataId);
+        }
+        // if we're rejecting, automatically unpublish
+        else if (toStatusId.equals(StatusValue.Status.REMOVED)) {
+            metadataManager.purgeMetadata(context, String.valueOf(status.getMetadataId()), true);
         }
     }
 
@@ -561,15 +573,16 @@ public class DefaultStatusActions implements StatusActions {
      * <p>
      * VL modification.
      *
-     * @param profile       the role that tries to execute the status change
+     * @param profile    the role that tries to execute the status change
      * @param fromStatus the status from which we start
      * @param toStatus   the status to which we'd like to change
      * @return whether the change is allowed
      */
-    private boolean isStatusChangePossible(Profile profile, String fromStatus, String toStatus) {
+    private boolean isStatusChangePossible(Profile profile, AbstractMetadata metadata, String fromStatus, String toStatus) throws Exception {
         // special case: enabling the workflow sets the initial 'draft' status
-        if(StringUtils.isEmpty(fromStatus) && toStatus.equals(StatusValue.Status.DRAFT))
+        if (StringUtils.isEmpty(fromStatus) && toStatus.equals(StatusValue.Status.DRAFT))
             return true;
+        // TODO there was originally a check to be able to take over / become owner - keep vanilla for now
         // figure out whether we can switch from status to status, depending on the profile
         switch (profile) {
             case Editor:
@@ -581,5 +594,4 @@ public class DefaultStatusActions implements StatusActions {
         }
         return false;
     }
-
 }
