@@ -41,6 +41,7 @@
   "mdStatusTitle-retired-to-submitted_for_removed-reviewer": "Ingediend voor verwijderen",
   "mdStatusTitle-submitted_for_removed-to-rejected_for_removed-reviewer": "Afgekeurd voor verwijderen",
   "mdStatusTitle-submitted_for_removed-to-removed-admin": "Verwijderd",
+  "mdStatusTitle-submitted_for_removed-to-removed-reviewer": "Verwijderd",
   "mdStatusButton-draft": "Ontwerp",
   "mdStatusButton-submitted": "Ingediend",
   "mdStatusButton-rejected": "Afgekeurd",
