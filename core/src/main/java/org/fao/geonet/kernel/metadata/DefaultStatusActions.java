@@ -32,17 +32,13 @@ import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.*;
 import org.fao.geonet.events.md.MetadataStatusChanged;
 import org.fao.geonet.kernel.DataManager;
-import org.fao.geonet.kernel.datamanager.IMetadataManager;
-import org.fao.geonet.kernel.datamanager.IMetadataStatus;
-import org.fao.geonet.kernel.datamanager.IMetadataUtils;
-import org.fao.geonet.kernel.datamanager.IMetadataValidator;
+import org.fao.geonet.kernel.datamanager.*;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
 import org.fao.geonet.repository.*;
 import org.fao.geonet.repository.specification.GroupSpecs;
 import org.fao.geonet.util.MailUtil;
 import org.fao.geonet.utils.Log;
-import org.jdom.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -71,6 +67,8 @@ public class DefaultStatusActions implements StatusActions {
     private IMetadataValidator metadataValidator;
     private IMetadataUtils metadataRepository;
     private IMetadataManager metadataManager;
+    private IMetadataOperations metadataOperations;
+
 
     /**
      * Constructor.
@@ -113,6 +111,7 @@ public class DefaultStatusActions implements StatusActions {
         siteUrl = sm.getSiteURL(context);
 
         metadataValidator = context.getBean(IMetadataValidator.class);
+        metadataOperations = context.getBean(IMetadataOperations.class);
         metadataManager = context.getBean(IMetadataManager.class);
         metadataRepository = context.getBean(IMetadataUtils.class);
     }
@@ -172,7 +171,6 @@ public class DefaultStatusActions implements StatusActions {
             }
 
             // if not possible to go from one status to the other, don't continue
-            // TODO in the original: checks for possibility to take ownership - always necessary?
             AbstractMetadata metadata = metadataRepository.findOne(status.getMetadataId());
             if (!isStatusChangePossible(session.getProfile(), metadata, currentStatusId, statusId)) {
                 unchanged.add(status.getMetadataId());
@@ -411,7 +409,7 @@ public class DefaultStatusActions implements StatusActions {
 
         int allGroup = 1;
         for (ReservedOperation op : ReservedOperation.values()) {
-            dm.forceUnsetOperation(context, mdId, allGroup, op.getId());
+            metadataOperations.forceUnsetOperation(context, mdId, allGroup, op.getId());
         }
     }
 
@@ -422,12 +420,12 @@ public class DefaultStatusActions implements StatusActions {
      */
     protected void setAllOperations(String mdId) throws Exception {
         String allGroup = "1";
-        // TODO these are deprecated - another way to do this? same for unsetAllOperations method
-        dm.setOperation(context, mdId, allGroup, ReservedOperation.view);
-        dm.setOperation(context, mdId, allGroup, ReservedOperation.download);
-        dm.setOperation(context, mdId, allGroup, ReservedOperation.notify);
-        dm.setOperation(context, mdId, allGroup, ReservedOperation.dynamic);
-        dm.setOperation(context, mdId, allGroup, ReservedOperation.featured);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.view);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.view);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.download);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.notify);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.dynamic);
+        metadataOperations.setOperation(context, mdId, allGroup, ReservedOperation.featured);
     }
 
     private String getTranslatedStatusName(int statusValueId) {
@@ -582,7 +580,6 @@ public class DefaultStatusActions implements StatusActions {
         // special case: enabling the workflow sets the initial 'draft' status
         if (StringUtils.isEmpty(fromStatus) && toStatus.equals(StatusValue.Status.DRAFT))
             return true;
-        // TODO there was originally a check to be able to take over / become owner - keep vanilla for now
         // figure out whether we can switch from status to status, depending on the profile
         switch (profile) {
             case Editor:
