@@ -94,7 +94,8 @@
             <a
               class="btn btn-default"
               href=""
-              data-ng-show="(!md.isPublished() || (md.isPublished() && user.canDeletePublishedMetadata())) && user.canEditRecord(md) && md.isTemplate != 's'
+              data-ng-show="false"
+              data-ng-show-disabled-in-vl="(!md.isPublished() || (md.isPublished() && user.canDeletePublishedMetadata())) && user.canEditRecord(md) && md.isTemplate != 's'
                              && (user.isReviewerOrMore() || md.mdStatus != 4 || !isMdWorkflowEnable)
                              && md.draft != 'e'"
               data-gn-click-and-spin="deleteRecord(md)"

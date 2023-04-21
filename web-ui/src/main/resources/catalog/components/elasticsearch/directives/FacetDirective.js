@@ -162,7 +162,7 @@
     ["groupOwner", "group"],
     ["groupPublishedId", "group"],
     ["sourceCatalogue", "source"],
-    ["statusWorkflow", "mdStatus"]
+    ["statusWorkflow", "status"]
   ]);
 
   module.service("gnFacetSorter", [
