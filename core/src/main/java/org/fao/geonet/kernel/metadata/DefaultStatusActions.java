@@ -182,10 +182,7 @@ public class DefaultStatusActions implements StatusActions {
                 context.debug("Change status of metadata with id " + status.getMetadataId() + " from " + currentStatusId + " to " + statusId);
 
             // we know we are allowed to do the change, apply any side effects
-            applySideEffects(status.getMetadataId(), status, statusId);
-
-            // set status, indexing is assumed to take place later
-            metadataStatusManager.setStatusExt(status);
+            applyStatusChange(status.getMetadataId(), status, statusId);
 
             // inform content reviewers if the status is submitted
             try {
@@ -212,7 +209,10 @@ public class DefaultStatusActions implements StatusActions {
         return unchanged;
     }
 
-    private void applySideEffects(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
+    private void applyStatusChange(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
+        // whether to set the status at the end or not
+        boolean setStatus = true;
+
         // in the case of rejected for retired/removed: fall back to the previous status
         if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
                 .contains(toStatusId)) {
@@ -243,7 +243,12 @@ public class DefaultStatusActions implements StatusActions {
         // if we're rejecting, automatically unpublish
         else if (toStatusId.equals(StatusValue.Status.REMOVED)) {
             metadataManager.purgeMetadata(context, String.valueOf(status.getMetadataId()), true);
+            setStatus = false;
         }
+
+        // set status, indexing is assumed to take place later
+        if (setStatus)
+            metadataStatusManager.setStatusExt(status);
     }
 
 
