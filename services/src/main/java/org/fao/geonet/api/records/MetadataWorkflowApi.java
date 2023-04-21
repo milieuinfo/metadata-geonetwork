@@ -52,10 +52,7 @@ import org.fao.geonet.domain.utils.ObjectJSONUtils;
 import org.fao.geonet.events.history.RecordRestoredEvent;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
-import org.fao.geonet.kernel.datamanager.IMetadataIndexer;
-import org.fao.geonet.kernel.datamanager.IMetadataManager;
-import org.fao.geonet.kernel.datamanager.IMetadataStatus;
-import org.fao.geonet.kernel.datamanager.IMetadataUtils;
+import org.fao.geonet.kernel.datamanager.*;
 import org.fao.geonet.kernel.metadata.StatusActions;
 import org.fao.geonet.kernel.metadata.StatusActionsFactory;
 import org.fao.geonet.kernel.search.EsSearchManager;
@@ -135,12 +132,15 @@ public class MetadataWorkflowApi {
     @Autowired
     private MetadataRepository metadataRepository;
 
+    @Autowired
+    private IMetadataValidator metadataValidator;
+
     // The restore function currently supports these states
     static final Integer[] supportedRestoreStatuses = {
-        Integer.parseInt(StatusValue.Events.RECORDUPDATED),
-        Integer.parseInt(StatusValue.Events.RECORDPROCESSINGCHANGE),
-        Integer.parseInt(StatusValue.Events.RECORDDELETED),
-        Integer.parseInt(StatusValue.Events.RECORDRESTORED)};
+            Integer.parseInt(StatusValue.Events.RECORDUPDATED),
+            Integer.parseInt(StatusValue.Events.RECORDPROCESSINGCHANGE),
+            Integer.parseInt(StatusValue.Events.RECORDDELETED),
+            Integer.parseInt(StatusValue.Events.RECORDRESTORED)};
 
     private enum State {
         BEFORE, AFTER
@@ -152,20 +152,20 @@ public class MetadataWorkflowApi {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public List<MetadataStatusResponse> getRecordStatusHistory(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        @RequestParam(required = false) boolean details,
-        @Parameter(description = "Sort direction", required = false) @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder,
-        HttpServletRequest request) throws Exception {
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            @RequestParam(required = false) boolean details,
+            @Parameter(description = "Sort direction", required = false) @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder,
+            HttpServletRequest request) throws Exception {
         ServiceContext context = ApiUtils.createServiceContext(request);
         AbstractMetadata metadata = ApiUtils.canViewRecord(metadataUuid, request);
 
         String sortField = SortUtils.createPath(MetadataStatus_.changeDate);
 
         List<MetadataStatus> listOfStatus = metadataStatusRepository.findAllByMetadataId(metadata.getId(),
-            Sort.by(sortOrder, sortField));
+                Sort.by(sortOrder, sortField));
 
         List<MetadataStatusResponse> response = buildMetadataStatusResponses(listOfStatus, details,
-            context.getLanguage());
+                context.getLanguage());
 
         // TODO: Add paging
         return response;
@@ -176,21 +176,21 @@ public class MetadataWorkflowApi {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public List<MetadataStatusResponse> getRecordStatusHistoryByType(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        @Parameter(description = "Type", required = true) @PathVariable StatusValueType type,
-        @RequestParam(required = false) boolean details,
-        @Parameter(description = "Sort direction", required = false) @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder,
-        HttpServletRequest request) throws Exception {
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            @Parameter(description = "Type", required = true) @PathVariable StatusValueType type,
+            @RequestParam(required = false) boolean details,
+            @Parameter(description = "Sort direction", required = false) @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder,
+            HttpServletRequest request) throws Exception {
         ServiceContext context = ApiUtils.createServiceContext(request);
         AbstractMetadata metadata = ApiUtils.canViewRecord(metadataUuid, request);
 
         String sortField = SortUtils.createPath(MetadataStatus_.changeDate);
 
         List<MetadataStatus> listOfStatus = metadataStatusRepository.findAllByMetadataIdAndByType(metadata.getId(), type,
-            Sort.by(sortOrder, sortField));
+                Sort.by(sortOrder, sortField));
 
         List<MetadataStatusResponse> response = buildMetadataStatusResponses(listOfStatus, details,
-            context.getLanguage());
+                context.getLanguage());
 
         // TODO: Add paging
         return response;
@@ -198,15 +198,15 @@ public class MetadataWorkflowApi {
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Get last workflow status for a record", description = "")
     @RequestMapping(value = "/{metadataUuid}/status/workflow/last", method = RequestMethod.GET, produces = {
-        MediaType.APPLICATION_JSON_VALUE})
+            MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAuthority('Editor')")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Record status."),
-        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
+            @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public MetadataWorkflowStatusResponse getStatus(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        HttpServletRequest request) throws Exception {
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            HttpServletRequest request) throws Exception {
         AbstractMetadata metadata = ApiUtils.canEditRecord(metadataUuid, request);
         ApplicationContext appContext = ApplicationContextHolder.get();
         Locale locale = languageUtils.parseAcceptLanguage(request.getLocales());
@@ -215,7 +215,7 @@ public class MetadataWorkflowApi {
         // --- only allow the owner of the record to set its status
         if (!accessManager.isOwner(context, String.valueOf(metadata.getId()))) {
             throw new SecurityException(String.format(
-                "Only the owner of the metadata can get the status. User is not the owner of the metadata"));
+                    "Only the owner of the metadata can get the status. User is not the owner of the metadata"));
         }
 
         MetadataStatus recordStatus = metadataStatus.getStatus(metadata.getId());
@@ -233,7 +233,7 @@ public class MetadataWorkflowApi {
             listOfReviewers.add(reviewer.two());
         }
         return new MetadataWorkflowStatusResponse(recordStatus, listOfReviewers,
-            accessManager.hasEditPermission(context, metadata.getId() + ""), elStatus);
+                accessManager.hasEditPermission(context, metadata.getId() + ""), elStatus);
 
     }
 
@@ -241,13 +241,13 @@ public class MetadataWorkflowApi {
     @RequestMapping(value = "/approve", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('Reviewer')")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Metadata approved ."),
-        @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled.")})
+            @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled.")})
     @ResponseBody
     MetadataProcessingReport approve(@RequestBody MetadataBatchApproveParameter approveParameter,
                                      @Parameter(hidden = true) HttpSession session,
                                      @Parameter(hidden = true) HttpServletRequest request) throws Exception {
         ServiceContext context = ApiUtils.createServiceContext(request,
-            languageUtils.getIso3langCode(request.getLocales()));
+                languageUtils.getIso3langCode(request.getLocales()));
 
         checkWorkflowEnabled();
 
@@ -255,7 +255,7 @@ public class MetadataWorkflowApi {
 
         try {
             Set<String> records = ApiUtils.getUuidsParameterOrSelection(approveParameter.getUuids(),
-                approveParameter.getBucket(), ApiUtils.getUserSession(session));
+                    approveParameter.getBucket(), ApiUtils.getUserSession(session));
             report.setTotalRecords(records.size());
 
             List<String> listOfUpdatedRecords = new ArrayList<>();
@@ -264,7 +264,7 @@ public class MetadataWorkflowApi {
                 if (metadata == null) {
                     report.incrementNullRecords();
                 } else if (!accessManager.isOwner(
-                    ApiUtils.createServiceContext(request), String.valueOf(metadata.getId()))) {
+                        ApiUtils.createServiceContext(request), String.valueOf(metadata.getId()))) {
                     report.addNotEditableMetadataId(metadata.getId());
                 } else {
                     if (!isAllowedMetadataStatusChange(context, metadata, report)) {
@@ -276,15 +276,15 @@ public class MetadataWorkflowApi {
                     if (currentStatus == null) {
                         // Metadata not in the workflow
                         report.addMetadataInfos(metadata.getId(), metadata.getUuid(),
-                            true, false, "Metadata workflow is not enabled");
+                                true, false, "Metadata workflow is not enabled");
                         continue;
                     } else {
                         if (!approveParameter.isDirectApproval()) {
                             if (currentStatus.getStatusValue().getId() != Integer.parseInt(StatusValue.Status.SUBMITTED)) {
                                 report.addMetadataInfos(metadata.getId(), metadata.getUuid(),
-                                    this.metadataUtils.isMetadataDraft(metadata.getId()),
-                                    this.metadataUtils.isMetadataApproved(metadata.getId()),
-                                    "Metadata is not in submitted status.");
+                                        this.metadataUtils.isMetadataDraft(metadata.getId()),
+                                        this.metadataUtils.isMetadataApproved(metadata.getId()),
+                                        "Metadata is not in submitted status.");
                                 continue;
                             }
                         }
@@ -313,13 +313,13 @@ public class MetadataWorkflowApi {
     @RequestMapping(value = "/submit", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('Editor')")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Metadata submitted ."),
-        @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled.")})
+            @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled.")})
     @ResponseBody
     MetadataProcessingReport submit(@RequestBody MetadataBatchSubmitParameter submitParameter,
-                                     @Parameter(hidden = true) HttpSession session,
-                                     @Parameter(hidden = true) HttpServletRequest request) throws Exception {
+                                    @Parameter(hidden = true) HttpSession session,
+                                    @Parameter(hidden = true) HttpServletRequest request) throws Exception {
         ServiceContext context = ApiUtils.createServiceContext(request,
-            languageUtils.getIso3langCode(request.getLocales()));
+                languageUtils.getIso3langCode(request.getLocales()));
 
         checkWorkflowEnabled();
 
@@ -327,7 +327,7 @@ public class MetadataWorkflowApi {
 
         try {
             Set<String> records = ApiUtils.getUuidsParameterOrSelection(submitParameter.getUuids(),
-                submitParameter.getBucket(), ApiUtils.getUserSession(session));
+                    submitParameter.getBucket(), ApiUtils.getUserSession(session));
             report.setTotalRecords(records.size());
 
             List<String> listOfUpdatedRecords = new ArrayList<>();
@@ -336,7 +336,7 @@ public class MetadataWorkflowApi {
                 if (metadata == null) {
                     report.incrementNullRecords();
                 } else if (!accessManager.isOwner(
-                    ApiUtils.createServiceContext(request), String.valueOf(metadata.getId()))) {
+                        ApiUtils.createServiceContext(request), String.valueOf(metadata.getId()))) {
                     report.addNotEditableMetadataId(metadata.getId());
                 } else {
                     if (!isAllowedMetadataStatusChange(context, metadata, report)) {
@@ -348,14 +348,14 @@ public class MetadataWorkflowApi {
                     if (currentStatus == null) {
                         // Metadata not in the workflow
                         report.addMetadataInfos(metadata.getId(), metadata.getUuid(),
-                            true, false, "Metadata workflow is not enabled");
+                                true, false, "Metadata workflow is not enabled");
                         continue;
                     } else if (currentStatus.getStatusValue().getId() != Integer.parseInt(StatusValue.Status.DRAFT)) {
                         // Metadata not in draft status
                         report.addMetadataInfos(metadata.getId(), metadata.getUuid(),
-                            this.metadataUtils.isMetadataDraft(metadata.getId()),
-                            this.metadataUtils.isMetadataApproved(metadata.getId()),
-                            "Metadata is not in draft status.");
+                                this.metadataUtils.isMetadataDraft(metadata.getId()),
+                                this.metadataUtils.isMetadataApproved(metadata.getId()),
+                                "Metadata is not in draft status.");
                         continue;
                     }
 
@@ -392,15 +392,15 @@ public class MetadataWorkflowApi {
     @RequestMapping(value = "/{metadataUuid}/status", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('Editor')")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Status updated."),
-        @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled."),
-        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
+            @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled."),
+            @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void setStatus(@Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
                           @Parameter(description = "Metadata status", required = true) @RequestBody(required = true) MetadataStatusParameter status,
                           HttpServletRequest request) throws Exception {
         AbstractMetadata metadata = ApiUtils.canEditRecord(metadataUuid, request);
         ServiceContext context = ApiUtils.createServiceContext(request,
-            languageUtils.getIso3langCode(request.getLocales()));
+                languageUtils.getIso3langCode(request.getLocales()));
 
         boolean isMdWorkflowEnable = settingManager.getValueAsBool(Settings.METADATA_WORKFLOW_ENABLE);
 
@@ -408,31 +408,33 @@ public class MetadataWorkflowApi {
         MetadataStatus metadataStatus = convertParameter(metadata.getId(), metadata.getUuid(), status, author);
 
         if (metadataStatus.getStatusValue().getType() == StatusValueType.workflow
-            && !isMdWorkflowEnable) {
+                && !isMdWorkflowEnable) {
             throw new FeatureNotEnabledException(
-                "Metadata workflow is disabled, can not be set the status of metadata")
-                .withMessageKey("exception.resourceNotEnabled.workflow")
-                .withDescriptionKey("exception.resourceNotEnabled.workflow.description");
+                    "Metadata workflow is disabled, can not be set the status of metadata")
+                    .withMessageKey("exception.resourceNotEnabled.workflow")
+                    .withDescriptionKey("exception.resourceNotEnabled.workflow.description");
         }
 
         // --- only allow the owner of the record to set its status
         if (!accessManager.isOwner(context, String.valueOf(metadata.getId()))) {
             throw new SecurityException(String.format(
-                "Only the owner of the metadata can set the status of this record. User is not the owner of the metadata."));
+                    "Only the owner of the metadata can set the status of this record. User is not the owner of the metadata."));
         }
 
         boolean isAllowedSubmitApproveInvalidMd = settingManager
-            .getValueAsBool(Settings.METADATA_WORKFLOW_ALLOW_SUBMIT_APPROVE_INVALID_MD);
+                .getValueAsBool(Settings.METADATA_WORKFLOW_ALLOW_SUBMIT_APPROVE_INVALID_MD);
         if (((status.getStatus() == Integer.parseInt(StatusValue.Status.SUBMITTED))
-            || (status.getStatus() == Integer.parseInt(StatusValue.Status.APPROVED)))
-            && !isAllowedSubmitApproveInvalidMd) {
+                || (status.getStatus() == Integer.parseInt(StatusValue.Status.APPROVED_FOR_PUBLISHED))
+                || (status.getStatus() == Integer.parseInt(StatusValue.Status.APPROVED)))
+                && !isAllowedSubmitApproveInvalidMd) {
 
+            metadataValidator.doValidate(metadata, context.getLanguage());
             boolean isInvalid = MetadataUtils.retrieveMetadataValidationStatus(metadata, context);
 
             if (isInvalid) {
                 throw new NotAllowedException("Metadata is invalid: can't be submitted or approved")
-                    .withMessageKey("exception.resourceInvalid.metadata")
-                    .withDescriptionKey("exception.resourceInvalid.metadata.description");
+                        .withMessageKey("exception.resourceInvalid.metadata")
+                        .withDescriptionKey("exception.resourceInvalid.metadata.description");
             }
         }
 
@@ -459,23 +461,23 @@ public class MetadataWorkflowApi {
     }
 
     @io.swagger.v3.oas.annotations.Operation(
-        summary = "Close a record task",
-        description = "")
+            summary = "Close a record task",
+            description = "")
     @RequestMapping(
-        value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}/close",
-        method = RequestMethod.PUT
+            value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}/close",
+            method = RequestMethod.PUT
     )
     @PreAuthorize("hasAuthority('Editor')")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Task closed."),
-        @ApiResponse(responseCode = "404", description = "Status not found."),
-        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
+            @ApiResponse(responseCode = "404", description = "Status not found."),
+            @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeTask(@Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
                           @Parameter(description = "Status identifier", required = true) @PathVariable int statusId,
                           @Parameter(description = "User identifier", required = true) @PathVariable int userId,
                           @Parameter(description = "Change date", required = true) @PathVariable String changeDate,
                           @Parameter(description = "Close date", required = true) @RequestParam String closeDate, HttpServletRequest request)
-        throws Exception {
+            throws Exception {
         AbstractMetadata metadata = ApiUtils.canEditRecord(metadataUuid, request);
 
         MetadataStatus metadataStatus = metadataStatusRepository
@@ -483,11 +485,11 @@ public class MetadataWorkflowApi {
 
         if (metadataStatus != null) {
             metadataStatusRepository.update(metadataStatus.getId(),
-                entity -> entity.setCloseDate(new ISODate(closeDate)));
+                    entity -> entity.setCloseDate(new ISODate(closeDate)));
         } else {
             throw new ResourceNotFoundException(
-                String.format("Can't find metadata status for record '%d', user '%s' at date '%s'", metadataUuid,
-                    userId, changeDate));
+                    String.format("Can't find metadata status for record '%d', user '%s' at date '%s'", metadataUuid,
+                            userId, changeDate));
         }
     }
 
@@ -495,26 +497,26 @@ public class MetadataWorkflowApi {
     @RequestMapping(value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('Administrator')")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Status removed."),
-        @ApiResponse(responseCode = "404", description = "Status not found."),
-        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_ONLY_ADMIN)})
+            @ApiResponse(responseCode = "404", description = "Status not found."),
+            @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_ONLY_ADMIN)})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRecordStatus(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        @Parameter(description = "Status identifier", required = true) @PathVariable int statusId,
-        @Parameter(description = "User identifier", required = true) @PathVariable int userId,
-        @Parameter(description = "Change date", required = true) @PathVariable String changeDate,
-        HttpServletRequest request) throws Exception {
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            @Parameter(description = "Status identifier", required = true) @PathVariable int statusId,
+            @Parameter(description = "User identifier", required = true) @PathVariable int userId,
+            @Parameter(description = "Change date", required = true) @PathVariable String changeDate,
+            HttpServletRequest request) throws Exception {
         AbstractMetadata metadata = ApiUtils.canEditRecord(metadataUuid, request);
 
         MetadataStatus metadataStatus = metadataStatusRepository
-            .findOneByMetadataIdAndStatusValue_IdAndUserIdAndChangeDate(metadata.getId(), statusId, userId, new ISODate(changeDate));
+                .findOneByMetadataIdAndStatusValue_IdAndUserIdAndChangeDate(metadata.getId(), statusId, userId, new ISODate(changeDate));
         if (metadataStatus != null) {
             metadataStatusRepository.delete(metadataStatus);
             // TODO: Reindex record ?
         } else {
             throw new ResourceNotFoundException(
-                String.format("Can't find metadata status for record '%d', user '%s' at date '%s'", metadataUuid,
-                    userId, changeDate));
+                    String.format("Can't find metadata status for record '%d', user '%s' at date '%s'", metadataUuid,
+                            userId, changeDate));
         }
     }
 
@@ -522,12 +524,12 @@ public class MetadataWorkflowApi {
     @RequestMapping(value = "/{metadataUuid}/status", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('Administrator')")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Status removed."),
-        @ApiResponse(responseCode = "404", description = "Status not found."),
-        @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_ONLY_ADMIN)})
+            @ApiResponse(responseCode = "404", description = "Status not found."),
+            @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_ONLY_ADMIN)})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllRecordStatus(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        HttpServletRequest request) throws Exception {
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            HttpServletRequest request) throws Exception {
         AbstractMetadata metadata = ApiUtils.canEditRecord(metadataUuid, request);
         metadataStatusRepository.deleteAllById_MetadataId(metadata.getId());
     }
@@ -538,71 +540,71 @@ public class MetadataWorkflowApi {
     @PreAuthorize("hasAuthority('Editor')")
     @ResponseBody
     public List<MetadataStatusResponse> getWorkflowStatusByType(
-        @Parameter(description = "One or more types to retrieve (ie. worflow, event, task). Default is all.",
-            required = false)
-        @RequestParam(required = false)
-        List<StatusValueType> type,
-        @Parameter(description = "All event details including XML changes. Responses are bigger. Default is false",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more types to retrieve (ie. worflow, event, task). Default is all.",
+                    required = false)
+            @RequestParam(required = false)
+            List<StatusValueType> type,
+            @Parameter(description = "All event details including XML changes. Responses are bigger. Default is false",
+                    required = false)
+            @RequestParam(required = false)
             boolean details,
-        @Parameter(description = "Sort Order (ie. DESC or ASC). Default is none.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "Sort Order (ie. DESC or ASC). Default is none.",
+                    required = false)
+            @RequestParam(required = false)
             Sort.Direction sortOrder,
-        @Parameter(description = "One or more event author. Default is all.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more event author. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
             List<Integer> author,
-        @Parameter(description = "One or more event owners. Default is all.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more event owners. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
             List<Integer> owner,
-        @Parameter(description = "One or more record identifier. Default is all.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more record identifier. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
             List<Integer> id,
-        @Parameter(description = "One or more metadata record identifier. Default is all.",
-            required = false)
-        @RequestParam(required = false)
-             List<Integer> record,
-        @Parameter(description = "One or more metadata uuid. Default is all.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more metadata record identifier. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
+            List<Integer> record,
+            @Parameter(description = "One or more metadata uuid. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
             List<String> uuid,
-        @Parameter(description = "One or more status id. Default is all.",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "One or more status id. Default is all.",
+                    required = false)
+            @RequestParam(required = false)
             List<String> statusIds,
-        @Parameter(description = "Start date",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "Start date",
+                    required = false)
+            @RequestParam(required = false)
             String dateFrom,
-        @Parameter(description = "End date",
-            required = false)
-        @RequestParam(required = false)
+            @Parameter(description = "End date",
+                    required = false)
+            @RequestParam(required = false)
             String dateTo,
-        @Parameter(description = "From page",
-            required = false)
-        @RequestParam(required = false, defaultValue = "0")
+            @Parameter(description = "From page",
+                    required = false)
+            @RequestParam(required = false, defaultValue = "0")
             Integer from,
-        @Parameter(description = "Number of records to return",
-            required = false)
-        @RequestParam(required = false, defaultValue = "100")
+            @Parameter(description = "Number of records to return",
+                    required = false)
+            @RequestParam(required = false, defaultValue = "100")
             Integer size,
-        HttpServletRequest request) throws Exception {
+            HttpServletRequest request) throws Exception {
         ServiceContext context = ApiUtils.createServiceContext(request);
 
         Profile profile = context.getUserSession().getProfile();
         if (profile != Profile.Administrator) {
             if (CollectionUtils.isEmpty(record) &&
-                CollectionUtils.isEmpty(uuid)) {
+                    CollectionUtils.isEmpty(uuid)) {
                 throw new NotAllowedException(
-                    "Non administrator user must use a id or uuid parameter to search for status.");
+                        "Non administrator user must use a id or uuid parameter to search for status.");
             }
 
             if (!CollectionUtils.isEmpty(record)) {
-                for(Integer recordId : record) {
+                for (Integer recordId : record) {
                     AbstractMetadata md;
                     try {
                         md = ApiUtils.canEditRecord(recordId + "", request);
@@ -612,7 +614,7 @@ public class MetadataWorkflowApi {
                 }
             }
             if (!CollectionUtils.isEmpty(uuid)) {
-                for(String recordId : uuid) {
+                for (String recordId : uuid) {
                     AbstractMetadata md;
                     try {
                         md = ApiUtils.canEditRecord(recordId, request);
@@ -634,15 +636,15 @@ public class MetadataWorkflowApi {
 
         List<MetadataStatus> metadataStatuses;
         if (CollectionUtils.isNotEmpty(id) ||
-            CollectionUtils.isNotEmpty(uuid) ||
-            CollectionUtils.isNotEmpty(type) ||
-            CollectionUtils.isNotEmpty(author) ||
-            CollectionUtils.isNotEmpty(owner) ||
-            CollectionUtils.isNotEmpty(record) ||
-            CollectionUtils.isNotEmpty(statusIds)) {
+                CollectionUtils.isNotEmpty(uuid) ||
+                CollectionUtils.isNotEmpty(type) ||
+                CollectionUtils.isNotEmpty(author) ||
+                CollectionUtils.isNotEmpty(owner) ||
+                CollectionUtils.isNotEmpty(record) ||
+                CollectionUtils.isNotEmpty(statusIds)) {
             metadataStatuses = metadataStatusRepository.searchStatus(
-                id, uuid, type, author, owner, record, statusIds,
-                dateFrom, dateTo, pageRequest);
+                    id, uuid, type, author, owner, record, statusIds,
+                    dateFrom, dateTo, pageRequest);
         } else {
             metadataStatuses = metadataStatusRepository.findAll(pageRequest).getContent();
         }
@@ -680,8 +682,8 @@ public class MetadataWorkflowApi {
     }
 
     @io.swagger.v3.oas.annotations.Operation(
-        summary = "Get saved content from the status record before changes",
-        description = "")
+            summary = "Get saved content from the status record before changes",
+            description = "")
     @RequestMapping(
             value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}/before",
             method = RequestMethod.GET,
@@ -696,11 +698,11 @@ public class MetadataWorkflowApi {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String showStatusBefore(
-        @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
-        @Parameter(description = "Status identifier", required = true) @PathVariable int statusId,
-        @Parameter(description = "User identifier", required = true) @PathVariable int userId,
-        @Parameter(description = "Change date", required = true) @PathVariable String changeDate,
-        @Parameter(hidden = true) HttpSession httpSession, HttpServletRequest request
+            @Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
+            @Parameter(description = "Status identifier", required = true) @PathVariable int statusId,
+            @Parameter(description = "User identifier", required = true) @PathVariable int userId,
+            @Parameter(description = "Change date", required = true) @PathVariable String changeDate,
+            @Parameter(hidden = true) HttpSession httpSession, HttpServletRequest request
     )
             throws Exception {
 
@@ -711,7 +713,7 @@ public class MetadataWorkflowApi {
     }
 
     @io.swagger.v3.oas.annotations.Operation(
-        summary = "Get saved content from the status record after changes"
+            summary = "Get saved content from the status record after changes"
     )
     @RequestMapping(value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}/after",
             method = RequestMethod.GET,
@@ -741,11 +743,11 @@ public class MetadataWorkflowApi {
     }
 
     @io.swagger.v3.oas.annotations.Operation(
-        summary = "Restore saved content from a status record")
+            summary = "Restore saved content from a status record")
     @RequestMapping(
             value = "/{metadataUuid}/status/{statusId:[0-9]+}.{userId:[0-9]+}.{changeDate}/restore",
             method = RequestMethod.POST
-            )
+    )
     @PreAuthorize("hasAuthority('Editor')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Record restored."),
@@ -896,9 +898,9 @@ public class MetadataWorkflowApi {
                 // Locate language title based on language which is a 3 char code
                 // First look for exact match. otherwise look for 2 char code and if still not found then default to first occurrence
                 status.setTitle(
-                    s.getTitles().getOrDefault(language,
-                        s.getTitles().getOrDefault(language.substring(0, 2),
-                            s.getTitles().entrySet().iterator().next().getValue())));
+                        s.getTitles().getOrDefault(language,
+                                s.getTitles().getOrDefault(language.substring(0, 2),
+                                        s.getTitles().entrySet().iterator().next().getValue())));
             }
             // If title was not stored in database then try to get it from the index.
             // Titles may be missing in database if it is older data or if the extract-titles.xsl does not exists/fails for schema plugin
@@ -911,7 +913,7 @@ public class MetadataWorkflowApi {
                         fields.add(titleField);
                         Optional<Metadata> metadata = metadataRepository.findById(s.getMetadataId());
                         final Map<String, String> values =
-                            searchManager.getFieldsValues(metadata.get().getUuid(), fields);
+                                searchManager.getFieldsValues(metadata.get().getUuid(), fields);
                         title = values.get(titleField);
                         titles.put(s.getMetadataId(), title);
                     } catch (Exception e1) {
@@ -949,7 +951,7 @@ public class MetadataWorkflowApi {
             case StatusValue.Events.RECORDVALIDATIONTRIGGERED:
                 if (s.getCurrentState() == null) {
                     return "UNKNOWN";
-                } else if(s.getCurrentState().equals("1")) {
+                } else if (s.getCurrentState().equals("1")) {
                     return "OK";
                 } else {
                     return "KO";
@@ -1150,15 +1152,15 @@ public class MetadataWorkflowApi {
 
         if (!isMdWorkflowEnable) {
             throw new FeatureNotEnabledException(
-                "Metadata workflow is disabled, can not be set the status of metadata")
-                .withMessageKey("exception.resourceNotEnabled.workflow")
-                .withDescriptionKey("exception.resourceNotEnabled.workflow.description");
+                    "Metadata workflow is disabled, can not be set the status of metadata")
+                    .withMessageKey("exception.resourceNotEnabled.workflow")
+                    .withDescriptionKey("exception.resourceNotEnabled.workflow.description");
         }
     }
 
     /**
      * Checks if the metadata status can be changed.
-     *
+     * <p>
      * If the setting to allow only to submit / approve valid metadata only is enabled,
      * the metadata should be valid, to allow the status change.
      *
@@ -1170,7 +1172,7 @@ public class MetadataWorkflowApi {
     private boolean isAllowedMetadataStatusChange(ServiceContext context, AbstractMetadata metadata,
                                                   MetadataProcessingReport report) throws Exception {
         boolean isAllowedSubmitApproveInvalidMd = settingManager
-            .getValueAsBool(Settings.METADATA_WORKFLOW_ALLOW_SUBMIT_APPROVE_INVALID_MD);
+                .getValueAsBool(Settings.METADATA_WORKFLOW_ALLOW_SUBMIT_APPROVE_INVALID_MD);
         if (!isAllowedSubmitApproveInvalidMd) {
             boolean isInvalid = MetadataUtils.retrieveMetadataValidationStatus(metadata, context);
 
@@ -1193,7 +1195,7 @@ public class MetadataWorkflowApi {
      * @throws Exception
      */
     private void changeMetadataStatus(ServiceContext context, AbstractMetadata metadata, String newStatus, String changeMessage)
-        throws Exception {
+            throws Exception {
         // --- use StatusActionsFactory and StatusActions class to
         // --- change status and carry out behaviours for status changes
         StatusActions sa = statusActionFactory.createStatusActions(context);
