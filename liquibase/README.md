@@ -27,6 +27,17 @@ GEONETWORK_DB_MIGRATION_ONSTARTUP=false
 General config of liquibase is done using `pom.xml`. Here, the driver is added as a dependency. Necessary liquibase properties
 are defined in de pom, and also available as profiles.
 
+Property definition is done in `liquibase.properties` where some properties are set, to be used in the changesets.
+*Important* notes here:
+- once used on an environment, these variables are not meant to change
+- the changeset is generated, so if the variable changes the changeset changes (which influences the hash)
+- changing a property in a new changeset means introducing a new property
+
+An example property is: `gn.system.feedback.mailServer.password`. If set in the `liquibase.properties` file, the value
+will be used in `00010-sendgrid-apikey.xml` (for example). Overriding the property can also be done in an environment variable.
+When executing `mvn`, pass `-Dgn.system.feedback.mailServer.password="yourvalue"` to set the value (and override the
+value set in `liquibase.properties`).
+
 
 # Contexts
 
@@ -61,6 +72,7 @@ Afterwards, run `mvn liquibase:update` in the folder `liquibase/`. Pass `-P cont
 properties by adding `-Dliquibase.attribute=value`. For available values, see `mvn liquibase:help -Ddetail=true`.
 
 This procedure is also contained in the script `reset-db.sh` for convenience, when running the docker compose version. Make sure you are using the right properties file. 
+
 
 
 # Useful commands 
