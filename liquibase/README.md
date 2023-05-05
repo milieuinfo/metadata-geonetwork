@@ -34,7 +34,7 @@ Property definition is done in `liquibase.properties` where some properties are 
 - changing a property in a new changeset means introducing a new property
 
 An example property is: `gn.system.feedback.mailServer.password`. If set in the `liquibase.properties` file, the value
-will be used in `00005-settings.xml` (for example). Overriding the property can also be done in an environment variable.
+will be used in `00010-sendgrid-apikey.xml` (for example). Overriding the property can also be done in an environment variable.
 When executing `mvn`, pass `-Dgn.system.feedback.mailServer.password="yourvalue"` to set the value (and override the
 value set in `liquibase.properties`).
 

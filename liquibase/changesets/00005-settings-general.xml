@@ -49,7 +49,7 @@
       <where>name='system/feedback/mailServer/ignoreSslCertificateErrors'</where>
     </update>
     <update tableName="settings">
-      <column name="value" value="${gn.system.feedback.mailServer.password}"/>
+      <column name="value" value="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"/>
       <where>name='system/feedback/mailServer/password'</where>
     </update>
     <update tableName="settings">
