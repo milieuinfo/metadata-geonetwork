@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset joachim:00010
+--changeset joachim:00011
 
 -- custom statusvalues
 INSERT INTO StatusValues (id, name, reserved, displayorder, type, notificationLevel) VALUES  (8,'approved_for_published','y', 0, 'workflow', 'recordUserAuthor');
