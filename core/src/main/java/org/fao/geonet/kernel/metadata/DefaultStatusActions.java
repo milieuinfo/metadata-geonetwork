@@ -145,9 +145,13 @@ public class DefaultStatusActions implements StatusActions {
      * @return
      * @throws Exception
      */
-    public Set<Integer> onStatusChange(List<MetadataStatus> listOfStatus) throws Exception {
+    public Map<Integer, StatusChangeType> onStatusChange(List<MetadataStatus> listOfStatus) throws Exception {
 
-        Set<Integer> unchanged = new HashSet<>();
+        if (listOfStatus.stream().map(MetadataStatus::getMetadataId).distinct().count() != listOfStatus.size()) {
+            throw new IllegalArgumentException("Multiple status update received on the same metadata");
+        }
+
+        Map<Integer, StatusChangeType> results = new HashMap<>();
 
         // process the metadata records to set status
         for (MetadataStatus status : listOfStatus) {
@@ -166,14 +170,14 @@ public class DefaultStatusActions implements StatusActions {
                 if (context.isDebugEnabled())
                     context.debug(String.format("Metadata %s already has status %s ",
                             status.getMetadataId(), status.getStatusValue().getId()));
-                unchanged.add(status.getMetadataId());
+                results.put(status.getMetadataId(), StatusChangeType.UNCHANGED);
                 continue;
             }
 
             // if not possible to go from one status to the other, don't continue
             AbstractMetadata metadata = metadataRepository.findOne(status.getMetadataId());
             if (!isStatusChangePossible(session.getProfile(), metadata, currentStatusId, statusId)) {
-                unchanged.add(status.getMetadataId());
+                results.put(status.getMetadataId(), StatusChangeType.UNCHANGED);
                 continue;
             }
 
@@ -182,7 +186,7 @@ public class DefaultStatusActions implements StatusActions {
                 context.debug("Change status of metadata with id " + status.getMetadataId() + " from " + currentStatusId + " to " + statusId);
 
             // we know we are allowed to do the change, apply any side effects
-            applyStatusChange(status.getMetadataId(), status, statusId);
+            boolean deleted = applyStatusChange(status.getMetadataId(), status, statusId);
 
             // inform content reviewers if the status is submitted
             try {
@@ -193,27 +197,31 @@ public class DefaultStatusActions implements StatusActions {
                         status.getMetadataId(), status.getStatusValue().getId(), e.getMessage()));
             }
 
+            if (deleted) {
+                results.put(status.getMetadataId(), StatusChangeType.DELETED);
+            } else {
+                results.put(status.getMetadataId(), StatusChangeType.UPDATED);
+            }
             // throw events
             Log.trace(Geonet.DATA_MANAGER, "Throw workflow events.");
             for (Integer mid : listOfId) {
-                if (!unchanged.contains(mid)) {
+                if (results.get(mid) != StatusChangeType.DELETED) {
                     Log.debug(Geonet.DATA_MANAGER, "  > Status changed for record (" + mid + ") to status " + status);
                     context.getApplicationContext().publishEvent(new MetadataStatusChanged(
-                            metadataUtils.findOne(mid),
-                            status.getStatusValue(), status.getChangeMessage(),
-                            status.getUserId()));
+                        metadataUtils.findOne(mid),
+                        status.getStatusValue(), status.getChangeMessage(),
+                        status.getUserId()
+                    ));
                 }
             }
         }
 
-        return unchanged;
+        return results;
     }
 
-    private void applyStatusChange(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
-        // whether to set the status at the end or not
-        boolean setStatus = true;
-
+    private boolean applyStatusChange(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
         // in the case of rejected for retired/removed: fall back to the previous status
+        boolean deleted = false;
         if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
                 .contains(toStatusId)) {
             MetadataStatus previousStatus = metadataStatusManager.getPreviousStatus(metadataId);
@@ -243,12 +251,13 @@ public class DefaultStatusActions implements StatusActions {
         // if we're rejecting, automatically unpublish
         else if (toStatusId.equals(StatusValue.Status.REMOVED)) {
             metadataManager.purgeMetadata(context, String.valueOf(status.getMetadataId()), true);
-            setStatus = false;
+            deleted = true;
         }
 
-        // set status, indexing is assumed to take place later
-        if (setStatus)
+        if (!deleted) {
             metadataStatusManager.setStatusExt(status);
+        }
+        return deleted;
     }
 
 
