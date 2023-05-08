@@ -42,6 +42,40 @@ It is perhaps wise to keep track of some Metadata Vlaanderen-specific notes or c
 - Override settings (see, e.g., `docker-compose.dev.example.yaml`)
   - make a copy and remove `.example` (this file is ignored in `.gitignore`) 
   - use `docker compose -f docker-compose.yml -f docker-compose.dev.yml` to override settings to your liking
+  
+## Java and Maven
+
+Java 8 is needed to compile Geonetwork. The compiler is defined in the `pom.xml` file, but won't be picked up automatically if the current `java` version is not 8. 
+
+Configure `.m2/toolchains.xml` as follows to make maven pick up the right version, without having to set `JAVA_HOME` specifically for this project.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+ <!-- JDK toolchains -->
+ <toolchain>
+   <type>jdk</type>
+   <provides>
+     <version>8</version>
+     <vendor>openjdk</vendor>
+   </provides>
+   <configuration>
+     <jdkHome>/usr/lib/jvm/java-8-openjdk</jdkHome>
+   </configuration>
+ </toolchain>
+ <toolchain>
+   <type>jdk</type>
+   <provides>
+     <version>11</version>
+     <vendor>openjdk</vendor>
+   </provides>
+   <configuration>
+     <jdkHome>/usr/lib/jvm/java-11-openjdk</jdkHome>
+   </configuration>
+ </toolchain>
+</toolchains>
+```
 
 ## Notes
 - `mvn clean install -DskipTests -T 16` would run multi-core (on 16 cores)
