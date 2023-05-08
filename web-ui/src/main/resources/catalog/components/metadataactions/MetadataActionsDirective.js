@@ -199,8 +199,9 @@
   module.directive("gnMetadataStatusUpdater", [
     "$translate",
     "$http",
+    "$location",
     "gnMetadataManager",
-    function ($translate, $http, gnMetadataManager) {
+    function ($translate, $http, $location, gnMetadataManager) {
       return {
         restrict: "A",
         replace: true,
@@ -279,6 +280,10 @@
               .put("../api/records/" + metadataId + "/status", scope.newStatus)
               .then(
                 function (response) {
+                  // If we did a delete - move back to the home page as the record doesn't exist anymore
+                  if (scope.newStatus.status === "12") {
+                    $location.path("/home");
+                  }
                   //After the new status is approved, the working copy will get deleted and will not get searched.
                   //The search parameter will need to reset to draft=n
                   if (

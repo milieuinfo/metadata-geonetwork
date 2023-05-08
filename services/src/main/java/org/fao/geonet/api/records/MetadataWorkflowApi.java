@@ -465,10 +465,6 @@ public class MetadataWorkflowApi {
                 }
             }
         }
-        if (statusUpdate.get(metadata.getId()) == StatusChangeType.DELETED) {
-            JeevesNodeAwareRedirectStrategy redirectStrategy = context.getBean(JeevesNodeAwareRedirectStrategy.class);
-            redirectStrategy.sendRedirect(request, response, "/");
-        }
     }
 
     @io.swagger.v3.oas.annotations.Operation(
