@@ -222,6 +222,7 @@
     <div>Ofwel de naam ofwel de titel van de verwante dataset dient gedefinieerd te zijn.</div>
   </alert.M23>
   <report.M23>De naam of de titel van de verwante dataset is gegeven.</report.M23>
+  <report.M23-dup>An associated resource is declared multiple time with same association and initiative type.</report.M23-dup>
   <alert.M24>
     <div>De taal is aanwezig.</div>
   </alert.M24>
