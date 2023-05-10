@@ -281,7 +281,7 @@
               .then(
                 function (response) {
                   // If we did a delete - move back to the home page as the record doesn't exist anymore
-                  if (scope.newStatus.status === "12") {
+                  if (response.data[metadataId] === "DELETED") {
                     $location.path("/home");
                   }
                   //After the new status is approved, the working copy will get deleted and will not get searched.
