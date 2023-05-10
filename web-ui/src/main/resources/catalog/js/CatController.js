@@ -103,8 +103,8 @@
             enabled: true,
             appUrl: "../../{{node}}/{{lang}}/catalog.search#/home",
             showSocialBarInFooter: true,
-            showMosaic: true,
-            showMaps: true,
+            showMosaic: false,
+            showMaps: false,
             facetConfig: {
               "th_httpinspireeceuropaeutheme-theme_tree.key": {
                 terms: {
