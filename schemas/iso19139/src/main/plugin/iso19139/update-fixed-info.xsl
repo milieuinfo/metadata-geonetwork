@@ -57,18 +57,21 @@
   * ISO19139:2005 (not recommended)
   <xsl:variable name="isUsing2005Schema" select="true()"/>
   -->
-  <xsl:variable name="isUsing2005Schema"
+  <!--xsl:variable name="isUsing2005Schema"
                 select="(/root/gmd:MD_Metadata/@xsi:schemaLocation
                           and /root/gmd:MD_Metadata/@xsi:schemaLocation != $schemaLocationFor2007)
                         or
-                        count(//gml320:*) > 0"/>
+                        count(//gml320:*) > 0"/-->
 
   <!-- This variable is used to migrate from 2005 to 2007 version.
   By setting the schema location in a record, on next save, the record
   will use GML3.2.1.-->
-  <xsl:variable name="isUsing2007Schema"
+  <!--xsl:variable name="isUsing2007Schema"
                 select="/root/gmd:MD_Metadata/@xsi:schemaLocation
-                          and /root/gmd:MD_Metadata/@xsi:schemaLocation = $schemaLocationFor2007"/>
+                          and /root/gmd:MD_Metadata/@xsi:schemaLocation = $schemaLocationFor2007"/-->
+
+  <xsl:variable name="isUsing2005Schema" select="true()"/>
+  <xsl:variable name="isUsing2007Schema" select="false()"/>
 
   <!-- We use the category check to find out if this is an SDS metadata. Please replace with anything better -->
   <xsl:variable name="isSDS"
@@ -112,11 +115,13 @@
     <xsl:namespace name="xsi" select="'http://www.w3.org/2001/XMLSchema-instance'"/>
     <xsl:namespace name="gco" select="'http://www.isotc211.org/2005/gco'"/>
     <xsl:namespace name="gmd" select="'http://www.isotc211.org/2005/gmd'"/>
-    <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
     <xsl:namespace name="gmx" select="'http://www.isotc211.org/2005/gmx'"/>
     <xsl:namespace name="gts" select="'http://www.isotc211.org/2005/gts'"/>
     <xsl:namespace name="gsr" select="'http://www.isotc211.org/2005/gsr'"/>
     <xsl:namespace name="gmi" select="'http://www.isotc211.org/2005/gmi'"/>
+    <xsl:if test="gmd:identificationInfo/srv:SV_ServiceIdentification">
+      <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
+    </xsl:if>
     <xsl:choose>
       <xsl:when test="$isUsing2005Schema and not($isUsing2007Schema)">
         <xsl:namespace name="gml" select="'http://www.opengis.net/gml'"/>
@@ -132,6 +137,22 @@
   <xsl:template match="gmd:MD_Metadata">
     <xsl:copy copy-namespaces="no">
       <xsl:call-template name="add-namespaces"/>
+
+      <xsl:choose>
+        <xsl:when test="$isUsing2005Schema">
+          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
+          <xsl:attribute name="xsi:schemaLocation"
+                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd'"/>
+        </xsl:when>
+        <xsl:when test="$isUsing2007Schema">
+          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
+          <xsl:attribute name="xsi:schemaLocation"
+                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20070417/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20070417/srv/1.0/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="@*"/>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <xsl:apply-templates select="@*"/>
 
