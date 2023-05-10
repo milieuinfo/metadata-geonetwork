@@ -1,0 +1,19 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+  <!-- core: v424/migrate-db-default.sql -->
+  <changeSet author="joachim" id="00013">
+    <addColumn tableName="spg_page">
+      <column name="label" type="varchar(255)"/>
+    </addColumn>
+    <update tableName="spg_page">
+      <column name="label" valueComputed="linktext"/>
+    </update>
+    <delete tableName="spg_sections">
+      <where>section = 'DRAFT'</where>
+    </delete>
+    <addNotNullConstraint tableName="spg_page" columnName="label"/>
+  </changeSet>
+</databaseChangeLog>
