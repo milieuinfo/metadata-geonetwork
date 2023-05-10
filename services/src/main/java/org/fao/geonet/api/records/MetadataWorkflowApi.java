@@ -398,6 +398,7 @@ public class MetadataWorkflowApi {
             @ApiResponse(responseCode = "400", description = "Metadata workflow not enabled."),
             @ApiResponse(responseCode = "403", description = ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT)})
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    // TODO VL might want to return the Map of metadataid > status change so we can know whether the record was deleted on the frontend
     public void setStatus(@Parameter(description = API_PARAM_RECORD_UUID, required = true) @PathVariable String metadataUuid,
                           @Parameter(description = "Metadata status", required = true) @RequestBody(required = true) MetadataStatusParameter status,
                           HttpServletRequest request,
