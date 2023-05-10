@@ -106,18 +106,10 @@
             showMosaic: false,
             showMaps: false,
             facetConfig: {
-              "th_httpinspireeceuropaeutheme-theme_tree.key": {
+              "th_datatheme_tree.key": {
                 terms: {
-                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
-                  size: 34
-                  // "order" : { "_key" : "asc" }
-                },
-                meta: {
-                  decorator: {
-                    type: "icon",
-                    prefix: "fa fa-2x pull-left gn-icon iti-",
-                    expression: "http://inspire.ec.europa.eu/theme/(.*)"
-                  }
+                  field: "th_datatheme_tree.key",
+                  size: 20
                 }
               },
               "cl_topic.key": {
@@ -129,6 +121,20 @@
                   decorator: {
                     type: "icon",
                     prefix: "fa fa-2x pull-left gn-icon-"
+                  }
+                }
+              },
+              "th_httpinspireeceuropaeutheme-theme_tree.key": {
+                terms: {
+                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
+                  size: 34
+                  // "order" : { "_key" : "asc" }
+                },
+                meta: {
+                  decorator: {
+                    type: "icon",
+                    prefix: "fa fa-2x pull-left gn-icon iti-",
+                    expression: "http://inspire.ec.europa.eu/theme/(.*)"
                   }
                 }
               },
