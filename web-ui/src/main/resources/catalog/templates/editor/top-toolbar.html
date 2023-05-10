@@ -95,11 +95,11 @@
         aria-label="{{'showOptions' | translate}}"
         data-toggle="dropdown"
         aria-expanded="false"
-        ng-show="false"
+        ng-if="false"
       >
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-show="false">
+      <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="false">
         <li
           role="menuitem"
           data-ng-if="(user.isEditorForGroup(gnCurrentEdit.metadata.groupOwner) || user.isAdmin()) && gnCurrentEdit.metadata.mdStatus == 1 && isMdWorkflowEnable"
