@@ -2,7 +2,7 @@
 
 ## Content
 
-This module contains a web user interface for GeoNetwork opensource based on AngularJS, Bootstrap and d3.js librairies.
+This module contains a web user interface for GeoNetwork opensource based on AngularJS, Bootstrap and d3.js libraries.
 
 
 

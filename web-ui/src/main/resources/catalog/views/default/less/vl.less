@@ -9,3 +9,59 @@
     }
   }
 }
+
+
+
+.gn-status-draft-to-approved_for_published-editor:before,
+.gn-status-draft-to-approved_for_published-reviewer:before,
+.gn-status-submitted-to-approved_for_published-reviewer:before {
+  content: @fa-var-unlock;
+}
+
+.gn-status-draft-to-rejected-editor:before,
+.gn-status-draft-to-rejected-reviewer:before,
+.gn-status-submitted-to-rejected-reviewer:before {
+  content: @fa-var-thumbs-down;
+}
+
+.gn-status-submitted-to-draft-editor:before,
+.gn-status-submitted-to-draft-reviewer:before,
+.gn-status-rejected-to-draft-reviewer:before {
+  content: @fa-var-pencil;
+}
+
+.gn-status-draft-to-submitted_for_removed-editor:before,
+.gn-status-draft-to-submitted_for_removed-reviewer:before,
+.gn-status-rejected-to-submitted_for_removed-reviewer:before,
+.gn-status-approved-to-submitted_for_removed-reviewer:before,
+.gn-status-retired-to-submitted_for_removed-reviewer:before {
+  content: @fa-var-times-circle-o;
+}
+
+.gn-status-draft-to-removed-editor:before,
+.gn-status-draft-to-removed-reviewer:before,
+.gn-status-submitted_for_removed-to-removed-reviewer:before {
+  content: @fa-var-times;
+}
+
+.gn-status-rejected-to-submitted-reviewer:before {
+  content: @fa-var-check-circle;
+}
+
+.gn-status-approved_for_published-to-approved-reviewer:before,
+.gn-status-retired-to-approved-reviewer:before {
+  content: @fa-var-thumbs-up;
+}
+
+.gn-status-approved-to-submitted_for_retired-reviewer:before {
+  content: @fa-var-archive;
+}
+
+.gn-status-submitted_for_retired-to-retired-reviewer:before {
+  content: @fa-var-archive;
+}
+
+.gn-status-submitted_for_retired-to-rejected_for_retired-reviewer:before,
+.gn-status-submitted_for_removed-to-rejected_for_removed-reviewer:before {
+  content: @fa-var-undo;
+}

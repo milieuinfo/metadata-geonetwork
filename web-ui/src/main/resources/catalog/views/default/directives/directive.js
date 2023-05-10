@@ -107,8 +107,7 @@
       return {
         restrict: "A",
         replace: true,
-        templateUrl:
-          "../../catalog/views/default/directives/" + "partials/mdactionmenu.html",
+        templateUrl: "../../catalog/views/default/directives/partials/mdactionmenu.html",
         link: function linkFn(scope, element, attrs) {
           scope.mdService = gnMetadataActions;
           scope.md = scope.$eval(attrs.gnMdActionsMenu);
@@ -127,6 +126,8 @@
             scope.iso2Lang = gnLangs.getIso2Lang(gnLangs.getCurrent());
           });
 
+          scope.status = undefined;
+
           scope.buildFormatter = function (url, uuid, isDraft) {
             if (url.indexOf("${uuid}") !== -1) {
               return url.replace("${lang}", scope.lang).replace("${uuid}", uuid);
@@ -141,6 +142,51 @@
               );
             }
           };
+
+          function loadWorkflowStatus() {
+            return $http
+              .get("../api/status/workflow", { cache: true })
+              .then(function (response) {
+                scope.status = {};
+                response.data.forEach(function (s) {
+                  scope.status[s.name] = s.id;
+                });
+
+                var editorSteps = [
+                    { from: "approved", to: "submitted_for_removed" },
+                    { from: "approved", to: "submitted_for_retired" },
+                    { from: "draft", to: "removed" },
+                    { from: "draft", to: "submitted" },
+                    { from: "draft", to: "submitted_for_removed" },
+                    { from: "rejected", to: "draft" },
+                    { from: "rejected", to: "submitted" },
+                    { from: "rejected", to: "submitted_for_removed" },
+                    { from: "retired", to: "submitted_for_removed" },
+                    { from: "submitted", to: "draft" },
+                    { from: "submitted_for_removed", to: "rejected_for_removed" }
+                  ],
+                  reviewerSteps = editorSteps.concat([
+                    { from: "approved_for_published", to: "approved" },
+                    { from: "draft", to: "approved" },
+                    { from: "draft", to: "approved_for_published" },
+                    { from: "draft", to: "rejected" },
+                    { from: "retired", to: "approved" },
+                    { from: "submitted", to: "approved" },
+                    { from: "submitted", to: "approved_for_published" },
+                    { from: "submitted", to: "rejected" },
+                    { from: "submitted_for_retired", to: "rejected_for_retired" },
+                    { from: "submitted_for_retired", to: "retired" }
+                  ]),
+                  adminSteps = reviewerSteps.concat([
+                    { from: "submitted_for_removed", to: "removed" }
+                  ]);
+                scope.statusEffects = {
+                  editor: editorSteps,
+                  reviewer: reviewerSteps,
+                  admin: adminSteps
+                };
+              });
+          }
 
           function loadTasks() {
             return $http
@@ -189,6 +235,7 @@
            * @returns {*|boolean|false|boolean}
            */
           scope.displayPublicationOption = function (md, user) {
+            return false; // VL specific. Publication is managed by workflow
             return (
               md.canReview &&
               md.draft != "y" &&
@@ -199,6 +246,7 @@
           };
 
           loadTasks();
+          loadWorkflowStatus();
 
           scope.$watch(attrs.gnMdActionsMenu, function (a) {
             scope.md = a;

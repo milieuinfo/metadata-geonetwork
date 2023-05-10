@@ -55,7 +55,7 @@
                     class="text-muted gn-status"
                     data-ng-class="{'text-success': md.mdStatus == 2, 'text-warning': md.mdStatus == 4}"
                     data-ng-if="md.mdStatus < 50 && isMdWorkflowEnable"
-                    >{{('mdStatus-' + md.statusWorkflow) | translate}}</small
+                    >{{('status-' + md.statusWorkflow) | translate}}</small
                   >
 
                   <small
@@ -101,7 +101,8 @@
             <a
               class="btn btn-default"
               href=""
-              data-ng-show="(!md.isPublished() || (md.isPublished() && user.canDeletePublishedMetadata())) && user.canEditRecord(md) && md.isTemplate != 's'
+              data-ng-show="false"
+              data-ng-show-disabled-in-vl="(!md.isPublished() || (md.isPublished() && user.canDeletePublishedMetadata())) && user.canEditRecord(md) && md.isTemplate != 's'
                              && (user.isReviewerOrMore() || md.mdStatus != 4 || !isMdWorkflowEnable)
                              && md.draft != 'e'"
               data-gn-click-and-spin="deleteRecord(md)"

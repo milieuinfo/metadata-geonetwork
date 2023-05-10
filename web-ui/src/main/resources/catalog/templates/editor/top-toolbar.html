@@ -60,6 +60,7 @@
     <!-- /.btn-group -->
 
     <data-gn-md-validation-tools></data-gn-md-validation-tools>
+
     <!-- TODO: automatic save status -->
     <div class="btn-group">
       <button
@@ -94,10 +95,11 @@
         aria-label="{{'showOptions' | translate}}"
         data-toggle="dropdown"
         aria-expanded="false"
+        ng-if="false"
       >
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+      <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="false">
         <li
           role="menuitem"
           data-ng-if="(user.isEditorForGroup(gnCurrentEdit.metadata.groupOwner) || user.isAdmin()) && gnCurrentEdit.metadata.mdStatus == 1 && isMdWorkflowEnable"
@@ -125,6 +127,7 @@
       </ul>
     </div>
     <!-- /.btn-group -->
+
     <div
       class="btn-group"
       title="{{(isTemplate() ? 'saveTemplate' : 'saveMetadata') | translate}}"
@@ -150,10 +153,11 @@
         title="{{(gnCurrentEdit.metadata.draft === 'y' ? 'draftCanNoBeATemplateOrMinorEdit' : 'showOptions') | translate}}"
         data-toggle="dropdown"
         aria-expanded="false"
+        ng-if="false"
       >
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+      <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="false">
         <!-- A draft can not be a template -->
         <li role="menuitem" data-ng-show="user.canCreateTemplate()">
           <a

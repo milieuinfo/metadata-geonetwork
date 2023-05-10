@@ -199,13 +199,14 @@
   module.directive("gnMetadataStatusUpdater", [
     "$translate",
     "$http",
+    "$location",
     "gnMetadataManager",
-    function ($translate, $http, gnMetadataManager) {
+    function ($translate, $http, $location, gnMetadataManager) {
       return {
         restrict: "A",
         replace: true,
         templateUrl:
-          "../../catalog/components/metadataactions/partials/" + "statusupdater.html",
+          "../../catalog/components/metadataactions/partials/statusupdater.html",
         scope: {
           md: "=gnMetadataStatusUpdater",
           statusType: "@",
@@ -226,6 +227,18 @@
             dueDate: null,
             changeMessage: ""
           };
+
+          scope.statusToBe = undefined;
+          $http.get("../api/status/workflow", { cache: true }).then(function (response) {
+            scope.status = {};
+            for (var i = 0; i < response.data.length; i++) {
+              var s = response.data[i];
+              if (s.id == scope.statusToSelect) {
+                scope.statusToBe = s;
+                break;
+              }
+            }
+          });
 
           // Retrieve last status to set it in the form
           function init() {
@@ -267,6 +280,10 @@
               .put("../api/records/" + metadataId + "/status", scope.newStatus)
               .then(
                 function (response) {
+                  // If we did a delete - move back to the home page as the record doesn't exist anymore
+                  if (response.data[metadataId] === "DELETED") {
+                    $location.path("/home");
+                  }
                   //After the new status is approved, the working copy will get deleted and will not get searched.
                   //The search parameter will need to reset to draft=n
                   if (

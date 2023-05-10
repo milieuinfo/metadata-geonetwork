@@ -2038,6 +2038,7 @@
             return angular.isFunction(this[fnName]) ? this[fnName]() : false;
           },
           canDeletePublishedMetadata: function () {
+            return false; // VL specific. Deletion is managed by workflow
             var profile =
                 gnConfig["metadata.delete.profilePublishedMetadata"] || "Editor",
               fnName =

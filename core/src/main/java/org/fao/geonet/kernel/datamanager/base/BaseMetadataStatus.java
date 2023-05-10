@@ -97,6 +97,21 @@ public class BaseMetadataStatus implements IMetadataStatus {
     }
 
     /**
+     * Return previous workflow status for the metadata id
+     */
+    @Override
+    public MetadataStatus getPreviousStatus(int metadataId) throws Exception {
+        String sortField = SortUtils.createPath(MetadataStatus_.changeDate);
+        List<MetadataStatus> metadataStatusList = metadataStatusRepository.findAllByMetadataIdAndByType(
+                metadataId, StatusValueType.workflow, Sort.by(Sort.Direction.DESC, sortField));
+        if (metadataStatusList.isEmpty() || metadataStatusList.size() == 1) {
+            return null;
+        } else {
+            return metadataStatusList.get(1);
+        }
+    }
+
+    /**
      * Return all status for the metadata id
      */
     @Override
@@ -138,7 +153,7 @@ public class BaseMetadataStatus implements IMetadataStatus {
     @Override
     @Deprecated
     public MetadataStatus setStatus(ServiceContext context, int id, int status, ISODate changeDate,
-            String changeMessage) throws Exception {
+                                    String changeMessage) throws Exception {
         MetadataStatus statusObject = setStatusExt(context, id, status, changeDate, changeMessage);
         metadataIndexer.indexMetadata(Integer.toString(id), true, IndexingMode.full);
         return statusObject;
@@ -158,7 +173,7 @@ public class BaseMetadataStatus implements IMetadataStatus {
      */
     @Override
     public MetadataStatus setStatusExt(ServiceContext context, int id, int status, ISODate changeDate,
-            String changeMessage) throws Exception {
+                                       String changeMessage) throws Exception {
         Optional<StatusValue> statusValue = statusValueRepository.findById(status);
 
         if (!statusValue.isPresent()) {
