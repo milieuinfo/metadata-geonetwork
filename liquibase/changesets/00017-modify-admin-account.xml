@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+  <!-- the admin password is set in the liquibase.properties -->
+  <!-- - choose one for yourself when deploying locally -->
+  <!-- - keep the cluster settings the same once they're deployed once! -->
+  <changeSet author="joachim" id="00017">
+    <update tableName="users">
+      <column name="username" value="mdv"/>
+      <column name="name" value="mdv"/>
+      <column name="password" value="${mdv.password}"/>
+      <where>username = 'admin'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
