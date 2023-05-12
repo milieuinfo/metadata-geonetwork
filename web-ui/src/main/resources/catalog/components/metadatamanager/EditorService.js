@@ -616,10 +616,9 @@
 
                 target.slideUp(duration, function () {
                   $(this).remove();
+                  // TODO: Take care of moving the + sign
+                  defer.resolve(response.data);
                 });
-
-                // TODO: Take care of moving the + sign
-                defer.resolve(response.data);
               },
               function (response) {
                 defer.reject(response.data);
