@@ -843,7 +843,7 @@
               maps: ["ows"]
             },
             isFilterTagsDisplayedInSearch: true,
-            showMapInFacet: false,
+            searchMapPlacement: "", // results, facets or none
             showStatusFooterFor: "historicalArchive,obsolete,superseded",
             showBatchDropdown: true,
             usersearches: {
@@ -859,7 +859,7 @@
             }
           },
           map: {
-            enabled: true,
+            enabled: false,
             appUrl: "../../{{node}}/{{lang}}/catalog.search#/map",
             externalViewer: {
               enabled: false,
