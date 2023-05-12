@@ -11,7 +11,7 @@
     <update tableName="users">
       <column name="username" value="mdv"/>
       <column name="name" value="mdv"/>
-      <column name="password" value="${mdv.password}"/>
+      <column name="password" value="${mdv.passwordhash}"/>
       <where>username = 'admin'</where>
     </update>
   </changeSet>
