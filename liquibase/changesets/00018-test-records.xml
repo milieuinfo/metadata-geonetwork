@@ -60,8 +60,8 @@
       <column name="changedate">2023-05-12T12:44:41.970Z</column>
     </insert>
 
-    <!-- fcd34c15-e073-43f1-8273-fa2be767a5ce DS, MercatorNet geharvest metatdata VL-->
-    <!-- new uuid: dbe94ffb-79e6-4761-81dc-33ebce95bd2e-->
+    <!-- original uuid: fcd34c15-e073-43f1-8273-fa2be767a5ce -->
+    <!-- new uuid: dbe94ffb-79e6-4761-81dc-33ebce95bd2e -->
     <insert tableName="metadata">
       <column name="changedate">2023-05-12T13:40:42.597Z</column>
       <column name="createdate">2023-05-12T13:40:05.044Z</column>
@@ -81,7 +81,7 @@
       <column name="uuid">dbe94ffb-79e6-4761-81dc-33ebce95bd2e</column>
     </insert>
 
-    <!-- 1af7f4fc-bb73-469f-9001-019c103b695f SVC, MercatorNet geharvest metatdata VL-->
+    <!-- original uuid: 1af7f4fc-bb73-469f-9001-019c103b695f -->
     <!-- new uuid: f2a431ae-1f21-48dd-a3fc-a76aa46b239c-->
     <insert tableName="metadata">
       <column name="changedate">2023-05-12T13:52:39.777Z</column>
