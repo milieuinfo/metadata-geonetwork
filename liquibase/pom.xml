@@ -46,6 +46,15 @@
         <liquibase.contexts>bet</liquibase.contexts>
       </properties>
     </profile>
+    <profile>
+      <id>prd</id>
+      <properties>
+        <liquibase.url>jdbc:postgresql://localhost:5435/geonetwork</liquibase.url>
+        <liquibase.username>geonetwork</liquibase.username>
+        <liquibase.password>geonetwork</liquibase.password>
+        <liquibase.contexts>prd</liquibase.contexts>
+      </properties>
+    </profile>
   </profiles>
 
   <dependencies>
