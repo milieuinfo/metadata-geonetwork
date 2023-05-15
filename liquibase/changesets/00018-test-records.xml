@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
   <!-- rig the right sequence, not present in original dump -->
-  <changeSet id="00017-metadata-sequence" author="joachim">
+  <changeSet id="00018-metadata-sequence" author="joachim">
     <addDefaultValue tableName="metadata" columnName="id" defaultValueSequenceNext="metadata_id_seq"/>
   </changeSet>
 
@@ -17,7 +17,7 @@
   3) modify title
   4) copy content straight from database, generate the above statements
   -->
-  <changeSet author="joachim" id="00017-test-records" contextFilter="!prd">
+  <changeSet id="00018-test-records" author="joachim" contextFilter="!prd">
     <!-- original uuid: 9ff44cc4-5f16-4507-81a6-6810958b14df -->
     <!-- new uuid: 534985c3-29d9-448c-9c38-a355b4f749d2 -->
     <insert tableName="metadata">
@@ -103,4 +103,3 @@
     </insert>
   </changeSet>
 </databaseChangeLog>
-
