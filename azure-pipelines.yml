@@ -15,7 +15,7 @@ variables:
 
 jobs:
 - job: publish
-  timeoutInMinutes: "30"
+  timeoutInMinutes: "60"
   # itss linux build server
   pool: dv-alex-adobuildserves-ubuntu-vmss
   steps:
