@@ -51,4 +51,5 @@ jobs:
           targetType: 'inline'
           workingDirectory: 'liquibase'
           script: |
-            ./execute-on-env.sh -n dev
+            ls -lsa
+            sh execute-on-env.sh -n dev
