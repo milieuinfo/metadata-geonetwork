@@ -52,4 +52,4 @@ jobs:
           workingDirectory: 'liquibase'
           script: |
             ls -lsa
-            sh execute-on-env.sh -n dev
+            bash execute-on-env.sh -n dev
