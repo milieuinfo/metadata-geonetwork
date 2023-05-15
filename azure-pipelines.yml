@@ -94,9 +94,9 @@ jobs:
           targetType: 'inline'
           workingDirectory: 'liquibase'
           script: |
-            # create the liquibase.properties file from scratch
-            echo -e "parameter.gn.system.feedback.mailServer.password=$LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD\n" > liquibase.properties
-            echo -e "parameter.mdv.passwordhash=$LIQUIBASE_MDV_PASSWORDHASH\n" >> liquibase.properties
+            # create an empty liquibase.properties file
+            touch liquibase.properties
+            # necessary variables are found in environment
             bash execute-on-env.sh -n dev
       - task: Bash@3
         displayName: Rolling restart of geonetwork
