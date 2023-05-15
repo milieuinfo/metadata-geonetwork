@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset fxprunayre:00015
+--changeset fxprunayre:00019
 
 DELETE FROM isolanguagesdes
   WHERE langid NOT IN (
