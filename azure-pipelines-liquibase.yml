@@ -44,9 +44,9 @@ jobs:
             echo "##vso[task.setvariable variable=spnSecret;isSecret=true]$servicePrincipalKey"
       - task: Bash@3
         displayName: Execute liquibase
-        env:
-          LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: ${{ variables.liquibase.gn.system.feedback.mailserver.password }}
-          LIQUIBASE_MDV_PASSWORDHASH: ${{ variables.liquibase.mdv.passwordhash }}
+#        env:
+#          LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: ${{ variables.liquibase.gn.system.feedback.mailserver.password }}
+#          LIQUIBASE_MDV_PASSWORDHASH: ${{ variables.liquibase.mdv.passwordhash }}
         inputs:
           targetType: 'inline'
           workingDirectory: 'liquibase'
