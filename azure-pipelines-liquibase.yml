@@ -48,6 +48,9 @@ jobs:
           # get the pipeline variables into our task
           LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: $(liquibase.gn.system.feedback.mailserver.password)
           LIQUIBASE_MDV_PASSWORDHASH: $(liquibase.mdv.passwordhash)
+          # needed for kube access
+          AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+          AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
         inputs:
           targetType: 'inline'
           workingDirectory: 'liquibase'
