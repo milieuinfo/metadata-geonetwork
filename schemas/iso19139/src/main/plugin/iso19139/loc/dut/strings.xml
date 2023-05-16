@@ -99,7 +99,7 @@
   <vl-measureType>Type meting</vl-measureType>
   <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
   <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
-  <vl-representationType-is-other>other</vl-representationType-is-other>
+  <vl-representationType-is-other>andere</vl-representationType-is-other>
   <vl-section-classification>Classificatie van data en services</vl-section-classification>
   <vl-section-constraints>Inhoudelijke beperkingen</vl-section-constraints>
   <vl-sourceDescription>Inwinningsmethode</vl-sourceDescription>
@@ -122,12 +122,14 @@
   <contactInfo>Contact informatie</contactInfo>
   <featureCatalogueCitationUuidref>Objectencatalogus identificator</featureCatalogueCitationUuidref>
   <mdContactInfo>Metadata contact</mdContactInfo>
-  <refDate>Referentie datum</refDate>
+  <refDate>Referentiedatum</refDate>
   <relatedResources>Gerelateerde services en gekoppelde data</relatedResources>
-  <resourceConstraints>Beperkingen van de dataset(serie)</resourceConstraints>
   <techInfo>Technische informatie</techInfo>
+  <resourceConstraints>Beperkingen van de dataset(serie)</resourceConstraints>
   <temporalRef>Temporele informatie</temporalRef>
   <understandResource>Informatie over de dataset</understandResource>
+  <xml_iso19139>Sla deze metadata op als een ISO19139 XML bestand</xml_iso19139>
+  <xml_iso19139Tooai_dc>Sla deze metadata als een OAI Dublin Core XML bestand</xml_iso19139Tooai_dc>
 
   <!-- New strings added for the AngularJS editor -->
   <!-- View and tabs -->
@@ -137,9 +139,22 @@
   <inspire>INSPIRE</inspire>
   <inspire_sds>SDS</inspire_sds>
 
-  <overviews>Overviews</overviews>
+  <keywordFrom>Keywords - </keywordFrom>
+  <resource>Resource</resource>
+  <xml>XML</xml>
+  <metadata>Metadata</metadata>
+  <identificationInfo>Identification</identificationInfo>
+  <distributionInfo>Distribution</distributionInfo>
+  <dataQualityInfo>Quality</dataQualityInfo>
+  <referenceSystemInfo>Referentiesysteem</referenceSystemInfo>
+  <contentInfo>Content</contentInfo>
+  <portrayalCatalogueInfo>Weergave</portrayalCatalogueInfo>
+  <applicationSchemaInfo>Schema info</applicationSchemaInfo>
+  <noThesaurusName>Zoekwoorden</noThesaurusName>
+  <bboxesSection>Ruimtelijke dekking</bboxesSection>
+  <overviews>Overzichten</overviews>
   <metadataInXML>XML</metadataInXML>
-  <providedBy>Provided by</providedBy>
+  <providedBy>Verzorgd door</providedBy>
   <shareOnSocialSite>Deel op social media</shareOnSocialSite>
   <viewMode>Views</viewMode>
   <keywordFrom>Trefwoord van</keywordFrom>
@@ -147,17 +162,37 @@
   <xml>XML</xml>
   <metadata>Metadata</metadata>
   <identificationInfo>Identificatie</identificationInfo>
+
   <distributionInfo>Distributie</distributionInfo>
   <dataQualityInfo>Kwaliteit</dataQualityInfo>
-  <spatialRepresentationInfo>Ruimtelijke rep.</spatialRepresentationInfo>
-  <referenceSystemInfo>Ref. systeem</referenceSystemInfo>
+  <spatialRepresentationInfo>Ruimtelijke representatie</spatialRepresentationInfo>
   <contentInfo>Inhoud</contentInfo>
-  <portrayalCatalogueInfo>Weergave</portrayalCatalogueInfo>
-  <metadataConstraints>Md. restricties</metadataConstraints>
-  <metadataMaintenance>Md. ouderhoud</metadataMaintenance>
+  <metadataConstraints>Metadata restricties</metadataConstraints>
+  <metadataMaintenance>Metadata onderhoud</metadataMaintenance>
   <applicationSchemaInfo>Schema info</applicationSchemaInfo>
   <noThesaurusName>Trefwoorden</noThesaurusName>
-  <bboxesSection>Geografische dekking</bboxesSection>
+
+  <linkToPortal>Toegang tot het portaal</linkToPortal>
+  <linkToPortal-help>Lees hier de volle details en krijg toegang tot de data.</linkToPortal-help>
+  <citationProposal>Citatie voorstel</citationProposal>
+  <citationProposal-help>This proposal was automatically generated, check if the metadata authors did not specified custom citation requirements.</citationProposal-help>
+  <citationAdditional>When using this resource in a publication, also cite the related work(s) with:</citationAdditional>
+  <associatedResources>Gerelateerde bronnen</associatedResources>
+
+  <!-- XSD error translation -->
+  <invalidElement>Ongeldige inhoud gevonden in element </invalidElement>
+  <onElementOf>Eén van de volgende elementen </onElementOf>
+  <isExpected> is verwacht.</isExpected>
+  <isNotComplete> is niet compleet.</isNotComplete>
+  <elementLocated> Ouder element is </elementLocated>
+  <missingElement>Ontbrekend element in </missingElement>
+  <invalidValue>Ongeldige of ontbrekende waarde.</invalidValue>
+  <notValidFor> is geen geldige waarde voor </notValidFor>
+  <xsdErrorIs>XSD fout is: </xsdErrorIs>
+  <inElement> in element </inElement>
+  <enum1>Waarde </enum1>
+  <enum2> is niet geldig voor het veld </enum2>
+  <enum3>Mogelijke waarden zijn: </enum3>
 
   <!-- INSPIRE view labels and help -->
   <url>Online resource</url>
@@ -198,24 +233,28 @@
   <add-resource-idHelp>Compose the resource identifier using the catalog URL and the metadata
     identifier (eg. http://www.organization.org/catalogue/5391bf69-44bc-4ea0-8cc0-6cf6c3bc81ae).
   </add-resource-idHelp>
-  <add-extent-from-geokeywords>Compute extent from keyword</add-extent-from-geokeywords>
+  <add-extent-from-geokeywords>Add extent for each keywords</add-extent-from-geokeywords>
+  <add-one-extent-from-geokeywords>Add one extent from all keywords</add-one-extent-from-geokeywords>
   <add-extent-from-geokeywordsHelp>Analyze each keyword of type place and add matching extent.
   </add-extent-from-geokeywordsHelp>
-  <classificationSection>Classification of data and services</classificationSection>
-  <temporalSection>Temporal reference</temporalSection>
-  <restrictionsSection>Restrictions on access and use</restrictionsSection>
-  <metadataSection>Metadata information</metadataSection>
-  <responsibleOrganisationSection>Responsible organization (s)</responsibleOrganisationSection>
-  <qualityAndValiditySection>Quality and validity</qualityAndValiditySection>
-  <spatialRepresentationType>Spatial representation type</spatialRepresentationType>
+  <classificationSection>Classificatie van data en services</classificationSection>
+  <temporalSection>Temperele referentie</temporalSection>
+  <restrictionsSection>Beperkingen op toegang en gebruik</restrictionsSection>
+  <metadataSection>Metadata informatie</metadataSection>
+  <responsibleOrganisationSection>Verantwoordelijke organisatie(s)</responsibleOrganisationSection>
+  <qualityAndValiditySection>Kwaliteit en geldigheid</qualityAndValiditySection>
+  <spatialRepresentationType>Spatiaal representatietype</spatialRepresentationType>
   <topicCategory>Topic category code</topicCategory>
-  <metadataLanguage>Metadata language</metadataLanguage>
+  <metadataLanguage>Metadata taal</metadataLanguage>
   <inspireServiceTaxonomy>INSPIRE Service Taxonomy</inspireServiceTaxonomy>
-  <otherConstraints>Other constraints</otherConstraints>
-  <operatesOn>Coupled resource</operatesOn>
-  <extent>Geographic bounding box</extent>
+  <otherConstraints>Andere beperkingen</otherConstraints>
+  <operatesOn>Gekoppelde resources</operatesOn>
+  <extent>Geografische bounding box</extent>
   <spatialExtent>Ruimtelijke dekking</spatialExtent>
-  <freeTextKeywords>Other keywords</freeTextKeywords>
+  <freeTextKeywords>Vrije keywords</freeTextKeywords>
+
+  <resource_url>URL</resource_url>
+  <resource_protocol>Protocol</resource_protocol>
 
   <addCrs>Projection</addCrs>
   <addCrs4936>ETRS89-XYZ</addCrs4936>
@@ -246,9 +285,9 @@
   <inspire_sds_cc2>Conformance class 2: interoperable</inspire_sds_cc2>
   <inspire_sds_cc3>Conformance class 3: harmonized</inspire_sds_cc3>
 
-  <sds-category>Category</sds-category>
+  <sds-category>Categorie</sds-category>
   <inspire_add_pass>Add pass element</inspire_add_pass>
-  <sds-add-dataquality>Add DataQuality element</sds-add-dataquality>
+  <sds-add-dataquality>Voeg DataQuality element toe</sds-add-dataquality>
   <sds-add-dataqualityHelp>TG4: For each spatial data service, there shall be one and only one set
     of quality information (dataQualityInfo element) scoped to “service”.
   </sds-add-dataqualityHelp>
@@ -294,16 +333,23 @@
   <sds-addConstraints>Customizable constraints</sds-addConstraints>
 
   <sds>
-    <noConditionsApply>No conditions apply</noConditionsApply>
-    <conditionsUnknown>Conditions unknown</conditionsUnknown>
+    <noConditionsApply>Geen condities van toepassing</noConditionsApply>
+    <conditionsUnknown>Condities onbekend</conditionsUnknown>
   </sds>
 
-  <sds-limitation>Limitation</sds-limitation>
+  <sds-limitation>Beperking</sds-limitation>
 
-  <sds-section-custodian>Responsible custodian</sds-section-custodian>
-  <sds-addOperation>Add Operation</sds-addOperation>
+  <sds-section-custodian>Verantwoordelijke beheerder</sds-section-custodian>
+  <sds-addOperation>Voeg operatie toe</sds-addOperation>
 
   <trueValue>Ja</trueValue>
   <falseValue>Nee</falseValue>
   <nilValue>Undefined</nilValue>
+  <logo>logo</logo>
+  <overview>overzicht</overview>
+  <thumbnail>thumbnail</thumbnail>
+  <north>noord</north>
+  <east>oost</east>
+  <south>zuid</south>
+  <west>west</west>
 </strings>
