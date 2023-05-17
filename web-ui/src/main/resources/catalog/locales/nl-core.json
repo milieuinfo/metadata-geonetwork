@@ -527,6 +527,8 @@
     "analyseRecordFinishedWithErrors": "Analyse afgerond, {{total}} records geanalyseerd met {{errors}} fouten",
     "testLinkRunning": "{{total}} links om te testen",
     "testLinkFinished": "Testen van links afgerond, {{total}} links getest",
+    "status-21": "Goedgekeurd met concept",
+    "status-24": "Goedgekeurd met ingediend concept",
     "mdStatus-0": "Onbekend",
     "mdStatus-1": "Concept",
     "mdStatus-2": "Goedgekeurd",
