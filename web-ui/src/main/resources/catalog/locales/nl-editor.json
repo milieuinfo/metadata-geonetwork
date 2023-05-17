@@ -274,7 +274,7 @@
     "saveAtimeAgo": "Laatste wijziging was {{timeAgo}}.",
     "saveMetadataError": "Fout tijdens het opslaan van metadata. U moet de editor opnieuw laden.",
     "saveMetadataSuccess": "Alle wijzigingen opgeslagen.",
-    "saveMetadata": "Bewaar metadata",
+    "saveMetadata": "Metadata opslaan",
     "saveDraft": "Concept opslaan",
     "draftCanNoBeATemplateOrMinorEdit": "Template kan niet in concept opgeslagen worden, ook kunt u geen gebruik maken van de 'minor edit' modus.",
     "saveTemplate": "Bewaar template",
