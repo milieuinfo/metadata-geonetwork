@@ -96,7 +96,7 @@ public class DraftMetadataIndexer extends BaseMetadataIndexer implements IMetada
                     statusDraft = String.valueOf(stat.getStatusValue().getId());
                 }
 
-                extraFields.put(Geonet.IndexFieldNames.STATUS_WORKFLOW,  status + statusDraft);
+                extraFields.put(Geonet.IndexFieldNames.STATUS_WORKFLOW, status + "-" + statusDraft);
 
             } else {
                 Log.trace(Geonet.DATA_MANAGER,
