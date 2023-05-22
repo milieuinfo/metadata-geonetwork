@@ -97,10 +97,14 @@
       };
       angular.extend($scope.searchObj, $scope.defaultSearchObj);
 
+      /**
+       * Compute a translated status label for a record, based on the index field 'statusWorkflow'.
+       * The result can be a single status for records that have no draft, or a combined label for records with draft.
+       */
       $scope.getStatusLabel = function (workflowStatus) {
         var split = workflowStatus.split("-");
         // the status of the record
-        var metadataStatus = $translate.instant("mdStatus-" + split[0]);;
+        var metadataStatus = $translate.instant("mdStatus-" + split[0]);
         result = metadataStatus;
         if (split.length == 2) {
           // if there is a draft status present, incorporate this into the resulting string
