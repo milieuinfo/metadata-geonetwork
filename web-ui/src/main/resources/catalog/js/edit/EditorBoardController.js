@@ -97,6 +97,22 @@
       };
       angular.extend($scope.searchObj, $scope.defaultSearchObj);
 
+      $scope.getStatusLabel = function (workflowStatus) {
+        console.log("YYY" + workflowStatus);
+        var split = workflowStatus.split("-");
+        var from = "";
+        var to = "";
+        from = $translate.instant("mdStatus-" + split[0]);
+        if (split.length == 2) {
+          to = $translate.instant("mdStatus-" + split[1]);
+          copy = $translate.instant("workingCopy").toLowerCase();
+          result = from + " (" + copy + " in " + to + ")";
+        } else {
+          result = from;
+        }
+        return result;
+      };
+
       var setOwner = function () {
         $scope.searchObj.params["owner"] = $scope.user.id;
       };
