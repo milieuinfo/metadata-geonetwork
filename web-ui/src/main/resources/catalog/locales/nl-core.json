@@ -549,6 +549,7 @@
     "mdStatusTitle-approved-to-retired-editor": "Depubliceerd metadata",
     "mdStatusTitle-approved-to-retired-reviewer": "Depubliceer metadata",
     "mdStatusTitle-draft-to-approved-reviewer": "Keur direct goed",
+    "mdStatusWorkflowWithDraft": "{{metadataStatus}} (concept in {{draftStatus}})",
     "cancel": "Annuleren",
     "workflow": "Workflow",
     "metadataPublished": "Metadata gepubliceerd",

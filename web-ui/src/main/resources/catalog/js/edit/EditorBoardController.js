@@ -98,17 +98,14 @@
       angular.extend($scope.searchObj, $scope.defaultSearchObj);
 
       $scope.getStatusLabel = function (workflowStatus) {
-        console.log("YYY" + workflowStatus);
         var split = workflowStatus.split("-");
-        var from = "";
-        var to = "";
-        from = $translate.instant("mdStatus-" + split[0]);
+        // the status of the record
+        var metadataStatus = $translate.instant("mdStatus-" + split[0]);;
+        result = metadataStatus;
         if (split.length == 2) {
-          to = $translate.instant("mdStatus-" + split[1]);
-          copy = $translate.instant("workingCopy").toLowerCase();
-          result = from + " (" + copy + " in " + to + ")";
-        } else {
-          result = from;
+          // if there is a draft status present, incorporate this into the resulting string
+          var draftStatus = $translate.instant("mdStatus-" + split[1]);
+          result = $translate.instant("mdStatusWorkflowWithDraft", {metadataStatus: metadataStatus, draftStatus: draftStatus});
         }
         return result;
       };

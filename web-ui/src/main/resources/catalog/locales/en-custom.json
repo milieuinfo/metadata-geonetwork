@@ -18,7 +18,7 @@
   "mdStatusButton-approved_for_published": "Ready for publication",
   "mdStatusButton-draft": "Draft",
   "mdStatusButton-rejected": "Rejected",
-  "mdStatusButton-rejected_for_removed": "Rejected for removal"
+  "mdStatusButton-rejected_for_removed": "Rejected for removal",
   "mdStatusButton-rejected_for_retired": "Rejected for retirement",
   "mdStatusButton-removed": "Deleted",
   "mdStatusButton-retired": "Retired",
@@ -54,5 +54,5 @@
   "mdStatusTitle-submitted_for_removed-to-removed-admin": "Deleted",
   "mdStatusTitle-submitted_for_removed-to-removed-reviewer": "Deleted",
   "mdStatusTitle-submitted_for_retired-to-rejected_for_retired-reviewer": "Rejected for retirement",
-  "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Retired",
+  "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Retired"
 }
