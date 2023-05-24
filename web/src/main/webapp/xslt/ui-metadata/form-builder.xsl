@@ -603,7 +603,9 @@
                                 select="if ($keyValues) then $keyValues/field[@name = $valueLabelKey]/codelist else ''"/>
                   <xsl:variable name="readonly"
                                 select="if ($keyValues) then $keyValues/field[@name = $valueLabelKey]/readonly else ''"/>
-                  <div class="col-sm-11 gn-field">
+
+                  <!-- TODO: VL: Awaiting core fix. Current custom breaks displayTooltipMode="icon" for template field with mutliples keys -->
+                  <div class="col-sm-12 gn-field">
                     <!-- Only display label if more than one key to match -->
                     <xsl:if test="count($template/values/key) > 1">
                       <label for="{$id}_{@label}">
@@ -785,7 +787,7 @@
                       </xsl:call-template>
                     </xsl:if>
                   </div>
-                  <div class="col-sm-1 gn-control"></div>
+                  <!-- <div class="col-sm-1 gn-control"></div> -->
                 </div>
                 </xsl:for-each>
               </div>
