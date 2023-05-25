@@ -33,7 +33,8 @@
       <column name="changedate">2023-05-25T11:53:40.000Z</column>
       <column name="createdate">2023-05-25T11:49:38.156Z</column>
       <column name="data">
-        <![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
 <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd">
   <gmd:fileIdentifier>
     <gco:CharacterString>b6934c23-bffa-40de-ac34-7f1f6e1dbdf1</gco:CharacterString>
@@ -1853,7 +1854,8 @@
       <column name="changedate">2023-05-25T12:02:16.984Z</column>
       <column name="createdate">2023-05-25T12:01:52.624Z</column>
       <column name="data">
-        <![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
 <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd">
   <gmd:fileIdentifier>
     <gco:CharacterString>a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c</gco:CharacterString>
@@ -3657,7 +3659,8 @@ De beschermde archeologische sites worden geografisch afgebakend en op kadastraa
   </changeSet>
 
   <changeSet id="00020-publish-selection" author="joachim">
-    <!-- enable workflow-->
+    <!-- TODO do this for all new records -->
+    <!-- enable workflow - do this for all new records -->
     <insert tableName="metadatastatus">
       <column name="changedate">2023-05-25T12:18:31.164Z</column>
       <column name="changemessage">Enable workflow</column>
@@ -3680,6 +3683,32 @@ De beschermde archeologische sites worden geografisch afgebakend en op kadastraa
       <column name="userid">1</column>
       <column name="uuid">a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c</column>
       <column name="statusid">2</column>
+    </insert>
+
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="operationid">0</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="operationid">1</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="operationid">3</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="operationid">5</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="operationid">6</column>
     </insert>
   </changeSet>
 
