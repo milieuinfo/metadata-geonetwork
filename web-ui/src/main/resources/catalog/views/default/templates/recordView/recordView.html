@@ -62,7 +62,7 @@
         class="gn-status-stamp"
       >
         <span class="gn-status gn-status-mdview gn-status-{{c.key}}"
-          >{{c.key | translate}}</span
+        >{{c.key | translate}}</span
         >
       </div>
     </div>
@@ -112,13 +112,13 @@
                 data-translate=""
                 class="hidden-sm hidden-xs"
                 data-ng-if="mdView.current.record.draft == 'y'"
-                >cancelWorkingCopy</span
+              >cancelWorkingCopy</span
               >
               <span
                 data-translate=""
                 class="hidden-sm hidden-xs"
                 data-ng-if="mdView.current.record.draft != 'y'"
-                >delete</span
+              >delete</span
               >
             </a>
           </div>
@@ -155,6 +155,11 @@
                   gn-formatter="f && f.url"
                 >
                   {{f.label | translate}}
+                </a>
+              </li>
+              <li>
+                <a data-ng-href="{{gnUrl}}api/records/{{md.getUuid()}}/formatters/xml" target="_blank">
+                  <span data-translate="">xmlView</span>
                 </a>
               </li>
             </ul>
