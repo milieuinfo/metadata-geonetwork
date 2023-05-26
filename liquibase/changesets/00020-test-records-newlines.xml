@@ -4,31 +4,28 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
+  <!--  the old uuid (broken record) and the new one to be inserted -->
+  <property name="test1.old.uuid" value="534985c3-29d9-448c-9c38-a355b4f749d2"/>
+  <property name="test1.new.uuid" value="b6934c23-bffa-40de-ac34-7f1f6e1dbdf1"/>
+  <property name="test2.old.uuid" value="cbf4bf0b-ff9d-4255-91ec-f7769ec80f25"/>
+  <property name="test2.new.uuid" value="43f9e1ef-4458-4da3-a6fe-3f325c92f264"/>
+  <property name="test3.old.uuid" value="dbe94ffb-79e6-4761-81dc-33ebce95bd2e"/>
+  <property name="test3.new.uuid" value="a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c"/>
+  <property name="test4.old.uuid" value="f2a431ae-1f21-48dd-a3fc-a76aa46b239c"/>
+  <property name="test4.new.uuid" value="6df083c3-99b2-48e2-b9aa-1e85a8b76df0"/>
+
   <!-- rig the right sequence, not present in original dump -->
   <changeSet id="00020-metadatastatus-sequence" author="joachim">
     <addDefaultValue tableName="metadatastatus" columnName="id" defaultValueSequenceNext="metadatastatus_id_seq"/>
   </changeSet>
 
-  <!-- to make sure there are no other unintended issues: remove the old records -->
-  <changeSet id="00020-delete-broken-records" author="joachim" contextFilter="!prd">
+  <!-- original uuid: '9ff44cc4-5f16-4507-81a6-6810958b14df' -->
+  <changeSet id="00020-fix-test-1" author="joachim" contextFilter="!prd">
+    <!-- remove the broken record -->
     <delete tableName="metadata">
-      <where>uuid = '534985c3-29d9-448c-9c38-a355b4f749d2'</where>
+      <where>uuid = '${test1.old.uuid}'</where>
     </delete>
-    <delete tableName="metadata">
-      <where>uuid = 'cbf4bf0b-ff9d-4255-91ec-f7769ec80f25'</where>
-    </delete>
-    <delete tableName="metadata">
-      <where>uuid = 'dbe94ffb-79e6-4761-81dc-33ebce95bd2e'</where>
-    </delete>
-    <delete tableName="metadata">
-      <where>uuid = 'f2a431ae-1f21-48dd-a3fc-a76aa46b239c'</where>
-    </delete>
-  </changeSet>
-
-  <changeSet id="00020-replace-records" author="joachim" contextFilter="!prd">
-    <!-- [test-1] -->
-    <!-- original uuid: '9ff44cc4-5f16-4507-81a6-6810958b14df' -->
-    <!-- new uuid: 'b6934c23-bffa-40de-ac34-7f1f6e1dbdf1' -->
+    <!-- reinsert it with corrected data -->
     <insert tableName="metadata">
       <column name="changedate">2023-05-25T11:53:40.000Z</column>
       <column name="createdate">2023-05-25T11:49:38.156Z</column>
@@ -108,7 +105,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date>2023-05-25</gco:Date>
+    <gco:Date>2023-05-26</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115/2003/Cor.1:2006/INSPIRE-TG2.0</gco:CharacterString>
@@ -1016,7 +1013,7 @@
                 <gco:CharacterString>Versie 01/01/2019:Deze versie incorporeert de fusies zoals doorgevoerd op 01/01/2019.De Algemene Directie Statistiek – Statistics Belgium heeft aan deze nieuwe gemeentes nieuwe NIS-codes toegekend. Die zullen van kracht zijn op de startdatum van de fusie (op 01/01/2019):- Meeuwen-Gruitrode en Opglabbeek: NIS 72042 (nieuwe naam: Oudsbergen)- Neerpelt en Overpelt: NIS 72043 (nieuwe naam: Pelt)- Kruishoutem en Zingem: NIS 45068 (nieuwe naam: Kruisem)- Aalter en Knesselare: NIS 44084 (nieuwe naam: Aalter)- Deinze en Nevele: NIS 44083- Puurs en Sint-Amands: NIS 12041 (nieuwe naam: Puurs-Sint-Amands)- Waarschoot, Lovendegem &amp; Zomergem: NIS 44085 (nieuwe naam: Lievegem)</gco:CharacterString>
               </gmd:description>
               <gmd:dateTime>
-                <gco:DateTime />
+                <gco:DateTime>2019-01-01T00:00:00</gco:DateTime>
               </gmd:dateTime>
               <gmd:processor>
                 <gmd:CI_ResponsibleParty>
@@ -1077,7 +1074,8 @@
       </gmd:lineage>
     </gmd:DQ_DataQuality>
   </gmd:dataQualityInfo>
-</gmd:MD_Metadata>]]>
+</gmd:MD_Metadata>
+]]>
       </column>
       <column name="displayorder">0</column>
       <column name="groupowner">2</column>
@@ -1089,12 +1087,69 @@
       <column name="root">gmd:MD_Metadata</column>
       <column name="schemaid">iso19139</column>
       <column name="source">c678d0fb-894d-403f-b146-4b96706a1a16</column>
-      <column name="uuid">b6934c23-bffa-40de-ac34-7f1f6e1dbdf1</column>
+      <column name="uuid" valueComputed="'${test1.new.uuid}'"/>
     </insert>
+    <!-- enable workflow -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:31.164Z</column>
+      <column name="changemessage">Enable workflow</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="statusid">1</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test1.new.uuid}'"/>
+    </insert>
+    <!-- publish -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:42.896Z</column>
+      <column name="changemessage" valueComputed="''"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test1.new.uuid}'"/>
+      <column name="statusid">2</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="operationid">0</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="operationid">1</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="operationid">3</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="operationid">5</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test1.new.uuid}')"/>
+      <column name="operationid">6</column>
+    </insert>
+  </changeSet>
 
-    <!-- [test-2]-->
-    <!-- original uuid: '45cde39a-5421-85ec-d52c-4b46-3891-e876-549ea870' -->
-    <!-- new uuid: '43f9e1ef-4458-4da3-a6fe-3f325c92f264' -->
+  <!-- original uuid: '45cde39a-5421-85ec-d52c-4b46-3891-e876-549ea870' -->
+  <changeSet id="00020-fix-test-2" author="joachim" contextFilter="!prd">
+    <!-- remove the broken record -->
+    <delete tableName="metadata">
+      <where>uuid = '${test2.old.uuid}'</where>
+    </delete>
+    <!-- reinsert it with corrected data -->
     <insert tableName="metadata">
       <column name="changedate">2023-05-25T11:59:48.071Z</column>
       <column name="createdate">2023-05-25T11:56:28.992Z</column>
@@ -1845,11 +1900,67 @@
       <column name="source">c678d0fb-894d-403f-b146-4b96706a1a16</column>
       <column name="uuid">43f9e1ef-4458-4da3-a6fe-3f325c92f264</column>
     </insert>
+    <!-- enable workflow -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:31.164Z</column>
+      <column name="changemessage">Enable workflow</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="statusid">1</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test2.new.uuid}'"/>
+    </insert>
+    <!-- publish -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:42.896Z</column>
+      <column name="changemessage" valueComputed="''"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test2.new.uuid}'"/>
+      <column name="statusid">2</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="operationid">0</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="operationid">1</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="operationid">3</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="operationid">5</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test2.new.uuid}')"/>
+      <column name="operationid">6</column>
+    </insert>
+  </changeSet>
 
-
-    <!-- [test-3]-->
-    <!-- original uuid: 'fcd34c15-e073-43f1-8273-fa2be767a5ce' -->
-    <!-- new uuid: 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c' -->
+  <!-- original uuid: 'fcd34c15-e073-43f1-8273-fa2be767a5ce' -->
+  <changeSet id="00020-fix-test-3" author="joachim" contextFilter="!prd">
+    <!-- remove the broken record -->
+    <delete tableName="metadata">
+      <where>uuid = '${test3.old.uuid}'</where>
+    </delete>
+    <!-- reinsert it with corrected data -->
     <insert tableName="metadata">
       <column name="changedate">2023-05-25T12:02:16.984Z</column>
       <column name="createdate">2023-05-25T12:01:52.624Z</column>
@@ -2885,10 +2996,67 @@ De beschermde archeologische sites worden geografisch afgebakend en op kadastraa
       <column name="source">c678d0fb-894d-403f-b146-4b96706a1a16</column>
       <column name="uuid">a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c</column>
     </insert>
+    <!-- enable workflow -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:31.164Z</column>
+      <column name="changemessage">Enable workflow</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="statusid">1</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test3.new.uuid}'"/>
+    </insert>
+    <!-- publish -->
+    <insert tableName="metadatastatus">
+      <column name="changedate">2023-05-25T12:18:42.896Z</column>
+      <column name="changemessage" valueComputed="''"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="owner">0</column>
+      <column name="userid">1</column>
+      <column name="uuid" valueComputed="'${test3.new.uuid}'"/>
+      <column name="statusid">2</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="operationid">0</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="operationid">1</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="operationid">3</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="operationid">5</column>
+    </insert>
+    <insert tableName="operationallowed">
+      <column name="groupid">1</column>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test3.new.uuid}')"/>
+      <column name="operationid">6</column>
+    </insert>
+  </changeSet>
 
-    <!-- [test-4]-->
-    <!-- original uuid: '1af7f4fc-bb73-469f-9001-019c103b695f' -->
-    <!-- new uuid: '6df083c3-99b2-48e2-b9aa-1e85a8b76df0' -->
+  <!-- original uuid: '1af7f4fc-bb73-469f-9001-019c103b695f' -->
+  <changeSet id="00020-fix-test-4" author="joachim" contextFilter="!prd">
+    <!-- remove the broken record -->
+    <delete tableName="metadata">
+      <where>uuid = '${test4.old.uuid}'</where>
+    </delete>
+    <!-- reinsert it with corrected data -->
     <insert tableName="metadata">
       <column name="changedate">2023-05-25T12:04:33.060Z</column>
       <column name="createdate">2023-05-25T12:03:49.020Z</column>
@@ -3656,58 +3824,56 @@ De beschermde archeologische sites worden geografisch afgebakend en op kadastraa
       <column name="source">c678d0fb-894d-403f-b146-4b96706a1a16</column>
       <column name="uuid">6df083c3-99b2-48e2-b9aa-1e85a8b76df0</column>
     </insert>
-  </changeSet>
-
-  <changeSet id="00020-publish-selection" author="joachim">
-    <!-- TODO do this for all new records -->
-    <!-- enable workflow - do this for all new records -->
+    <!-- enable workflow -->
     <insert tableName="metadatastatus">
       <column name="changedate">2023-05-25T12:18:31.164Z</column>
       <column name="changemessage">Enable workflow</column>
       <column name="metadataid"
-              valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="owner">0</column>
       <column name="statusid">1</column>
-      <column name="titles">'null'</column>
       <column name="userid">1</column>
-      <column name="uuid">a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c</column>
+      <column name="uuid" valueComputed="'${test4.new.uuid}'"/>
     </insert>
     <!-- publish -->
     <insert tableName="metadatastatus">
       <column name="changedate">2023-05-25T12:18:42.896Z</column>
       <column name="changemessage" valueComputed="''"/>
       <column name="metadataid"
-              valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="owner">0</column>
-      <column name="titles">null</column>
       <column name="userid">1</column>
-      <column name="uuid">a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c</column>
+      <column name="uuid" valueComputed="'${test4.new.uuid}'"/>
       <column name="statusid">2</column>
     </insert>
-
     <insert tableName="operationallowed">
       <column name="groupid">1</column>
-      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="operationid">0</column>
     </insert>
     <insert tableName="operationallowed">
       <column name="groupid">1</column>
-      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="operationid">1</column>
     </insert>
     <insert tableName="operationallowed">
       <column name="groupid">1</column>
-      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="operationid">3</column>
     </insert>
     <insert tableName="operationallowed">
       <column name="groupid">1</column>
-      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="operationid">5</column>
     </insert>
     <insert tableName="operationallowed">
       <column name="groupid">1</column>
-      <column name="metadataid" valueComputed="(select id from metadata where uuid = 'a0fab7fe-7dd9-4e06-ba57-fb2a01a9593c')"/>
+      <column name="metadataid"
+              valueComputed="(select id from metadata where uuid = '${test4.new.uuid}')"/>
       <column name="operationid">6</column>
     </insert>
   </changeSet>
