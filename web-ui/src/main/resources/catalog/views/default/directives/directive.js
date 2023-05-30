@@ -128,7 +128,7 @@
 
           scope.status = undefined;
 
-          scope.buildFormatter = function (url, uuid, isDraft) {
+          scope.buildFormatter = function (url, uuid, isDraft, asDownload) {
             if (url.indexOf("${uuid}") !== -1) {
               return url.replace("${lang}", scope.lang).replace("${uuid}", uuid);
             } else {
@@ -138,7 +138,9 @@
                 url.replace("${lang}", scope.lang) +
                 (url.indexOf("?") !== -1 ? "&" : "?") +
                 "approved=" +
-                (isDraft != "y")
+                (isDraft != "y") +
+                "&attachment=" +
+                (asDownload == true)
               );
             }
           };
