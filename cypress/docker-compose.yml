@@ -1,0 +1,92 @@
+version: '3.8'
+
+volumes:
+  geonetwork:
+  esdata:
+  pgdata:
+  pglog:
+
+# TODO extend the top level docker-compose instead of redefining everything
+# TODO add health checks to, e.g., postgres, so we know it's up and 'depends' work correctly
+
+services:
+  database:
+    image: postgres:15.0
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: geonetwork
+      POSTGRES_USER: geonetwork
+      POSTGRES_DB: geonetwork
+      PGDATA: /var/lib/postgresql/data/geonetwork
+    command: [ "postgres",
+               "-c", "log_statement=all",
+               "-c", "logging_collector=true",
+               "-c", "log_file_mode=0644",
+               "-c", "log_directory=/var/log/postgresql",
+               "-c", "log_filename=postgresql.log" ]
+    volumes:
+      - pgdata:/var/lib/postgresql/data/geonetwork
+      - pglog:/var/log/postgresql
+
+  geonetwork:
+    image: geonetwork
+    depends_on:
+      - elasticsearch
+      - database
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      DATA_DIR: /geonetwork-data
+      JAVA_OPTS: >
+        -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
+        -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
+        -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC
+        -Dgeonetwork.dir=/geonetwork-data
+        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
+        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
+      ES_HOST: elasticsearch
+      ES_PROTOCOL: http
+      ES_PORT: 9200
+
+      GEONETWORK_DB_TYPE: postgres
+      GEONETWORK_DB_HOST: database
+      GEONETWORK_DB_PORT: 5432
+      GEONETWORK_DB_NAME: geonetwork
+      GEONETWORK_DB_USERNAME: geonetwork
+      GEONETWORK_DB_PASSWORD: geonetwork
+
+      GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
+    volumes:
+      - geonetwork:/geonetwork-data
+
+  ogc-api-records-service:
+    image: geonetwork/gn-cloud-ogc-api-records-service:0.2.0
+    depends_on:
+      - database
+      - elasticsearch
+    environment:
+      SPRING_PROFILES_ACTIVE: standalone
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
+      SPRING_DATASOURCE_USERNAME: geonetwork
+      SPRING_DATASOURCE_PASSWORD: geonetwork
+      GN_BASEURL: http://geonetwork:8080/geonetwork/api
+      GN_LEGACY_URL: http://geonetwork:8080/geonetwork
+      GN_INDEX_URL: http://elasticsearch:9200
+      SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
+
+  elasticsearch:
+    # TODO: upgrade elasticsearch to latest v7
+    image: elasticsearch:7.11.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      ES_JAVA_OPTS: "-Xms1G -Xmx1G"
+      discovery.type: single-node
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
