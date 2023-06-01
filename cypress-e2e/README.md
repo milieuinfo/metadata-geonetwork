@@ -12,7 +12,12 @@ Execute using `npx`:
 npx cypress open
 ```
 
+The base url would be `localhost:8080` as configured in `cypress.config.js`.
+
+
 # Run cypress through docker
+
+The base url would be `geonetwork:8080` as configured in `docker-compose.yml`.
 
 Execute in this folder:
 ```bash

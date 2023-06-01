@@ -3,8 +3,6 @@ version: '3.8'
 volumes:
   geonetwork:
   esdata:
-  pgdata:
-  pglog:
 
 # TODO extend the top level docker-compose instead of redefining everything
 # TODO add health checks to, e.g., postgres, so we know it's up and 'depends' work correctly
@@ -14,7 +12,6 @@ services:
   e2e:
     image: cypress
     build: ./e2e
-    container_name: cypress
     depends_on:
       geonetwork:
         condition: service_healthy
@@ -45,7 +42,11 @@ services:
       POSTGRES_PASSWORD: geonetwork
       POSTGRES_USER: geonetwork
       POSTGRES_DB: geonetwork
-      PGDATA: /var/lib/postgresql/data/geonetwork
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     command: [ "postgres",
                "-c", "log_statement=all",
                "-c", "logging_collector=true",
@@ -53,14 +54,26 @@ services:
                "-c", "log_directory=/var/log/postgresql",
                "-c", "log_filename=postgresql.log" ]
     volumes:
-      - pgdata:/var/lib/postgresql/data/geonetwork
-      - pglog:/var/log/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  liquibase:
+    image: maven
+    depends_on:
+      database:
+        condition: service_healthy
+    working_dir: /liquibase
+    volumes:
+      - ../liquibase:/liquibase
+    # Command to run the liquibase update service
+    command: mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
 
   geonetwork:
     image: geonetwork
     depends_on:
-      - elasticsearch
-      - database
+      elasticsearch:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
     restart: always
@@ -96,8 +109,10 @@ services:
   ogc-api-records-service:
     image: geonetwork/gn-cloud-ogc-api-records-service:0.2.0
     depends_on:
-      - database
-      - elasticsearch
+      liquibase:
+        condition: service_completed_successfully
+      elasticsearch:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: standalone
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
@@ -118,6 +133,11 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    healthcheck:
+      test: curl -s http://localhost:9200 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 50
     environment:
       ES_JAVA_OPTS: "-Xms1G -Xmx1G"
       discovery.type: single-node
