@@ -10,6 +10,34 @@ volumes:
 # TODO add health checks to, e.g., postgres, so we know it's up and 'depends' work correctly
 
 services:
+
+  e2e:
+    image: cypress
+    build: ./e2e
+    container_name: cypress
+    depends_on:
+      geonetwork:
+        condition: service_healthy
+    # note: inside e2e container, the network allows accessing
+    # "web" host under name "web"
+    # so "curl http://web" would return whatever the webserver
+    # in the "web" container is cooking
+    # see https://docs.docker.com/compose/networking/
+    environment:
+      - CYPRESS_baseUrl=http://geonetwork:8080/geonetwork
+    command: npx cypress run
+    # mount the host directory e2e/cypress and the file e2e/cypress.config.js as
+    # volumes within the container
+    # this means that:
+    #  1. anything that Cypress writes to these folders (e.g., screenshots,
+    #     videos) appears also on the Docker host's filesystem
+    #  2. any change that the developer applies to Cypress files on the host
+    #     machine immediately takes effect within the e2e container (no docker
+    #     rebuild required).
+    volumes:
+      - ./e2e/cypress:/app/cypress
+      - ./e2e/cypress.config.js:/app/cypress.config.js
+
   database:
     image: postgres:15.0
     restart: always
@@ -36,6 +64,11 @@ services:
     ports:
       - "8080:8080"
     restart: always
+    healthcheck:
+      test: "curl -f http://localhost:8080/geonetwork"
+      interval: 5s
+      timeout: 5s
+      retries: 20
     environment:
       DATA_DIR: /geonetwork-data
       JAVA_OPTS: >
