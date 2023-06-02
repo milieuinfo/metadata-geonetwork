@@ -5,6 +5,8 @@ module.exports = defineConfig({
   reporterOptions: {
     mochaFile: 'cypress/results/output.xml',
   },
+  viewportWidth: 1280,
+  viewportHeight: 700,
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
