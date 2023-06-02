@@ -33,6 +33,15 @@ services:
     # Command to run the liquibase update service
     command: mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
 
+  geonetwork-reindexer:
+    image: metadata/geonetwork-reindexer
+    depends_on:
+      geonetwork:
+        condition: service_healthy
+    build:
+      context: geonetwork-reindexer
+      dockerfile: Dockerfile
+
   geonetwork:
     image: metadata/geonetwork
     build:

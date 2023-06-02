@@ -5,8 +5,8 @@ services:
     image: cypress
     build: .
     depends_on:
-      geonetwork:
-        condition: service_healthy
+      geonetwork-reindexer:
+        condition: service_completed_successfully
     environment:
       - CYPRESS_baseUrl=http://geonetwork:8080/geonetwork
     command: npx cypress run --browser chrome
@@ -37,6 +37,11 @@ services:
     extends:
       file: ../docker-compose.yml
       service: geonetwork
+
+  geonetwork-reindexer:
+    extends:
+      file: ../docker-compose.yml
+      service: geonetwork-reindexer
 
   ogc-api-records-service:
     extends:

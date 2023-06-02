@@ -1,14 +1,13 @@
 describe('template spec', () => {
   beforeEach('passes', () => {
     cy.visit(`/`);
-    cy.get('.gn-alerts > .alert > .btn').click();
     cy.get('[data-ng-click="acceptCookies()"]').click();
   });
 
-  it.only('should have results when logged in but not logged out', () => {
+  it.only('should show the admin username on the top bar when logged in', () => {
   cy.visit('/');
-    cy.get('.search-over').contains('Search 0');
+    cy.get('.signin-dropdown > .dropdown-toggle').contains('Inloggen')
     cy.login();
-    cy.get('.search-over').contains('Search 3')
+    cy.get('.signin-dropdown > .dropdown-toggle').contains('mdv admin')
   });
 });
