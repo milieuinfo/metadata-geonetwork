@@ -1708,6 +1708,7 @@ public class EditLib {
     }
 
     private void addAttribs(MetadataType type, Element md, MetadataSchema schema) {
+        md.removeChildren(Edit.RootChild.ATTRIBUTE, Edit.NAMESPACE);
         for (MetadataAttribute attr: type.getAlAttribs()) {
 
             Element attribute = new Element(Edit.RootChild.ATTRIBUTE, Edit.NAMESPACE);
