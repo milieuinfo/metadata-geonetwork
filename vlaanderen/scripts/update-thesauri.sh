@@ -19,9 +19,6 @@ rm -rfv "$TARGET_DCAT"
 mkdir -v -p "$TARGET_DCAT/place"
 mkdir -v -p "$TARGET_DCAT/theme"
 
-# set of necessary copies for iso19139
-cp "$SOURCE/theme/datatheme.rdf" "$TARGET_ISO19139/theme/"
-
 # copy specific theme files to dcat
 cp -a "$SOURCE/theme/access-right-service.rdf" "$TARGET_DCAT/theme/access-right-service.rdf"
 cp -a "$SOURCE/theme/access-right.rdf" "$TARGET_DCAT/theme/access-right.rdf"
