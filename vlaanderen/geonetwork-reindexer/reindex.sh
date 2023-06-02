@@ -85,6 +85,7 @@ if [[ $authed == 1 ]]; then
   if [[ $response_code == "200" ]]; then
     # happy path: cleanup cookie and exit successfully
     echo "reindex successful"
+    # TODO wait until reindex has completed (async)
     rm -f "$cookie_path"
     exit 0
   fi

@@ -6,8 +6,8 @@ describe('template spec', () => {
 
   it.only('should show the admin username on the top bar when logged in', () => {
   cy.visit('/');
-    cy.get('.signin-dropdown > .dropdown-toggle').contains('Inloggen')
+    cy.get('.dropdown-toggle').contains('Inloggen')
     cy.login();
-    cy.get('.signin-dropdown > .dropdown-toggle').contains('mdv admin')
+    cy.get('.dropdown-toggle').contains('mdv admin')
   });
 });
