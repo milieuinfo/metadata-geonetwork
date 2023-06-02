@@ -69,7 +69,10 @@ services:
     command: mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
 
   geonetwork:
-    image: geonetwork
+    image: metadata/geonetwork
+    build:
+      context: ../web/
+      dockerfile: Dockerfile
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -79,7 +82,7 @@ services:
       - "8080:8080"
     restart: always
     healthcheck:
-      test: "curl -f http://localhost:8080/geonetwork"
+      test: "curl -f http://localhost:8080/"
       interval: 5s
       timeout: 5s
       retries: 20
@@ -102,6 +105,8 @@ services:
       GEONETWORK_DB_NAME: geonetwork
       GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
+
+      GEONETWORK_WEBBAPP_CONTEXTPATH: /
 
       GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
     volumes:

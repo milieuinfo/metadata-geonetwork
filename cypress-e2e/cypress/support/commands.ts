@@ -23,3 +23,18 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  cy.get('.signin-dropdown > .dropdown-toggle').click();
+  cy.get('#inputUsername').type('mdv');
+  cy.get('#inputPassword').type('admin');
+  cy.get(".signin-dropdown > .dropdown-menu [type='submit']").click();
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable<T> {
+      login(): Chainable<void>;
+    }
+  }
+}
