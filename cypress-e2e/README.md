@@ -1,8 +1,8 @@
 # Install cypress
 
-First install cypress as a dev dependency
+First install dependencies and package-lock.json
 ```bash
-npm install cypress --save-dev
+npm install cypress
 ```
 
 # Run cypress manually

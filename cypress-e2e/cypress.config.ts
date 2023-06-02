@@ -1,7 +1,7 @@
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
-  reporter: 'junit',
+  reporter: 'mochawesome',
   reporterOptions: {
     mochaFile: 'cypress/results/output.xml',
   },
@@ -12,5 +12,8 @@ module.exports = defineConfig({
       return require('./cypress/plugins/index.js')(on, config)
     },
     baseUrl: 'http://localhost:8080/geonetwork',
+    env: {
+      GN_BASE_URL: 'http://localhost:8080'
+    }
   },
 })

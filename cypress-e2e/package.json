@@ -1,28 +1,29 @@
 {
-  "name": "cypress-example-docker-compose",
+  "name": "geonetwork-cypress-docker",
   "version": "1.0.0",
-  "description": "Example running Cypress tests against Apache server via docker-compose",
+  "description": "Run cypress tests against the dockerised setup of Geonetwork",
   "scripts": {
     "build": "docker-compose build",
-    "up": "docker-compose run e2e",
-    "down": "docker-compose down -v"
+    "up": "docker-compose run --rm e2e",
+    "down": "docker-compose down -v",
+    "local": "npx cypress open"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cypress-io/cypress-example-docker-compose.git"
+    "url": "git+https://agiv.visualstudio.com/DefaultCollection/Metadata/_git/MetadataGeonetwork"
   },
   "keywords": [
     "cypress",
     "cypress-io",
-    "example",
     "docker",
     "docker-compose"
   ],
-  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com> (https://glebbahmutov.com/)",
-  "license": "ISC",
-  "private": true,
-  "bugs": {
-    "url": "https://github.com/cypress-io/cypress-example-docker-compose/issues"
-  },
-  "homepage": "https://github.com/cypress-io/cypress-example-docker-compose#readme"
+  "author": "Joachim Nielandt <joachim.nielandt@vlaanderen.be>",
+  "homepage": "https://metadata.vlaanderen.be",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "cypress": "^12.13.0",
+    "mochawesome": "^7.1.3",
+    "typescript": "^5.0.3"
+  }
 }
