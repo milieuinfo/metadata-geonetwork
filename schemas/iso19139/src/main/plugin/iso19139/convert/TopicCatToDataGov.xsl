@@ -9,7 +9,7 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 
-  <xsl:variable name="dataTheme" select="document('../thesauri-AIV/theme/datatheme.rdf')"/>
+  <xsl:variable name="dataTheme" select="document('../thesauri/theme/datatheme.rdf')"/>
 
   <xsl:template name="MapTopicCatToDataGovTheme">
     <xsl:param name="TopicCategory" as="xs:string"/>
