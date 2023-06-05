@@ -2,7 +2,7 @@ describe('Test-record tests', () => {
   it('Loads a specific test record and displays the right content', () => {
     // load test record 1 view
     cy.visit('/srv/dut/catalog.search#/metadata/b6934c23-bffa-40de-ac34-7f1f6e1dbdf1');
-    cy.contains('Accept').click();
+    cy.acceptCookies();
     // check title
     cy.get('.gn-record h1').invoke('text').should('contains', 'Voorlopig referentiebestand gemeentegrenzen');
     // check abstract content
