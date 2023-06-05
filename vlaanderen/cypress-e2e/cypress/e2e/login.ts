@@ -1,7 +1,9 @@
 describe('template spec', () => {
   beforeEach('passes', () => {
     cy.visit(`/`);
-    cy.get('[data-ng-click="acceptCookies()"]').click();
+    cy.acceptCookies();
+    // should be able to run this function twice without crashing
+    cy.acceptCookies();
   });
 
   it.only('should show the admin username on the top bar when logged in', () => {

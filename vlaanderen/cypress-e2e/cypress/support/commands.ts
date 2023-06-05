@@ -1,29 +1,12 @@
 // ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
 // For more comprehensive examples of custom
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+/**
+ * Login with the admin user. To be refined with other types of logins?
+ */
 Cypress.Commands.add('login', () => {
   cy.get('.signin-dropdown > .dropdown-toggle').click();
   cy.get('#inputUsername').type('mdv');
@@ -31,10 +14,19 @@ Cypress.Commands.add('login', () => {
   cy.get(".signin-dropdown > .dropdown-menu [type='submit']").click();
 });
 
-declare global {
-  namespace Cypress {
-    interface Chainable<T> {
-      login(): Chainable<void>;
+/**
+ * Accept cookies, if the button is present. Should be conditional, otherwise cypress fails on not finding the button, 
+ * which happens if the session has already accepted the cookie in a previous test.
+ */
+Cypress.Commands.add('acceptCookies', () => {
+  cy.get('body').then(($body) => {
+    var selector = 'button[data-ng-click="acceptCookies()"]';
+    if($body.find(selector).length > 0) {
+      cy.get(selector).then($button => {
+        if($button.is(':visible')) {
+          cy.get(selector).click();
+        }
+      });
     }
-  }
-}
+  });
+});

@@ -25,3 +25,8 @@ npm run up
 ```
 
 This will start up all relevant services (dummy geonetwork for now), wait until geonetwork responds, then run tests in `e2e/cypress/e2e`
+
+
+# Add custom command
+
+Custom commands like `login()` are added in the `commands.ts` file. Also modify `cypress.d.ts` to make sure their definitions are properly defined and can be type checked.

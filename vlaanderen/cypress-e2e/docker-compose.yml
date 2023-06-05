@@ -8,7 +8,7 @@ services:
       geonetwork-reindexer:
         condition: service_completed_successfully
     environment:
-      - CYPRESS_baseUrl=http://geonetwork:8080/geonetwork
+      - CYPRESS_baseUrl=http://geonetwork:8080
     command: npx cypress run --browser chrome
     # mount the host directory e2e/cypress and the file e2e/cypress.config.ts as
     # volumes within the container
@@ -21,6 +21,7 @@ services:
     volumes:
       - ./cypress:/app/cypress
       - ./cypress.config.ts:/app/cypress.config.ts
+      - ./cypress.d.ts:/app/cypress.d.ts
       - ./tsconfig.json:/app/tsconfig.json
 
   database:
