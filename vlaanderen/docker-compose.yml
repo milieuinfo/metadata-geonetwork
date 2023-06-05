@@ -1,22 +1,18 @@
 version: '3.8'
 
-volumes:
-  geonetwork:
-  esdata:
-  pgdata:
-  pglog:
-  nginxlog:
-  apachelog:
-
 services:
   database:
-    image: postgres:15.0
+    image: postgres:15.3
     restart: always
     environment:
       POSTGRES_PASSWORD: geonetwork
       POSTGRES_USER: geonetwork
       POSTGRES_DB: geonetwork
-      PGDATA: /var/lib/postgresql/data/geonetwork
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     command: [ "postgres",
                "-c", "log_statement=all",
                "-c", "logging_collector=true",
@@ -24,18 +20,47 @@ services:
                "-c", "log_directory=/var/log/postgresql",
                "-c", "log_filename=postgresql.log" ]
     volumes:
-      - pgdata:/var/lib/postgresql/data/geonetwork
-      - pglog:/var/log/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  liquibase:
+    image: maven
+    depends_on:
+      database:
+        condition: service_healthy
+    working_dir: /liquibase
+    volumes:
+      - ../liquibase:/liquibase
+    # Command to run the liquibase update service
+    command: mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
+
+  geonetwork-reindexer:
+    image: metadata/geonetwork-reindexer
+    depends_on:
+      geonetwork:
+        condition: service_healthy
+    build:
+      context: geonetwork-reindexer
+      dockerfile: Dockerfile
 
   geonetwork:
     image: metadata/geonetwork
-    profiles: [ "full" ]
     build:
-      context: web/
+      context: ../web/
       dockerfile: Dockerfile
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
     restart: always
+    healthcheck:
+      test: "curl -f http://localhost:8080/"
+      interval: 5s
+      timeout: 5s
+      retries: 20
     environment:
-      DATA_DIR: /geonetwork-data
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
@@ -44,27 +69,29 @@ services:
         -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
       ES_HOST: elasticsearch
-      ES_PROTOCOL: http
       ES_PORT: 9200
-
-      KB_URL: http://kibana:5601
-
-      GEONETWORK_DB_TYPE: postgres
+      ES_PROTOCOL: http
       GEONETWORK_DB_HOST: database
-      GEONETWORK_DB_PORT: 5432
       GEONETWORK_DB_NAME: geonetwork
-      GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_DB_PASSWORD: geonetwork
-
+      GEONETWORK_DB_PORT: 5432
+      GEONETWORK_DB_TYPE: postgres
+      GEONETWORK_DB_USERNAME: geonetwork
       GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
-    volumes:
-      - geonetwork:/geonetwork-data
-    depends_on:
-      - elasticsearch
-      - database
+      GEONETWORK_WEBBAPP_CONTEXTPATH: /
 
   ogc-api-records-service:
     image: geonetwork/gn-cloud-ogc-api-records-service:0.2.0
+    depends_on:
+      liquibase:
+        condition: service_completed_successfully
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"
+      interval: 10s
+      timeout: 2s
+      retries: 10
     environment:
       SPRING_PROFILES_ACTIVE: standalone
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
@@ -74,10 +101,6 @@ services:
       GN_LEGACY_URL: http://geonetwork:8080/geonetwork
       GN_INDEX_URL: http://elasticsearch:9200
       SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
-
-    depends_on:
-      - database
-      - elasticsearch
 
   elasticsearch:
     # TODO: upgrade elasticsearch to latest v7
@@ -89,19 +112,11 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    healthcheck:
+      test: "curl -s http://localhost:9200 >/dev/null || exit 1"
+      interval: 10s
+      timeout: 2s
+      retries: 10
     environment:
       ES_JAVA_OPTS: "-Xms1G -Xmx1G"
       discovery.type: single-node
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-
-  kibana:
-    # TODO: upgrade kibana
-    image: kibana:7.11.1
-    environment:
-      SERVER_NAME: 'kibana'
-      ELASTICSEARCH_URL: http://elasticsearch:9200/
-      SERVER_BASEPATH: /geonetwork/dashboards
-      SERVER_REWRITEBASEPATH: 'false'
-      KIBANA_INDEX: .dashboards
-      XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: 'true'
