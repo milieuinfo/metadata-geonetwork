@@ -79,6 +79,11 @@ jobs:
           testResultsFiles: '**/surefire-reports/TEST-*.xml'
           goals: 'clean install'
           options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: 'web/target/geonetwork.war'
+          ArtifactName: 'geonetwork.war'
+          publishLocation: 'Container'
       - task: Docker@2
         displayName: Build web image and push to preprod container registry (premdacr)
         inputs:
