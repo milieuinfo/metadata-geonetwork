@@ -39,15 +39,18 @@
   <xsl:include href="../iso19139/convert/functions.xsl"/>
   <xsl:include href="update-fixed-info-keywords.xsl"/>
   <xsl:include href="layout/utility-fn.xsl"/>
-  <xsl:include href="update-fixed-info-vl.xsl"/>
-
 
 
   <xsl:variable name="serviceUrl" select="/root/env/siteURL"/>
   <xsl:variable name="node" select="/root/env/node"/>
+  <xsl:variable name="nodeType" select="/root/env/nodeType"/>
 
   <xsl:variable name="schemaLocationFor2007"
                 select="'http://www.isotc211.org/2005/gmd http://schemas.opengis.net/csw/2.0.2/profiles/apiso/1.0.0/apiso.xsd'"/>
+
+  <xsl:variable name="metadataStandardNameForDatasetAndSeries">ISO 19115/2003/Cor.1:2006/INSPIRE-TG2.0</xsl:variable>
+  <xsl:variable name="metadataStandardNameForService">ISO 19119:2005/Amd 1:2008/INSPIRE-TG2.0</xsl:variable>
+  <xsl:variable name="metadataStandardVersion">GDI-Vlaanderen Best Practices - versie 2.0</xsl:variable>
 
   <!-- Try to determine if using the 2005 or 2007 version
   of ISO19139. Based on this GML 3.2.0 or 3.2.1 is used.
@@ -59,19 +62,18 @@
   * ISO19139:2005 (not recommended)
   <xsl:variable name="isUsing2005Schema" select="true()"/>
   -->
-  <!--xsl:variable name="isUsing2005Schema"
-                select="(/root/gmd:MD_Metadata/@xsi:schemaLocation
-                          and /root/gmd:MD_Metadata/@xsi:schemaLocation != $schemaLocationFor2007)
-                        or
-                        count(//gml320:*) > 0"/-->
+  <!--<xsl:variable name="isUsing2005Schema"-->
+  <!--              select="(/root/gmd:MD_Metadata/@xsi:schemaLocation-->
+  <!--                        and /root/gmd:MD_Metadata/@xsi:schemaLocation != $schemaLocationFor2007)-->
+  <!--                      or-->
+  <!--                      count(//gml320:*) > 0"/>-->
 
   <!-- This variable is used to migrate from 2005 to 2007 version.
   By setting the schema location in a record, on next save, the record
   will use GML3.2.1.-->
-  <!--xsl:variable name="isUsing2007Schema"
-                select="/root/gmd:MD_Metadata/@xsi:schemaLocation
-                          and /root/gmd:MD_Metadata/@xsi:schemaLocation = $schemaLocationFor2007"/-->
-
+  <!--<xsl:variable name="isUsing2007Schema"-->
+  <!--              select="/root/gmd:MD_Metadata/@xsi:schemaLocation-->
+  <!--                        and /root/gmd:MD_Metadata/@xsi:schemaLocation = $schemaLocationFor2007"/>-->
   <xsl:variable name="isUsing2005Schema" select="true()"/>
   <xsl:variable name="isUsing2007Schema" select="false()"/>
 
@@ -82,11 +84,9 @@
 
   <!-- The default language is also added as gmd:locale
   for multilingual metadata records. -->
-  <xsl:variable name="mainLanguage">
-    <xsl:call-template name="langId_from_gmdlanguage19139">
-      <xsl:with-param name="gmdlanguage" select="/root/*/gmd:language"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:variable name="mainLanguage"
+                select="/root/*/gmd:language/gco:CharacterString/text()|
+                        /root/*/gmd:language/gmd:LanguageCode/@codeListValue"/>
 
   <xsl:variable name="isMultilingual"
                 select="count(/root/*/gmd:locale[*/gmd:languageCode/*/@codeListValue != $mainLanguage]) > 0"/>
@@ -156,8 +156,6 @@
         </xsl:otherwise>
       </xsl:choose>
 
-      <xsl:apply-templates select="@*"/>
-
       <gmd:fileIdentifier>
         <gco:CharacterString>
           <xsl:value-of select="/root/env/uuid"/>
@@ -195,15 +193,13 @@
         <gmd:locale>
           <gmd:PT_Locale id="{$mainLanguageId}">
             <gmd:languageCode>
-              <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/"
+              <gmd:LanguageCode codeList="https://www.loc.gov/standards/iso639-2/"
                                 codeListValue="{$mainLanguage}"/>
             </gmd:languageCode>
             <gmd:characterEncoding>
-              <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_CharacterSetCode"
+              <gmd:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_CharacterSetCode"
                                        codeListValue="{$defaultEncoding}"/>
             </gmd:characterEncoding>
-            <!-- Apply country if it exists.  -->
-            <xsl:apply-templates select="gmd:locale/gmd:PT_Locale[gmd:languageCode/*/@codeListValue = $mainLanguage]/gmd:country"/>
           </gmd:PT_Locale>
         </gmd:locale>
       </xsl:if>
@@ -237,16 +233,10 @@
 
   <!-- ================================================================= -->
 
-  <xsl:template match="gmd:dateStamp">
+  <xsl:template match="gmd:dateStamp" priority="2000">
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
-        <xsl:copy>
-          <!--<gco:DateTime>
-            <xsl:value-of select="/root/env/changeDate"/>
-          </gco:DateTime>-->
-          <!-- VL / Force dateStamp to be
-           as defined in ISO PDF document
-           even if not the case in XSDs. -->
+        <xsl:copy copy-namespaces="no">
           <gco:Date>
             <xsl:value-of select="format-dateTime(/root/env/changeDate,'[Y0001]-[M01]-[D01]')"/>
           </gco:Date>
@@ -260,11 +250,81 @@
 
   <!-- ================================================================= -->
 
+  <!-- Set the required hierarchyLevelName for dataset, service and series, see TG 2.0 -->
+
+  <!-- Remove gmd:hierarchyLevelName for gmd:MD_ScopeCode with codeListValue dataset, series and service -->
+  <xsl:template match="gmd:hierarchyLevelName[lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue)=('dataset','series','service')]" priority="100"/>
+
+  <!-- Change gmd:hierarchyLevelName -->
+  <xsl:template match="gmd:hierarchyLevel[lower-case(gmd:MD_ScopeCode/@codeListValue)=('dataset','series','service')]">
+    <xsl:copy copy-namespaces="no">
+      <gmd:MD_ScopeCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_ScopeCode" codeListValue="{lower-case(gmd:MD_ScopeCode/@codeListValue)}"/>
+    </xsl:copy>
+    <xsl:variable name="hierarchyLevelNameValue">
+      <xsl:choose>
+        <xsl:when test="lower-case(gmd:MD_ScopeCode/@codeListValue) = 'dataset'">Dataset</xsl:when>
+        <xsl:when test="lower-case(gmd:MD_ScopeCode/@codeListValue) = 'series'">Datasetserie</xsl:when>
+        <xsl:when test="lower-case(gmd:MD_ScopeCode/@codeListValue) = 'service'">Dienst</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <gmd:hierarchyLevelName>
+      <gco:CharacterString><xsl:value-of select="$hierarchyLevelNameValue" /></gco:CharacterString>
+    </gmd:hierarchyLevelName>
+  </xsl:template>
+
+  <!-- Set the required metadataStandardName and metadataStandardVersion for dataset and series, see TG 2.0 -->
+
+  <!-- Change elements -->
+  <xsl:template match="gmd:metadataStandardName[$nodeType='Metadatacenter' and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="100">
+    <xsl:copy copy-namespaces="no">
+      <gco:CharacterString><xsl:value-of select="$metadataStandardNameForDatasetAndSeries" /></gco:CharacterString>
+    </xsl:copy>
+    <xsl:if test="count(../gmd:metadataStandardVersion)=0">
+      <gmd:metadataStandardVersion>
+        <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+      </gmd:metadataStandardVersion>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="gmd:metadataStandardVersion[$nodeType='Metadatacenter' and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="100">
+    <xsl:if test="count(../gmd:metadataStandardName)=0">
+      <gmd:metadataStandardName>
+        <gco:CharacterString><xsl:value-of select="$metadataStandardNameForDatasetAndSeries" /></gco:CharacterString>
+      </gmd:metadataStandardName>
+    </xsl:if>
+    <xsl:copy copy-namespaces="no">
+      <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+    </xsl:copy>
+  </xsl:template>
+
+
+  <xsl:template match="gmd:metadataStandardName[$nodeType='Metadatacenter' and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="1000">
+    <xsl:copy copy-namespaces="no">
+      <gco:CharacterString><xsl:value-of select="$metadataStandardNameForService" /></gco:CharacterString>
+    </xsl:copy>
+    <xsl:if test="count(../gmd:metadataStandardVersion)=0">
+      <gmd:metadataStandardVersion>
+        <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+      </gmd:metadataStandardVersion>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="gmd:metadataStandardVersion[$nodeType='Metadatacenter' and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="1000">
+    <xsl:if test="count(../gmd:metadataStandardName)=0">
+      <gmd:metadataStandardName>
+        <gco:CharacterString><xsl:value-of select="$metadataStandardNameForService" /></gco:CharacterString>
+      </gmd:metadataStandardName>
+    </xsl:if>
+    <xsl:copy copy-namespaces="no">
+      <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Only set metadataStandardName and metadataStandardVersion
     if not set. -->
-  <xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']"
+  <!--xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']"
                 priority="10">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <gco:CharacterString>ISO 19115:2003/19139</gco:CharacterString>
     </xsl:copy>
   </xsl:template>
@@ -272,32 +332,38 @@
   <xsl:template
     match="gmd:metadataStandardVersion[@gco:nilReason='missing' or gco:CharacterString='']"
     priority="10">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <gco:CharacterString>1.0</gco:CharacterString>
     </xsl:copy>
-  </xsl:template>
+  </xsl:template-->
 
-  <xsl:template match="@gml:id|@gml320:id">
-    <xsl:choose>
-      <xsl:when test="normalize-space(.)=''">
-        <xsl:attribute name="gml:id"
-                       namespace="{if($isUsing2005Schema)
-                                 then 'http://www.opengis.net/gml'
-                                 else 'http://www.opengis.net/gml/3.2'}">
-          <xsl:value-of select="generate-id(.)"/>
-        </xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:copy-of select="."/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <!-- ================================================================= -->
+
+  <xsl:template
+    match="gmd:topicCategory[not(gmd:MD_TopicCategoryCode)]"
+    priority="10" />
+
+  <!-- ================================================================= -->
+
+  <xsl:template match="@gml:id|@gml320:id" priority="1000">
+    <xsl:attribute name="gml:id" namespace="{if ($isUsing2005Schema and not($isUsing2007Schema)) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
+      <xsl:variable name="idValue">
+        <xsl:choose>
+          <xsl:when test="normalize-space(.)=''">
+            <xsl:value-of select="generate-id(.)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:value-of select="$idValue"/>
+    </xsl:attribute>
   </xsl:template>
 
   <!-- ==================================================================== -->
   <!-- Fix srsName attribute generate CRS:84 (EPSG:4326 with long/lat
          ordering) by default -->
-
-  <xsl:template match="gml:LinearRing/@srsName|gml320:LinearRing/@srsName"/>
 
   <xsl:template match="@srsName">
     <xsl:choose>
@@ -312,48 +378,21 @@
     </xsl:choose>
   </xsl:template>
 
-
   <!-- Add required gml attributes if missing -->
-  <xsl:template match="gml:TimePeriod[not(@gml:id)]|
-                       gml320:TimePeriod[not(@gml:id)]|
-                       gml:Polygon[not(@gml:id) or not(@srsName)]|
-                       gml:MultiSurface[not(@gml:id) or not(@srsName)]|
-                       gml:LineString[not(@gml:id) or not(@srsName)]|
-                       gml320:Polygon[not(@gml320:id) or not(@srsName)]|
-                       gml320:MultiSurface[not(@gml:id) or not(@srsName)]|
-                       gml320:LineString[not(@gml:id) or not(@srsName)]">
-    <xsl:element name="gml:{local-name()}"
-                 namespace="{if($isUsing2005Schema)
-                             then 'http://www.opengis.net/gml'
-                             else 'http://www.opengis.net/gml/3.2'}">
-
-      <xsl:attribute name="gml:id"
-                     namespace="{if($isUsing2005Schema)
-                                 then 'http://www.opengis.net/gml'
-                                 else 'http://www.opengis.net/gml/3.2'}">
-        <xsl:value-of select="if (@gml:id != '')
-                              then @gml:id
-                              else if (@gml320:id != '')
-                              then @gml320:id
-                              else generate-id(.)"/>
+  <xsl:template match="gml:Polygon[not(@gml:id) and not(@srsName)]|
+                       gml:MultiSurface[not(@gml:id) and not(@srsName)]|
+                       gml:LineString[not(@gml:id) and not(@srsName)]|
+                       gml320:Polygon[not(@gml320:id) and not(@srsName)]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:attribute name="gml:id" namespace="{if ($isUsing2005Schema and not($isUsing2007Schema)) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
+        <xsl:value-of select="generate-id(.)"/>
       </xsl:attribute>
-      <xsl:if test="local-name(.) != 'TimePeriod'">
-        <xsl:attribute name="srsName">
-          <xsl:value-of select="if (@srsName != '') then @srsName else 'urn:ogc:def:crs:EPSG:6.6:4326'"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:copy-of select="@*[name() != 'srsName' and local-name() != 'id']"/>
+      <xsl:attribute name="srsName">
+        <xsl:text>urn:ogc:def:crs:EPSG:6.6:4326</xsl:text>
+      </xsl:attribute>
+      <xsl:copy-of select="@*"/>
       <xsl:apply-templates select="*"/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="gml:*|gml320:*">
-    <xsl:element name="gml:{local-name()}"
-                 namespace="{if($isUsing2005Schema)
-                             then 'http://www.opengis.net/gml'
-                             else 'http://www.opengis.net/gml/3.2'}">
-      <xsl:apply-templates select="@*|*"/>
-    </xsl:element>
+    </xsl:copy>
   </xsl:template>
 
   <!-- INSPIRE / TG2 / Require nilReason attribute to be
@@ -368,7 +407,7 @@
 
 
   <xsl:template match="*[gco:CharacterString|gmx:Anchor|gmd:PT_FreeText]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*[not(name() = 'gco:nilReason') and not(name() = 'xsi:type')]"/>
 
       <!-- Add nileason if text is empty -->
@@ -466,29 +505,20 @@
             </xsl:when>
             <xsl:otherwise>
 
-              <!-- Populate PT_FreeText for default language if not existing and it is not null. -->
+              <!-- Populate PT_FreeText for default language if not existing. -->
               <xsl:apply-templates select="gco:CharacterString|gmx:Anchor"/>
-              <!-- only put this in if there's stuff to put in, otherwise we get a <gmd:PT_FreeText/> in output -->
-              <xsl:if test="(normalize-space(gco:CharacterString|gmx:Anchor) != '') or gmd:PT_FreeText">
-                <gmd:PT_FreeText>
-                  <xsl:if test="normalize-space(gco:CharacterString|gmx:Anchor) != ''"> <!-- default lang-->
-                    <gmd:textGroup>
-                      <gmd:LocalisedCharacterString locale="#{$mainLanguageId}">
-                        <xsl:value-of select="gco:CharacterString|gmx:Anchor"/>
-                      </gmd:LocalisedCharacterString>
-                    </gmd:textGroup>
-                  </xsl:if>
-                  <xsl:call-template name="populate-free-text"/> <!-- other langs -->
-                </gmd:PT_FreeText>
-              </xsl:if>
+              <gmd:PT_FreeText>
+                <gmd:textGroup>
+                  <gmd:LocalisedCharacterString locale="#{$mainLanguageId}">
+                    <xsl:value-of select="gco:CharacterString"/>
+                  </gmd:LocalisedCharacterString>
+                </gmd:textGroup>
+                <xsl:call-template name="populate-free-text"/>
+              </gmd:PT_FreeText>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
-
-      <!-- Apply other elements that we are not handling in this template -->
-      <xsl:apply-templates select="node()[not(self::gco:CharacterString|self::gmx:Anchor|self::gmd:PT_FreeText)]"/>
-
     </xsl:copy>
   </xsl:template>
 
@@ -517,43 +547,53 @@
   <!-- codelists: set @codeList path -->
   <!-- ================================================================= -->
   <xsl:template match="gmd:LanguageCode[@codeListValue]" priority="10">
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/">
+    <gmd:LanguageCode codeList="https://www.loc.gov/standards/iso639-2/">
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
-
-      <xsl:if test="normalize-space(./text()) != '' and string(@codeListValue)">
-        <xsl:value-of select="java:getIsoLanguageLabel(@codeListValue, $mainLanguage)" />
-        <!--
-             If wanting to get strings from codelists then add gmd:LanguageCode codelist in loc/{lang}/codelists.xml
-             and use getCodelistTranslation instead of getIsoLanguageLabel. This will allow for custom values such as "eng; USA"
-             i.e.
-             <xsl:value-of select="java:getCodelistTranslation(name(), string(@codeListValue), string($mainLanguage))"/>
-        -->
-      </xsl:if>
+      <!-- Keep the translation for the codeListValue attribute in the xml if exists, see TG 2.0 -->
+      <xsl:apply-templates select="node()"/>
     </gmd:LanguageCode>
   </xsl:template>
 
+  <!--  only accept the pointOfContact role code for a gmd:contact element -->
+  <xsl:template match="gmd:role[name(../..)='gmd:contact']" priority="100">
+    <gmd:role>
+      <gmd:CI_RoleCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact"/>
+    </gmd:role>
+  </xsl:template>
 
   <xsl:template match="gmd:*[@codeListValue]">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
-          select="concat('http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#',local-name(.))"/>
+          select="concat('https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#',local-name(.))"/>
+      </xsl:attribute>
+      <!-- Keep the translation for the codeListValue attribute in the xml if exists and when required, see TG 2.0 -->
+      <xsl:apply-templates select="node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="srv:SV_CouplingType[@codeListValue]|srv:DCPList[@codeListValue]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*[name(.)!='codeList']"/>
+      <xsl:attribute name="codeList">
+        <xsl:value-of
+          select="concat('https://standards.iso.org/iso/19115/resources/Codelists/gml/',local-name(.),'.xml')"/>
       </xsl:attribute>
     </xsl:copy>
   </xsl:template>
 
   <!-- can't find the location of the 19119 codelists - so we make one up -->
 
-  <xsl:template match="srv:*[@codeListValue]">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
+  <!--xsl:template match="srv:*[@codeListValue]">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
           select="concat('http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#',local-name(.))"/>
       </xsl:attribute>
     </xsl:copy>
-  </xsl:template>
+  </xsl:template-->
 
   <!-- ================================================================= -->
 
@@ -563,15 +603,15 @@
         error on XSD validation. -->
 
   <xsl:template match="srv:operatesOn|gmd:featureCatalogueCitation">
-    <xsl:copy>
-      <xsl:copy-of select="@*[name() != 'xlink:href']"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:copy-of select="@uuidref"/>
       <xsl:choose>
+
         <!-- Do not expand operatesOn sub-elements when using uuidref
              to link service metadata to datasets or datasets to iso19110.
          -->
-        <xsl:when test="@uuidref or @xlink:href">
-          <xsl:choose>
-            <!-- Build xlink for internal records -->
+        <xsl:when test="@uuidref">
+          <!--xsl:choose>
             <xsl:when test="not(string(@xlink:href)) or starts-with(@xlink:href, $serviceUrl)">
               <xsl:attribute name="xlink:href">
                 <xsl:value-of
@@ -579,10 +619,10 @@
               </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-              <!-- Preserve existing -->
               <xsl:copy-of select="@xlink:href"/>
             </xsl:otherwise>
-          </xsl:choose>
+          </xsl:choose-->
+          <xsl:copy-of select="@xlink:href"/>
         </xsl:when>
 
         <xsl:otherwise>
@@ -682,32 +722,12 @@
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <xsl:template name="correct_ns_prefix_with_namespace">
-    <xsl:param name="element"/>
-    <xsl:param name="prefix"/>
-    <xsl:param name="namespace"/>
-
-    <xsl:choose>
-      <xsl:when test="local-name($element)=name($element) and $prefix != '' ">
-        <xsl:element name="{$prefix}:{local-name($element)}" namespace="{$namespace}">
-          <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:copy>
-          <xsl:apply-templates select="@*|node()"/>
-        </xsl:copy>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
 
   <xsl:template match="gmd:*">
     <xsl:call-template name="correct_ns_prefix">
@@ -723,24 +743,25 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!-- Move to GML 3.2.1 when using 2007 version. -->
-  <xsl:template match="gml320:*[$isUsing2007Schema]">
-    <xsl:element name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2">
+  <xsl:template match="gml320:*|gml:*">
+    <xsl:element name="gml:{local-name()}" namespace="{if ($isUsing2005Schema and not($isUsing2007Schema)) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:element>
   </xsl:template>
-  <xsl:template match="@gml320:*[$isUsing2007Schema]">
-    <xsl:attribute name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2" select="."/>
+
+  <xsl:template match="@gml320:*|@gml:*">
+    <xsl:attribute name="gml:{local-name()}" namespace="{if ($isUsing2005Schema and not($isUsing2007Schema)) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="gml:*|gml320:*">
-    <xsl:call-template name="correct_ns_prefix_with_namespace">
-      <xsl:with-param name="element" select="."/>
-      <xsl:with-param name="prefix"
-                      select="'gml'"/>
-      <xsl:with-param name="namespace"
-                      select="if($isUsing2005Schema) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'"/>
-    </xsl:call-template>
+  <!-- Only gmd:referenceSystemIdentifier can have a gmd:RS_Identifier child element, all other RS_Identifier elements
+        must be transformed to a MD:Identifier and existing child elements gmd:codeSpace and gmd:version must be removed -->
+  <xsl:template match="gmd:RS_Identifier[not(name(..)='gmd:referenceSystemIdentifier')]" priority="100">
+    <gmd:MD_Identifier>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="*[not(name(.)='gmd:codeSpace' or name(.)='gmd:version')]"/>
+    </gmd:MD_Identifier>
   </xsl:template>
 
   <!-- ================================================================= -->
@@ -748,7 +769,7 @@
 
   <!-- DCP codelist -->
   <xsl:template match="srv:DCP[$isSDS]/srv:DCPList[@codeListValue]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="codeList">
         <xsl:value-of select="'http://inspire.ec.europa.eu/metadata-codelist/DCPList'"/>
@@ -758,26 +779,61 @@
 
 
   <!-- Remove geographic/temporal extent if doesn't contain child elements.
-       Used to clean up the element, for example when removing the temporal extent
+       Used to clean up the element, for example when removing the the temporal extent
        in the editor, to avoid an element like <gmd:extent><gmd:EX_Extent></gmd:EX_Extent></gmd:extent>,
        that causes a validation error in schematron iso: [ISOFTDS19139:2005-TableA1-Row23] - Extent element required
   -->
   <xsl:template match="gmd:extent[gmd:EX_Extent/not(*)]|srv:extent[gmd:EX_Extent/not(*)]"/>
 
 
-  <!-- Remove empty boolean  and set gco:nilReason='unknown' -->
-  <xsl:template match="*[gco:Boolean and not(string(gco:Boolean))]">
-    <xsl:copy>
-      <xsl:copy-of select="@*[name() != 'gco:nilReason']" />
-      <xsl:attribute name="gco:nilReason">unknown</xsl:attribute>
+  <xsl:template match="gmd:dateTime" priority="200">
+    <xsl:variable name="child" select="gco:Date|gco:DateTime"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:if test="normalize-space($child) = ''">
+        <xsl:attribute name="gco:nilReason" select="'missing'"/>
+      </xsl:if>
+      <xsl:if test="not(normalize-space($child) = '')">
+        <gco:DateTime>
+          <xsl:value-of select="$child"/>
+        </gco:DateTime>
+      </xsl:if>
     </xsl:copy>
   </xsl:template>
 
-  <!-- Remove gco:nilReason if not empty boolean -->
-  <xsl:template match="*[string(gco:Boolean)]">
-    <xsl:copy>
-      <xsl:copy-of select="@*[name() != 'gco:nilReason']" />
-      <xsl:apply-templates select="*" />
+  <xsl:template match="*[gco:DateTime]" priority="100">
+    <xsl:variable name="child" select="gco:DateTime"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:if test="normalize-space($child) = ''">
+        <xsl:attribute name="gco:nilReason" select="'missing'"/>
+      </xsl:if>
+      <xsl:if test="not(normalize-space($child) = '')">
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*[gco:Date]" priority="100">
+    <xsl:variable name="child" select="gco:Date"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:if test="normalize-space($child) = ''">
+        <xsl:attribute name="gco:nilReason" select="'missing'"/>
+      </xsl:if>
+      <xsl:if test="not(normalize-space($child) = '')">
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="gmd:pass" priority="100">
+    <xsl:copy copy-namespaces="no">
+      <xsl:choose>
+        <xsl:when test="not(gco:Boolean) or normalize-space(gco:Boolean) = ''">
+          <xsl:attribute name="gco:nilReason" select="'unknown'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="@*[not(name() = 'gco:nilReason')]|*"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:copy>
   </xsl:template>
 
@@ -785,7 +841,7 @@
   <!-- copy everything else as is -->
 
   <xsl:template match="@*|node()">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
@@ -796,14 +852,4 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- Force element with DateTime_PropertyType to have gco:DateTime -->
-  <xsl:template match="gmd:dateTime|gmd:plannedAvailableDateTime|gmd:usageDateTime"
-                priority="200">
-    <xsl:variable name="value" select="gco:Date|gco:DateTime" />
-    <xsl:copy>
-      <gco:DateTime>
-        <xsl:value-of select="$value" /><xsl:if test="string-length($value) = 10">T00:00:00</xsl:if>
-      </gco:DateTime>
-    </xsl:copy>
-  </xsl:template>
 </xsl:stylesheet>

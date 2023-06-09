@@ -1421,6 +1421,11 @@
       <description>Data wordt momenteel gecre&#233;erd.</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <entry hideInEditMode="true">
+      <code>notobsolete</code>
+      <label>Not obsolete</label>
+      <description></description>
+    </entry>
   </codelist>
   <!-- ==================================================== -->
   <codelist name="gmd:MD_RestrictionCode">
@@ -1624,7 +1629,22 @@
       <label>Interactive map</label>
       <description></description>
     </entry>
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <entry hideInEditMode="true">
+      <code>featureCatalog</code>
+      <label>Feature catalog</label>
+      <description></description>
+    </entry>
+  </codelist>
+  <codelist name="gmd:MD_ScopeCode"
+            displayIf="/ancestor::node()[name()='gmd:MD_Metadata']/gmd:identificationInfo/srv:SV_ServiceIdentification">
+    <entry>
+      <code>service</code>
+      <label>Service</label>
+      <description>Information applies to a capability which a service provider entity makes
+        available to a service user entity through a set of interfaces that define a behaviour,
+        such as a use case
+      </description>
+    </entry>
   </codelist>
   <!-- ==================================================== -->
   <codelist name="gmd:MD_SpatialRepresentationTypeCode">
@@ -2154,26 +2174,24 @@
       <label>WebServices</label>
     </entry>
     <entry>
-      <code>httpGet</code>
-      <label>httpGet</label>
-      <description>Vraagt een representatie van de specifieke resource, door middel van een URL
-        codering of naam/waarde paar.
-      </description>
+      <description>DCP is SOAP</description>
+      <code>SOAP</code>
+      <label>SOAP</label>
     </entry>
     <entry>
-      <code>httpPost</code>
-      <label>httpPost</label>
-      <description>Verzend gebruikersdata naar de ge&#239;dentificeerde resource. De data is
-        opgenomen in de "request".
-      </description>
+      <description>DCP is Z3950</description>
+      <code>Z3950</code>
+      <label>Z3950</label>
     </entry>
     <entry>
-      <code>httpSoap</code>
-      <label>httpSoap</label>
-      <description>Verzend gebruikersdata naar de ge&#239;dentificeerde resource over httpPost. De
-        data is opgenomen
-        in de "request". Deze "request" is een "SOAP request".
-      </description>
+      <description>DCP is HTTP</description>
+      <code>HTTP</code>
+      <label>HTTP</label>
+    </entry>
+    <entry>
+      <description>DCP is FTP</description>
+      <code>FTP</code>
+      <label>FTP</label>
     </entry>
   </codelist>
   <!--=== CouplingType from ISO19119 ===-->
