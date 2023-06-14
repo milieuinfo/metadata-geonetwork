@@ -2,9 +2,9 @@
 # watch the frontend files for modification and update the deployment when they change
 
 # the folder to copy from and to keep watch on
-SOURCE=../web-ui/src/main/resources/catalog
+SOURCE=../../web-ui/src/main/resources/catalog
 # the folder to which the new files are being copied
-TARGET=../web/target/geonetwork/catalog
+TARGET=../../web/target/geonetwork/catalog
 
 # account to perform admin-level management
 ADMIN_USER=mdv
