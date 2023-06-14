@@ -89,6 +89,11 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
     IMetadataUtils metadataUtils;
 
     private ServiceContext context;
+    private Set<String> listOfStatusToTriggerDraftCreation = Sets.newHashSet(
+        StatusValue.Status.APPROVED,
+        StatusValue.Status.SUBMITTED_FOR_REMOVED,
+        StatusValue.Status.SUBMITTED_FOR_RETIRED,
+        StatusValue.Status.RETIRED);
 
     public void init(ServiceContext context, Boolean force) throws Exception {
         this.context = context;
@@ -408,7 +413,7 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
     /**
      * Start an editing session. This will record the original metadata record in
      * the session under the
-     * {@link org.fao.geonet.constants.Geonet.Session#METADATA_BEFORE_ANY_CHANGES} +
+     * {@link Geonet.Session#METADATA_BEFORE_ANY_CHANGES} +
      * id session property.
      * <p>
      * The record contains geonet:info element.
@@ -434,12 +439,8 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
             Log.trace(Geonet.DATA_MANAGER, "Editing draft with id " + id);
         } else if (isMdWorkflowEnable
             && (context.getBean(IMetadataManager.class) instanceof DraftMetadataManager)
-            && Sets.newHashSet(
-                StatusValue.Status.APPROVED,
-                StatusValue.Status.SUBMITTED_FOR_REMOVED,
-                StatusValue.Status.SUBMITTED_FOR_RETIRED,
-                StatusValue.Status.RETIRED)
-            .contains(metadataStatus.getCurrentStatus(Integer.parseInt(id)))
+            && listOfStatusToTriggerDraftCreation.contains(
+                metadataStatus.getCurrentStatus(Integer.parseInt(id)))
         ) {
             id = createDraft(context, id, md);
 
@@ -650,7 +651,7 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
 
                 // --- remove metadata
                 xmlSerializer.delete(id, ServiceContext.get());
-                searchManager.delete(id);
+                searchManager.delete(String.format("+id:%s", id));
 
                 // Unset METADATA_EDITING_CREATED_DRAFT flag
                 context.getUserSession().removeProperty(Geonet.Session.METADATA_EDITING_CREATED_DRAFT);
@@ -681,4 +682,11 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
         }
     }
 
+    public void setListOfStatusCreatingDraft(Set<String> listOfStatusCreatingDraft) {
+        this.listOfStatusToTriggerDraftCreation = listOfStatusCreatingDraft;
+    }
+
+    public Set<String> getListOfStatusCreatingDraft() {
+        return listOfStatusToTriggerDraftCreation;
+    }
 }

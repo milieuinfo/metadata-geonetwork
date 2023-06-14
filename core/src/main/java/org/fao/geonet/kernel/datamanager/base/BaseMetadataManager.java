@@ -361,7 +361,7 @@ public class BaseMetadataManager implements IMetadataManager {
         ApplicationContextHolder.get().publishEvent(preRemoveEvent);
 
         if (metadata.getDataInfo().getType() != MetadataType.SUB_TEMPLATE
-                && metadata.getDataInfo().getType() != MetadataType.TEMPLATE_OF_SUB_TEMPLATE && withBackup) {
+            && metadata.getDataInfo().getType() != MetadataType.TEMPLATE_OF_SUB_TEMPLATE && withBackup) {
             MEFLib.backupRecord(metadata, context);
         }
 
@@ -373,8 +373,8 @@ public class BaseMetadataManager implements IMetadataManager {
         store.delResources(context, metadata.getUuid(), approved);
 
         RecordDeletedEvent recordDeletedEvent = new RecordDeletedEvent(
-                metadata.getId(), metadata.getUuid(), new LinkedHashMap<>(),
-                context.getUserSession().getUserIdAsInt(), metadata.getData());
+            metadata.getId(), metadata.getUuid(), new LinkedHashMap<>(),
+            context.getUserSession().getUserIdAsInt(), metadata.getData());
         deleteMetadata(context, metadataId);
         recordDeletedEvent.publish(ApplicationContextHolder.get());
     }
@@ -433,7 +433,7 @@ public class BaseMetadataManager implements IMetadataManager {
 
             xml = duplicateMetadata(schema, xml, context);
         } else if (type == MetadataType.SUB_TEMPLATE
-                || type == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) {
+            || type == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) {
             xml.setAttribute("uuid", uuid);
         }
 
@@ -1022,12 +1022,12 @@ public class BaseMetadataManager implements IMetadataManager {
             result.addContent(env);
             // apply update-fixed-info.xsl
             Path styleSheet = metadataSchemaUtils.getSchemaDir(schema).resolve(
-                    metadata != null
-                            && (
-                            metadata.getDataInfo().getType() == MetadataType.SUB_TEMPLATE
-                                    || metadata.getDataInfo().getType() == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) ?
-                            Geonet.File.UPDATE_FIXED_INFO_SUBTEMPLATE :
-                            Geonet.File.UPDATE_FIXED_INFO);
+                metadata != null
+                    && (
+                    metadata.getDataInfo().getType() == MetadataType.SUB_TEMPLATE
+                        || metadata.getDataInfo().getType() == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) ?
+                    Geonet.File.UPDATE_FIXED_INFO_SUBTEMPLATE :
+                    Geonet.File.UPDATE_FIXED_INFO);
             result = Xml.transform(result, styleSheet);
             return result;
         } else {

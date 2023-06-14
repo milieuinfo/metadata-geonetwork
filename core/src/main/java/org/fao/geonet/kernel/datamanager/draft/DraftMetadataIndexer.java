@@ -110,7 +110,7 @@ public class DraftMetadataIndexer extends BaseMetadataIndexer implements IMetada
                 if (!statuses.isEmpty()) {
                     MetadataStatus stat = statuses.get(0);
                     String status = String.valueOf(stat.getStatusValue().getName());
-                    extraFields.put(Geonet.IndexFieldNames.STATUS_WORKFLOW,  status);
+                    extraFields.put(Geonet.IndexFieldNames.STATUS_WORKFLOW, status);
                 }
             }
         }
