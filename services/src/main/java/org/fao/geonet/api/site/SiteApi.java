@@ -207,7 +207,8 @@ public class SiteApi {
             Settings.SYSTEM_SITE_ORGANIZATION,
             Settings.SYSTEM_SITE_SITE_ID_PATH,
             Settings.SYSTEM_PLATFORM_VERSION,
-            Settings.SYSTEM_PLATFORM_SUBVERSION
+            Settings.SYSTEM_PLATFORM_SUBVERSION,
+            Settings.SYSTEM_VLAANDEREN_VERSION
         }));
         Optional<Source> source;
         String nodeDefault;
