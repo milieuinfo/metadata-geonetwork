@@ -67,35 +67,35 @@ jobs:
             maven
           path: $(mavenCacheFolder)
         displayName: Cache Maven local repo
-      - task: Maven@3
-        displayName: Build project artifacts
-        inputs:
-          mavenPomFile: 'pom.xml'
-          mavenOptions: '-Xmx3072m $(mavenCacheOpts)'
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.8'
-          jdkArchitectureOption: 'x64'
-          publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          goals: 'clean install'
-          options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: 'web/target/geonetwork.war'
-          ArtifactName: 'geonetwork.war'
-          publishLocation: 'Container'
-      - task: Docker@2
-        displayName: Build web image and push to preprod container registry (premdacr)
-        inputs:
-          containerRegistry: 'premdacr'
-          repository: 'metadata/geonetwork'
-          command: 'buildAndPush'
-          Dockerfile: 'web/Dockerfile'
-          tags: |
-            latest
-            develop
-            $(GIT_COMMIT_SHA)
-            $(VL_GEONETWORK_VERSION)
+#      - task: Maven@3
+#        displayName: Build project artifacts
+#        inputs:
+#          mavenPomFile: 'pom.xml'
+#          mavenOptions: '-Xmx3072m $(mavenCacheOpts)'
+#          javaHomeOption: 'JDKVersion'
+#          jdkVersionOption: '1.8'
+#          jdkArchitectureOption: 'x64'
+#          publishJUnitResults: true
+#          testResultsFiles: '**/surefire-reports/TEST-*.xml'
+#          goals: 'clean install'
+#          options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
+#      - task: PublishBuildArtifacts@1
+#        inputs:
+#          PathtoPublish: 'web/target/geonetwork.war'
+#          ArtifactName: 'geonetwork.war'
+#          publishLocation: 'Container'
+#      - task: Docker@2
+#        displayName: Build web image and push to preprod container registry (premdacr)
+#        inputs:
+#          containerRegistry: 'premdacr'
+#          repository: 'metadata/geonetwork'
+#          command: 'buildAndPush'
+#          Dockerfile: 'web/Dockerfile'
+#          tags: |
+#            latest
+#            develop
+#            $(GIT_COMMIT_SHA)
+#            $(VL_GEONETWORK_VERSION)
       - task: Bash@3
         displayName: Execute liquibase
         env:
@@ -115,12 +115,12 @@ jobs:
             touch liquibase.properties
             # necessary variables are found in environment
             bash execute-on-env.sh -n dev
-      - task: Bash@3
-        displayName: Rolling restart of geonetwork
-        env:
-          AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
-          AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
-        inputs:
-          targetType: 'inline'
-          script: |
-            kubectl rollout restart -n dev deployment/geonetwork
+#      - task: Bash@3
+#        displayName: Rolling restart of geonetwork
+#        env:
+#          AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+#          AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
+#        inputs:
+#          targetType: 'inline'
+#          script: |
+#            kubectl rollout restart -n dev deployment/geonetwork
