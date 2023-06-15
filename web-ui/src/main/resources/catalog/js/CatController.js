@@ -31,6 +31,7 @@
   goog.require("gn_search_manager");
   goog.require("gn_session_service");
   goog.require("gn_alert");
+  goog.require("gn_es");
 
   var module = angular.module("gn_cat_controller", [
     "gn_search_manager",
@@ -39,7 +40,8 @@
     "gn_saved_selections",
     "gn_external_viewer",
     "gn_history",
-    "gn_alert"
+    "gn_alert",
+    "gn_es"
   ]);
 
   module.constant("gnSearchSettings", {});
@@ -75,7 +77,18 @@
             enabled: true,
             showSocialBarInFooter: true,
             showApplicationInfoAndLinksInFooter: true,
-            footerCustomMenu: [] // List of static pages identifiers to display
+            footerCustomMenu: [], // List of static pages identifiers to display
+            rssFeeds: [
+              {
+                // List of rss feeds links to display when the OGC API Records service is enabled
+                url: "f=rss&sortby=-createDate&size=30",
+                label: "lastCreatedRecords"
+              }
+              // , {
+              //   url: "f=rss&sortby=-publicationDateForResource&size=30",
+              //   label: "lastPublishedRecords"
+              // }
+            ]
           },
           header: {
             enabled: true,
@@ -732,7 +745,7 @@
                 sortOrder: "desc"
               },
               {
-                sortBy: "resourceTitleObject.default.keyword",
+                sortBy: "resourceTitleObject.default.sort",
                 sortOrder: ""
               },
               {
@@ -912,6 +925,8 @@
               syncAllLayers: false,
               drawVector: false
             },
+            defaultTool: "layers",
+            defaultToolAfterMapLoad: "layers",
             graticuleOgcService: {},
             "map-viewer": {
               context: "../../map/config-viewer.xml",
@@ -1325,7 +1340,7 @@
                 sortOrder: "desc"
               },
               {
-                sortBy: "resourceTitleObject.default.keyword",
+                sortBy: "resourceTitleObject.default.sort",
                 sortOrder: ""
               },
               {
@@ -1793,6 +1808,8 @@
       $scope.langs = gnGlobalSettings.gnCfg.mods.header.languages;
       $scope.lang = gnLangs.detectLang(null, gnGlobalSettings);
       $scope.iso2lang = gnLangs.getIso2Lang($scope.lang);
+
+      $scope.rssFeeds = gnGlobalSettings.gnCfg.mods.footer.rssFeeds;
 
       $scope.getSocialLinksVisible = function () {
         var onMdView = $location.absUrl().indexOf("/metadata/") > -1;

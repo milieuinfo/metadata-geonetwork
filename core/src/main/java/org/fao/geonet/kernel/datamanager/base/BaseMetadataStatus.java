@@ -101,9 +101,9 @@ public class BaseMetadataStatus implements IMetadataStatus {
      */
     @Override
     public MetadataStatus getPreviousStatus(int metadataId) throws Exception {
-        String sortField = SortUtils.createPath(MetadataStatus_.changeDate);
+        String sortField = SortUtils.createPath(MetadataStatus_.id, MetadataStatus_.changeDate);
         List<MetadataStatus> metadataStatusList = metadataStatusRepository.findAllByMetadataIdAndByType(
-                metadataId, StatusValueType.workflow, Sort.by(Sort.Direction.DESC, sortField));
+            metadataId, StatusValueType.workflow, Sort.by(Sort.Direction.DESC, sortField));
         if (metadataStatusList.isEmpty() || metadataStatusList.size() == 1) {
             return null;
         } else {

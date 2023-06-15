@@ -24,6 +24,7 @@
 package org.fao.geonet.kernel.metadata;
 
 import com.google.common.collect.Sets;
+import com.google.common.base.Joiner;
 import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import org.apache.commons.lang.StringUtils;
@@ -46,8 +47,6 @@ import java.text.MessageFormat;
 import java.util.*;
 
 import static org.fao.geonet.kernel.setting.Settings.SYSTEM_FEEDBACK_EMAIL;
-
-import com.google.common.base.Joiner;
 
 public class DefaultStatusActions implements StatusActions {
 
@@ -125,13 +124,11 @@ public class DefaultStatusActions implements StatusActions {
     public void onEdit(int id, boolean minorEdit) throws Exception {
         if (Log.isTraceEnabled(Geonet.DATA_MANAGER)) {
             Log.trace(Geonet.DATA_MANAGER, "DefaultStatusActions.onEdit(" + id + ", " + minorEdit + ") with status "
-                    + dm.getCurrentStatus(id));
+                + dm.getCurrentStatus(id));
         }
         if (!minorEdit && dm.getCurrentStatus(id).equals(StatusValue.Status.APPROVED)) {
-            //if (!minorEdit && dm.getCurrentStatus(id).equals(StatusValue.Status.APPROVED)
-            //        && (context.getBean(IMetadataManager.class) instanceof DraftMetadataManager)) {
             ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages",
-                    new Locale(this.language));
+                new Locale(this.language));
             String changeMessage = String.format(messages.getString("status_email_text"), replyToDescr, replyTo, id);
             Log.trace(Geonet.DATA_MANAGER, "Set DRAFT to current record with id " + id);
             dm.setStatus(context, id, Integer.valueOf(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
@@ -157,19 +154,20 @@ public class DefaultStatusActions implements StatusActions {
         for (MetadataStatus status : listOfStatus) {
             MetadataStatus currentStatus = dm.getStatus(status.getMetadataId());
             String currentStatusId = (currentStatus != null) ?
-                    String.valueOf(currentStatus.getStatusValue().getId()) : "";
+                String.valueOf(currentStatus.getStatusValue().getId()) : "";
+
 
             String statusId = status.getStatusValue().getId() + "";
             Set<Integer> listOfId = new HashSet<>(1);
             listOfId.add(status.getMetadataId());
 
-            // For the workflow, if the status is already set to value of status then do nothing.
-            // This does not apply to task and event.
+            // For the workflow, if the status is already set to value
+            // of status then do nothing. This does not apply to task and event.
             if (status.getStatusValue().getType().equals(StatusValueType.workflow) &&
-                    (statusId).equals(currentStatusId)) {
+                (statusId).equals(currentStatusId)) {
                 if (context.isDebugEnabled())
                     context.debug(String.format("Metadata %s already has status %s ",
-                            status.getMetadataId(), status.getStatusValue().getId()));
+                        status.getMetadataId(), status.getStatusValue().getId()));
                 results.put(status.getMetadataId(), StatusChangeType.UNCHANGED);
                 continue;
             }
@@ -281,7 +279,7 @@ public class DefaultStatusActions implements StatusActions {
         String subjectTemplate = "";
         try {
             subjectTemplate = messages
-                    .getString("status_change_" + status.getStatusValue().getName() + "_email_subject");
+                .getString("status_change_" + status.getStatusValue().getName() + "_email_subject");
         } catch (MissingResourceException e) {
             subjectTemplate = messages.getString("status_change_default_email_subject");
         }
@@ -307,10 +305,10 @@ public class DefaultStatusActions implements StatusActions {
         String metadataUrl = metadataUtils.getDefaultUrl(metadata.getUuid(), this.language);
 
         String message = MessageFormat.format(textTemplate, replyToDescr, // Author of the change
-                status.getChangeMessage(), translatedStatusName, status.getChangeDate(), status.getDueDate(),
-                status.getCloseDate(),
-                owner == null ? "" : Joiner.on(" ").skipNulls().join(owner.getName(), owner.getSurname()),
-                metadataUrl);
+            status.getChangeMessage(), translatedStatusName, status.getChangeDate(), status.getDueDate(),
+            status.getCloseDate(),
+            owner == null ? "" : Joiner.on(" ").skipNulls().join(owner.getName(), owner.getSurname()),
+            metadataUrl);
 
 
         subject = MailUtil.compileMessageWithIndexFields(subject, metadata.getUuid(), this.language);
@@ -336,6 +334,16 @@ public class DefaultStatusActions implements StatusActions {
      */
     protected List<User> getUserToNotify(MetadataStatus status) {
         StatusValueNotificationLevel notificationLevel = status.getStatusValue().getNotificationLevel();
+
+        // If new status is DRAFT and previous status is not SUBMITTED (which means a rejection),
+        // ignore notifications as the DRAFT status is used also when creating the working copy.
+        // We don't want to notify when creating a working copy.
+        if (status.getStatusValue().getId() == Integer.parseInt(StatusValue.Status.DRAFT) &&
+            ((StringUtils.isEmpty(status.getPreviousState())) ||
+                (Integer.parseInt(status.getPreviousState()) != Integer.parseInt(StatusValue.Status.SUBMITTED)))) {
+                return new ArrayList<>();
+        }
+
         // TODO: Status does not provide batch update
         // So taking care of one record at a time.
         // Currently the code could notify a mix of reviewers
@@ -447,7 +455,7 @@ public class DefaultStatusActions implements StatusActions {
         StatusValue s = statusValueRepository.findOneById(statusValueId);
         if (s == null) {
             translatedStatusName = statusValueId
-                    + " (Status not found in database translation table. Check the content of the StatusValueDes table.)";
+                + " (Status not found in database translation table. Check the content of the StatusValueDes table.)";
         } else {
             translatedStatusName = s.getLabel(this.language);
         }

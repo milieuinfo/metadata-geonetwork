@@ -14,7 +14,7 @@ git*.properties
 */target/
 .*/
 !.run/
-GeoNetwork*
+#GeoNetwork*
 /geonetwork*
 camel-harvesters/wfsfeature-harvester/logs
 changes-*

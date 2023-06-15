@@ -89,6 +89,7 @@ public class DatabaseMigration implements BeanPostProcessor {
         if (!dbMigrationOnStartup) {
             return bean;
         }
+
         try {
             if (Class.forName(initAfter).isInstance(bean)) {
                 _logger.debug(String.format("DB Migration / Running '%s' after initialization of '%s'.", bean.getClass(), initAfter));
