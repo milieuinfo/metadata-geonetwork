@@ -355,7 +355,6 @@ public class AjaxEditUtils extends EditUtils {
 
         //--- locate the geonet:element and geonet:info elements and clone for
         //--- later re-use
-        Element refEl = (Element) (el.getChild(Edit.RootChild.ELEMENT, Edit.NAMESPACE)).clone();
         Element info = null;
 
         if (md.getChild(Edit.RootChild.INFO, Edit.NAMESPACE) != null) {
@@ -409,16 +408,9 @@ public class AjaxEditUtils extends EditUtils {
         }
         //--- now enumerate the new child (if not a simple attribute)
         if (childName == null || !childName.equals("geonet:attribute")) {
-            //--- now add the geonet:element back again to keep ref number
-            el.addContent(refEl);
-
             int iRef = editLib.findMaximumRef(md);
-            editLib.expandElements(schema, child);
             editLib.enumerateTreeStartingAt(child, iRef + 1, Integer.parseInt(ref));
-
-            //--- add editing info to everything from the parent down
-            editLib.expandTree(mds, el);
-
+            editLib.expandTree(schema, child);
         }
         if (info != null) {
             //--- attach the info element to the child

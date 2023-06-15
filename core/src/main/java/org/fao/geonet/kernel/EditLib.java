@@ -1341,6 +1341,11 @@ public class EditLib {
         }
     }
 
+    public void expandTree(String schema, Element md) throws Exception {
+        MetadataSchema mdSchema = scm.getSchema(schema);
+        expandTree(mdSchema, md);
+    }
+
     private String getParentNameFromChild(Element child) {
         String parentName = "root";
         Element parent = child.getParentElement();
@@ -1708,7 +1713,6 @@ public class EditLib {
     }
 
     private void addAttribs(MetadataType type, Element md, MetadataSchema schema) {
-        md.removeChildren(Edit.RootChild.ATTRIBUTE, Edit.NAMESPACE);
         for (MetadataAttribute attr: type.getAlAttribs()) {
 
             Element attribute = new Element(Edit.RootChild.ATTRIBUTE, Edit.NAMESPACE);
