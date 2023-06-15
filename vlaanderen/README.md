@@ -4,6 +4,15 @@ This section serves as an appendix to the current Geonetwork documentation. The 
 to the core that are either useful in our environment (e.g. scripts) or vlaanderen-specific.
 
 
+# Versioning
+
+See [the changelog readme file](./CHANGELOG.md) for an overview of the past versions and ongoing development effort.
+
+Update `pom.xml` to reflect changes to the current version. This is picked up by the DevOps pipeline to automatically tag the built docker image. The version can be easily extracted from the `pom.xml` file by executing ` mvn help:evaluate -Dexpression=project.version -q -DforceStdout`.
+
+Specific `-SNAPSHOT` versions are used to indicate work in progress, to be solidified in the actual version when it's deemed ready. This way multiple merge requests can be bundled into a single version. 
+
+
 # Docker
 
 A full dockerised setup is available. 
