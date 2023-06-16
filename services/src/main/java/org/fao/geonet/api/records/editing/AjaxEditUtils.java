@@ -375,6 +375,8 @@ public class AjaxEditUtils extends EditUtils {
                         if (defaultChild != null) {
                             defaultValue = defaultChild.getAttributeValue(Edit.Attribute.Attr.VALUE);
                         }
+                        attributeDef.removeAttribute(Edit.Attribute.Attr.ADD);
+                        attributeDef.setAttribute(new Attribute(Edit.Attribute.Attr.DEL, "true"));
                     }
                 }
 
@@ -382,7 +384,6 @@ public class AjaxEditUtils extends EditUtils {
                 //--- Add new attribute with default value
                 el.setAttribute(new Attribute(attInfo.two(), defaultValue, attInfo.one()));
 
-                // TODO : add attribute should be false and del true after adding an attribute
                 child = el;
             } else {
                 //--- normal element
@@ -413,7 +414,8 @@ public class AjaxEditUtils extends EditUtils {
             editLib.expandTree(schema, child);
         }
         if (info != null) {
-            //--- attach the info element to the child
+            //--- remove and re-attach the info element to the child
+            child.removeChild(Edit.RootChild.INFO, Edit.NAMESPACE);
             child.addContent(info);
         }
 
