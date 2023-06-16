@@ -14,6 +14,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Implement DCAT-ap metadata editor.
 - [core] Fix issue in editor where reference to an element would be lost and recreated
 - [core] Fix issue where `geonet` edit element where added multiple times
+- [core] Fixed nullpointer bug in LocaleRedirects (pr #24802)
 
 ## [1.0.0] - 2023-06-09
 - Introduced semver versioning
