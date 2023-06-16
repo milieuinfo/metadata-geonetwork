@@ -147,7 +147,7 @@ public class LocaleRedirects {
                                            final String langHeader) throws ResourceNotFoundException {
         String lang = lang(langParam, langCookie, langHeader);
 
-        if (checkPortalExist(portal, !accept.startsWith(ACCEPT_VALUE))) {
+        if (checkPortalExist(portal, accept!=null && !accept.startsWith(ACCEPT_VALUE))) {
             return redirectURL(createServiceUrl(request, _homeRedirectUrl, lang, portal));
         } else {
             if (sourceRepository.findByType(SourceType.subportal, null).size() == 0) {

@@ -4,8 +4,13 @@
     <Property name="log_dir">./logs</Property>
   </Properties>
   <Appenders>
+    <!-- default console layout -->
+    <!--    <Console name="Console" target="SYSTEM_OUT">-->
+    <!--      <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>-->
+    <!--    </Console>-->
+    <!-- setting console output to json for grafana/loki interpretation -->
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>
+      <JSONLayout />
     </Console>
     <RollingFile name="File">
       <filename>${sys:log_dir:-log_dir}/geonetwork.log</filename>
