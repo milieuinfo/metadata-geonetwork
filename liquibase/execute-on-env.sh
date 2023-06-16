@@ -76,9 +76,14 @@ mvn liquibase:update -P "$namespace" \
  -Dgn.system.vlaanderen.version="$LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION" \
  -Dmdv.passwordhash="$LIQUIBASE_MDV_PASSWORDHASH" \
  -Dliquibase.url=jdbc:postgresql://localhost:$localport/geonetwork
+mvnstatus=$?
+echo "mvn exit code: $mvnstatus"
 
 # kill the previous background process: kubectl port forward
 kill $!
 
 # finish
 echo "Liquibase update finished."
+
+# return the mvn status - this is what we want to see succeed
+exit $mvnstatus
