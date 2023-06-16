@@ -11,6 +11,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - minor fixes and updates
   - font-awesome library upgrade, slight changes in icons
 - Vlaanderen Geonetwork version now visible and automatically updating
+- Implement DCAT-ap metadata editor.
+- [core] Fix issue in editor where reference to an element would be lost and recreated
+- [core] Fix issue where `geonet` edit element where added multiple times
 
 ## [1.0.0] - 2023-06-09
 - Introduced semver versioning
