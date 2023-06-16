@@ -11,6 +11,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - minor fixes and updates
   - font-awesome library upgrade, slight changes in icons
 - Vlaanderen Geonetwork version now visible and automatically updating
+- [core] Fixed nullpointer bug in LocaleRedirects (pr #24802)
 
 ## [1.0.0] - 2023-06-09
 - Introduced semver versioning
