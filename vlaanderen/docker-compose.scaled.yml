@@ -1,0 +1,33 @@
+# To test scaling of the geonetwork service.
+# execute: docker-compose --verbose -f docker-compose.yml -f docker-compose.scaled.yml up --scale geonetwork=4 geonetwork -d
+# then, open: http://localhost:{8085-8088}/
+volumes:
+  pgdata:
+  pglog:
+  esdata:
+  geonetworkdata:
+
+services:
+  database:
+    ports:
+      - "5432:5432"
+
+  geonetwork:
+#    environment:
+#      DATA_DIR: /geonetwork-data
+    ports:
+      - "8085-8090:8080"
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data/geonetwork
+#      - pglog:/var/log/postgresql
+#      - geonetworkdata:/geonetwork-data
+
+  elasticsearch:
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  ogc-api-records-service:
+    ports:
+      - "8081:8080"

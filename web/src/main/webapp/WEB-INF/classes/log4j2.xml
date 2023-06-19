@@ -10,7 +10,7 @@
     <!--    </Console>-->
     <!-- setting console output to json for grafana/loki interpretation -->
     <Console name="Console" target="SYSTEM_OUT">
-      <JSONLayout />
+      <JSONLayout compact="true" eventEol="true" stacktraceAsString="true"/>
     </Console>
     <RollingFile name="File">
       <filename>${sys:log_dir:-log_dir}/geonetwork.log</filename>
@@ -96,6 +96,7 @@
     <Logger name="org.springframework.beans" level="error"/>
     <Logger name="org.springframework.security" level="error"/>
     <Logger name="org.springframework.security.ldap" level="error"/>
+    <Logger name="org.springframework.security.web.firewall" level="error"/>
     <Logger name="org.springframework.aop.framework.CglibAopProxy" level="error"/>
 
     <Logger name="com.k_int" level="error" additivity="false">
