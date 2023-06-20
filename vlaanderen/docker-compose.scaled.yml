@@ -6,6 +6,11 @@ volumes:
   pglog:
   esdata:
   geonetworkdata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/tmp/geonetwork_data_dir'
 
 services:
   database:
@@ -13,14 +18,13 @@ services:
       - "5432:5432"
 
   geonetwork:
-#    environment:
-#      DATA_DIR: /geonetwork-data
+    environment:
+      DATA_DIR: /geonetwork-data
+      HTMLCACHE_DIR: /tmp/geonetwork-htmlcache
     ports:
       - "8085-8090:8080"
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data/geonetwork
-#      - pglog:/var/log/postgresql
-#      - geonetworkdata:/geonetwork-data
+    volumes:
+      - geonetworkdata:/geonetwork-data
 
   elasticsearch:
     ports:
