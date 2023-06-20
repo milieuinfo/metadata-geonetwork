@@ -5,19 +5,19 @@
   </Properties>
   <Appenders>
     <!-- default console layout -->
-    <!--    <Console name="Console" target="SYSTEM_OUT">-->
-    <!--      <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>-->
-    <!--    </Console>-->
-    <!-- setting console output to json for grafana/loki interpretation -->
     <Console name="Console" target="SYSTEM_OUT">
-      <JSONLayout compact="true" eventEol="true" stacktraceAsString="true"/>
+      <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>
     </Console>
+    <!-- setting console output to json for grafana/loki interpretation -->
+    <!--    <Console name="Console" target="SYSTEM_OUT">-->
+    <!--      <JSONLayout compact="true" eventEol="true" stacktraceAsString="true"/>-->
+    <!--    </Console>-->
     <RollingFile name="File">
       <filename>${sys:log_dir:-log_dir}/geonetwork.log</filename>
       <filePattern>${sys:log_dir:-log_dir}/geonetwork.log-%i.log</filePattern>
       <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>
       <Policies>
-        <SizeBasedTriggeringPolicy size="10 MB" />
+        <SizeBasedTriggeringPolicy size="10 MB"/>
       </Policies>
       <DefaultRolloverStrategy max="3" fileIndex="min"/>
     </RollingFile>
@@ -25,7 +25,8 @@
       <Routes pattern="$${ctx:logfile}">
         <!-- value dynamically determines the name of the log file. -->
         <Route>
-          <File name="harvester-${ctx:harvester}" fileName="${sys:log_dir:-log_dir}/${ctx:logfile:-harvester_default.log}">
+          <File name="harvester-${ctx:harvester}"
+                fileName="${sys:log_dir:-log_dir}/${ctx:logfile:-harvester_default.log}">
             <PatternLayout>
               <pattern>%date{ISO8601}{${ctx:timeZone}} %-5level [%logger] - %message%n</pattern>
             </PatternLayout>
@@ -142,7 +143,7 @@
 
     <!-- Turn off logging except when explicitly declared above -->
     <Root level="off">
-        <AppenderRef ref="File"/>
+      <AppenderRef ref="File"/>
     </Root>
   </Loggers>
 </Configuration>
