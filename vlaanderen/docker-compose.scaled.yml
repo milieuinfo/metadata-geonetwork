@@ -10,7 +10,7 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/tmp/geonetwork_data_dir'
+      device: '/tmp/ha/data'
 
 services:
   database:
@@ -19,8 +19,14 @@ services:
 
   geonetwork:
     environment:
-      DATA_DIR: /geonetwork-data
-      HTMLCACHE_DIR: /tmp/geonetwork-htmlcache
+      JAVA_OPTS: >
+        -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
+        -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
+        -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC
+        -Dgeonetwork.dir=/geonetwork-data
+        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
+        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
+        -Dgeonetwork.htmlcache.dir=/tmp/geonetwork-htmlcache
     ports:
       - "8085-8090:8080"
     volumes:
