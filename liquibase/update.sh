@@ -1,4 +1,6 @@
-# run this scripts as:
+# run liquibase update, assuming you have set up the port forwards, env variables, ...
+
+# run this script:
 # > bash update.sh loc
 # > bash update.sh dev
 # > bash update.sh bet
@@ -10,7 +12,7 @@ profile=$1
 # check namespace validity
 valid_profiles=("loc" "dev" "bet")
 if ! [[ " ${valid_profiles[*]} " =~ ${profile} ]]; then
-  echo "namespace should be either one of: ${valid_profiles[*]}"
+  echo "profile should be either one of: ${valid_profiles[*]}"
   exit 1
 fi
 
