@@ -829,12 +829,12 @@
                 // 'url' : '/formatters/xml?attachment=false',
                 url: "/formatters/xml",
                 class: "fa-file-code-o"
-              } /*,
+              },
               {
                 label: "exportDCAT",
-                url: "/geonetwork/api/collections/main/items/${uuid}?f=dcat",
-                class: "fa-file-code-o"
-              }*/
+                url: "/api/collections/main/items/${uuid}?f=dcat_ap_vl",
+                class: "fa-share-nodes"
+              }
             ],
             grid: {
               related: ["parent", "children", "services", "datasets"]
