@@ -5,7 +5,7 @@
 
   <property name="default-node-uuid" value="c678d0fb-894d-403f-b146-4b96706a1a16"/>
 
-  <changeSet id="00024-default-node-info-loc" author="joachim" contextFilter="loc">
+  <changeSet id="00025-default-node-info-loc" author="joachim" contextFilter="loc">
     <update tableName="sources">
       <column name="name" value="Metadata Vlaanderen (loc)"/>
       <where>uuid = '${default-node-uuid}'</where>
@@ -16,7 +16,7 @@
     </update>
   </changeSet>
 
-  <changeSet id="00024-default-node-info-dev" author="joachim" contextFilter="dev">
+  <changeSet id="00025-default-node-info-dev" author="joachim" contextFilter="dev">
     <update tableName="sources">
       <column name="name" value="Metadata Vlaanderen (dev)"/>
       <where>uuid = '${default-node-uuid}'</where>
@@ -27,7 +27,7 @@
     </update>
   </changeSet>
 
-  <changeSet id="00024-default-node-info-bet" author="joachim" contextFilter="bet">
+  <changeSet id="00025-default-node-info-bet" author="joachim" contextFilter="bet">
     <update tableName="sources">
       <column name="name" value="Metadata Vlaanderen (bet)"/>
       <where>uuid = '${default-node-uuid}'</where>
@@ -38,7 +38,7 @@
     </update>
   </changeSet>
 
-  <changeSet id="00024-default-node-info-prd" author="joachim" contextFilter="prd">
+  <changeSet id="00025-default-node-info-prd" author="joachim" contextFilter="prd">
     <update tableName="sources">
       <column name="name" value="Metadata Vlaanderen"/>
       <where>uuid = '${default-node-uuid}'</where>
