@@ -119,8 +119,6 @@
     <xsl:namespace name="gmd" select="'http://www.isotc211.org/2005/gmd'"/>
     <xsl:namespace name="gmx" select="'http://www.isotc211.org/2005/gmx'"/>
     <xsl:namespace name="gts" select="'http://www.isotc211.org/2005/gts'"/>
-    <xsl:namespace name="gsr" select="'http://www.isotc211.org/2005/gsr'"/>
-    <xsl:namespace name="gmi" select="'http://www.isotc211.org/2005/gmi'"/>
     <xsl:if test="gmd:identificationInfo/srv:SV_ServiceIdentification">
       <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
     </xsl:if>
@@ -197,7 +195,7 @@
                                 codeListValue="{$mainLanguage}"/>
             </gmd:languageCode>
             <gmd:characterEncoding>
-              <gmd:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_CharacterSetCode"
+              <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_CharacterSetCode"
                                        codeListValue="{$defaultEncoding}"/>
             </gmd:characterEncoding>
           </gmd:PT_Locale>
@@ -258,7 +256,7 @@
   <!-- Change gmd:hierarchyLevelName -->
   <xsl:template match="gmd:hierarchyLevel[lower-case(gmd:MD_ScopeCode/@codeListValue)=('dataset','series','service')]">
     <xsl:copy copy-namespaces="no">
-      <gmd:MD_ScopeCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_ScopeCode" codeListValue="{lower-case(gmd:MD_ScopeCode/@codeListValue)}"/>
+      <gmd:MD_ScopeCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_ScopeCode" codeListValue="{lower-case(gmd:MD_ScopeCode/@codeListValue)}"/>
     </xsl:copy>
     <xsl:variable name="hierarchyLevelNameValue">
       <xsl:choose>
@@ -344,6 +342,19 @@
     priority="10" />
 
   <!-- ================================================================= -->
+
+  <xsl:template match="gml:verticalCS|gml:verticalDatum|gml320:verticalCS|gml320:verticalDatum" priority="2000">
+    <xsl:variable name="childExists" select="count(*[local-name(.)='VerticalCS']) + count(*[local-name(.)='VerticalDatum']) != 0"/>
+    <xsl:copy copy-namespaces="no">
+      <xsl:if test="$childExists">
+        <xsl:apply-templates select="@*[local-name(.)!='nilReason']"/>
+        <xsl:apply-templates select="node()"/>
+      </xsl:if>
+      <xsl:if test="not($childExists)">
+        <xsl:attribute name="nilReason" select="'missing'"/>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="@gml:id|@gml320:id" priority="1000">
     <xsl:attribute name="gml:id" namespace="{if ($isUsing2005Schema and not($isUsing2007Schema)) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
@@ -449,13 +460,6 @@
       </xsl:choose>
 
 
-      <!-- For multilingual records, for multilingual fields,
-       create a gco:CharacterString or gmx:Anchor containing
-       the same value as the default language PT_FreeText.
-      -->
-      <xsl:variable name="element" select="name()"/>
-
-
       <xsl:choose>
         <!-- Check record does not contains multilingual elements
           matching the main language. This may happen if the main
@@ -470,8 +474,7 @@
             <xsl:value-of select="$valueInPtFreeTextForMainLanguage"/>
           </xsl:element>
         </xsl:when>
-        <xsl:when test="not($isMultilingual) or
-                        $excluded">
+        <xsl:when test="not($isMultilingual) or $excluded">
           <!-- Copy gco:CharacterString only. PT_FreeText are removed if not multilingual. -->
           <xsl:apply-templates select="gco:CharacterString|gmx:Anchor"/>
         </xsl:when>
@@ -557,7 +560,7 @@
   <!--  only accept the pointOfContact role code for a gmd:contact element -->
   <xsl:template match="gmd:role[name(../..)='gmd:contact']" priority="100">
     <gmd:role>
-      <gmd:CI_RoleCode codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact"/>
+      <gmd:CI_RoleCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact"/>
     </gmd:role>
   </xsl:template>
 
@@ -566,7 +569,7 @@
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
-          select="concat('https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#',local-name(.))"/>
+          select="concat('http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#',local-name(.))"/>
       </xsl:attribute>
       <!-- Keep the translation for the codeListValue attribute in the xml if exists and when required, see TG 2.0 -->
       <xsl:apply-templates select="node()"/>
@@ -578,7 +581,7 @@
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
-          select="concat('https://standards.iso.org/iso/19115/resources/Codelists/gml/',local-name(.),'.xml')"/>
+          select="concat('http://standards.iso.org/iso/19115/resources/Codelists/gml/',local-name(.),'.xml')"/>
       </xsl:attribute>
     </xsl:copy>
   </xsl:template>
@@ -624,11 +627,9 @@
           </xsl:choose-->
           <xsl:copy-of select="@xlink:href"/>
         </xsl:when>
-
-        <xsl:otherwise>
-          <xsl:apply-templates select="node()" />
-        </xsl:otherwise>
+        <xsl:otherwise />
       </xsl:choose>
+      <xsl:apply-templates select="node()" />
     </xsl:copy>
   </xsl:template>
 
@@ -757,12 +758,12 @@
 
   <!-- Only gmd:referenceSystemIdentifier can have a gmd:RS_Identifier child element, all other RS_Identifier elements
         must be transformed to a MD:Identifier and existing child elements gmd:codeSpace and gmd:version must be removed -->
-  <xsl:template match="gmd:RS_Identifier[not(name(..)='gmd:referenceSystemIdentifier')]" priority="100">
+  <!--xsl:template match="gmd:RS_Identifier[not(name(..)='gmd:referenceSystemIdentifier')]" priority="100">
     <gmd:MD_Identifier>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="*[not(name(.)='gmd:codeSpace' or name(.)='gmd:version')]"/>
     </gmd:MD_Identifier>
-  </xsl:template>
+  </xsl:template-->
 
   <!-- ================================================================= -->
   <!-- SDS fixes -->
@@ -786,6 +787,19 @@
   <xsl:template match="gmd:extent[gmd:EX_Extent/not(*)]|srv:extent[gmd:EX_Extent/not(*)]"/>
 
 
+  <xsl:template match="gmd:otherConstraints[*/@gco:nilReason = 'custom' or @gco:nilReason = 'custom']" priority="200">
+    <xsl:copy copy-namespaces="no">
+      <xsl:attribute name="gco:nilReason" select="'custom'"/>
+      <xsl:apply-templates select="@*"/>
+      <gmx:Anchor xlink:href="{gmx:Anchor/@xlink:href}">
+        <xsl:for-each select="gmx:Anchor/@*[name() != 'gco:nilReason' and name() != 'xlink:href']">
+          <xsl:attribute name="{name()}" select="string()"/>
+        </xsl:for-each>
+        <xsl:value-of select="string(*)"/>
+      </gmx:Anchor>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="gmd:dateTime" priority="200">
     <xsl:variable name="child" select="gco:Date|gco:DateTime"/>
     <xsl:copy copy-namespaces="no">
@@ -794,10 +808,25 @@
       </xsl:if>
       <xsl:if test="not(normalize-space($child) = '')">
         <gco:DateTime>
-          <xsl:value-of select="$child"/>
+          <xsl:choose>
+            <xsl:when test="matches($child, '^-?\d{4}-\d{2}-\d{2}(Z|(-|\+)\d{2}:\d{2})?$')">
+              <xsl:value-of select="concat($child, 'T00:00:00')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$child"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </gco:DateTime>
       </xsl:if>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="gmd:date[gmd:CI_Date]">
+    <xsl:if test="count(gmd:CI_Date/gmd:date) > 0 and count(gmd:CI_Date/gmd:dateType/*) > 0">
+      <xsl:copy copy-namespaces="no">
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:copy>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="*[gco:DateTime]" priority="100">
@@ -807,7 +836,7 @@
         <xsl:attribute name="gco:nilReason" select="'missing'"/>
       </xsl:if>
       <xsl:if test="not(normalize-space($child) = '')">
-        <xsl:apply-templates select="@*|node()"/>
+        <xsl:apply-templates select="@*[name() != 'gco:nilReason']|node()"/>
       </xsl:if>
     </xsl:copy>
   </xsl:template>
@@ -819,7 +848,7 @@
         <xsl:attribute name="gco:nilReason" select="'missing'"/>
       </xsl:if>
       <xsl:if test="not(normalize-space($child) = '')">
-        <xsl:apply-templates select="@*|node()"/>
+        <xsl:apply-templates select="@*[name() != 'gco:nilReason']|node()"/>
       </xsl:if>
     </xsl:copy>
   </xsl:template>
@@ -831,10 +860,16 @@
           <xsl:attribute name="gco:nilReason" select="'unknown'"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="@*[not(name() = 'gco:nilReason')]|*"/>
+          <xsl:apply-templates select="@*[name() != 'gco:nilReason']|*"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:copy>
+  </xsl:template>
+
+
+  <!-- Fix INSPIRE codelist still under HTTPS instead of HTTP -->
+  <xsl:template match="@*[starts-with(string(), 'https://inspire.ec.europa.eu')]">
+    <xsl:attribute name="{name()}" select="replace(., 'https://inspire.ec.europa.eu', 'http://inspire.ec.europa.eu')"/>
   </xsl:template>
 
   <!-- ================================================================= -->

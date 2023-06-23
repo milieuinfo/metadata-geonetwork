@@ -129,7 +129,7 @@ Mapping between:
       <!-- ============================================================================= -->
       <language>
         <!--<gco:CharacterString>JUST TO TEST</gco:CharacterString>-->
-        <LanguageCode codeList="https://www.loc.gov/standards/iso639-2" codeListValue="{$lang}">Nederlands</LanguageCode>
+        <LanguageCode codeList="http://www.loc.gov/standards/iso639-2" codeListValue="{$lang}">Nederlands</LanguageCode>
       </language>
       <!-- ============================================================================= -->
       <!-- === characterSet WCS OK-->
