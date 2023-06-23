@@ -8,6 +8,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.2-SNAPSHOT] (to finalise)
 - Adding download link for RDF
+- Enabled 'pin as favorite' functionality
 
 ## [1.0.1] - 2023-06-15
 - [core] Merged core-geonetwork 4.2.5 changes (pr #24644)

@@ -865,7 +865,7 @@
               displayFeaturedSearchesPanel: false
             },
             savedSelection: {
-              enabled: false
+              enabled: true
             },
             addWMSLayersToMap: {
               urlLayerParam: ""
