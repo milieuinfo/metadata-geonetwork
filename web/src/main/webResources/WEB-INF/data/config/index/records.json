@@ -1830,6 +1830,9 @@
               "type": {
                 "type": "keyword"
               },
+              "cardinality": {
+                "type": "keyword"
+              },
               "values": {
                 "type": "object",
                 "properties": {
