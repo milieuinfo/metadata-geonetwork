@@ -303,10 +303,10 @@ public class GeonetworkDataDirectory {
         );
         formatterDir = setDir(jeevesServlet, webappName, handlerConfig, formatterDir,
             ".formatter" + KEY_SUFFIX, Geonet.Config.FORMATTER_PATH, "data", "formatter");
-
         htmlCacheDir = setDir(jeevesServlet, webappName, handlerConfig, htmlCacheDir,
             ".htmlcache" + KEY_SUFFIX, Geonet.Config.HTMLCACHE_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "htmlcache"
         );
+        Log.info(Geonet.DATA_DIRECTORY, "   - Html cache directory is: " + htmlCacheDir);        
         schemaPublicationDir = setDir(jeevesServlet, webappName, handlerConfig, schemaPublicationDir,
             ".schemapublication" + KEY_SUFFIX, Geonet.Config.SCHEMAPUBLICATION_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "schemapublication"
         );

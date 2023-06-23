@@ -6,9 +6,10 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.2-SNAPSHOT] (to finalise)
+## [1.0.2-SNAPSHOT]
 - Adding download link for RDF
 - Enabled 'pin as favorite' functionality
+- [core] high availability fix, allow configuration of separate html cache directory / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24976)
 
 ## [1.0.1] - 2023-06-15
 - [core] Merged core-geonetwork 4.2.5 changes (pr #24644)

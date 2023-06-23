@@ -11,6 +11,7 @@ services:
       - "5432:5432"
 
   geonetwork:
+    profiles: [ "full" ]
     environment:
       DATA_DIR: /geonetwork-data
     ports:
