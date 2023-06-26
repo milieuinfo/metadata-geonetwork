@@ -23,16 +23,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.0.0] - 2023-06-09
 - Introduced semver versioning
-
-## [0.0.0] - <2023-06
-- Modified workflow with custom states
+- [Add XML view/download options](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24005)
+- [Added custom workflow](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/22731)
+- [Added liquibase versioning for database versioning, disabling Geonetwork-managed updates](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/20246)
+- [Cleanup of start-page "browse by" options](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23629)
+- [Customised facets](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18729)
 - Customised editor view
-- Added liquibase versioning for database versioning, disabling Geonetwork-managed updates
+- [Introduce ACM/IDM as default authenticaiton layer](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21672)
+- [Introducing Cypress e2e testing](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24170)
+- Introduce DCAT editor - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/22851), [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23974)
+- [Introducing DCAT plugin](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18131) and [DCAT indexing](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/22605)
+- Modified workflow with custom states
+- [Porting 2005/2007 schemas and enforce default](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18689)
+- [Porting ISO editor](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21740)
+- [Porting thesauri of previous deployment](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18736)
 - **core**
-  - Upgraded to core-geonetwork 4.2.5-SNAPSHOT
+  - Allow disabling the 'search map' - [core](https://github.com/geonetwork/core-geonetwork/pull/7071), [vlaanderen](https://agiv.visualstudio.com/Metadata/_workitems/edit/170315/)
+  - [Allow disabling automatic database migration](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21726)
+  - [Config / add property file overlay](https://github.com/geonetwork/core-geonetwork/pull/6954), setting auto hibernate on startup
+  - Copy resources to data dir - [core](https://github.com/geonetwork/core-geonetwork/pull/7110), [vlaanderen](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23983)
   - [Default tab configuration](https://github.com/geonetwork/core-geonetwork/pull/6986)
   - [Onhover mode for tooltips](https://github.com/geonetwork/core-geonetwork/pull/6987)
-  - [Workflow improvements](https://github.com/geonetwork/core-geonetwork/pull/7011)
-  - [Config / add property file overlay](https://github.com/geonetwork/core-geonetwork/pull/6954), setting auto hibernate on startup
-  - [Workflow / On Cancel / Properly remove draft from index](https://github.com/geonetwork/core-geonetwork/pull/7101)
   - [Removal of magic numbers in workflow labels](https://github.com/geonetwork/core-geonetwork/pull/7104)
+  - Upgraded to **core-geonetwork 4.2.5-SNAPSHOT**
+    - Index performance improved, related to thesaurus and thumbnails
+  - [Workflow / On Cancel / Properly remove draft from index](https://github.com/geonetwork/core-geonetwork/pull/7101)
+  - [Workflow improvements](https://github.com/geonetwork/core-geonetwork/pull/7011)
