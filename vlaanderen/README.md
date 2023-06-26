@@ -32,6 +32,18 @@ Run Geonetwork, freshly built, with all dependencies. Volumes and default port b
 Clean up with:
 `docker-compose down -v`
 
+## Scaled version
+To test a scaled-up version, make use of `docker-compose.scaled.yml`. The following snippet illustrates usage:
+
+```bash
+# run 4 instances
+docker-compose --verbose -f docker-compose.yml -f docker-compose.scaled.yml up --scale geonetwork=4 geonetwork -d
+# open all scaled geonetworks in one go (http://localhost:{8085-8088}/):
+docker ps --format json --filter "name=geonetwork" | jq ".Ports" | sed -E "s/.*:([0-9]{4})->.*/http:\/\/localhost:\1/" | while read -r url; do xdg-open "$url"; done
+```
+
+**Warning**: some work remains to be done to make this completely functional.
+
 ## Only run dependencies
 Add a 'profile' in an override (see `docker-compose.loc.example.yml`). This allows excluding certain containers from a 
 docker compose setup. Then, run the override as follows:
