@@ -7,19 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Adding download link for RDF
 - Enabled 'pin as favorite' functionality
 - **core**
-  - [Work in progress: high availability](https://github.com/geonetwork/core-geonetwork/pull/6990)
   - [High availability fix, allow configuration of separate html cache directory](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24976)
+  - [Work in progress: high availability](https://github.com/geonetwork/core-geonetwork/pull/6990)
 
 ## [1.0.1] - 2023-06-15
 - Vlaanderen Geonetwork version now visible and automatically updating
-- Implement DCAT-ap metadata editor.
+- [Implement DCAT-ap metadata editor](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24798)
 - **core** 
   - [merged core-geonetwork 4.2.5-SNAPSHOT changes](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24644)
     - Minor fixes and updates
     - Font-awesome library upgrade, minor icon changes
   - Fix issue in editor where reference to an element would be lost and recreated
   - Fix issue where `geonet` edit element where added multiple times
-  - Fixed nullpointer bug in LocaleRedirects (pr #24802)
+  - Fixed nullpointer bug in LocaleRedirects - [vlaanderen](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24802)
 
 ## [1.0.0] - 2023-06-09
 - Introduced semver versioning
