@@ -23,6 +23,7 @@
 
 package org.fao.geonet.api.records.editing;
 
+import be.vlaanderen.geonet.kernel.validation.VlaanderenPostValidationProcess;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -90,6 +91,9 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @PreAuthorize("hasAuthority('Editor')")
 @ReadWriteController
 public class MetadataEditingApi {
+
+    @Autowired
+    VlaanderenPostValidationProcess vlaanderenPostValidationProcess;
 
     @Autowired
     LanguageUtils languageUtils;
@@ -376,6 +380,12 @@ public class MetadataEditingApi {
             // Save validation if the forceValidationOnMdSave is enabled
             if (forceValidationOnMdSave) {
                 validator.doValidate(metadata, context.getLanguage());
+                try {
+                    vlaanderenPostValidationProcess.addConformKeywords(metadata, true);
+                } catch(Exception e) {
+                    Log.debug("Error saving metadata during adding conform keywords to xml for metadata record with uuid '{}': '{}'.",
+                        new Object[]{metadataUuid, e.getMessage()});
+                }
                 reindex = true;
             }
 

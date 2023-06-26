@@ -72,10 +72,7 @@ import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.url.UrlChecker;
 import org.fao.geonet.languages.IsoLanguagesMapper;
 import org.fao.geonet.lib.Lib;
-import org.fao.geonet.repository.IsoLanguageRepository;
-import org.fao.geonet.repository.SourceRepository;
-import org.fao.geonet.repository.UiSettingsRepository;
-import org.fao.geonet.repository.UserRepository;
+import org.fao.geonet.repository.*;
 import org.fao.geonet.schema.iso19139.ISO19139Namespaces;
 import org.fao.geonet.utils.Log;
 import org.fao.geonet.utils.Xml;
@@ -1122,6 +1119,29 @@ public final class XslUtil {
         return null;
     }
 
+    public static String getRecordValidationStatus(String uuid, String validationType) {
+        ApplicationContext applicationContext = ApplicationContextHolder.get();
+        DataManager dataManager = applicationContext.getBean(DataManager.class);
+        try {
+            String id = dataManager.getMetadataId(uuid);
+            MetadataValidationRepository metadataValidationRepository =
+                applicationContext.getBean(MetadataValidationRepository.class);
+
+            List<MetadataValidation> validationInfo = metadataValidationRepository.findAllById_MetadataId(Integer.parseInt(id));
+            if (validationInfo.isEmpty()) {
+                return "";
+            } else {
+                for (MetadataValidation metadataValidation : validationInfo) {
+                    if (metadataValidation.getId().getValidationType().equals(validationType)) {
+                        return metadataValidation.getStatus().getCode();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        return "";
+    }
 
     /**
      * @param formula    Math expression to evaluate
