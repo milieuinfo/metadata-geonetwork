@@ -1,8 +1,5 @@
-# To test scaling of the geonetwork service.
-# execute: docker-compose --verbose -f docker-compose.yml -f docker-compose.scaled.yml up --scale geonetwork=4 geonetwork -d
-# then, open: http://localhost:{8085-8088}/
-# open all scaled geonetworks in one go:
-# > docker ps --format json --filter "name=geonetwork" | jq ".Ports" | sed -E "s/.*:([0-9]{4})->.*/http:\/\/localhost:\1/" | while read -r url; do xdg-open "$url"; done
+# Check README.md for example usage.
+
 volumes:
   pgdata:
   pglog:
