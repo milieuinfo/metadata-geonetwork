@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.2-SNAPSHOT]
+- Adding download link for RDF
+- Enabled 'pin as favorite' functionality
+- Adding VL/INSPIRE conformity keywords upon validation
+- [core] high availability fix, allow configuration of separate html cache directory / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24976)
+
+## [1.0.2-SNAPSHOT]
 - Adding VL/INSPIRE conformity keywords upon validation
 
 ## [1.0.1] - 2023-06-15
