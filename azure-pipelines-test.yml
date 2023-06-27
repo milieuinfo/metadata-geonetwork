@@ -33,3 +33,4 @@ jobs:
             Write-Output "$json"
             Write-Output "$description"
             Write-Output "$title"
+            Write-Output "done"
