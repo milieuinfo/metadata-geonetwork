@@ -35,4 +35,4 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            echo "Hello from the end of the world.."
+            echo "Hello from the end of the world..."
