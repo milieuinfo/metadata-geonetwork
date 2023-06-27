@@ -29,7 +29,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            echo "Testing whether we need to skip the pipeline.
+            echo "Testing whether we need to skip the pipeline."
             SUB='skipci'
             echo "> SUB: $SUB"
             echo "> COMMIT_MESSAGE: $COMMIT_MESSAGE"
