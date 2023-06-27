@@ -21,6 +21,8 @@ jobs:
           script: |
             STR=$(Build.SourceVersionMessage)
             SUB='skipci'
+            echo "STR: $STR"
+            echo "SUB: $SUB"
             if [[ "$STR" == *"$SUB"* ]]; then
               echo "Skipping pipeline, 'skipci' was found in the commit message."
               exit 1
