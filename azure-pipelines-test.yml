@@ -8,7 +8,7 @@ variables:
     value: false
 
 jobs:
-  - job: A
+  - job: skipcheck
     pool: dv-alex-adobuildserves-ubuntu-vmss
     steps:
       - bash: |
@@ -23,18 +23,18 @@ jobs:
           else
             echo "##vso[task.setvariable variable=skip;isoutput=true]false"
           fi
-        name: passOutput
+        name: skipcheck
         env:
           COMMIT_MESSAGE: $(Build.SourceVersionMessage)
   - job: B
     pool: dv-alex-adobuildserves-ubuntu-vmss
-    dependsOn: A
-    condition: and(succeeded(), eq(dependencies.A.outputs['passOutput.skip'], 'false'))
+    dependsOn: skipcheck
+    condition: and(succeeded(), eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
     variables:
-      skip: $[ dependencies.A.outputs['passOutput.skip'] ]
+      skip: $[ dependencies.skipcheck.outputs['skipcheck.skip'] ]
     steps:
       - bash: |
-          echo "var from A: $(skip)"
+          echo "var from skipcheck: $(skip)"
 #  - job: skipcheck
 #    timeoutInMinutes: "30"
 #    pool: dv-alex-adobuildserves-ubuntu-vmss
