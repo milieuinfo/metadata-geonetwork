@@ -16,14 +16,15 @@ jobs:
         submodules: recursive # needed for submodules
       - task: Bash@3
         displayName: Check if we need to skip the pipeline
+        env:
+          COMMIT_MESSAGE: $(Build.SourceVersionMessage)
         inputs:
           targetType: 'inline'
           script: |
-            STR=$(Build.SourceVersionMessage)
             SUB='skipci'
-            echo "STR: $STR"
+            echo "COMMIT_MESSAGE: $COMMIT_MESSAGE"
             echo "SUB: $SUB"
-            if [[ "$STR" == *"$SUB"* ]]; then
+            if [[ "$COMMIT_MESSAGE" == *"$SUB"* ]]; then
               echo "Skipping pipeline, 'skipci' was found in the commit message."
               exit 1
             fi
