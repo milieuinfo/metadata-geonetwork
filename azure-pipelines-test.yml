@@ -1,0 +1,35 @@
+trigger:
+  - develop
+
+variables:
+  - name: subscription
+    value: METADATA-dev
+
+jobs:
+  - job: publish
+    timeoutInMinutes: "60"
+    # itss linux build server
+    pool: dv-alex-adobuildserves-ubuntu-vmss
+    steps:
+      - checkout: self
+        displayName: Set up repository
+        submodules: recursive # needed for submodules
+      - task: PowerShell@2
+        displayName: Figure out skip requirements
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Call the Azure DevOps Services Rest API.
+            $url = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$env:SYSTEM_TEAMPROJECTID/_apis/git/repositories/$(Build.Repository.ID)/pullRequests/$(System.PullRequest.PullRequestId)?api-version=7.0"
+            $headers = @{
+              Authorization = "Bearer $(System.AccessToken)"
+            }
+            $pullRequestInfo = Invoke-RestMethod -Uri $url -Method 'GET' -ContentType 'application/json' -Headers $headers
+
+            # Get PR title and description from the json response.
+            $json = $($pullRequestInfo | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
+            $description = $json.description
+            $title = $json.title
+            Write-Output "$json"
+            Write-Output "$description"
+            Write-Output "$title"
