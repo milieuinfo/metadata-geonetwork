@@ -4,6 +4,8 @@ trigger:
 variables:
   - name: subscription
     value: METADATA-dev
+  - name: manualskip
+    value: true
 
 jobs:
   - job: skipcheck
@@ -33,7 +35,8 @@ jobs:
     timeoutInMinutes: "60"
     pool: dv-alex-adobuildserves-ubuntu-vmss
     dependsOn: skipcheck
-    condition: and(succeeded(), ne(dependencies.skipcheck.outputs['testskip.skipsubsequent'], 'true'))
+#    condition: and(succeeded(), ne(dependencies.skipcheck.outputs['testskip.skipsubsequent'], 'true'))
+    condition: and(succeeded(), eq(variables.manualskip, false))
     steps:
       - task: Bash@3
         displayName: Should not run when skipped
