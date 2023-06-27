@@ -21,11 +21,12 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
+            echo "Testing whether we need to skip the pipeline.
             SUB='skipci'
-            echo "COMMIT_MESSAGE: $COMMIT_MESSAGE"
-            echo "SUB: $SUB"
+            echo "> SUB: $SUB"
+            echo "> COMMIT_MESSAGE: $COMMIT_MESSAGE"
             if [[ "$COMMIT_MESSAGE" == *"$SUB"* ]]; then
-              echo "Skipping pipeline, 'skipci' was found in the commit message."
+              echo "> Skipping pipeline, '$SUB' was found in the commit message."
               exit 1
             fi
             exit 0
