@@ -9,11 +9,13 @@ variables:
 
 jobs:
   - job: A
+    pool: dv-alex-adobuildserves-ubuntu-vmss
     steps:
       - bash: |
           echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]this is from job A"
         name: passOutput
   - job: B
+    pool: dv-alex-adobuildserves-ubuntu-vmss
     dependsOn: A
     variables:
       myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]
