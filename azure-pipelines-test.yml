@@ -6,7 +6,7 @@ variables:
     value: METADATA-dev
 
 jobs:
-  - job: testskip
+  - job: skipcheck
     timeoutInMinutes: "30"
     pool: dv-alex-adobuildserves-ubuntu-vmss
     steps:
@@ -32,8 +32,8 @@ jobs:
   - job: publish
     timeoutInMinutes: "60"
     pool: dv-alex-adobuildserves-ubuntu-vmss
-    dependsOn: testskip
-    condition: and(succeeded(), ne(dependencies.A.outputs['testskip.skipsubsequent'], 'true'))
+    dependsOn: skipcheck
+    condition: and(succeeded(), ne(dependencies.skipcheck.outputs['testskip.skipsubsequent'], 'true'))
     steps:
       - task: Bash@3
         displayName: Should not run when skipped
