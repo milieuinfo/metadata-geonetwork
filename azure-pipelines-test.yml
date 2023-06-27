@@ -17,6 +17,7 @@ jobs:
   - job: B
     pool: dv-alex-adobuildserves-ubuntu-vmss
     dependsOn: A
+    condition: and(succeeded(), eq(dependencies.A.outputs['passOutput.myOutputVar'], 'skippls'))
     variables:
       myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]
     steps:
