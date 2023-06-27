@@ -22,9 +22,10 @@ jobs:
             skip=true
           fi
           echo "result skip: $skip"
+          echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$skip"
         name: passOutput
         env:
-          COMMIT_MESSAGE: $(Build.SourceVersionMessage)  echo "##vso[task.setvariable variable=myOutputVar;isoutput=true]$skip"
+          COMMIT_MESSAGE: $(Build.SourceVersionMessage)
   - job: B
     pool: dv-alex-adobuildserves-ubuntu-vmss
     dependsOn: A
@@ -33,7 +34,7 @@ jobs:
       myVarFromJobA: $[ dependencies.A.outputs['passOutput.myOutputVar'] ]
     steps:
       - bash: |
-          echo $(myVarFromJobA)
+          echo "var from A: $(myVarFromJobA)"
 #  - job: skipcheck
 #    timeoutInMinutes: "30"
 #    pool: dv-alex-adobuildserves-ubuntu-vmss
