@@ -30,8 +30,10 @@ shift $((OPTIND - 1))
 
 # where the pomfile lives
 pomfile=../pom.xml
+changelogfile=../CHANGELOG.md
 # what remote we push to
 remote=origin
+today=$(date +%F)
 
 # check bump validity
 valid_bumps=("major" "minor" "patch")
@@ -55,30 +57,46 @@ if [[ $current_version == *-SNAPSHOT ]]; then
   mvn -f $pomfile validate -Dremove-snapshot -DgenerateBackupPoms=false -q
   new_version=$(mvn -f $pomfile help:evaluate -Dexpression=project.version -q -DforceStdout)
 
+  # replace the snapshot reference in changelog.md so we can't forget
+  escaped_version=$(echo "$current_version" | sed -E 's/([][\.])/\\\1/g')
+  echo "Escaped version: $escaped_version"
+  echo "New version: $new_version"
+  regex_from="s/## \[$escaped_version\].*/## [$new_version] - $today/"
+  echo "Regex source: $regex_from"
+  sed -E "$regex_from" -i $changelogfile
+
   # switch to the 'finalise' branch and commit the pom with the new version set
   branch="feature/finalise-$new_version"
   echo "Created local branch $branch"
   git checkout -b "$branch"
   git add $pomfile
+  git add $changelogfile
   git commit -m "Finalising $new_version"
   git push --set-upstream $remote "$branch"
 
-  # go back to the original branch
-  git checkout "$current_branch"
-  # cleanup
-  git branch -D "$branch"
+  # prepare for cleanup
+  branch1="$branch"
 fi
 
 # second step: bump the version as desired
+current_version=$(mvn -f $pomfile help:evaluate -Dexpression=project.version -q -DforceStdout)
 mvn -f $pomfile validate -D "bump-$bump" -q
 mvn -f $pomfile validate -D "add-snapshot" -q
 new_version=$(mvn -f $pomfile help:evaluate -Dexpression=project.version -q -DforceStdout)
+escaped_version=$(echo "$current_version" | sed -E 's/([][\.])/\\\1/g')
 branch="feature/started-$new_version"
+regex_from="s/(## \[$escaped_version\].*)/## [$new_version]\n\n\1/"
+sed -E "$regex_from" -i ../CHANGELOG.md
 echo "Created local branch $branch"
 git checkout -b "$branch"
 git add $pomfile
+git add ../CHANGELOG.md
 git commit -m "[skipci] Starting $new_version"
 git push --set-upstream $remote "$branch"
 git checkout "$current_branch"
-# cleanup
 git branch -D "$branch"
+
+# if the SNAPSHOT finalise branch was used... delete it
+if  [[ -n "$branch1" ]]; then
+  git branch -D "$branch1"
+fi
