@@ -35,25 +35,6 @@ jobs:
     dependsOn: testskip
     condition: and(succeeded(), ne(dependencies.A.outputs['testskip.skipsubsequent'], 'true'))
     steps:
-      - checkout: self
-        displayName: Set up repository
-        submodules: recursive # needed for submodules
-      - task: Bash@3
-        displayName: Check if we need to skip the pipeline
-        env:
-          COMMIT_MESSAGE: $(Build.SourceVersionMessage)
-        inputs:
-          targetType: 'inline'
-          script: |
-            echo "Testing whether we need to skip the pipeline."
-            SUB='skipci'
-            echo "> SUB: $SUB"
-            echo "> COMMIT_MESSAGE: $COMMIT_MESSAGE"
-            if [[ "$COMMIT_MESSAGE" == *"$SUB"* ]]; then
-              echo "> Skipping pipeline, '$SUB' was found in the commit message."
-              exit 1
-            fi
-            exit 0
       - task: Bash@3
         displayName: Should not run when skipped
         inputs:
