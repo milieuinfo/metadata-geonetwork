@@ -6,10 +6,34 @@ variables:
     value: METADATA-dev
 
 jobs:
+  - job: testskip
+    timeoutInMinutes: "30"
+    pool: dv-alex-adobuildserves-ubuntu-vmss
+    steps:
+      - task: Bash@3
+        displayName: Check if we need to skip the pipeline
+        name: testskip
+        env:
+          COMMIT_MESSAGE: $(Build.SourceVersionMessage)
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo "Testing whether we need to skip the pipeline."
+            SUB='skipci'
+            echo "> SUB: $SUB"
+            echo "> COMMIT_MESSAGE: $COMMIT_MESSAGE"
+            skip=false
+            if [[ "$COMMIT_MESSAGE" == *"$SUB"* ]]; then
+              echo "> '$SUB' was found in the commit message."
+              skip=true
+            fi
+            echo "result skip: $skip"
+            echo '##vso[task.setvariable variable=skipsubsequent;isOutput=true]$skip'
   - job: publish
     timeoutInMinutes: "60"
-    # itss linux build server
     pool: dv-alex-adobuildserves-ubuntu-vmss
+    dependsOn: testskip
+    condition: and(succeeded(), ne(dependencies.A.outputs['testskip.skipsubsequent'], 'true'))
     steps:
       - checkout: self
         displayName: Set up repository
