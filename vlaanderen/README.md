@@ -18,7 +18,7 @@ The script `finalise-version.sh` helps switching from one version to the next. I
 - finish off a SNAPSHOT version
 - start the newly bumped version
 
-The `pom.xml` file is automatically added.
+The `pom.xml` file is automatically added. The changelog file is modified accordingly.
 
 Sample usage:
 ```bash

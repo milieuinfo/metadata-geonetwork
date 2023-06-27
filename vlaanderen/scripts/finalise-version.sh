@@ -3,8 +3,8 @@
 usage="$(basename "$0") [-h] [-b bump]
 --------------------------------------------------
 Bump the version and create the necessary commits.
-This can be run from a SNAPSHOT version. In that case, it will remove the SNAPSHOT and produce a 'finalisation' commit.
-Afterwards, it bumps the version and produces a 'starting' commit for the new SNAPSHOT version.
+This can be run from a SNAPSHOT version. In that case, it will remove the SNAPSHOT and produce a 'finalisation' branch.
+Afterwards, it bumps the version and produces a 'starting' branch for the new SNAPSHOT version.
 
 where:
     -h  show this help text
