@@ -21,6 +21,9 @@ services:
       - pglog:/var/log/postgresql
       - geonetworkdata:/geonetwork-data
 
+  geonetwork-reindexer:
+    profiles: [ "full" ]
+
   elasticsearch:
     ports:
       - "9200:9200"
