@@ -1291,7 +1291,6 @@
   <!--     Modules for the build in approximate dependency order   -->
   <!-- =========================================================== -->
   <modules>
-    <module>schemas</module>
     <module>common</module>
     <module>cachingxslt</module>
     <module>sde</module>
@@ -1300,6 +1299,7 @@
     <module>events</module>
     <module>core</module>
     <module>listeners</module>
+    <module>schemas</module>
     <module>csw-server</module>
     <module>harvesters</module>
     <module>healthmonitor</module>
