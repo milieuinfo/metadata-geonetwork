@@ -12,8 +12,6 @@
                 xmlns:geonet="http://www.fao.org/geonetwork"
                 xmlns:java="java:org.fao.geonet.util.XslUtil"
                 version="2.0" exclude-result-prefixes="#all">
-  <xsl:include href="../iso19139/convert/functions.xsl"/>
-  <xsl:include href="layout/utility-fn.xsl"/>
 
   <xsl:variable name="metadataStandardNameForDatasetAndSeries">ISO 19115/2003/Cor.1:2006/INSPIRE-TG2.0</xsl:variable>
   <xsl:variable name="metadataStandardNameForService">ISO 19119:2005/Amd 1:2008/INSPIRE-TG2.0</xsl:variable>

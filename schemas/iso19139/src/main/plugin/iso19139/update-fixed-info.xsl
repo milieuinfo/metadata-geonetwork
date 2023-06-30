@@ -39,6 +39,7 @@
   <xsl:include href="../iso19139/convert/functions.xsl"/>
   <xsl:include href="update-fixed-info-keywords.xsl"/>
   <xsl:include href="layout/utility-fn.xsl"/>
+  <xsl:include href="update-fixed-info-vl.xsl"/>
 
 
   <xsl:variable name="serviceUrl" select="/root/env/siteURL"/>
@@ -104,9 +105,6 @@
   <xsl:variable name="nonMultilingualFields"
                 select="$editorConfig/editor/multilingualFields/exclude"/>
 
-
-  <xsl:include href="update-fixed-info-vl.xsl"/>
-
   <xsl:template match="/root">
     <xsl:apply-templates select="*:MD_Metadata"/>
   </xsl:template>
@@ -118,9 +116,9 @@
     <xsl:namespace name="gmd" select="'http://www.isotc211.org/2005/gmd'"/>
     <xsl:namespace name="gmx" select="'http://www.isotc211.org/2005/gmx'"/>
     <xsl:namespace name="gts" select="'http://www.isotc211.org/2005/gts'"/>
-    <xsl:if test="gmd:identificationInfo/srv:SV_ServiceIdentification">
-      <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
-    </xsl:if>
+    <xsl:namespace name="gsr" select="'http://www.isotc211.org/2005/gsr'"/>
+    <xsl:namespace name="gmi" select="'http://www.isotc211.org/2005/gmi'"/>
+    <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
     <xsl:choose>
       <xsl:when test="$isUsing2005Schema and not($isUsing2007Schema)">
         <xsl:namespace name="gml" select="'http://www.opengis.net/gml'"/>
