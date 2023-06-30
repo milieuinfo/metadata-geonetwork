@@ -2,10 +2,10 @@
   <li class="navbar-text">
     <span
       data-translate=""
-      data-translate-values="{platform: '{{info['system/platform/name']}}', version: '{{info['system/platform/version']}}', subversion: '{{info['system/platform/subVersion']}}'}"
+      data-translate-values="{vlversion: '{{info['system/vlaanderen/version']}}', platform: '{{info['system/platform/name']}}', version: '{{info['system/platform/version']}}', subversion: '{{info['system/platform/subVersion']}}'}"
     >
-      versionDetails</span
-    >
+      versionDetails
+    </span>
   </li>
   <li>
     <a href="http://geonetwork-opensource.org/">
@@ -76,6 +76,18 @@
     >
       <span class="fa fa-fw fa-link"></span
     ></a>
+  </li>
+  <li
+    data-ng-if="info['microservices/enabled'] === true"
+    data-ng-repeat="rssFeed in rssFeeds"
+  >
+    <a
+      href="../../api/collections/main/items?{{rssFeed.url}}"
+      title="{{rssFeed.label | translate}}"
+      aria-label="{{rssFeed.label | translate}}"
+    >
+      <span class="fa fa-rss" />
+    </a>
   </li>
   <!--<li>
     <a href="rss.search?sortBy=changeDate&georss=simplepoint"

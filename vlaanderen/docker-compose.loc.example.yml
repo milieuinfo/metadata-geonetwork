@@ -1,0 +1,17 @@
+# make a copy of this file for your own purposes,
+# run it with `docker-compose -f docker-compose.yml -f docker-compose.dev.yml`
+
+# below are port overrides, excluding geonetwork with a profile, ...
+services:
+  database:
+    ports:
+      - "5432:5432"
+
+  geonetwork:
+    profiles: ["full"]
+    ports:
+      - "8080:8080"
+
+  elasticsearch:
+    ports:
+      - "9200:9200"

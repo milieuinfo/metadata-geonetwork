@@ -542,8 +542,9 @@
               </xsl:when>
               <xsl:otherwise>
 
-                <xsl:variable name="hasMultipleChoice"
-                              select="count($template/snippet) gt 1"/>
+                <xsl:variable name="snippets" select="$template/snippet|$editorConfig/editor/snippets/list[@name = $template/snippets/@name]/snippet"/>
+
+                <xsl:variable name="hasMultipleChoice" select="count($snippets) gt 1"/>
 
                 <div class="btn-group" data-gn-template-field-add-button="{$id}">
                   <xsl:if test="$hasMultipleChoice">
@@ -570,7 +571,7 @@
                   <xsl:if test="$hasMultipleChoice">
                     <!-- A combo with the list of snippet available -->
                     <ul class="dropdown-menu">
-                      <xsl:for-each select="$template/snippet">
+                      <xsl:for-each select="$snippets">
                         <xsl:variable name="label" select="@label"/>
                         <li><a id="{concat($id, $label)}">
                           <xsl:value-of select="if ($strings/*[name() = $label] != '') then $strings/*[name() = $label] else $label"/>
@@ -602,7 +603,9 @@
                                 select="if ($keyValues) then $keyValues/field[@name = $valueLabelKey]/codelist else ''"/>
                   <xsl:variable name="readonly"
                                 select="if ($keyValues) then $keyValues/field[@name = $valueLabelKey]/readonly else ''"/>
-                  <div class="col-sm-11 gn-field">
+
+                  <!-- TODO: VL: Awaiting core fix. Current custom breaks displayTooltipMode="icon" for template field with mutliples keys -->
+                  <div class="col-sm-12 gn-field">
                     <!-- Only display label if more than one key to match -->
                     <xsl:if test="count($template/values/key) > 1">
                       <label for="{$id}_{@label}">
@@ -784,7 +787,7 @@
                       </xsl:call-template>
                     </xsl:if>
                   </div>
-                  <div class="col-sm-1 gn-control"></div>
+                  <!-- <div class="col-sm-1 gn-control"></div> -->
                 </div>
                 </xsl:for-each>
               </div>
@@ -792,14 +795,14 @@
                 <input class="gn-debug" type="text" name="{$xpathFieldId}" value="{@xpath}"/>
               </xsl:if>
 
-              <xsl:variable name="hasMultipleChoice"
-                            select="count($template/snippet) gt 1"/>
+              <xsl:variable name="snippets" select="$template/snippet|$editorConfig/editor/snippets/list[@name = $template/snippets/@name]/snippet"/>
+
+              <xsl:variable name="hasMultipleChoice" select="count($snippets) gt 1"/>
 
               <xsl:if test="$hasMultipleChoice">
-                <xsl:for-each select="$template/snippet">
+                <xsl:for-each select="$snippets">
                   <textarea id="{concat($id, @label, '-value')}">
-                    <xsl:value-of select="saxon:serialize(*,
-                                        'default-serialize-mode')"/>
+                    <xsl:value-of select="saxon:serialize(*, 'default-serialize-mode')"/>
                   </textarea>
                 </xsl:for-each>
               </xsl:if>
@@ -813,8 +816,7 @@
                 <xsl:if test="$isMissingLabel != ''">
                   <xsl:attribute name="data-not-set-check" select="$tagId"/>
                 </xsl:if>
-                <xsl:value-of select="saxon:serialize($template/snippet[1]/*,
-                                      'default-serialize-mode')"/>
+                <xsl:value-of select="saxon:serialize($snippets[1]/*, 'default-serialize-mode')"/>
               </textarea>
             </div>
           </xsl:if>

@@ -54,5 +54,7 @@
   "mdStatusTitle-submitted_for_removed-to-removed-admin": "Verwijderd",
   "mdStatusTitle-submitted_for_removed-to-removed-reviewer": "Verwijderd",
   "mdStatusTitle-submitted_for_retired-to-rejected_for_retired-reviewer": "Afgekeurd voor depublicatie",
-  "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Gedepubliceerd"
+  "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Gedepubliceerd",
+  "exportDCAT": "Exporteer (RDF/XML)",
+  "featureAttributeTable": "Entiteit"
 }

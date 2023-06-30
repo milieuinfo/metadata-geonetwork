@@ -8,5 +8,6 @@
   "facet-standardNameObject.default.keyword": "Profiel",
   "serviceType-view": "Raadpleegbaar",
   "serviceType-download": "Downloadbaar",
-  "serviceType-discovery": "Zoekdienst"
+  "serviceType-discovery": "Zoekdienst",
+  "exportDCAT": "Export (RDF/XML)",
 }

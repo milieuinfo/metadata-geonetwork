@@ -4,15 +4,20 @@
     <Property name="log_dir">./logs</Property>
   </Properties>
   <Appenders>
+    <!-- default console layout -->
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>
     </Console>
+    <!-- setting console output to json for grafana/loki interpretation -->
+    <!--    <Console name="Console" target="SYSTEM_OUT">-->
+    <!--      <JSONLayout />-->
+    <!--    </Console>-->
     <RollingFile name="File">
       <filename>${sys:log_dir:-log_dir}/geonetwork.log</filename>
       <filePattern>${sys:log_dir:-log_dir}/geonetwork.log-%i.log</filePattern>
       <PatternLayout pattern="%date{ISO8601} %-5level [%logger] - %message%n"/>
       <Policies>
-        <SizeBasedTriggeringPolicy size="10 MB" />
+        <SizeBasedTriggeringPolicy size="10 MB"/>
       </Policies>
       <DefaultRolloverStrategy max="3" fileIndex="min"/>
     </RollingFile>
@@ -20,7 +25,8 @@
       <Routes pattern="$${ctx:logfile}">
         <!-- value dynamically determines the name of the log file. -->
         <Route>
-          <File name="harvester-${ctx:harvester}" fileName="${sys:log_dir:-log_dir}/${ctx:logfile:-harvester_default.log}">
+          <File name="harvester-${ctx:harvester}"
+                fileName="${sys:log_dir:-log_dir}/${ctx:logfile:-harvester_default.log}">
             <PatternLayout>
               <pattern>%date{ISO8601}{${ctx:timeZone}} %-5level [%logger] - %message%n</pattern>
             </PatternLayout>
@@ -65,7 +71,7 @@
     <Logger name="geonetwork.resources" level="error"/>
     <Logger name="geonetwork.schemamanager" level="error"/>
     <Logger name="geonetwork.search" level="error"/>
-    <Logger name="geonetwork.security" level="error"/>
+    <Logger name="geonetwork.security" level="debug"/>
     <Logger name="geonetwork.spatineo" level="error"/>
     <Logger name="geonetwork.sru" level="error"/>
     <Logger name="geonetwork.sru.search" level="error"/>
@@ -78,7 +84,7 @@
     <Logger name="geonetwork.engine" level="error"/>
     <Logger name="geonetwork.monitor" level="error"/>
     <Logger name="geonetwork.resources" level="error"/>
-    <Logger name="geonetwork.security" level="error"/>
+    <Logger name="geonetwork.security" level="debug"/>
     <Logger name="geonetwork.transformerFactory" level="error"/>
     <Logger name="geonetwork.xlinkprocessor" level="error"/>
     <Logger name="geonetwork.xmlresolver" level="error"/>
@@ -89,8 +95,9 @@
       <AppenderRef ref="File"/>
     </Logger>
     <Logger name="org.springframework.beans" level="error"/>
-    <Logger name="org.springframework.security" level="error"/>
+    <Logger name="org.springframework.security" level="debug"/>
     <Logger name="org.springframework.security.ldap" level="error"/>
+    <Logger name="org.springframework.security.web.firewall" level="error"/>
     <Logger name="org.springframework.aop.framework.CglibAopProxy" level="error"/>
 
     <Logger name="com.k_int" level="error" additivity="false">
@@ -136,7 +143,7 @@
 
     <!-- Turn off logging except when explicitly declared above -->
     <Root level="off">
-        <AppenderRef ref="File"/>
+      <AppenderRef ref="File"/>
     </Root>
   </Loggers>
 </Configuration>
