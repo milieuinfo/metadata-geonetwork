@@ -13,7 +13,7 @@
     <gco:CharacterString>c31a20a0-49b1-4472-a5f3-a97b8724b43d</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="https://www.loc.gov/standards/iso639-2/" codeListValue="dut">Nederlands</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="dut">Nederlands</gmd:LanguageCode>
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode
