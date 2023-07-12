@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.0.3-SNAPSHOT]
 - Backport changes & customization made on the ISO19139 update-fixed-info.xsl & OGC Web service harvester logic
 - Fix DCAT editor issues with date field
+- **core** 
+  - [merged core-geonetwork 4.2.6-SNAPSHOT changes](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25576)
+    - minor fixes, including workflow
+  
 
 ## [1.0.2] - 2023-06-26
 - Adding download link for RDF

@@ -1,7 +1,6 @@
 --liquibase formatted sql
 --changeset fxprunayre:00027
 
-
 ALTER TABLE Languages DROP COLUMN isdefault;
 ALTER TABLE spg_page ALTER COLUMN link TYPE text;
 
