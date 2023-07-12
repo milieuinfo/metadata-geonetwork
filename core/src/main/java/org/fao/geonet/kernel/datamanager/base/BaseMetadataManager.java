@@ -52,6 +52,7 @@ import org.fao.geonet.kernel.search.IndexingMode;
 import org.fao.geonet.kernel.search.index.BatchOpsMetadataReindexer;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
+import org.fao.geonet.kernel.setting.SettingInfo;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.repository.*;
 import org.fao.geonet.repository.specification.MetadataFileUploadSpecs;
@@ -913,15 +914,8 @@ public class BaseMetadataManager implements IMetadataManager {
         }
 
         // add baseUrl of this site (from settings)
-        String protocol = settingManager.getValue(Settings.SYSTEM_SERVER_PROTOCOL);
-        String host = settingManager.getValue(Settings.SYSTEM_SERVER_HOST);
-        String port = settingManager.getValue(Settings.SYSTEM_SERVER_PORT);
-        if (port.equals("80")) {
-            port = "";
-        } else {
-            port = ":" + port;
-        }
-        addElement(info, Edit.Info.Elem.BASEURL, protocol + "://" + host + port + context.getBaseUrl());
+        SettingInfo si = new SettingInfo();
+        addElement(info, Edit.Info.Elem.BASEURL, si.getSiteUrl() + context.getBaseUrl());
         addElement(info, Edit.Info.Elem.LOCSERV, "/srv/en");
         return info;
     }
