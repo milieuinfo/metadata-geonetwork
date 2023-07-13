@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.3-SNAPSHOT]
-- TODO
+- Backport changes & customization made on the ISO19139 update-fixed-info.xsl & OGC Web service harvester logic
+- Fix DCAT editor issues with date field
+- [Added capability to disable harvester scheduling](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25303), potential **core** contribution
+- **core** Contributions to core
+  - [Add cardinality for ISO19110](https://github.com/geonetwork/core-geonetwork/pull/7182) - [PR](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25115)
 
 ## [1.0.2] - 2023-06-26
 - Adding download link for RDF
@@ -34,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Cleanup of start-page "browse by" options](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23629)
 - [Customised facets](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18729)
 - Customised editor view
-- [Introduce ACM/IDM as default authenticaiton layer](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21672)
+- [Introduce ACM/IDM as default authentication layer](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21672)
 - [Introducing Cypress e2e testing](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24170)
 - Introduce DCAT editor - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/22851), [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23974)
 - [Introducing DCAT plugin](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/18131) and [DCAT indexing](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/22605)
