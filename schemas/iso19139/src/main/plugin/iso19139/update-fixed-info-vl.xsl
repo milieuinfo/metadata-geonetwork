@@ -3,13 +3,10 @@
                 xmlns:gml="http://www.opengis.net/gml/3.2"
                 xmlns:gml320="http://www.opengis.net/gml"
                 xmlns:srv="http://www.isotc211.org/2005/srv"
-                xmlns:gmx="http://www.isotc211.org/2005/gmx"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:gn-fn-iso19139="http://geonetwork-opensource.org/xsl/functions/profiles/iso19139"
-                xmlns:geonet="http://www.fao.org/geonetwork"
                 xmlns:java="java:org.fao.geonet.util.XslUtil"
                 version="2.0" exclude-result-prefixes="#all">
 
@@ -114,7 +111,6 @@
           namespace-uri()!='http://www.isotc211.org/2005/srv']"/>
     </xsl:copy>
   </xsl:template>
-
 
 
   <!--  only accept the pointOfContact role code for a gmd:contact element -->
@@ -242,56 +238,71 @@
       </xsl:choose>
     </xsl:variable>
     <gmd:hierarchyLevelName>
-      <gco:CharacterString><xsl:value-of select="$hierarchyLevelNameValue" /></gco:CharacterString>
+      <gco:CharacterString>
+        <xsl:value-of select="$hierarchyLevelNameValue"/>
+      </gco:CharacterString>
     </gmd:hierarchyLevelName>
   </xsl:template>
 
 
-  <!-- Set the required metadataStandardName and metadataStandardVersion for dataset and series, see TG 2.0 -->
   <!-- Change elements -->
-  <!-- TODO: Used to only be applied on Metadatacenter and not Metadata Vlaanderen ($nodeType='Metadatacenter') -->
-  <!-- TODO: Now that we only have one node, what should be the approach ? -->
-  <xsl:template match="gmd:metadataStandardName[false() and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="9000">
+  <xsl:template match="gmd:metadataStandardName[lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="9000">
     <xsl:copy copy-namespaces="no">
-      <gco:CharacterString><xsl:value-of select="$metadataStandardNameForDatasetAndSeries" /></gco:CharacterString>
+      <gco:CharacterString>
+        <xsl:value-of select="$metadataStandardNameForDatasetAndSeries"/>
+      </gco:CharacterString>
     </xsl:copy>
     <xsl:if test="count(../gmd:metadataStandardVersion) = 0">
       <gmd:metadataStandardVersion>
-        <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+        <gco:CharacterString>
+          <xsl:value-of select="$metadataStandardVersion"/>
+        </gco:CharacterString>
       </gmd:metadataStandardVersion>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="gmd:metadataStandardVersion[false() and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="9000">
+  <xsl:template match="gmd:metadataStandardVersion[lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = ('series','dataset')]" priority="9000">
     <xsl:if test="count(../gmd:metadataStandardName) = 0">
       <gmd:metadataStandardName>
-        <gco:CharacterString><xsl:value-of select="$metadataStandardNameForDatasetAndSeries" /></gco:CharacterString>
+        <gco:CharacterString>
+          <xsl:value-of select="$metadataStandardNameForDatasetAndSeries"/>
+        </gco:CharacterString>
       </gmd:metadataStandardName>
     </xsl:if>
     <xsl:copy copy-namespaces="no">
-      <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+      <gco:CharacterString>
+        <xsl:value-of select="$metadataStandardVersion"/>
+      </gco:CharacterString>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="gmd:metadataStandardName[false() and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="9000">
+  <xsl:template match="gmd:metadataStandardName[lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="9000">
     <xsl:copy copy-namespaces="no">
-      <gco:CharacterString><xsl:value-of select="$metadataStandardNameForService" /></gco:CharacterString>
+      <gco:CharacterString>
+        <xsl:value-of select="$metadataStandardNameForService"/>
+      </gco:CharacterString>
     </xsl:copy>
     <xsl:if test="count(../gmd:metadataStandardVersion) = 0">
       <gmd:metadataStandardVersion>
-        <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+        <gco:CharacterString>
+          <xsl:value-of select="$metadataStandardVersion"/>
+        </gco:CharacterString>
       </gmd:metadataStandardVersion>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="gmd:metadataStandardVersion[false() and lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="9000">
+  <xsl:template match="gmd:metadataStandardVersion[lower-case(../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue) = 'service']" priority="9000">
     <xsl:if test="count(../gmd:metadataStandardName) = 0">
       <gmd:metadataStandardName>
-        <gco:CharacterString><xsl:value-of select="$metadataStandardNameForService" /></gco:CharacterString>
+        <gco:CharacterString>
+          <xsl:value-of select="$metadataStandardNameForService"/>
+        </gco:CharacterString>
       </gmd:metadataStandardName>
     </xsl:if>
     <xsl:copy copy-namespaces="no">
-      <gco:CharacterString><xsl:value-of select="$metadataStandardVersion"/></gco:CharacterString>
+      <gco:CharacterString>
+        <xsl:value-of select="$metadataStandardVersion"/>
+      </gco:CharacterString>
     </xsl:copy>
   </xsl:template>
 
