@@ -59,6 +59,7 @@ services:
       timeout: 5s
       retries: 20
     environment:
+      # requestHeaderSize/maxFormContentSize: added to improve editing large forms
       JAVA_OPTS: >
         -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
         -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
@@ -66,6 +67,8 @@ services:
         -Dgeonetwork.dir=/geonetwork-data
         -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
         -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
+        -Djetty.httpConfig.requestHeaderSize=32768
+        -Dorg.eclipse.jetty.server.Request.maxFormContentSize=500000
       ES_HOST: elasticsearch
       ES_PORT: 9200
       ES_PROTOCOL: http
