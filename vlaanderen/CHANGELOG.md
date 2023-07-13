@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.0.3-SNAPSHOT]
 - Backport changes & customization made on the ISO19139 update-fixed-info.xsl & OGC Web service harvester logic
 - Fix DCAT editor issues with date field
+- [Added capability to disable harvester scheduling](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25303), potential **core** contribution
 - **core**
   - [Add cardinality for ISO19110](https://github.com/geonetwork/core-geonetwork/pull/7182) - [PR](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25115)
   - [Improve performance of large forms](https://github.com/geonetwork/docker-geonetwork/pull/107/files#diff-bed7ab158ecf2f50be93c45dd9ae77da44d0689a155d95771d091515fb6d1ba7R84-R85)
+- Replace title by empty value when creating or duplicating a metadata
+- Change UI config to show absolute modification in the UI instead of relative elapsed time
+- Backport changes mode on the `update-info-on-duplicate.xsl` for ISO19139
+- Update codelist dut label for `gmd:CI_DateTypeCode`
 - Enforce values for metadataStandardName and metadataStandardVersion during edition
 
 ## [1.0.2] - 2023-06-26

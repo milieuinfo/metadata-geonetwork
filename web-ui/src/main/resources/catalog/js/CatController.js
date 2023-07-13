@@ -69,7 +69,7 @@
         },
         mods: {
           global: {
-            humanizeDates: true,
+            humanizeDates: false,
             dateFormat: "DD-MM-YYYY",
             timezone: "Browser" // Default to browser timezone
           },
