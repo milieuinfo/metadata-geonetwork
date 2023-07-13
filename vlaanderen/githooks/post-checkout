@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+# start script
+printf "\nExecuting 'post-checkout' hook\n\n"
+
+# input to the hook
+prevHEAD=$1
+newHEAD=$2
+checkoutType=$3
+
+[[ $checkoutType == 1 ]] && checkoutType='branch' ||
+                            checkoutType='file' ;
+
+newBranch=$(git rev-parse --abbrev-ref HEAD)
+newHead=$(git name-rev --name-only "$prevHEAD")
+prevHead=$(git name-rev --name-only "$newHEAD")
+echo "Checkout type: $checkoutType"
+echo "    prev HEAD: $prevHEAD"
+echo "     new HEAD: $newHead"
+echo "   new BRANCH: $newBranch"
+
+# perform the transifex update if we're checking out a feature branch
+if [[ $checkoutType == "branch" && $newBranch == feature/* ]] ;
+then
+  printf "\nPerforming transifex update for feature branch\n"
+  (
+      cd web-ui
+      bash download-from-transifex-vl.sh
+  )
+fi
+
