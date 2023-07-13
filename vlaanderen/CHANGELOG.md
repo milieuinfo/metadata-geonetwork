@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **core**
   - [Add cardinality for ISO19110](https://github.com/geonetwork/core-geonetwork/pull/7182) - [PR](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25115)
   - [Improve performance of large forms](https://github.com/geonetwork/docker-geonetwork/pull/107/files#diff-bed7ab158ecf2f50be93c45dd9ae77da44d0689a155d95771d091515fb6d1ba7R84-R85)
+- Enforce values for metadataStandardName and metadataStandardVersion during edition
 
 ## [1.0.2] - 2023-06-26
 - Adding download link for RDF
