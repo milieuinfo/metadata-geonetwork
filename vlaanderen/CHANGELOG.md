@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Change UI config to show absolute modification in the UI instead of relative elapsed time
 - Backport changes mode on the `update-info-on-duplicate.xsl` for ISO19139
 - Update codelist dut label for `gmd:CI_DateTypeCode`
+- Enforce values for metadataStandardName and metadataStandardVersion during edition
 
 ## [1.0.2] - 2023-06-26
 - Adding download link for RDF
