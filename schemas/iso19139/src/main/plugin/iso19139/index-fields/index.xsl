@@ -1049,7 +1049,6 @@
             <xsl:with-param name="languages" select="$allLanguages"/>
           </xsl:apply-templates>
         </xsl:for-each-group>
-
       </xsl:for-each>
 
       <xsl:variable name="atomProtocol" select="util:getSettingValue('system/inspire/atomProtocol')" />

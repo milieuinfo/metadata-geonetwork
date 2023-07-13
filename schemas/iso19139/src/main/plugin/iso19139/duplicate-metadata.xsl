@@ -33,6 +33,8 @@
   <xsl:variable name="doiProtocol"
                 select="'DOI'"/>
 
+  <xsl:include href="duplicate-metadata-vl.xsl"/>
+
   <xsl:template match="/root">
     <xsl:apply-templates select="*[1]"/>
   </xsl:template>

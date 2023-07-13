@@ -28,23 +28,20 @@
   <codelist name="gmd:CI_DateTypeCode">
     <entry>
       <code>creation</code>
-      <label>creatie</label>
-      <description>Datum waarop de dataset of dataset serie is gecre&#236;erd.</description>
+      <label>Creatie</label>
+      <description>Aanmaakdatum of opnamedatum van de dataset.</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
     <entry>
       <code>publication</code>
-      <label>publicatie</label>
-      <description>Publicatie datum waarop de dataset of dataset serie is gepubliceerd.
-      </description>
+      <label>Publicatie</label>
+      <description>Uitgavedatum van de dataset.</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
     <entry>
       <code>revision</code>
-      <label>revisie</label>
-      <description>Datum waarop de dataset of dataset serie is gecontroleerd, verbeterd of
-        gewijzigd.
-      </description>
+      <label>Wijziging</label>
+      <description>Datum van wijziging, controle, verbetering van dataset.</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
   </codelist>

@@ -5,7 +5,7 @@
     <th data-translate="">attributeDefinition</th>
   </tr>
   <tr data-ng-repeat-start="attribute in attributeTable track by $index">
-    <td>
+    <td style="border-top-width: 3px">
       <strong>{{attribute.name}}</strong>
       <div>
         <span data-ng-if="attribute.type" title="{{'attributeType' | translate}}">
@@ -19,7 +19,7 @@
         </span>
       </div>
     </td>
-    <td data-ng-show="::columnVisibility.code">
+    <td style="border-top-width: 3px" data-ng-show="::columnVisibility.code">
       <strong data-ng-show="{{attribute.link == null || attribute.link == ''}}"
         >{{attribute.code}}</strong
       >
@@ -29,10 +29,13 @@
         >{{attribute.code}}</a
       >
     </td>
-    <td>{{attribute.definition}}</td>
+    <td style="border-top-width: 3px">{{attribute.definition}}</td>
   </tr>
   <tr data-ng-if="attribute.values.length > 0">
-    <td colspan="3" class="gn-noborder-top gn-nopadding-top gn-nopadding-bottom" />
+    <td
+      colspan="3"
+      class="gn-noborder-top gn-noborder-bottom gn-nopadding-top gn-nopadding-bottom"
+    />
   </tr>
   <tr data-ng-repeat-end data-ng-if="attribute.values.length > 0">
     <td colspan="3" class="gn-noborder-top">
