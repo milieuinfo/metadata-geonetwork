@@ -29,7 +29,7 @@
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:srv="http://www.isotc211.org/2005/srv"
                 xmlns:gml="http://www.opengis.net/gml/3.2"
-                xmlns:gml31="http://www.opengis.net/gml"
+                xmlns:gml320="http://www.opengis.net/gml"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:gn-fn-index="http://geonetwork-opensource.org/xsl/functions/index"
                 xmlns:index="java:org.fao.geonet.kernel.search.EsSearchManager"
@@ -650,7 +650,7 @@
         <xsl:for-each select="*/gmd:EX_Extent/*/gmd:EX_BoundingPolygon/gmd:polygon">
           <xsl:variable name="geojson"
                         select="util:gmlToGeoJson(
-                                  saxon:serialize((gml:*|gml31:*), 'default-serialize-mode'),
+                                  saxon:serialize((gml:*|gml320:*), 'default-serialize-mode'),
                                   true(), 5)"/>
           <xsl:choose>
             <xsl:when test="$geojson = ''"></xsl:when>
@@ -667,6 +667,10 @@
 
         <xsl:for-each select="*/gmd:EX_Extent">
           <xsl:copy-of select="gn-fn-index:add-multilingual-field('extentDescription', gmd:description, $allLanguages)"/>
+
+          <xsl:for-each select=".//gmd:geographicIdentifier">
+            <xsl:copy-of select="gn-fn-index:add-multilingual-field('extentIdentifier', */gmd:code, $allLanguages)"/>
+          </xsl:for-each>
 
           <!-- TODO: index bounding polygon -->
           <xsl:variable name="bboxes"
@@ -749,11 +753,17 @@
             <!--<xsl:value-of select="($e + $w) div 2"/>,<xsl:value-of select="($n + $s) div 2"/></field>-->
           </xsl:for-each>
 
-          <xsl:for-each select=".//gmd:temporalElement/*/gmd:extent/gml:TimePeriod">
+          <xsl:for-each select=".//gmd:temporalElement/*/gmd:extent/(gml:TimePeriod|gml320:TimePeriod)">
             <xsl:variable name="start"
-                          select="gml:beginPosition|gml:begin/gml:TimeInstant/gml:timePosition"/>
+                          select="gml:beginPosition
+                                  |gml:begin/gml:TimeInstant/gml:timePosition
+                                  |gml320:beginPosition
+                                  |gml320:begin/gml320:TimeInstant/gml320:timePosition"/>
             <xsl:variable name="end"
-                          select="gml:endPosition|gml:end/gml:TimeInstant/gml:timePosition"/>
+                          select="gml:endPosition
+                                  |gml:end/gml:TimeInstant/gml:timePosition
+                                  |gml320:endPosition
+                                  |gml320:end/gml320:TimeInstant/gml320:timePosition"/>
 
             <xsl:variable name="zuluStartDate"
                           select="date-util:convertToISOZuluDateTime($start)"/>
@@ -956,13 +966,14 @@
                                 gmd:statement, $allLanguages)"/>
 
 
-        <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != '']">
+        <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != ''
+                                          or gmd:measureDescription/gco:CharacterString != '']">
           <xsl:variable name="name"
                         select="(gmd:nameOfMeasure/gco:CharacterString)[1]"/>
           <xsl:variable name="value"
                         select="(gmd:result/gmd:DQ_QuantitativeResult/gmd:value)[1]"/>
           <xsl:variable name="unit"
-                        select="(gmd:result/gmd:DQ_QuantitativeResult/gmd:valueUnit//gml:identifier)[1]"/>
+                        select="(gmd:result/gmd:DQ_QuantitativeResult/gmd:valueUnit//(gml:identifier|gml320:identifier))[1]"/>
           <xsl:variable name="description"
                         select="(gmd:measureDescription/gco:CharacterString)[1]"/>
           <measure type="object">{
@@ -1007,8 +1018,37 @@
               </xsl:for-each>
               ]
             </xsl:if>
+
+            <xsl:variable name="processors"
+                          select="gmd:processor/*[gmd:organisationName/gco:CharacterString != '']"/>
+
+            <xsl:if test="count($processors) > 0">
+              ,"processor": [
+              <xsl:for-each select="$processors">
+                {
+                  "organisationObject": <xsl:value-of
+                                          select="gn-fn-index:add-multilingual-field(
+                                            'description', gmd:organisationName, $allLanguages)"/>
+                  <xsl:if test="gmd:individualName/gco:CharacterString/text()">
+                    ,"individual":"<xsl:value-of select="gn-fn-index:json-escape(gmd:individualName/gco:CharacterString/text())"/>"
+                  </xsl:if>
+                }
+                <xsl:if test="position() != last()">,</xsl:if>
+              </xsl:for-each>
+              ]
+            </xsl:if>
             }</processSteps>
         </xsl:for-each>
+
+        <xsl:for-each-group select="gmd:lineage/*/gmd:processStep/*/gmd:processor[
+                                    */gmd:organisationName/gco:CharacterString != '']"
+                            group-by="*/gmd:organisationName/gco:CharacterString">
+          <xsl:apply-templates mode="index-contact"
+                               select=".">
+            <xsl:with-param name="fieldSuffix" select="'ForProcessing'"/>
+            <xsl:with-param name="languages" select="$allLanguages"/>
+          </xsl:apply-templates>
+        </xsl:for-each-group>
       </xsl:for-each>
 
       <xsl:variable name="atomProtocol" select="util:getSettingValue('system/inspire/atomProtocol')" />

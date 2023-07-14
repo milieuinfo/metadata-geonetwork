@@ -1316,6 +1316,14 @@
               "organisation": {
                 "type": "keyword"
               },
+              "email": {
+                "type": "keyword",
+                "copy_to": ["any.default"]
+              },
+              "individual": {
+                "type": "keyword",
+                "copy_to": ["any.default"]
+              },
               "role": {
                 "type": "keyword"
               }
@@ -1629,6 +1637,9 @@
             "type": "date"
           },
           "source": {
+            "type": "object"
+          },
+          "processor": {
             "type": "object"
           }
         }
@@ -1957,6 +1968,26 @@
       },
       "userSavedCount": {
         "type": "long"
+      },
+      "resourceTemporalExtentDetails": {
+        "properties": {
+          "start": {
+            "properties": {
+              "date": {
+                "type": "date",
+                "format": "date_optional_time"
+              }
+            }
+          },
+          "end": {
+            "properties": {
+              "date": {
+                "type": "date",
+                "format": "date_optional_time"
+              }
+            }
+          }
+        }
       }
     }
   }
