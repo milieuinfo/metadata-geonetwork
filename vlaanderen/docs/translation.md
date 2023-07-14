@@ -17,11 +17,11 @@ After getting an account on Transifex and access to the project, the relevant pa
 - [nl_BE language](https://app.transifex.com/geonetwork/core-geonetwork/language/nl_BE/)
 
 Filter on category `Angular_UI` to get access to the most used files:
-- Angular UI - version 4 Strings 
+- `nl-v4.json` - Angular UI - version 4 Strings 
 - `nl-admin.json` - Angular UI Admin Strings
-- Angular UI Core Strings
-- Angular UI Editor Strings
-- Angular UI Search
+- `nl-core.json` - Angular UI Core Strings
+- `nl-editor.json` - Angular UI Editor Strings
+- `nl-search.json` - Angular UI Search
 
 Click one of them, then the button `Translate`. This provides an overview of all available (un)translated strings. 
 
