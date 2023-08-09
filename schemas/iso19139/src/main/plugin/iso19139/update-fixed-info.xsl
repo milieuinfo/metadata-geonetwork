@@ -697,14 +697,14 @@
   </xsl:template>
 
   <!-- Move to GML 3.2.1 when using 2007 version. -->
-  <xsl:template match="gml320:*[$isUsing2007Schema]">
-    <xsl:element name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2">
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:element>
-  </xsl:template>
-  <xsl:template match="@gml320:*[$isUsing2007Schema]">
-    <xsl:attribute name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2" select="."/>
-  </xsl:template>
+  <!-- <xsl:template match="gml320:*[$isUsing2007Schema]"> -->
+  <!--   <xsl:element name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2"> -->
+  <!--     <xsl:apply-templates select="@*|node()"/> -->
+  <!--   </xsl:element> -->
+  <!-- </xsl:template> -->
+  <!-- <xsl:template match="@gml320:*[$isUsing2007Schema]"> -->
+  <!--   <xsl:attribute name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2" select="."/> -->
+  <!-- </xsl:template> -->
 
   <xsl:template match="gml:*|gml320:*">
     <xsl:call-template name="correct_ns_prefix_with_namespace">
