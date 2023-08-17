@@ -9,7 +9,7 @@ cd transifex-src
 
 cat <<EOF > .tx/config
   [main]
-  host = https://www.transifex.com
+  host = https://app.transifex.com
 
   [o:geonetwork:p:core-geonetwork:r:v4]
   file_filter = translations/core-geonetwork.v4/<lang>.json
