@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.0.4-SNAPSHOT]
 - [Started work on Transifex nl_BE](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25634), see [docs](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork?path=/vlaanderen/docs/translation.md&version=GBdevelop)
+- Remove unused core metadata templates from ISO19139 plugin to avoid including them when loading the templates
 
 ## [1.0.3] - 2023-07-14
 - Backport changes & customization made on the ISO19139 update-fixed-info.xsl & OGC Web service harvester logic
