@@ -4,14 +4,20 @@
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:java="java:org.fao.geonet.util.XslUtil"
+                xmlns:uuid="java:java.util.UUID"
                 version="2.0" exclude-result-prefixes="#all">
 
-
+  <xsl:include href="../iso19139/convert/functions.xsl"/>
   <xsl:include href="update-fixed-info-keywords.xsl"/>
 
   <xsl:variable name="serviceUrl" select="/root/env/siteURL"/>
   <xsl:variable name="nodeUrl" select="/root/env/nodeURL"/>
   <xsl:variable name="node" select="/root/env/node"/>
+  <xsl:variable name="mainLanguage">
+    <xsl:call-template name="langId_from_gmdlanguage19139">
+      <xsl:with-param name="gmdlanguage" select="/root/*/gmd:language"/>
+    </xsl:call-template>
+  </xsl:variable>
 
 
   <!-- Empty description -->
@@ -33,8 +39,10 @@
                        gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier">
     <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*"/>
-      <gmd:code gco:nilReason="missing">
-        <gco:CharacterString/>
+      <gmd:code>
+        <gco:CharacterString>
+          <xsl:value-of select="uuid:toString(uuid:randomUUID())"/>
+        </gco:CharacterString>
       </gmd:code>
       <xsl:if test="name() = 'gmd:RS_Identifier'">
         <gmd:codeSpace gco:nilReason="missing">
