@@ -1,17 +1,47 @@
-# make a copy of this file for your own purposes,
-# run it with `docker-compose -f docker-compose.yml -f docker-compose.dev.yml`
+# Make a copy of this file for your own purposes.
+# Below are port overrides, excluding geonetwork with a profile, ...
+# This file is based on the docker-compose.override.yml file.
+# Run it with `docker-compose -f docker-compose.yml -f docker-compose.loc.yml`
+# Note that specifying a file with -f excludes the default docker-compose.override.yml file
 
-# below are port overrides, excluding geonetwork with a profile, ...
+volumes:
+  pgdata:
+  pglog:
+  esdata:
+  geonetworkdata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/tmp/geonetwork/ha/data'
+
 services:
   database:
     ports:
       - "5432:5432"
 
   geonetwork:
-    profiles: ["full"]
+    profiles: [ "full", "scaled" ]
+    deploy:
+      mode: replicated
+      replicas: 2
+    ports:
+      - "8081-8082:8080"
+
+  geonetwork-harvester:
+    profiles: [ "scaled" ]
     ports:
       - "8080:8080"
+
+  geonetwork-reindexer:
+    profiles: [ "full" ]
 
   elasticsearch:
     ports:
       - "9200:9200"
+
+  ogc-api-records-service:
+    build: .
+    image: localhost/gn-cloud-ogc-api-records-service:vl-1.0.1
+    ports:
+      - "8081:8080"
