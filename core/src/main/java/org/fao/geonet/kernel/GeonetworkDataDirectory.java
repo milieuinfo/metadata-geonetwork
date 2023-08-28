@@ -306,7 +306,7 @@ public class GeonetworkDataDirectory {
         htmlCacheDir = setDir(jeevesServlet, webappName, handlerConfig, htmlCacheDir,
             ".htmlcache" + KEY_SUFFIX, Geonet.Config.HTMLCACHE_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "htmlcache"
         );
-        Log.info(Geonet.DATA_DIRECTORY, "   - Html cache directory is: " + htmlCacheDir);        
+        Log.info(Geonet.DATA_DIRECTORY, "   - Html cache directory is: " + htmlCacheDir);
         schemaPublicationDir = setDir(jeevesServlet, webappName, handlerConfig, schemaPublicationDir,
             ".schemapublication" + KEY_SUFFIX, Geonet.Config.SCHEMAPUBLICATION_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "schemapublication"
         );
@@ -525,6 +525,10 @@ public class GeonetworkDataDirectory {
      */
     private Path setDir(JeevesServlet jeevesServlet, String webappName,
                         ServiceConfig handlerConfig, Path dir, String key, String handlerKey, String firstPathSeg, String... otherSegments) {
+        // when context is root, webappname is empty, which breaks the default behaviour of GeonetworkDataDirectory
+        if(webappName.equals("")) {
+            webappName = "geonetwork";
+        }
         String envKey = webappName + key;
         if (dir != null) {
             if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY)) {
