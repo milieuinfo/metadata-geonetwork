@@ -109,7 +109,10 @@
         if (split.length == 2) {
           // if there is a draft status present, incorporate this into the resulting string
           var draftStatus = $translate.instant("mdStatus-" + split[1]);
-          result = $translate.instant("mdStatusWorkflowWithDraft", {metadataStatus: metadataStatus, draftStatus: draftStatus});
+          result = $translate.instant("mdStatusWorkflowWithDraft", {
+            metadataStatus: metadataStatus,
+            draftStatus: draftStatus
+          });
         }
         return result;
       };
