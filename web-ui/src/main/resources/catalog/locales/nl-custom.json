@@ -56,5 +56,7 @@
   "mdStatusTitle-submitted_for_retired-to-rejected_for_retired-reviewer": "Afgekeurd voor depublicatie",
   "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Gedepubliceerd",
   "exportDCAT": "Exporteer (RDF/XML)",
+  "groupManagedByYourself": "Beheerd door jezelf",
+  "groupManagedByDatapublicatie": "Beheerd door DataPublicatie"
   "featureAttributeTable": "Entiteit"
 }
