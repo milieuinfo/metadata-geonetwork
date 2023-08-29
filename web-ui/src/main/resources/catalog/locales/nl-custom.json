@@ -1,4 +1,6 @@
 {
+  "linkToParent": "Link naar een datasetserie",
+  "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "facet-domain": "Domein",
   "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Access rights",
   "facet-th_GDI-Vlaanderen-trefwoorden": "GDI Vlaanderen Trefwoord",
