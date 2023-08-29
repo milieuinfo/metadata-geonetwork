@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: geonetwork
+      POSTGRES_USER: geonetwork
+      POSTGRES_DB: geonetwork
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: [ "postgres",
+               "-c", "log_statement=all",
+               "-c", "logging_collector=true",
+               "-c", "log_file_mode=0644",
+               "-c", "log_directory=/var/log/postgresql",
+               "-c", "log_filename=postgresql.log" ]
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  liquibase:
+    image: maven
+    depends_on:
+      database:
+        condition: service_healthy
+    working_dir: /liquibase
+    volumes:
+      - ../liquibase:/liquibase
+      - ./pom.xml:/vlaanderen.pom.xml
+    # Command to run the liquibase update service
+    command: bash -c "mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2 -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
+
+  geonetwork-reindexer:
+    image: metadata/geonetwork-reindexer
+    depends_on:
+      geonetwork:
+        condition: service_healthy
+    build:
+      context: geonetwork-reindexer
+      dockerfile: Dockerfile
+
+  geonetwork:
+    image: metadata/geonetwork
+    build:
+      context: ../web/
+      dockerfile: Dockerfile
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+    restart: always
+    healthcheck:
+      test: "curl -f http://localhost:8080/"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    environment:
+      # requestHeaderSize/maxFormContentSize: added to improve editing large forms
+      JAVA_OPTS: >
+        -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF
+        -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
+        -Xms512M -Xss512M -Xmx2G -XX:+UseConcMarkSweepGC
+        -Dgeonetwork.dir=/geonetwork-data
+        -Dgeonetwork.codeList.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/codelist
+        -Dgeonetwork.schema.dir=/var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
+        -Djetty.httpConfig.requestHeaderSize=32768
+        -Dorg.eclipse.jetty.server.Request.maxFormContentSize=500000
+      ES_HOST: elasticsearch
+      ES_PORT: 9200
+      ES_PROTOCOL: http
+      GEONETWORK_DB_HOST: database
+      GEONETWORK_DB_NAME: geonetwork
+      GEONETWORK_DB_PASSWORD: geonetwork
+      GEONETWORK_DB_PORT: 5432
+      GEONETWORK_DB_TYPE: postgres
+      GEONETWORK_DB_USERNAME: geonetwork
+      GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
+      GEONETWORK_WEBBAPP_CONTEXTPATH: /
+
+  ogc-api-records-service:
+    image: geonetwork/gn-cloud-ogc-api-records-service:0.2.0
+    depends_on:
+      liquibase:
+        condition: service_completed_successfully
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    environment:
+      SPRING_PROFILES_ACTIVE: standalone
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/geonetwork
+      SPRING_DATASOURCE_USERNAME: geonetwork
+      SPRING_DATASOURCE_PASSWORD: geonetwork
+      GN_BASEURL: http://geonetwork:8080/geonetwork/api
+      GN_LEGACY_URL: http://geonetwork:8080/geonetwork
+      GN_INDEX_URL: http://elasticsearch:9200
+      SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
+
+  elasticsearch:
+    # TODO: upgrade elasticsearch to latest v7
+    image: elasticsearch:7.11.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: "curl -s http://localhost:9200 >/dev/null || exit 1"
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    environment:
+      ES_JAVA_OPTS: "-Xms1G -Xmx1G"
+      discovery.type: single-node

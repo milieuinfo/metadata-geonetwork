@@ -66,10 +66,12 @@
           ) {
             scope.attributeTable = [scope.attributeTable];
           }
-          scope.showCodeColumn = false;
+          scope.columnVisibility = {
+            code: false
+          };
           angular.forEach(scope.attributeTable, function (elem) {
             if (elem.code > "") {
-              scope.showCodeColumn = true;
+              scope.columnVisibility.code = true;
             }
           });
         }
@@ -128,7 +130,7 @@
 
           scope.status = undefined;
 
-          scope.buildFormatter = function (url, uuid, isDraft) {
+          scope.buildFormatter = function (url, uuid, isDraft, asDownload) {
             if (url.indexOf("${uuid}") !== -1) {
               return url.replace("${lang}", scope.lang).replace("${uuid}", uuid);
             } else {
@@ -138,7 +140,9 @@
                 url.replace("${lang}", scope.lang) +
                 (url.indexOf("?") !== -1 ? "&" : "?") +
                 "approved=" +
-                (isDraft != "y")
+                (isDraft != "y") +
+                "&attachment=" +
+                (asDownload == true)
               );
             }
           };
@@ -234,14 +238,14 @@
            * @param user
            * @returns {*|boolean|false|boolean}
            */
-          scope.displayPublicationOption = function (md, user) {
+          scope.displayPublicationOption = function (md, user, pubOption) {
             return false; // VL specific. Publication is managed by workflow
             return (
               md.canReview &&
               md.draft != "y" &&
               md.mdStatus != 3 &&
-              ((md.isPublished() && user.canUnpublishMetadata()) ||
-                (!md.isPublished() && user.canPublishMetadata()))
+              ((md.isPublished(pubOption) && user.canUnpublishMetadata()) ||
+                (!md.isPublished(pubOption) && user.canPublishMetadata()))
             );
           };
 

@@ -49,10 +49,10 @@ import org.fao.geonet.kernel.schema.MetadataSchema;
 import org.fao.geonet.kernel.schema.SchemaPlugin;
 import org.fao.geonet.kernel.search.EsSearchManager;
 import org.fao.geonet.kernel.search.IndexingMode;
-import org.fao.geonet.kernel.search.MetaSearcher;
 import org.fao.geonet.kernel.search.index.BatchOpsMetadataReindexer;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
+import org.fao.geonet.kernel.setting.SettingInfo;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.repository.*;
 import org.fao.geonet.repository.specification.MetadataFileUploadSpecs;
@@ -361,7 +361,7 @@ public class BaseMetadataManager implements IMetadataManager {
         ApplicationContextHolder.get().publishEvent(preRemoveEvent);
 
         if (metadata.getDataInfo().getType() != MetadataType.SUB_TEMPLATE
-                && metadata.getDataInfo().getType() != MetadataType.TEMPLATE_OF_SUB_TEMPLATE && withBackup) {
+            && metadata.getDataInfo().getType() != MetadataType.TEMPLATE_OF_SUB_TEMPLATE && withBackup) {
             MEFLib.backupRecord(metadata, context);
         }
 
@@ -373,8 +373,8 @@ public class BaseMetadataManager implements IMetadataManager {
         store.delResources(context, metadata.getUuid(), approved);
 
         RecordDeletedEvent recordDeletedEvent = new RecordDeletedEvent(
-                metadata.getId(), metadata.getUuid(), new LinkedHashMap<>(),
-                context.getUserSession().getUserIdAsInt(), metadata.getData());
+            metadata.getId(), metadata.getUuid(), new LinkedHashMap<>(),
+            context.getUserSession().getUserIdAsInt(), metadata.getData());
         deleteMetadata(context, metadataId);
         recordDeletedEvent.publish(ApplicationContextHolder.get());
     }
@@ -433,7 +433,7 @@ public class BaseMetadataManager implements IMetadataManager {
 
             xml = duplicateMetadata(schema, xml, context);
         } else if (type == MetadataType.SUB_TEMPLATE
-                || type == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) {
+            || type == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) {
             xml.setAttribute("uuid", uuid);
         }
 
@@ -914,15 +914,8 @@ public class BaseMetadataManager implements IMetadataManager {
         }
 
         // add baseUrl of this site (from settings)
-        String protocol = settingManager.getValue(Settings.SYSTEM_SERVER_PROTOCOL);
-        String host = settingManager.getValue(Settings.SYSTEM_SERVER_HOST);
-        String port = settingManager.getValue(Settings.SYSTEM_SERVER_PORT);
-        if (port.equals("80")) {
-            port = "";
-        } else {
-            port = ":" + port;
-        }
-        addElement(info, Edit.Info.Elem.BASEURL, protocol + "://" + host + port + context.getBaseUrl());
+        SettingInfo si = new SettingInfo();
+        addElement(info, Edit.Info.Elem.BASEURL, si.getSiteUrl() + context.getBaseUrl());
         addElement(info, Edit.Info.Elem.LOCSERV, "/srv/en");
         return info;
     }
@@ -1022,12 +1015,12 @@ public class BaseMetadataManager implements IMetadataManager {
             result.addContent(env);
             // apply update-fixed-info.xsl
             Path styleSheet = metadataSchemaUtils.getSchemaDir(schema).resolve(
-                    metadata != null
-                            && (
-                            metadata.getDataInfo().getType() == MetadataType.SUB_TEMPLATE
-                                    || metadata.getDataInfo().getType() == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) ?
-                            Geonet.File.UPDATE_FIXED_INFO_SUBTEMPLATE :
-                            Geonet.File.UPDATE_FIXED_INFO);
+                metadata != null
+                    && (
+                    metadata.getDataInfo().getType() == MetadataType.SUB_TEMPLATE
+                        || metadata.getDataInfo().getType() == MetadataType.TEMPLATE_OF_SUB_TEMPLATE) ?
+                    Geonet.File.UPDATE_FIXED_INFO_SUBTEMPLATE :
+                    Geonet.File.UPDATE_FIXED_INFO);
             result = Xml.transform(result, styleSheet);
             return result;
         } else {

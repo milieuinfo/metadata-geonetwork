@@ -1341,6 +1341,11 @@ public class EditLib {
         }
     }
 
+    public void expandTree(String schema, Element md) throws Exception {
+        MetadataSchema mdSchema = scm.getSchema(schema);
+        expandTree(mdSchema, md);
+    }
+
     private String getParentNameFromChild(Element child) {
         String parentName = "root";
         Element parent = child.getParentElement();

@@ -41,7 +41,7 @@
 .gn-status-rejected-to-submitted_for_removed-reviewer:before,
 .gn-status-approved-to-submitted_for_removed-reviewer:before,
 .gn-status-retired-to-submitted_for_removed-reviewer:before {
-  content: @fa-var-times-circle-o;
+  content: @fa-var-times-circle;
 }
 
 .gn-status-draft-to-removed-editor:before,
@@ -70,6 +70,20 @@
 .gn-status-submitted_for_retired-to-rejected_for_retired-reviewer:before,
 .gn-status-submitted_for_removed-to-rejected_for_removed-reviewer:before {
   content: @fa-var-undo;
+}
+
+// fix for slide toggle icon being too low
+legend[data-gn-slide-toggle]:before {
+  margin-top: -3px;
+}
+
+.navbar-default {
+  .gn-logo-link {
+    .gn-logo {
+      // drop down the logo a bit from its default position, taking into account the vlaanderen logo
+      margin-top: -4px;
+    }
+  }
 }
 
 .gn-facet-header{

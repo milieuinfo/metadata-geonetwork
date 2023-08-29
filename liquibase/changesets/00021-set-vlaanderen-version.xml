@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+  <changeSet id="00021-set-vlaanderen-version" author="joachim" runAlways="true">
+    <!-- this changeSet will change by its nature, so it should disregard the stored checksum -->
+    <validCheckSum>ANY</validCheckSum>
+    <sql dbms="postgresql">
+      INSERT INTO public.settings ("name","datatype",editable,"encrypted",internal,"position",value)
+      VALUES ('system/vlaanderen/version',0,'y','n','n',140,'${gn.system.vlaanderen.version}')
+      ON CONFLICT (name) DO UPDATE SET value = EXCLUDED.value;
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

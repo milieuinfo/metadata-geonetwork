@@ -253,6 +253,7 @@
     <for name="gmd:name" xpath="/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
          use="data-gn-keyword-picker">
       <directiveAttributes data-thesaurus-key="external.theme.file-type"
+                           data-number-of-suggestions="200"
                            data-thesaurus-concept-id-attribute="xlinkCOLONhref"/>
     </for>
 

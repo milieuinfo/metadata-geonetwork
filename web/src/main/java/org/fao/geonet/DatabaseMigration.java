@@ -89,6 +89,7 @@ public class DatabaseMigration implements BeanPostProcessor {
         if (!dbMigrationOnStartup) {
             return bean;
         }
+
         try {
             if (Class.forName(initAfter).isInstance(bean)) {
                 _logger.debug(String.format("DB Migration / Running '%s' after initialization of '%s'.", bean.getClass(), initAfter));
@@ -349,7 +350,7 @@ public class DatabaseMigration implements BeanPostProcessor {
     private String newLookup(Statement statement, String key) throws SQLException {
         final String newGetVersion = "SELECT value FROM Settings WHERE name = '" + key + "'";
 
-        try (ResultSet results = statement.executeQuery(newGetVersion)) {
+        try (ResultSet results = statement.executeQuery(newGetVersion)) { //NOSONAR
             if (results.next()) {
                 return results.getString(1);
             }
@@ -360,7 +361,7 @@ public class DatabaseMigration implements BeanPostProcessor {
     private String oldLookup(Statement statement, int key) throws SQLException {
         final String newGetVersion = "SELECT value FROM Settings WHERE id = " + key;
 
-        try (ResultSet results = statement.executeQuery(newGetVersion)) {
+        try (ResultSet results = statement.executeQuery(newGetVersion)) { //NOSONAR
             if (results.next()) {
                 return results.getString(1);
             }

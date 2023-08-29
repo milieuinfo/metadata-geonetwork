@@ -31,6 +31,7 @@
   goog.require("gn_search_manager");
   goog.require("gn_session_service");
   goog.require("gn_alert");
+  goog.require("gn_es");
 
   var module = angular.module("gn_cat_controller", [
     "gn_search_manager",
@@ -39,7 +40,8 @@
     "gn_saved_selections",
     "gn_external_viewer",
     "gn_history",
-    "gn_alert"
+    "gn_alert",
+    "gn_es"
   ]);
 
   module.constant("gnSearchSettings", {});
@@ -67,7 +69,7 @@
         },
         mods: {
           global: {
-            humanizeDates: true,
+            humanizeDates: false,
             dateFormat: "DD-MM-YYYY",
             timezone: "Browser" // Default to browser timezone
           },
@@ -75,7 +77,18 @@
             enabled: true,
             showSocialBarInFooter: true,
             showApplicationInfoAndLinksInFooter: true,
-            footerCustomMenu: [] // List of static pages identifiers to display
+            footerCustomMenu: [], // List of static pages identifiers to display
+            rssFeeds: [
+              {
+                // List of rss feeds links to display when the OGC API Records service is enabled
+                url: "f=rss&sortby=-createDate&size=30",
+                label: "lastCreatedRecords"
+              }
+              // , {
+              //   url: "f=rss&sortby=-publicationDateForResource&size=30",
+              //   label: "lastPublishedRecords"
+              // }
+            ]
           },
           header: {
             enabled: true,
@@ -90,7 +103,6 @@
             fluidHeaderLayout: true,
             showGNName: true,
             isHeaderFixed: false,
-            isMenubarAccessible: true,
             showPortalSwitcher: true,
             topCustomMenu: [] // List of static pages identifiers to display
           },
@@ -841,7 +853,7 @@
                 sortOrder: "desc"
               },
               {
-                sortBy: "resourceTitleObject.default.keyword",
+                sortBy: "resourceTitleObject.default.sort",
                 sortOrder: ""
               },
               {
@@ -925,12 +937,12 @@
                 // 'url' : '/formatters/xml?attachment=false',
                 url: "/formatters/xml",
                 class: "fa-file-code-o"
-              } /*,
+              },
               {
                 label: "exportDCAT",
-                url: "/geonetwork/api/collections/main/items/${uuid}?f=dcat",
-                class: "fa-file-code-o"
-              }*/
+                url: "/api/collections/main/items/${uuid}?f=dcat_ap_vl",
+                class: "fa-share-nodes"
+              }
             ],
             grid: {
               related: ["parent", "children", "services", "datasets"]
@@ -961,7 +973,7 @@
               displayFeaturedSearchesPanel: false
             },
             savedSelection: {
-              enabled: false
+              enabled: true
             },
             addWMSLayersToMap: {
               urlLayerParam: ""
@@ -1021,6 +1033,8 @@
               syncAllLayers: false,
               drawVector: false
             },
+            defaultTool: "layers",
+            defaultToolAfterMapLoad: "layers",
             graticuleOgcService: {},
             "map-viewer": {
               context: "../../map/config-viewer.xml",
@@ -1434,7 +1448,7 @@
                 sortOrder: "desc"
               },
               {
-                sortBy: "resourceTitleObject.default.keyword",
+                sortBy: "resourceTitleObject.default.sort",
                 sortOrder: ""
               },
               {
@@ -1903,6 +1917,8 @@
       $scope.lang = gnLangs.detectLang(null, gnGlobalSettings);
       $scope.iso2lang = gnLangs.getIso2Lang($scope.lang);
 
+      $scope.rssFeeds = gnGlobalSettings.gnCfg.mods.footer.rssFeeds;
+
       $scope.getSocialLinksVisible = function () {
         var onMdView = $location.absUrl().indexOf("/metadata/") > -1;
         return !onMdView && gnGlobalSettings.gnCfg.mods.footer.showSocialBarInFooter;
@@ -1995,6 +2011,11 @@
       $scope.isUserGroupUpdateEnabled = gnGlobalSettings.isUserGroupUpdateEnabled;
       $scope.isExternalViewerEnabled = gnExternalViewer.isEnabled();
       $scope.externalViewerUrl = gnExternalViewer.getBaseUrl();
+      $scope.publicationOptions = [];
+
+      $http.get("../api/records/sharing/options").then(function (response) {
+        $scope.publicationOptions = response.data;
+      });
 
       $scope.isSelfRegisterPossible = function () {
         return gnConfig["system.userSelfRegistration.enable"];
@@ -2266,6 +2287,15 @@
             });
         });
 
+        // Retrieve the publication options
+        userLogin.then(function (value) {
+          if ($scope.user && $scope.user.isReviewerOrMore()) {
+            $http.get("../api/records/sharing/options").then(function (response) {
+              $scope.publicationOptions = response.data;
+            });
+          }
+        });
+
         // Retrieve main search information
         var searchInfo = userLogin.then(function (value) {
           // Check index status.
@@ -2341,11 +2371,17 @@
         return gnConfig["metadata.workflow.allowPublishNonApprovedMd"];
       };
 
-      $scope.getPublicationOptionClass = function (md, user, isMdWorkflowEnable) {
+      $scope.getPublicationOptionClass = function (
+        md,
+        user,
+        isMdWorkflowEnable,
+        pubOption
+      ) {
         var publicationOptionTitle = $scope.getPublicationOptionTitle(
           md,
           user,
-          isMdWorkflowEnable
+          isMdWorkflowEnable,
+          pubOption
         );
         switch (publicationOptionTitle) {
           case "mdnonapprovedcantpublish":
@@ -2358,16 +2394,22 @@
       };
 
       // Function to get the title name to be used when displaying the publish item in the menu
-      $scope.getPublicationOptionTitle = function (md, user, isMdWorkflowEnable) {
+      $scope.getPublicationOptionTitle = function (
+        md,
+        user,
+        isMdWorkflowEnable,
+        pubOption
+      ) {
         var publicationOptionTitle = "";
-        if (!md.isPublished()) {
+        if (!md.isPublished(pubOption)) {
           if (md.isValid()) {
             publicationOptionTitle = "mdvalid";
           } else {
             if (
               isMdWorkflowEnable &&
               md.isWorkflowEnabled() &&
-              $scope.allowPublishInvalidMd() === false
+              $scope.allowPublishInvalidMd() === false &&
+              pubOption.name === "default"
             ) {
               publicationOptionTitle = "mdinvalidcantpublish";
             } else {
@@ -2384,7 +2426,8 @@
             isMdWorkflowEnable &&
             md.isWorkflowEnabled() &&
             md.mdStatus != 2 &&
-            $scope.allowPublishNonApprovedMd() === false
+            $scope.allowPublishNonApprovedMd() === false &&
+            pubOption.name === "default"
           ) {
             publicationOptionTitle = "mdnonapprovedcantpublish";
           }

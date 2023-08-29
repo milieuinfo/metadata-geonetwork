@@ -39,6 +39,7 @@
   <xsl:include href="../iso19139/convert/functions.xsl"/>
   <xsl:include href="update-fixed-info-keywords.xsl"/>
   <xsl:include href="layout/utility-fn.xsl"/>
+  <xsl:include href="update-fixed-info-vl.xsl"/>
 
 
   <xsl:variable name="serviceUrl" select="/root/env/siteURL"/>
@@ -104,8 +105,6 @@
   <xsl:variable name="nonMultilingualFields"
                 select="$editorConfig/editor/multilingualFields/exclude"/>
 
-
-
   <xsl:template match="/root">
     <xsl:apply-templates select="*:MD_Metadata"/>
   </xsl:template>
@@ -119,9 +118,7 @@
     <xsl:namespace name="gts" select="'http://www.isotc211.org/2005/gts'"/>
     <xsl:namespace name="gsr" select="'http://www.isotc211.org/2005/gsr'"/>
     <xsl:namespace name="gmi" select="'http://www.isotc211.org/2005/gmi'"/>
-    <xsl:if test="gmd:identificationInfo/srv:SV_ServiceIdentification">
-      <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
-    </xsl:if>
+    <xsl:namespace name="srv" select="'http://www.isotc211.org/2005/srv'"/>
     <xsl:choose>
       <xsl:when test="$isUsing2005Schema and not($isUsing2007Schema)">
         <xsl:namespace name="gml" select="'http://www.opengis.net/gml'"/>
@@ -137,22 +134,6 @@
   <xsl:template match="gmd:MD_Metadata">
     <xsl:copy copy-namespaces="no">
       <xsl:call-template name="add-namespaces"/>
-
-      <xsl:choose>
-        <xsl:when test="$isUsing2005Schema">
-          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
-          <xsl:attribute name="xsi:schemaLocation"
-                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd'"/>
-        </xsl:when>
-        <xsl:when test="$isUsing2007Schema">
-          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
-          <xsl:attribute name="xsi:schemaLocation"
-                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20070417/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20070417/srv/1.0/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd'"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="@*"/>
-        </xsl:otherwise>
-      </xsl:choose>
 
       <xsl:apply-templates select="@*"/>
 
@@ -239,15 +220,9 @@
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
         <xsl:copy>
-          <!--<gco:DateTime>
+          <gco:DateTime>
             <xsl:value-of select="/root/env/changeDate"/>
-          </gco:DateTime>-->
-          <!-- VL / Force dateStamp to be
-           as defined in ISO PDF document
-           even if not the case in XSDs. -->
-          <gco:Date>
-            <xsl:value-of select="format-dateTime(/root/env/changeDate,'[Y0001]-[M01]-[D01]')"/>
-          </gco:Date>
+          </gco:DateTime>
         </xsl:copy>
       </xsl:when>
       <xsl:otherwise>
@@ -722,14 +697,14 @@
   </xsl:template>
 
   <!-- Move to GML 3.2.1 when using 2007 version. -->
-  <xsl:template match="gml320:*[$isUsing2007Schema]">
-    <xsl:element name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2">
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:element>
-  </xsl:template>
-  <xsl:template match="@gml320:*[$isUsing2007Schema]">
-    <xsl:attribute name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2" select="."/>
-  </xsl:template>
+  <!-- <xsl:template match="gml320:*[$isUsing2007Schema]"> -->
+  <!--   <xsl:element name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2"> -->
+  <!--     <xsl:apply-templates select="@*|node()"/> -->
+  <!--   </xsl:element> -->
+  <!-- </xsl:template> -->
+  <!-- <xsl:template match="@gml320:*[$isUsing2007Schema]"> -->
+  <!--   <xsl:attribute name="gml:{local-name()}" namespace="http://www.opengis.net/gml/3.2" select="."/> -->
+  <!-- </xsl:template> -->
 
   <xsl:template match="gml:*|gml320:*">
     <xsl:call-template name="correct_ns_prefix_with_namespace">

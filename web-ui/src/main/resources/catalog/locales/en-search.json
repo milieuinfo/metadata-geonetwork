@@ -167,7 +167,7 @@
   "browseBy": "Browse by",
   "browseTopics": "Browse topics",
   "browseTypes": "Browse resources",
-  "versionDetails": "Powered by GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, on GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
   "lastRecords": "Latest news",
   "preferredRecords": "Most popular",
   "about": "About",

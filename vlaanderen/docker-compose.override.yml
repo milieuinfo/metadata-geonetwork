@@ -1,0 +1,38 @@
+# A default docker-compose override file. When specifying your own override file, this will not automatically be added.
+volumes:
+  pgdata:
+  pglog:
+  esdata:
+  geonetworkdata:
+
+services:
+  database:
+    ports:
+      - "5432:5432"
+
+  geonetwork:
+    profiles: [ "full" ]
+    environment:
+      DATA_DIR: /geonetwork-data
+    ports:
+      - "8080:8080"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/geonetwork
+      - pglog:/var/log/postgresql
+      - geonetworkdata:/geonetwork-data
+
+  geonetwork-reindexer:
+    profiles: [ "full" ]
+
+  elasticsearch:
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  ogc-api-records-service:
+    # use the locally built image, assumes it was tagged correctly
+    build: .
+    image: gn-cloud-ogc-api-records-service:vl-1.0.1
+    ports:
+      - "8081:8080"
