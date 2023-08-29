@@ -548,27 +548,43 @@ public class DefaultStatusActions implements StatusActions {
     private Map<String, Set<String>> getReviewerFlow() {
         Map<String, Set<String>> result = getEditorFlow();
         result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
-                StatusValue.Status.REJECTED
+                StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
+                StatusValue.Status.REJECTED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
-                StatusValue.Status.REJECTED
+                StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.APPROVED_FOR_PUBLISHED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED,
+                StatusValue.Status.REMOVED
+        ));
+        result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
-                StatusValue.Status.REJECTED_FOR_RETIRED,
-                StatusValue.Status.RETIRED
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.REJECTED_FOR_RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
+        ));
+        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         return result;
     }
@@ -582,20 +598,7 @@ public class DefaultStatusActions implements StatusActions {
      * @return a map of status to the possible follow-up statuses
      */
     private Map<String, Set<String>> getAdminFlow() {
-        Map<String, Set<String>> result = getReviewerFlow();
-
-
-        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
-                StatusValue.Status.REMOVED
-        ));
-        result.get(StatusValue.Status.REJECTED_FOR_REMOVED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
-                StatusValue.Status.DRAFT,
-                StatusValue.Status.REJECTED,
-                StatusValue.Status.RETIRED,
-                StatusValue.Status.SUBMITTED
-        ));
-        return result;
+        return getReviewerFlow();
     }
 
     /**

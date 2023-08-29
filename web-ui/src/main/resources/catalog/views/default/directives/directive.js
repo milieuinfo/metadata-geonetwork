@@ -157,32 +157,43 @@
                 });
 
                 var editorSteps = [
-                    { from: "approved", to: "submitted_for_removed" },
-                    { from: "approved", to: "submitted_for_retired" },
                     { from: "draft", to: "removed" },
                     { from: "draft", to: "submitted" },
+                    { from: "submitted", to: "removed" },
                     { from: "rejected", to: "submitted" },
                     { from: "rejected", to: "removed" },
+                    { from: "approved", to: "submitted_for_removed" },
+                    { from: "approved", to: "submitted_for_retired" },
+                    { from: "submitted_for_retired", to: "rejected_for_retired" },
                     { from: "retired", to: "submitted_for_removed" },
-                    { from: "submitted", to: "removed" },
-                    { from: "submitted_for_removed", to: "rejected_for_removed" },
-                    { from: "submitted_for_retired", to: "rejected_for_retired" }
+                    { from: "submitted_for_removed", to: "rejected_for_removed" }
                   ],
                   reviewerSteps = editorSteps.concat([
-                    { from: "approved_for_published", to: "approved" },
-                    { from: "draft", to: "approved" },
                     { from: "draft", to: "approved_for_published" },
-                    { from: "draft", to: "rejected" },
-                    { from: "retired", to: "approved" },
-                    { from: "submitted", to: "approved" },
-                    { from: "submitted", to: "approved_for_published" },
+                    { from: "draft", to: "approved" },
                     { from: "submitted", to: "rejected" },
-                    { from: "submitted_for_retired", to: "rejected_for_retired" },
-                    { from: "submitted_for_retired", to: "retired" }
-                  ]),
-                  adminSteps = reviewerSteps.concat([
+                    { from: "submitted", to: "approved_for_published" },
+                    { from: "submitted", to: "approved" },
+                    { from: "approved_for_published", to: "submitted" },
+                    { from: "approved_for_published", to: "rejected" },
+                    { from: "approved_for_published", to: "approved" },
+                    { from: "approved_for_published", to: "submitted_for_retired" },
+                    { from: "approved_for_published", to: "retired" },
+                    { from: "approved_for_published", to: "submitted_for_removed" },
+                    { from: "approved_for_published", to: "removed" },
+                    { from: "approved", to: "retired" },
+                    { from: "approved", to: "removed" },
+                    { from: "submitted_for_retired", to: "approved" },
+                    { from: "submitted_for_retired", to: "retired" },
+                    { from: "submitted_for_retired", to: "removed" },
+                    { from: "retired", to: "approved" },
+                    { from: "retired", to: "removed" },
+                    { from: "rejected_for_retired", to: "approved" },
+                    { from: "submitted_for_removed", to: "approved" },
+                    { from: "submitted_for_removed", to: "retired" },
                     { from: "submitted_for_removed", to: "removed" }
-                  ]);
+                  ]),
+                  adminSteps = reviewerSteps;
                 scope.statusEffects = {
                   editor: editorSteps,
                   reviewer: reviewerSteps,
