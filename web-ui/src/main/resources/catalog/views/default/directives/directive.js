@@ -161,13 +161,12 @@
                     { from: "approved", to: "submitted_for_retired" },
                     { from: "draft", to: "removed" },
                     { from: "draft", to: "submitted" },
-                    { from: "draft", to: "submitted_for_removed" },
-                    { from: "rejected", to: "draft" },
                     { from: "rejected", to: "submitted" },
-                    { from: "rejected", to: "submitted_for_removed" },
+                    { from: "rejected", to: "removed" },
                     { from: "retired", to: "submitted_for_removed" },
-                    { from: "submitted", to: "draft" },
-                    { from: "submitted_for_removed", to: "rejected_for_removed" }
+                    { from: "submitted", to: "removed" },
+                    { from: "submitted_for_removed", to: "rejected_for_removed" },
+                    { from: "submitted_for_retired", to: "rejected_for_retired" }
                   ],
                   reviewerSteps = editorSteps.concat([
                     { from: "approved_for_published", to: "approved" },
