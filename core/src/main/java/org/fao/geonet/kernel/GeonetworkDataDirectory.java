@@ -526,6 +526,8 @@ public class GeonetworkDataDirectory {
     private Path setDir(JeevesServlet jeevesServlet, String webappName,
                         ServiceConfig handlerConfig, Path dir, String key, String handlerKey, String firstPathSeg, String... otherSegments) {
         // when context is root, webappname is empty, which breaks the default behaviour of GeonetworkDataDirectory
+        // in the case of environment variables (GEONETWORK_HTMLCACHE_DIR would not be found, as the envKey would be
+        // _HTMLCACHE_DIR due to an empty webappName)
         if(webappName.equals("")) {
             webappName = "geonetwork";
         }
