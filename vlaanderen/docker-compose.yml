@@ -127,8 +127,7 @@ services:
       SERVER_FORWARDHEADERSSTRATEGY: FRAMEWORK
 
   elasticsearch:
-    # TODO: upgrade elasticsearch to latest v7
-    image: elasticsearch:7.11.1
+    image: elasticsearch:7.17.12
     ulimits:
       memlock:
         soft: -1
