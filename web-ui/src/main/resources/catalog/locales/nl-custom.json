@@ -1,6 +1,13 @@
 {
+  "facet-distributorOrgForDistribution": "Verdeler",
+  "facet-ownerOrgForResource": "Eigenaar",
+  "facet-pointOfContactOrgForResource": "Contactpunt",
+  "facet-publisherOrgForResource": "Uitgever",
+  "facet-licenseObject.default.keyword": "Licentie",
+  "facet-accessRights": "Toegankelijkheid",
   "facet-domain": "Domain",
   "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Access rights",
+  "facet-OrgForResourceObject": "Organisatie",
   "facet-th_GDI-Vlaanderen-trefwoorden": "GDI Vlaanderen Trefwoorden",
   "facet-th_GEMET-INSPIREthemesversion1-0.link": "INSPIRE thema's",
   "facet-th_datatheme_tree": "Data.gov.be themes",
@@ -56,5 +63,6 @@
   "mdStatusTitle-submitted_for_retired-to-rejected_for_retired-reviewer": "Afgekeurd voor depublicatie",
   "mdStatusTitle-submitted_for_retired-to-retired-reviewer": "Gedepubliceerd",
   "exportDCAT": "Exporteer (RDF/XML)",
-  "featureAttributeTable": "Entiteit"
+  "featureAttributeTable": "Entiteit",
+  "onlyMyRecord": "Mijn Metadatarecords"
 }
