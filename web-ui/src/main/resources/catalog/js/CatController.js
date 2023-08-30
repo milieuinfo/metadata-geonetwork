@@ -273,21 +273,21 @@
               boost: "5",
               functions: [
                 {
-                  filter: { match: { resourceType: "series" } },
+                  filter: {match: {resourceType: "series"}},
                   weight: 1.5
                 },
                 // Boost down member of a series
                 {
-                  filter: { exists: { field: "parentUuid" } },
+                  filter: {exists: {field: "parentUuid"}},
                   weight: 0.3
                 },
                 // Boost down obsolete and superseded records
                 {
-                  filter: { match: { "cl_status.key": "obsolete" } },
+                  filter: {match: {"cl_status.key": "obsolete"}},
                   weight: 0.2
                 },
                 {
-                  filter: { match: { "cl_status.key": "superseded" } },
+                  filter: {match: {"cl_status.key": "superseded"}},
                   weight: 0.3
                 },
                 // {
@@ -354,6 +354,7 @@
             // See https://github.com/geonetwork/core-geonetwork/pull/5349
             isVegaEnabled: true,
             facetConfig: {
+              // #1 BRONTYPE
               resourceType: {
                 terms: {
                   field: "resourceType"
@@ -365,6 +366,7 @@
                   }
                 }
               },
+              // #2 DOMEIN
               // Use .default for not multilingual catalogue with one language only UI.
               // 'cl_spatialRepresentationType.default': {
               //   'terms': {
@@ -374,12 +376,66 @@
               // },
               // Use .key for codelist for multilingual catalogue.
               // The codelist translation needs to be loaded in the client app. See GnSearchModule.js
+              domain: {
+                filters: {
+                  filters: {
+                    "Open data": {
+                      query_string: {
+                        query:
+                          '+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data"'
+                      }
+                    },
+                    Geografisch: {
+                      query_string: {
+                        query:
+                          '+th_GDI-Vlaanderen-trefwoorden.default:"Geografische gegevens"'
+                      }
+                    }
+                  }
+                }
+              },
+              // #3 METADATA STANDAARD
+              documentStandard: {
+                terms: {
+                  field: "documentStandard",
+                  size: 10
+                },
+                meta: {
+                  userHasRole: "isReviewerOrMore"
+                }
+              },
+              // #4 CATALOGUS
+              sourceCatalogue: {
+                terms: {
+                  field: "sourceCatalogue",
+                  size: 100,
+                  include: ".*"
+                },
+                meta: {
+                  orderByTranslation: true,
+                  filterByTranslation: true,
+                  displayFilter: true
+                }
+              },
+              // #5 GDI VLAANDEREN TREFWOORD
+              "th_GDI-Vlaanderen-trefwoorden.default": {
+                terms: {
+                  field: "th_GDI-Vlaanderen-trefwoorden.default",
+                  order: {_key: "asc"}
+                }
+              },
+              // #6
               "cl_spatialRepresentationType.key": {
                 terms: {
                   field: "cl_spatialRepresentationType.key",
                   size: 10
+                },
+                meta: {
+                  collapsed: true
                 }
               },
+
+              // #7 FORMAAT
               format: {
                 terms: {
                   field: "format",
@@ -389,6 +445,17 @@
                   collapsed: true
                 }
               },
+              // #8 SERVICE TYPE
+              serviceType: {
+                terms: {
+                  field: "serviceType",
+                  size: 10
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #9 PROTOCOL SERVICE
               linkProtocol: {
                 terms: {
                   field: "linkProtocol",
@@ -398,6 +465,7 @@
                   collapsed: true
                 }
               },
+              // #10 BESCHIKBAAR IN
               availableInServices: {
                 filters: {
                   //"other_bucket_key": "others",
@@ -423,43 +491,12 @@
                       availableInViewService: "fa-globe",
                       availableInDownloadService: "fa-download"
                     }
-                  }
-                }
-              },
-              serviceType: {
-                terms: {
-                  field: "serviceType",
-                  size: 10
-                }
-              },
-              "th_GDI-Vlaanderen-trefwoorden.default": {
-                terms: {
-                  field: "th_GDI-Vlaanderen-trefwoorden.default",
-                  order: { _key: "asc" }
-                }
-              },
-              sourceCatalogue: {
-                terms: {
-                  field: "sourceCatalogue",
-                  size: 100,
-                  include: ".*"
-                },
-                meta: {
-                  orderByTranslation: true,
-                  filterByTranslation: true,
-                  displayFilter: true,
+                  },
                   collapsed: true
                 }
               },
-              "cl_status.key": {
-                terms: {
-                  field: "cl_status.key",
-                  size: 15
-                },
-                meta: {
-                  collapsed: true
-                }
-              },
+              // #11
+
               "cl_topic.key": {
                 terms: {
                   field: "cl_topic.key",
@@ -469,7 +506,8 @@
                   decorator: {
                     type: "icon",
                     prefix: "fa fa-fw gn-icon-"
-                  }
+                  },
+                  collapsed: true
                 }
               },
               // GEMET configuration for non multilingual catalog
@@ -509,7 +547,6 @@
               //     'treeKeySeparator': '/'
               //   }
               // },
-
               // "th_httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset_tree.default":
               //   {
               //     terms: {
@@ -519,6 +556,18 @@
               //       order: { _key: "asc" }
               //     }
               //   },
+
+              // #12 THEMA
+              "th_datatheme_tree.key": {
+                terms: {
+                  field: "th_datatheme_tree.key",
+                  size: 20
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #13 INSPIRE THEMA
               "th_httpinspireeceuropaeutheme-theme_tree.key": {
                 terms: {
                   field: "th_httpinspireeceuropaeutheme-theme_tree.key",
@@ -530,61 +579,81 @@
                     type: "icon",
                     prefix: "fa fa-fw gn-icon iti-",
                     expression: "http://inspire.ec.europa.eu/theme/(.*)"
-                  }
+                  },
+                  collapsed: true
                 }
               },
-              tag: {
+              // #14 ORGANISATIE
+              OrgForResourceObjectObject: {
                 terms: {
-                  field: "tag.${aggLang}",
-                  include: ".*",
-                  // Exclude GDI keywords from the global list of keywords
-                  // because we have a specific agg for it
-                  exclude:
-                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data|Vlaamse Open data Service",
-                  size: 10
-                },
-                meta: {
-                  caseInsensitiveInclude: true
-                }
-              },
-              OrgForResource: {
-                terms: {
-                  field: "OrgForResource",
+                  field: "OrgForResourceObject.default",
                   include: ".*",
                   size: 15
                 },
                 meta: {
-                  // Always display filter even no more elements
-                  // This can be used when all facet values are loaded
-                  // with a large size and you want to provide filtering.
-                  // 'displayFilter': true,
-                  caseInsensitiveInclude: true
-                  // decorator: {
-                  //   type: 'img',
-                  //   map: {
-                  //     'EEA': 'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/EEA_agency_logo.svg/220px-EEA_agency_logo.svg.png'
-                  //   }
-                  // }
+                  caseInsensitiveInclude: true,
+                  collapsed: true
                 }
               },
 
-              // "th_regions_tree.default": {
-              //   terms: {
-              //     field: "th_regions_tree.default",
-              //     size: 100,
-              //     order: { _key: "asc" }
-              //     //"include": "EEA.*"
-              //   }
-              // },
-              // "resolutionScaleDenominator": {
-              //   "terms": {
-              //     "field": "resolutionScaleDenominator",
-              //     "size": 20,
-              //     "order": {
-              //       "_key": "asc"
-              //     }
-              //   }
-              // },
+              // #15 EIGENAAR
+              ownerOrgForResourceObject: {
+                terms: {
+                  field: "ownerOrgForResourceObject.default",
+                  size: 10,
+                  include: ".*"
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #16 VERDELER
+              distributorOrgForDistributionObject: {
+                terms: {
+                  field: "distributorOrgForDistributionObject.default",
+                  size: 10,
+                  include: ".*"
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+
+              // #17 CONTACTPUNT
+              pointOfContactOrgForResourceObject: {
+                terms: {
+                  field: "pointOfContactOrgForResourceObject.default",
+                  size: 10,
+                  include: ".*"
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #18 UITGEVER
+
+              publisherOrgForResourceObject: {
+                terms: {
+                  field: "publisherOrgForResourceObject.default",
+                  size: 10,
+                  include: ".*"
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+
+              // #19 STATUS
+              "cl_status.key": {
+                terms: {
+                  field: "cl_status.key",
+                  size: 15
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #20 SCHAAL
               resolutionScaleDenominator: {
                 histogram: {
                   field: "resolutionScaleDenominator",
@@ -596,6 +665,7 @@
                   collapsed: true
                 }
               },
+              // #21 GRONDRESOLUTIE
               resolutionDistance: {
                 terms: {
                   field: "resolutionDistance",
@@ -605,20 +675,62 @@
                   collapsed: true
                 }
               },
-              // "serviceType": {
-              //   'collapsed': true,
-              //   "terms": {
-              //     "field": "serviceType",
-              //     "size": 10
-              //   }
-              // },
-              // "resourceTemporalDateRange": {
-              //   "date_histogram": {
-              //     "field": "resourceTemporalDateRange",
-              //     "fixed_interval": "1900d",
-              //     "min_doc_count": 1
-              //   }
-              // },
+              // #22
+              accessRights: {
+                filters: {
+                  filters: {
+                    Publiek: {
+                      query_string: {
+                        query:
+                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                      }
+                    },
+                    "Toegang zonder voorwaarden": {
+                      query_string: {
+                        query:
+                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                      }
+                    },
+                    "Niet publiek": {
+                      query_string: {
+                        query:
+                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                      }
+                    },
+                    "Toegang met voorwaarden": {
+                      query_string: {
+                        query:
+                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                      }
+                    }
+                  }
+                },
+                meta: {
+                  collapsed: true
+                }
+              },
+              // #23
+              "licenseObject.default.keyword": {
+                terms: {
+                  field: "licenseObject.default.keyword",
+                  size: 15
+                },
+                meta: {
+                  caseInsensitiveInclude: true,
+                  collapsed: true
+                }
+              },
+              // #24 PROFIEL
+              "standardNameObject.default.keyword": {
+                terms: {
+                  field: "standardNameObject.default.keyword"
+                },
+                meta: {
+                  collapsed: true,
+                  userHasRole: "isReviewerOrMore"
+                }
+              },
+              // #25 JAAR (AANGEMAAKT)
               creationYearForResource: {
                 histogram: {
                   field: "creationYearForResource",
@@ -630,33 +742,7 @@
                   collapsed: true
                 }
               },
-              // "creationYearForResource": {
-              //   "terms": {
-              //     "field": "creationYearForResource",
-              //     "size": 10,
-              //     "order": {
-              //       "_key": "desc"
-              //     }
-              //   }
-              // },
-              domain: {
-                filters: {
-                  filters: {
-                    "Open data": {
-                      query_string: {
-                        query:
-                          '+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data"'
-                      }
-                    },
-                    Geografisch: {
-                      query_string: {
-                        query:
-                          '+th_GDI-Vlaanderen-trefwoorden.default:"Geografische gegevens"'
-                      }
-                    }
-                  }
-                }
-              },
+              // #26 UPDATE-FREQUENTIE BRON
               "cl_maintenanceAndUpdateFrequency.key": {
                 terms: {
                   field: "cl_maintenanceAndUpdateFrequency.key",
@@ -704,23 +790,46 @@
                 //     'collapsed': true
                 //   }
               },
-              documentStandard: {
+              // #27 TREFWOORD
+              tag: {
                 terms: {
-                  field: "documentStandard",
+                  field: "tag.${aggLang}",
+                  include: ".*",
+                  // Exclude GDI keywords from the global list of keywords
+                  // because we have a specific agg for it
+                  exclude:
+                    "Geografische gegevens|Herbruikbaar|Kosteloos|Lijst M\\&R INSPIRE|Metadata GDI-Vl-conform|Metadata INSPIRE-conform|Toegevoegd GDI-Vl|Vlaamse Open data|Vlaamse Open data Service",
                   size: 10
                 },
                 meta: {
-                  collapsed: true,
-                  userHasRole: "isReviewerOrMore"
+                  caseInsensitiveInclude: true,
+                  collapsed: true
                 }
               },
-              "standardNameObject.default.keyword": {
+              // #28 GroupPublished
+              groupPublished: {
                 terms: {
-                  field: "standardNameObject.default.keyword"
+                  field: "groupPublished"
                 },
                 meta: {
                   collapsed: true,
-                  userHasRole: "isReviewerOrMore"
+                  userHasRole: "isEditorOrMore",
+                  orderByTranslation: true,
+                  filterByTranslation: true,
+                  displayFilter: true
+                }
+              },
+              mdStatus: {
+                terms: {
+                  field: "statusWorkflow",
+                  size: 20
+                },
+                meta: {
+                  field: "statusWorkflow",
+                  collapsed: true,
+                  userHasRole: "isEditorOrMore",
+                  orderByTranslation: true,
+                  filterByTranslation: true
                 }
               }
             },
@@ -941,7 +1050,7 @@
             "map-editor": {
               context: "",
               extent: [0, 0, 0, 0],
-              layers: [{ type: "osm" }]
+              layers: [{type: "osm"}]
             },
             "map-thumbnail": {
               context: "../../map/config-viewer.xml",
@@ -961,7 +1070,7 @@
             showCitation: {
               enabled: false,
               // if: {'documentStandard': ['iso19115-3.2018']}
-              if: { resourceType: ["series", "dataset", "nonGeographicDataset"] }
+              if: {resourceType: ["series", "dataset", "nonGeographicDataset"]}
             },
             sortKeywordsAlphabetically: true,
             mainThesaurus: ["th_gemet", "th_gemet-theme"],
@@ -990,7 +1099,7 @@
                   filter: "protocol:.*DOWNLOAD.*|DB:.*|FILE:.*",
                   title: "download"
                 },
-                { types: "onlines", filter: "function:legend", title: "mapLegend" },
+                {types: "onlines", filter: "function:legend", title: "mapLegend"},
                 {
                   types: "onlines",
                   filter: "function:featureCatalogue",
@@ -1013,26 +1122,26 @@
               cl_status: {
                 terms: {
                   field: "cl_status.default",
-                  order: { _key: "asc" }
+                  order: {_key: "asc"}
                 }
               },
               creationYearForResource: {
                 terms: {
                   field: "creationYearForResource",
                   size: 100,
-                  order: { _key: "asc" }
+                  order: {_key: "asc"}
                 }
               },
               cl_spatialRepresentationType: {
                 terms: {
                   field: "cl_spatialRepresentationType.default",
-                  order: { _key: "asc" }
+                  order: {_key: "asc"}
                 }
               },
               format: {
                 terms: {
                   field: "format",
-                  order: { _key: "asc" }
+                  order: {_key: "asc"}
                 }
               }
             }
@@ -1105,7 +1214,7 @@
               "th_GDI-Vlaanderen-trefwoorden.default": {
                 terms: {
                   field: "th_GDI-Vlaanderen-trefwoorden.default",
-                  order: { _key: "asc" }
+                  order: {_key: "asc"}
                 }
               },
               domain: {
@@ -1447,7 +1556,7 @@
           },
           workflowHelper: {
             enabled: false,
-            workflowAssistApps: [{ appUrl: "", appLabelKey: "" }]
+            workflowAssistApps: [{appUrl: "", appLabelKey: ""}]
           }
         }
       };
@@ -1606,8 +1715,8 @@
               if (optionInDefaultConfig === undefined) {
                 console.warn(
                   "Path " +
-                    p +
-                    " not found in default configuration. Check your custom configuration.",
+                  p +
+                  " not found in default configuration. Check your custom configuration.",
                   config
                 );
               }
@@ -1848,6 +1957,7 @@
         }
         return detector.default || "geonetwork";
       }
+
       $scope.nodeId = detectNode(gnGlobalSettings.gnCfg.nodeDetector);
       $scope.isDefaultNode = $scope.nodeId === defaultNode;
       $scope.service = detectService(gnGlobalSettings.gnCfg.serviceDetector);
@@ -2204,7 +2314,7 @@
               });
             } else {
               var query = {
-                bool: { must: { query_string: { query: "+isTemplate:n" } } }
+                bool: {must: {query_string: {query: "+isTemplate:n"}}}
               };
               if (gnGlobalSettings.gnCfg.mods.search.filters) {
                 query.bool.filter = gnGlobalSettings.gnCfg.mods.search.filters;
@@ -2358,6 +2468,7 @@
             ($scope.healthCheck && $scope.healthCheck.IndexHealthCheck == false);
         }
       }
+
       $http.get("../../criticalhealthcheck").then(healthCheckStatus, healthCheckStatus);
       $http.get("../../warninghealthcheck").then(healthCheckStatus, healthCheckStatus);
     }
