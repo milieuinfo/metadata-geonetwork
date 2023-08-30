@@ -1,7 +1,7 @@
 {
   "dropFile": "",
   "facets.block.title.OrgForResource": "Organisatie",
-  "facets.block.title.availableInServices": "Beschikbaar voor",
+  "facets.block.title.availableInServices": "Beschikbaar in",
   "facets.block.title.cl_hierarchyLevel.key": "Bron type",
   "facets.block.title.cl_maintenanceAndUpdateFrequency.key": "Herzieningsfrequentie",
   "facets.block.title.cl_spatialRepresentationType.key": "Ruimtelijke weergave",
