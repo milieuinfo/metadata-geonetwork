@@ -126,12 +126,15 @@ public class DefaultStatusActions implements StatusActions {
             Log.trace(Geonet.DATA_MANAGER, "DefaultStatusActions.onEdit(" + id + ", " + minorEdit + ") with status "
                 + dm.getCurrentStatus(id));
         }
-        if (!minorEdit && dm.getCurrentStatus(id).equals(StatusValue.Status.APPROVED)) {
+        // VL specific
+        if (!minorEdit && !dm.getCurrentStatus(id).equals(StatusValue.Status.DRAFT)) {
             ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages",
                 new Locale(this.language));
             String changeMessage = String.format(messages.getString("status_email_text"), replyToDescr, replyTo, id);
             Log.trace(Geonet.DATA_MANAGER, "Set DRAFT to current record with id " + id);
-            dm.setStatus(context, id, Integer.valueOf(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
+            dm.setStatus(context, id, Integer.parseInt(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
+        }
+    }
 
     public void cancelEditStatus(ServiceContext context, int id) throws Exception {
         String statusBeforeAnyChanges = (String) session.getProperty(Geonet.Session.METADATA_STATUS_BEFORE_ANY_CHANGES + id);
