@@ -132,6 +132,19 @@ public class DefaultStatusActions implements StatusActions {
             String changeMessage = String.format(messages.getString("status_email_text"), replyToDescr, replyTo, id);
             Log.trace(Geonet.DATA_MANAGER, "Set DRAFT to current record with id " + id);
             dm.setStatus(context, id, Integer.valueOf(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
+
+    public void cancelEditStatus(ServiceContext context, int id) throws Exception {
+        String statusBeforeAnyChanges = (String) session.getProperty(Geonet.Session.METADATA_STATUS_BEFORE_ANY_CHANGES + id);
+        if (statusBeforeAnyChanges != null) {
+            ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages",
+                new Locale(this.language));
+            String changeMessage = String.format(messages.getString("status_cancel_email_text"), replyToDescr, replyTo, id);
+            dm.setStatus(context, id, Integer.parseInt(statusBeforeAnyChanges), new ISODate(), changeMessage);
+        } else {
+            if (Log.isDebugEnabled(Geonet.EDITOR_SESSION)) {
+                Log.debug(Geonet.EDITOR_SESSION, " > no status to cancel for record " + id
+                    + ". Original record status was null. Use starteditingsession to.");
+            }
         }
     }
 

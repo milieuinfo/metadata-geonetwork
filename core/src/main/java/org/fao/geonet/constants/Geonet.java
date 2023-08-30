@@ -205,6 +205,7 @@ public final class Geonet {
         // to be able to remove it if the user cancels the editing without saving any change
         public static final String METADATA_EDITING_CREATED_DRAFT = "metadata.editing.created.draft";
         public static final String METADATA_BEFORE_ANY_CHANGES = "metadata.before.any.changes";
+        public static final String METADATA_STATUS_BEFORE_ANY_CHANGES = "metadata.status.before.any.changes";
         public static final String METADATA_EDITING_TAB = "metadata.editing.tab";
         public static final String METADATA_POSITION = "metadata.position";
         public static final String SEARCH_KEYWORDS_RESULT = "search.keywords.result";

@@ -115,6 +115,9 @@ public class BaseMetadataUtils implements IMetadataUtils {
 
     protected IMetadataManager metadataManager;
 
+    @Autowired
+    protected IMetadataStatus metadataStatusManager;
+
     @Override
     public void setMetadataManager(IMetadataManager metadataManager) {
         this.metadataManager = metadataManager;
@@ -177,7 +180,9 @@ public class BaseMetadataUtils implements IMetadataUtils {
         boolean withValidationErrors = false;
         Element metadataBeforeAnyChanges = metadataManager.getMetadata(context, id, forEditing, false,
             withValidationErrors, keepXlinkAttributes);
+        String currentStatus = metadataStatusManager.getCurrentStatus(Integer.parseInt(id));
         context.getUserSession().setProperty(Geonet.Session.METADATA_BEFORE_ANY_CHANGES + id, metadataBeforeAnyChanges);
+        context.getUserSession().setProperty(Geonet.Session.METADATA_STATUS_BEFORE_ANY_CHANGES + id, currentStatus);
         return Integer.valueOf(id);
     }
 
