@@ -100,7 +100,7 @@ public class ResourceFilter implements Filter {
             this.nodeId = applicationContext.getBean(NodeInfo.class).getId();
             if (!faviconMap.containsKey(nodeId)) {
                 final byte[] defaultImageBytes = defaultImage.one();
-                AddFavIcon(nodeId, resources.loadResource(resourcesDir, servletContext, appPath, "images/logos/" + siteId + ".ico",
+                addFavIcon(nodeId, resources.loadResource(resourcesDir, servletContext, appPath, "images/logos/" + siteId + ".ico",
                                                           defaultImageBytes, -1));
             }
 
@@ -139,7 +139,7 @@ public class ResourceFilter implements Filter {
                 if (filename.equals("images/logos/" + siteId + ".ico")) {
                     favicon = resources.loadResource(resourcesDir, servletContext, appPath, "images/logos/" + siteId + ".ico", favicon.one(),
                                                      favicon.two());
-                    AddFavIcon(nodeId, favicon);
+                    addFavIcon(nodeId, favicon);
 
                     httpServletResponse.setContentLength(favicon.one().length);
                     httpServletResponse.addHeader("Cache-Control", "max-age=" + FIVE_DAYS + ", public");
@@ -171,7 +171,7 @@ public class ResourceFilter implements Filter {
             }
         }
 
-        private synchronized void AddFavIcon(String nodeId, Pair<byte[], Long> favicon) {
+        private synchronized void addFavIcon(String nodeId, Pair<byte[], Long> favicon) {
             if (faviconMap.containsKey(nodeId)) {
                 faviconMap.replace(nodeId, favicon);
             } else {
