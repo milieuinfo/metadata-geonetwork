@@ -181,10 +181,10 @@ public class GeonetworkDataDirectory {
                     value = handlerConfig.getValue(keyToUse);
                     break;
                 case 3:
-//				Environment variable names used by the utilities in the Shell and Utilities
-//				volume of IEEE Std 1003.1-2001 consist solely of uppercase letters, digits, and the '_'
-//				Instead of looking for geonetwork.dir, get geonetwork_dir
-                    value = System.getenv(keyToUse.replace('.', '_'));
+                    // Environment variable names used by the utilities in the Shell and Utilities
+                    // volume of IEEE Std 1003.1-2001 consist solely of uppercase letters, digits, and the '_'
+                    // Instead of looking for geonetwork.dir, get geonetwork_dir
+                    value = System.getenv(keyToUse.replace('.', '_').toUpperCase());
                     break;
                 default:
                     throw new IllegalArgumentException("Did not expect value: " + j);
@@ -306,7 +306,7 @@ public class GeonetworkDataDirectory {
         htmlCacheDir = setDir(jeevesServlet, webappName, handlerConfig, htmlCacheDir,
             ".htmlcache" + KEY_SUFFIX, Geonet.Config.HTMLCACHE_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "htmlcache"
         );
-        Log.info(Geonet.DATA_DIRECTORY, "   - Html cache directory is: " + htmlCacheDir);        
+        Log.info(Geonet.DATA_DIRECTORY, "   - Html cache directory is: " + htmlCacheDir);
         schemaPublicationDir = setDir(jeevesServlet, webappName, handlerConfig, schemaPublicationDir,
             ".schemapublication" + KEY_SUFFIX, Geonet.Config.SCHEMAPUBLICATION_DIR, handlerConfig.getValue(Geonet.Config.RESOURCES_DIR), "schemapublication"
         );
