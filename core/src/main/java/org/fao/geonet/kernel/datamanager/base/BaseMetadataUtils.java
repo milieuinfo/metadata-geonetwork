@@ -38,6 +38,8 @@ import org.fao.geonet.kernel.GeonetworkDataDirectory;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.XmlSerializer;
 import org.fao.geonet.kernel.datamanager.*;
+import org.fao.geonet.kernel.metadata.StatusActions;
+import org.fao.geonet.kernel.metadata.StatusActionsFactory;
 import org.fao.geonet.kernel.schema.MetadataSchema;
 import org.fao.geonet.kernel.schema.SavedQuery;
 import org.fao.geonet.kernel.search.EsSearchManager;
@@ -220,6 +222,11 @@ public class BaseMetadataUtils implements IMetadataUtils {
                     + ". Original record was null. Use starteditingsession to.");
             }
         }
+
+        // additionally, roll back the status that was active at the start of the editor session
+        StatusActionsFactory saf = context.getBean(StatusActionsFactory.class);
+        StatusActions sa = saf.createStatusActions(context);
+        sa.cancelEditStatus(context, Integer.parseInt(id));
     }
 
     /**

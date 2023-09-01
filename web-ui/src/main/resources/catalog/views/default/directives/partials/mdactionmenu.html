@@ -121,7 +121,7 @@
       >
         <a
           href=""
-          data-ng-init="stepLabelKey = step.from + '-to-' + step.to + '-' + (isReviewer ? 'reviewer' : 'editor')"
+          data-ng-init="stepLabelKey = step.to"
           data-ng-click="mdService.openUpdateStatusPanel(
                           getScope(), 'workflow', null, status[step.to], stepLabelKey)"
         >
