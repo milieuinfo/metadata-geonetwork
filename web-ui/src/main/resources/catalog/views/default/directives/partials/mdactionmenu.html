@@ -125,8 +125,8 @@
           data-ng-click="mdService.openUpdateStatusPanel(
                           getScope(), 'workflow', null, status[step.to], stepLabelKey)"
         >
-          <span class="fa fa-fw gn-status-{{stepLabelKey}}"></span>&nbsp;
-          <span>{{('mdStatusTitle-' + stepLabelKey) | translate}}</span>
+          <span class="fa fa-fw gn-status-{{step.to}}"></span>&nbsp;
+          <span>{{('mdStatus-' + step.to) | translate}}</span>
         </a>
       </li>
 
