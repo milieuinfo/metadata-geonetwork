@@ -62,13 +62,14 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 /**
  * TODO Javadoc.
  */
 public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
+
+    private int harvesterRefreshIntervalMinutes = 1;
 
     private final List<String> summaryHarvesterSettings =
         Arrays.asList("harvesting", "node", "site", "name", "uuid",
@@ -122,6 +123,9 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         AbstractHarvester.getScheduler().getListenerManager().addJobListener(
             HarversterJobListener.getInstance(this));
 
+        // intialise the harvesters...
+        initialiseHarvesters(context);
+        // ... and schedule a periodic refresh
         startHarvesterRefreshJob();
     }
 
@@ -184,7 +188,7 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
             .build();
         Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity("refresh-timer", group)
-            .withSchedule(simpleSchedule().withIntervalInMinutes(1).repeatForever())
+            .withSchedule(simpleSchedule().withIntervalInMinutes(harvesterRefreshIntervalMinutes).repeatForever())
             .startNow()
             .build();
         scheduler.scheduleJob(jobDetail, trigger);
@@ -726,4 +730,13 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         }
 
     }
+
+    public int getHarvesterRefreshIntervalMinutes() {
+        return harvesterRefreshIntervalMinutes;
+    }
+
+    public void setHarvesterRefreshIntervalMinutes(int harvesterRefreshIntervalMinutes) {
+        this.harvesterRefreshIntervalMinutes = harvesterRefreshIntervalMinutes;
+    }
+
 }
