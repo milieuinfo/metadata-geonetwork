@@ -121,11 +121,11 @@
       >
         <a
           href=""
-          data-ng-init="stepLabelKey = step.to"
+          data-ng-init="textLevel = (step.level.length>0?'text-'+step.level:'')"
           data-ng-click="mdService.openUpdateStatusPanel(
-                          getScope(), 'workflow', null, status[step.to], stepLabelKey)"
+                          getScope(), 'workflow', null, status[step.to], step.to)"
         >
-          <span class="fa fa-fw gn-status-{{step.to}}"></span>&nbsp;
+          <span class="fa fa-fw gn-status-{{step.to}} {{textLevel}}"></span>&nbsp;
           <span>{{('mdStatus-' + step.to) | translate}}</span>
         </a>
       </li>
