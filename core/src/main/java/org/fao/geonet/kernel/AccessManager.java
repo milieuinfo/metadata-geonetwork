@@ -412,7 +412,6 @@ public class AccessManager {
      */
     public boolean hasEditPermission(final ServiceContext context, final String id) throws Exception {
         return hasEditingPermissionWithProfile(context, id, Profile.Editor);
-
     }
 
     /**
