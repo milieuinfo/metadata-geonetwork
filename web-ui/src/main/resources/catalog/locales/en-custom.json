@@ -21,6 +21,8 @@
   "linkToParent": "Link to a dataset series",
   "mdStatus-approved": "Approved",
   "mdStatus-approved_for_published": "Approved for publication",
+  "mdStatus-rejected_for_removed": "Rejected for removal",
+  "mdStatus-rejected_for_retired": "Rejected for retirement",
   "mdStatus-draft": "Draft",
   "mdStatus-rejected": "Rejected",
   "mdStatus-rejected_for_removed": "Rejected for removal",
