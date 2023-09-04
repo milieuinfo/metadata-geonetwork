@@ -3,7 +3,12 @@ All notable changes to this project will be documented in this file. These chang
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.4-SNAPSHOT]
+## [1.1.0]
+- **core** 
+  - [merged core-geonetwork 4.4.0-SNAPSHOT](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26874)
+    - Upgraded to Java 11
+
+## [1.0.4] - 2023-09-04
 - [Started work on Transifex nl_BE](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25634), see [docs](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork?path=/vlaanderen/docs/translation.md&version=GBdevelop)
 - Remove unused core metadata templates from ISO19139 plugin to avoid including them when loading the templates
 

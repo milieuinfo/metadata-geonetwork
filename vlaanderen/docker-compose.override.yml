@@ -33,6 +33,6 @@ services:
   ogc-api-records-service:
     # use the locally built image, assumes it was tagged correctly
     build: .
-    image: gn-cloud-ogc-api-records-service:vl-1.0.1
+    image: localhost/gn-cloud-ogc-api-records-service:vl-1.0.1
     ports:
       - "8081:8080"
