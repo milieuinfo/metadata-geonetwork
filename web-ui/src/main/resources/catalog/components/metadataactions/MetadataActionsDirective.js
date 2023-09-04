@@ -575,7 +575,55 @@
             return $http
               .get("../api/groups?profile=Editor", { cache: true })
               .then(function (response) {
-                scope.groups = response.data;
+                // Build a list of groups by pair (except for Digitaal Vlaanderen).
+                // eg.
+                // () Digitaal Vlaanderen
+                // () Datapublicatie Digitaal Vlaanderen
+                // Stad Gent
+                // () Managed by yourself
+                // () Managed by DataPublicatie
+                scope.mapOfGroups = {};
+                response.data.map(function (group) {
+                  scope.mapOfGroups[group.name] = group;
+                });
+
+                scope.vlGroups = response.data
+                  .filter(function (group) {
+                    return (
+                      group.name.indexOf("Datapublicatie") === -1 &&
+                      group.name.indexOf("Digitaal Vlaanderen") === -1
+                    );
+                  })
+                  .sort(function (a, b) {
+                    return a.label[scope.lang].localeCompare(b.label[scope.lang]);
+                  });
+
+                scope.dvGroup = response.data.filter(function (group) {
+                  return group.name.indexOf("Digitaal Vlaanderen") !== -1;
+                });
+
+                //scope.groups = response.data;
+                // First Digitaal Vlaanderen groups
+                scope.groups = [].concat(scope.dvGroup);
+                // Then for each groups, check if a pair is available
+                scope.vlGroups.forEach(function (group) {
+                  scope.groups.push({
+                    vllabel: group.name,
+                    vlheader: true,
+                    label: { dut: "" }
+                  }); // Pair header
+                  group.vllabel = $translate.instant("groupManagedByYourself");
+                  scope.groups.push(group);
+
+                  var datapublicatieGroup =
+                    scope.mapOfGroups["Datapublicatie " + group.name];
+                  if (datapublicatieGroup) {
+                    datapublicatieGroup.vllabel = $translate.instant(
+                      "groupManagedByDatapublicatie"
+                    );
+                    scope.groups.push(datapublicatieGroup);
+                  }
+                });
               });
           };
 

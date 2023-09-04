@@ -22,7 +22,10 @@
     data-ng-if="mdView.current.record.resourceAltTitle.length > 0"
   >
     <span data-translate="">alternateTitle</span>
-    {{mdView.current.record.resourceAltTitle.join(', ')}}
+    <ul>
+      <li data-ng-repeat="title in mdView.current.record.resourceAltTitle">{{title}}</li>
+    </ul>
+    <!-- {{mdView.current.record.resourceAltTitle.join(', ')}}-->
   </div>
 
   <div

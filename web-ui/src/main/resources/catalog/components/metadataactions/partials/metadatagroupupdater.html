@@ -14,24 +14,29 @@
     <li role="presentation" class="dropdown-header" data-translate="">
       setMetadataGroup
     </li>
+    <!--
+    VL disabled
     <li data-ng-show="groups.length > 10">
       <input
         class="form-control"
         data-ng-model="groupSearch.$"
         placeholder="{{'filter' | translate}}"
       />
-    </li>
+    </li>-->
     <li
-      data-ng-repeat="g in groups | filter:groupSearch | orderBy:sortByLabel"
+      data-ng-repeat="g in groups"
       role="menuitem"
+      data-ng-class="{'dropdown-header': g.vlheader}"
     >
-      <a data-ng-click="assignGroup(g, $event)" href="">
+      <strong data-ng-if="g.vlheader">{{g.vllabel}}</strong>
+      <a data-ng-if="!g.vlheader" data-ng-click="assignGroup(g, $event)" href="">
         <i
           class="fa"
           data-ng-class="g.id == groupOwner ? 'fa-dot-circle-o' : 'fa-circle-o'"
         ></i>
         &#160;
-        <span data-translate="">{{g.label[lang]}}</span>
+        <span data-translate="">{{g.vllabel || g.label[lang]}}</span>
+        <!--        <span data-translate="">{{g.label[lang]}}</span>-->
         <img
           data-ng-if="g.logo"
           data-ng-src="../../images/harvesting/{{g.logo}}"
