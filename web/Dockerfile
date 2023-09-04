@@ -1,4 +1,4 @@
-FROM jetty:9.4.49-jdk8
+FROM jetty:9.4.51-jdk11
 
 # data dir for geonetwork, to be shared across instances
 # subfolders are specified below, using the various env vars
