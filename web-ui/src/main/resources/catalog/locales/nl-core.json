@@ -507,7 +507,7 @@
     "indexingTaskFinished": "Indexeren afgerond, {{total}} records verwerkt",
     "indexingTaskFinishedWithErrors": "Indexeren afgerond, {{total}} records verwerkt met {{errors}} fouten",
     "indexingTaskCanceled": "Indexeren geannuleerd",
-    "inspireValidationTaskUndefined": "Onbekende INSPIRE validatie taak (abnormale staat)",
+    "inspireValidationTaskUndefined": "Unknown INSPIRE validation task (abnormal state)",
     "inspireValidationTaskRunning": "INSPIRE validatie {{total}} records...",
     "inspireValidationTaskFinished": "INSPIRE validatie afgerond, {{total}} records gevalideerd",
     "inspireValidationTaskFinishedWithErrors": "INSPIRE validatie afgerond, {{total}} records gevalideerd met {{errors}} fouten",
