@@ -100,7 +100,7 @@ jobs:
           publishJUnitResults: true
           testResultsFiles: '**/surefire-reports/TEST-*.xml'
           goals: 'clean install'
-          options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 '
+          options: ' -DskipTests -Pwar -Dmaven.artifact.threads=30 -Dwro4j-prebuild-cache '
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: 'web/target/geonetwork.war'
