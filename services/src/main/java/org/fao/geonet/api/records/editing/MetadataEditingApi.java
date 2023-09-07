@@ -137,18 +137,6 @@ public class MetadataEditingApi {
 
         ServiceContext context = ApiUtils.createServiceContext(request);
         ApplicationContext applicationContext = ApplicationContextHolder.get();
-
-        // vl-specific
-        // if we are editor but not reviewer+, and the status of the record is in 'submitted for publication', editing is disallowed
-        AccessManager accessManager = context.getBean(AccessManager.class);
-        String id = String.valueOf(metadata.getId());
-        boolean statusCheck = metadataStatus.getCurrentStatus(metadata.getId()).equals(StatusValue.Status.SUBMITTED);
-        boolean permissionCheck = accessManager.hasEditPermission(context, id) && !accessManager.hasReviewPermission(context, id);
-        if(statusCheck && permissionCheck) {
-            throw new SecurityException(String.format(
-                "You can't edit record (submitted for publication) with UUID %s", metadataUuid));
-        }
-
         SettingManager sm = context.getBean(SettingManager.class);
 
         // Code to handle the flag METADATA_EDITING_CREATED_DRAFT:
