@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+  <changeSet author="mathieu" id="00029">
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approved and published'"/>
+      <where>iddes = 2 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approuvé et publié'"/>
+      <where>iddes = 2 and langid = 'fre'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Unpublished'"/>
+      <where>iddes = 3 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Dépublié'"/>
+      <where>iddes = 3 and langid = 'fre'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Submitted for publication'"/>
+      <where>iddes = 4 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Ingediend voor publicatie'"/>
+      <where>iddes = 4 and langid = 'dut'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Soumis pour publication'"/>
+      <where>iddes = 4 and langid = 'fre'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejected for publication'"/>
+      <where>iddes = 5 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Afgekeurd voor publicatie'"/>
+      <where>iddes = 5 and langid = 'dut'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejeté pour publication'"/>
+      <where>iddes = 5 and langid = 'fre'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approved for publication'"/>
+      <where>iddes = 8 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approuvé pour publication'"/>
+      <where>iddes = 8 and langid = 'fre'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Ingediend voor depublicatie'"/>
+      <where>iddes = 10 and langid = 'dut'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Ingediend voor verwijdering'"/>
+      <where>iddes = 11 and langid = 'dut'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejected for retirement'"/>
+      <where>iddes = 13 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejeté pour dépublication'"/>
+      <where>iddes = 13 and langid = 'fre'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Afgekeurd voor depublicatie'"/>
+      <where>iddes = 13 and langid = 'dut'</where>
+    </update>
+
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejected for removal'"/>
+      <where>iddes = 14 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Rejeté pour suppression'"/>
+      <where>iddes = 14 and langid = 'fre'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Afgekeurd voor verwijdering'"/>
+      <where>iddes = 14 and langid = 'dut'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
