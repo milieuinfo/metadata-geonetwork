@@ -29,17 +29,22 @@ import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import jeeves.server.dispatchers.ServiceManager;
 import org.fao.geonet.ApplicationContextHolder;
+import org.fao.geonet.api.exception.NotAllowedException;
 import org.fao.geonet.api.exception.ResourceNotFoundException;
 import org.fao.geonet.api.tools.i18n.LanguageUtils;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.AbstractMetadata;
+import org.fao.geonet.domain.Profile;
 import org.fao.geonet.domain.ReservedOperation;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.SelectionManager;
 import org.fao.geonet.kernel.datamanager.IMetadataUtils;
+import org.fao.geonet.kernel.datamanager.base.BaseMetadataStatus;
 import org.fao.geonet.kernel.setting.SettingManager;
+import org.fao.geonet.kernel.setting.Settings;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.repository.MetadataRepository;
+import org.fao.geonet.repository.MetadataStatusRepository;
 import org.fao.geonet.utils.GeonetHttpRequestFactory;
 import org.fao.geonet.utils.Log;
 import org.fao.geonet.utils.XmlRequest;
@@ -261,6 +266,16 @@ public class ApiUtils {
         if (!accessManager.canEdit(createServiceContext(request), String.valueOf(metadata.getId()))) {
             throw new SecurityException(String.format(
                 "You can't edit record with UUID %s", metadataUuid));
+        }
+
+        BaseMetadataStatus statusRepository = appContext.getBean(BaseMetadataStatus.class);
+        SettingManager sm = appContext.getBean(SettingManager.class);
+        UserSession userSession = createServiceContext(request).getUserSession();
+        boolean isEditor = userSession.getProfile().equals(Profile.Editor);
+        boolean isEnabledWorkflow = sm.getValueAsBool(Settings.METADATA_WORKFLOW_ENABLE);
+        if (isEnabledWorkflow && isEditor && !statusRepository.canEditorEdit(metadata.getId())) {
+            throw new SecurityException(String.format(
+                "Editors are not allowed to edit record with UUID %s and with currently set status", metadataUuid));
         }
         return metadata;
     }
