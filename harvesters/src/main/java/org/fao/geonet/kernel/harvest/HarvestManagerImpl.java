@@ -126,13 +126,17 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
 
         // intialise the harvesters...
         initialiseHarvesters(context);
-        // ... and schedule a periodic refresh
+
+        // artificially delay the refresh job so it never coincides with execution of an actual harvesterjob
+        // probably fine to do it this way, but the _correct_ solution would be to integrate an update-mechanism
+        // for the harvesters that doesn't involve removing them and making them aware of a "last-updated" timestamp
         long now = System.currentTimeMillis();
         long nextSecond = (now/1000)*1000+1000;
         long toSleep = nextSecond-now+500;
-
         Log.debug(Geonet.HARVEST_MAN, String.format("Artificially sleeping to not refresh 'on' the minute for %s.", toSleep));
         Thread.sleep(toSleep);
+
+        // ... and schedule a periodic refresh
         startHarvesterRefreshJob();
     }
 
