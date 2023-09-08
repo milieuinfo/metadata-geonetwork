@@ -161,29 +161,39 @@
                     { from: "approved", to: "submitted_for_retired" },
                     { from: "draft", to: "removed" },
                     { from: "draft", to: "submitted" },
-                    { from: "draft", to: "submitted_for_removed" },
-                    { from: "rejected", to: "draft" },
+                    { from: "rejected", to: "removed" },
                     { from: "rejected", to: "submitted" },
-                    { from: "rejected", to: "submitted_for_removed" },
                     { from: "retired", to: "submitted_for_removed" },
-                    { from: "submitted", to: "draft" },
-                    { from: "submitted_for_removed", to: "rejected_for_removed" }
+                    { from: "submitted", to: "removed" },
+                    { from: "submitted_for_removed", to: "rejected_for_removed" },
+                    { from: "submitted_for_retired", to: "rejected_for_retired" }
                   ],
                   reviewerSteps = editorSteps.concat([
+                    { from: "approved", to: "removed" },
+                    { from: "approved", to: "retired" },
                     { from: "approved_for_published", to: "approved" },
+                    { from: "approved_for_published", to: "rejected" },
+                    { from: "approved_for_published", to: "removed", level: "danger" },
+                    { from: "approved_for_published", to: "retired", level: "danger" },
+                    { from: "approved_for_published", to: "submitted" },
+                    { from: "approved_for_published", to: "submitted_for_removed" },
+                    { from: "approved_for_published", to: "submitted_for_retired" },
                     { from: "draft", to: "approved" },
                     { from: "draft", to: "approved_for_published" },
-                    { from: "draft", to: "rejected" },
+                    { from: "rejected_for_retired", to: "approved" },
                     { from: "retired", to: "approved" },
+                    { from: "retired", to: "removed" },
                     { from: "submitted", to: "approved" },
                     { from: "submitted", to: "approved_for_published" },
                     { from: "submitted", to: "rejected" },
-                    { from: "submitted_for_retired", to: "rejected_for_retired" },
+                    { from: "submitted_for_removed", to: "approved", level: "danger" },
+                    { from: "submitted_for_removed", to: "removed" },
+                    { from: "submitted_for_removed", to: "retired" },
+                    { from: "submitted_for_retired", to: "approved", level: "danger" },
+                    { from: "submitted_for_retired", to: "removed" },
                     { from: "submitted_for_retired", to: "retired" }
                   ]),
-                  adminSteps = reviewerSteps.concat([
-                    { from: "submitted_for_removed", to: "removed" }
-                  ]);
+                  adminSteps = reviewerSteps;
                 scope.statusEffects = {
                   editor: editorSteps,
                   reviewer: reviewerSteps,

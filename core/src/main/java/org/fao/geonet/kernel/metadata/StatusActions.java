@@ -38,6 +38,8 @@ public interface StatusActions {
 
     public void onEdit(int id, boolean minorEdit) throws Exception;
 
+    public void cancelEditStatus(ServiceContext context, int id) throws Exception;
+
     public Map<Integer, StatusChangeType> onStatusChange(List<MetadataStatus> status) throws Exception;
 
 }

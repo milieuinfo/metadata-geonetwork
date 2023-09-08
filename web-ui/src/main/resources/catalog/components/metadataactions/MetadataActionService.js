@@ -319,7 +319,7 @@
         scope.statusToSelect = statusToBe;
         gnUtilityService.openModal(
           {
-            title: label ? "mdStatusTitle-" + label : "status-" + t.id,
+            title: label ? "mdStatus-" + label : "status-" + t.id,
             content:
               '<div data-gn-metadata-status-updater="md" ' +
               'data-status-to-select="' +

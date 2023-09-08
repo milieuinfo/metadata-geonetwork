@@ -47,6 +47,7 @@ import org.fao.geonet.domain.*;
 import org.fao.geonet.events.history.RecordUpdatedEvent;
 import org.fao.geonet.kernel.*;
 import org.fao.geonet.kernel.datamanager.IMetadataIndexer;
+import org.fao.geonet.kernel.datamanager.IMetadataStatus;
 import org.fao.geonet.kernel.datamanager.IMetadataUtils;
 import org.fao.geonet.kernel.datamanager.IMetadataValidator;
 import org.fao.geonet.kernel.datamanager.base.BaseMetadataStatus;
@@ -111,6 +112,9 @@ public class MetadataEditingApi {
     MetadataDraftRepository metadataDraftRepository;
 
     @Autowired
+    IMetadataStatus metadataStatus;
+
+    @Autowired
     private StatusValueRepository statusValueRepository;
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Edit a record", description = "Return HTML form for editing.")
@@ -133,7 +137,6 @@ public class MetadataEditingApi {
 
         ServiceContext context = ApiUtils.createServiceContext(request);
         ApplicationContext applicationContext = ApplicationContextHolder.get();
-
         SettingManager sm = context.getBean(SettingManager.class);
 
         // Code to handle the flag METADATA_EDITING_CREATED_DRAFT:

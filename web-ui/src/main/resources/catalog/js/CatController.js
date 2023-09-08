@@ -273,21 +273,21 @@
               boost: "5",
               functions: [
                 {
-                  filter: {match: {resourceType: "series"}},
+                  filter: { match: { resourceType: "series" } },
                   weight: 1.5
                 },
                 // Boost down member of a series
                 {
-                  filter: {exists: {field: "parentUuid"}},
+                  filter: { exists: { field: "parentUuid" } },
                   weight: 0.3
                 },
                 // Boost down obsolete and superseded records
                 {
-                  filter: {match: {"cl_status.key": "obsolete"}},
+                  filter: { match: { "cl_status.key": "obsolete" } },
                   weight: 0.2
                 },
                 {
-                  filter: {match: {"cl_status.key": "superseded"}},
+                  filter: { match: { "cl_status.key": "superseded" } },
                   weight: 0.3
                 },
                 // {
@@ -421,7 +421,7 @@
               "th_GDI-Vlaanderen-trefwoorden.default": {
                 terms: {
                   field: "th_GDI-Vlaanderen-trefwoorden.default",
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               },
               // #6
@@ -1050,7 +1050,7 @@
             "map-editor": {
               context: "",
               extent: [0, 0, 0, 0],
-              layers: [{type: "osm"}]
+              layers: [{ type: "osm" }]
             },
             "map-thumbnail": {
               context: "../../map/config-viewer.xml",
@@ -1070,7 +1070,7 @@
             showCitation: {
               enabled: false,
               // if: {'documentStandard': ['iso19115-3.2018']}
-              if: {resourceType: ["series", "dataset", "nonGeographicDataset"]}
+              if: { resourceType: ["series", "dataset", "nonGeographicDataset"] }
             },
             sortKeywordsAlphabetically: true,
             mainThesaurus: ["th_gemet", "th_gemet-theme"],
@@ -1099,7 +1099,7 @@
                   filter: "protocol:.*DOWNLOAD.*|DB:.*|FILE:.*",
                   title: "download"
                 },
-                {types: "onlines", filter: "function:legend", title: "mapLegend"},
+                { types: "onlines", filter: "function:legend", title: "mapLegend" },
                 {
                   types: "onlines",
                   filter: "function:featureCatalogue",
@@ -1122,26 +1122,26 @@
               cl_status: {
                 terms: {
                   field: "cl_status.default",
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               },
               creationYearForResource: {
                 terms: {
                   field: "creationYearForResource",
                   size: 100,
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               },
               cl_spatialRepresentationType: {
                 terms: {
                   field: "cl_spatialRepresentationType.default",
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               },
               format: {
                 terms: {
                   field: "format",
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               }
             }
@@ -1214,7 +1214,7 @@
               "th_GDI-Vlaanderen-trefwoorden.default": {
                 terms: {
                   field: "th_GDI-Vlaanderen-trefwoorden.default",
-                  order: {_key: "asc"}
+                  order: { _key: "asc" }
                 }
               },
               domain: {
@@ -1556,7 +1556,7 @@
           },
           workflowHelper: {
             enabled: false,
-            workflowAssistApps: [{appUrl: "", appLabelKey: ""}]
+            workflowAssistApps: [{ appUrl: "", appLabelKey: "" }]
           }
         }
       };
@@ -1715,8 +1715,8 @@
               if (optionInDefaultConfig === undefined) {
                 console.warn(
                   "Path " +
-                  p +
-                  " not found in default configuration. Check your custom configuration.",
+                    p +
+                    " not found in default configuration. Check your custom configuration.",
                   config
                 );
               }
@@ -2314,7 +2314,7 @@
               });
             } else {
               var query = {
-                bool: {must: {query_string: {query: "+isTemplate:n"}}}
+                bool: { must: { query_string: { query: "+isTemplate:n" } } }
               };
               if (gnGlobalSettings.gnCfg.mods.search.filters) {
                 query.bool.filter = gnGlobalSettings.gnCfg.mods.search.filters;

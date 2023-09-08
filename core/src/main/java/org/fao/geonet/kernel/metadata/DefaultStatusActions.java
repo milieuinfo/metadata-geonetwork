@@ -126,12 +126,28 @@ public class DefaultStatusActions implements StatusActions {
             Log.trace(Geonet.DATA_MANAGER, "DefaultStatusActions.onEdit(" + id + ", " + minorEdit + ") with status "
                 + dm.getCurrentStatus(id));
         }
-        if (!minorEdit && dm.getCurrentStatus(id).equals(StatusValue.Status.APPROVED)) {
+        // VL specific
+        if (!minorEdit && !dm.getCurrentStatus(id).equals(StatusValue.Status.DRAFT)) {
             ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages",
                 new Locale(this.language));
             String changeMessage = String.format(messages.getString("status_email_text"), replyToDescr, replyTo, id);
             Log.trace(Geonet.DATA_MANAGER, "Set DRAFT to current record with id " + id);
-            dm.setStatus(context, id, Integer.valueOf(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
+            dm.setStatus(context, id, Integer.parseInt(StatusValue.Status.DRAFT), new ISODate(), changeMessage);
+        }
+    }
+
+    public void cancelEditStatus(ServiceContext context, int id) throws Exception {
+        String statusBeforeAnyChanges = (String) session.getProperty(Geonet.Session.METADATA_STATUS_BEFORE_ANY_CHANGES + id);
+        if (statusBeforeAnyChanges != null) {
+            ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages",
+                new Locale(this.language));
+            String changeMessage = String.format(messages.getString("status_cancel_email_text"), replyToDescr, replyTo, id);
+            dm.setStatus(context, id, Integer.parseInt(statusBeforeAnyChanges), new ISODate(), changeMessage);
+        } else {
+            if (Log.isDebugEnabled(Geonet.EDITOR_SESSION)) {
+                Log.debug(Geonet.EDITOR_SESSION, " > no status to cancel for record " + id
+                    + ". Original record status was null. Use starteditingsession to.");
+            }
         }
     }
 
@@ -515,25 +531,26 @@ public class DefaultStatusActions implements StatusActions {
         ).forEach(s -> result.put(s, new HashSet<>()));
 
         // set the values for editor
+        result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
+                StatusValue.Status.REMOVED,
+                StatusValue.Status.SUBMITTED
+        ));
+        result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
+                StatusValue.Status.REMOVED
+        ));
+        result.get(StatusValue.Status.REJECTED).addAll(Sets.newHashSet(
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REMOVED
+        ));
         result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
                 StatusValue.Status.SUBMITTED_FOR_RETIRED,
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
-        result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
-                StatusValue.Status.REMOVED,
-                StatusValue.Status.SUBMITTED,
-                StatusValue.Status.SUBMITTED_FOR_REMOVED
-        ));
-        result.get(StatusValue.Status.REJECTED).addAll(Sets.newHashSet(
-                StatusValue.Status.DRAFT,
-                StatusValue.Status.SUBMITTED,
-                StatusValue.Status.SUBMITTED_FOR_REMOVED
+        result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
+            StatusValue.Status.REJECTED_FOR_RETIRED
         ));
         result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.SUBMITTED_FOR_REMOVED
-        ));
-        result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
-                StatusValue.Status.DRAFT
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
                 StatusValue.Status.REJECTED_FOR_REMOVED
@@ -551,28 +568,44 @@ public class DefaultStatusActions implements StatusActions {
      */
     private Map<String, Set<String>> getReviewerFlow() {
         Map<String, Set<String>> result = getEditorFlow();
-        result.get(StatusValue.Status.APPROVED_FOR_PUBLISHED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED
-        ));
         result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
-                StatusValue.Status.REJECTED
-        ));
-        result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
+                StatusValue.Status.REJECTED,
                 StatusValue.Status.APPROVED_FOR_PUBLISHED,
-                StatusValue.Status.REJECTED
+                StatusValue.Status.APPROVED
+        ));
+        result.get(StatusValue.Status.APPROVED_FOR_PUBLISHED).addAll(Sets.newHashSet(
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED,
+                StatusValue.Status.REMOVED
+        ));
+        result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
-                StatusValue.Status.REJECTED_FOR_RETIRED,
-                StatusValue.Status.RETIRED
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
+        ));
+        result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.REJECTED_FOR_RETIRED).addAll(Sets.newHashSet(
                 StatusValue.Status.APPROVED
+        ));
+        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         return result;
     }
@@ -586,20 +619,7 @@ public class DefaultStatusActions implements StatusActions {
      * @return a map of status to the possible follow-up statuses
      */
     private Map<String, Set<String>> getAdminFlow() {
-        Map<String, Set<String>> result = getReviewerFlow();
-
-
-        result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
-                StatusValue.Status.REMOVED
-        ));
-        result.get(StatusValue.Status.REJECTED_FOR_REMOVED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
-                StatusValue.Status.DRAFT,
-                StatusValue.Status.REJECTED,
-                StatusValue.Status.RETIRED,
-                StatusValue.Status.SUBMITTED
-        ));
-        return result;
+        return getReviewerFlow();
     }
 
     /**

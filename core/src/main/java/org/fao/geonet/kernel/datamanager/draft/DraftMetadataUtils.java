@@ -89,11 +89,7 @@ public class DraftMetadataUtils extends BaseMetadataUtils {
     IMetadataUtils metadataUtils;
 
     private ServiceContext context;
-    private Set<String> listOfStatusToTriggerDraftCreation = Sets.newHashSet(
-        StatusValue.Status.APPROVED,
-        StatusValue.Status.SUBMITTED_FOR_REMOVED,
-        StatusValue.Status.SUBMITTED_FOR_RETIRED,
-        StatusValue.Status.RETIRED);
+    private Set<String> listOfStatusToTriggerDraftCreation;
 
     public void init(ServiceContext context, Boolean force) throws Exception {
         this.context = context;

@@ -101,7 +101,7 @@ public class BaseMetadataStatus implements IMetadataStatus {
      */
     @Override
     public MetadataStatus getPreviousStatus(int metadataId) throws Exception {
-        String sortField = SortUtils.createPath(MetadataStatus_.id, MetadataStatus_.changeDate);
+        String sortField = SortUtils.createPath(MetadataStatus_.changeDate);
         List<MetadataStatus> metadataStatusList = metadataStatusRepository.findAllByMetadataIdAndByType(
             metadataId, StatusValueType.workflow, Sort.by(Sort.Direction.DESC, sortField));
         if (metadataStatusList.isEmpty() || metadataStatusList.size() == 1) {
@@ -289,15 +289,11 @@ public class BaseMetadataStatus implements IMetadataStatus {
     }
 
     public boolean canEditorEdit(Integer metadataId) throws Exception {
-
         String currentState = this.getCurrentStatus(metadataId);
 
-        HashSet<String> draftCompatible = new HashSet<>();
-        draftCompatible.add(StatusValue.Status.DRAFT);
-        draftCompatible.add(StatusValue.Status.APPROVED);
-        draftCompatible.add(StatusValue.Status.RETIRED);
-
-        return draftCompatible.contains(currentState);
+        // vl-specific
+        // if we are editor but not reviewer+, and the status of the record is in 'submitted for publication', editing is disallowed
+        return !StatusValue.Status.APPROVED_FOR_PUBLISHED.equals(currentState);
     }
 
 }

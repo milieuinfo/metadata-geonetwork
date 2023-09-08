@@ -38,6 +38,8 @@ import org.fao.geonet.kernel.GeonetworkDataDirectory;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.XmlSerializer;
 import org.fao.geonet.kernel.datamanager.*;
+import org.fao.geonet.kernel.metadata.StatusActions;
+import org.fao.geonet.kernel.metadata.StatusActionsFactory;
 import org.fao.geonet.kernel.schema.MetadataSchema;
 import org.fao.geonet.kernel.schema.SavedQuery;
 import org.fao.geonet.kernel.search.EsSearchManager;
@@ -115,6 +117,9 @@ public class BaseMetadataUtils implements IMetadataUtils {
 
     protected IMetadataManager metadataManager;
 
+    @Autowired
+    protected IMetadataStatus metadataStatusManager;
+
     @Override
     public void setMetadataManager(IMetadataManager metadataManager) {
         this.metadataManager = metadataManager;
@@ -177,7 +182,9 @@ public class BaseMetadataUtils implements IMetadataUtils {
         boolean withValidationErrors = false;
         Element metadataBeforeAnyChanges = metadataManager.getMetadata(context, id, forEditing, false,
             withValidationErrors, keepXlinkAttributes);
+        String currentStatus = metadataStatusManager.getCurrentStatus(Integer.parseInt(id));
         context.getUserSession().setProperty(Geonet.Session.METADATA_BEFORE_ANY_CHANGES + id, metadataBeforeAnyChanges);
+        context.getUserSession().setProperty(Geonet.Session.METADATA_STATUS_BEFORE_ANY_CHANGES + id, currentStatus);
         return Integer.valueOf(id);
     }
 
@@ -215,6 +222,11 @@ public class BaseMetadataUtils implements IMetadataUtils {
                     + ". Original record was null. Use starteditingsession to.");
             }
         }
+
+        // additionally, roll back the status that was active at the start of the editor session
+        StatusActionsFactory saf = context.getBean(StatusActionsFactory.class);
+        StatusActions sa = saf.createStatusActions(context);
+        sa.cancelEditStatus(context, Integer.parseInt(id));
     }
 
     /**

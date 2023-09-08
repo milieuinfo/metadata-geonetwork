@@ -3,13 +3,16 @@ All notable changes to this project will be documented in this file. These chang
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0]
+## [1.1.0-SNAPSHOT]
+- [Backport facets and search options from old application](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26987)
+- [Display groups by pair in the editor group dropdown](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26988)
+- [Workflow tweaks and fixes](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27062)
 - **core** 
   - [merged core-geonetwork 4.4.0-SNAPSHOT](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26874)
     - Upgraded to Java 11
 
 ## [1.0.4] - 2023-09-04
-- [Started work on Transifex nl_BE](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25634), see [docs](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork?path=/vlaanderen/docs/translation.md&version=GBdevelop)
+- Synced translations files with Transifex nl_BE ([PR 1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25634) / [PR 2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26995)), see [docs](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork?path=/vlaanderen/docs/translation.md&version=GBdevelop)
 - Remove unused core metadata templates from ISO19139 plugin to avoid including them when loading the templates
 
 ## [1.0.3] - 2023-07-14
