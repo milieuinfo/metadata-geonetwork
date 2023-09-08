@@ -62,6 +62,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 /**
@@ -126,6 +127,12 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         // intialise the harvesters...
         initialiseHarvesters(context);
         // ... and schedule a periodic refresh
+        long now = System.currentTimeMillis();
+        long nextSecond = (now/1000)*1000+1000;
+        long toSleep = nextSecond-now+500;
+
+        Log.debug(Geonet.HARVEST_MAN, String.format("Artificially sleeping to not refresh 'on' the minute for %s.", toSleep));
+        Thread.sleep(toSleep);
         startHarvesterRefreshJob();
     }
 
@@ -201,10 +208,15 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         // restart them
         initialiseHarvesters(context);
         // log the new state
-        Log.debug(Geonet.HARVEST_MAN, "Refreshed harvesters (" + hmHarvesters.size() + ")");
+        Log.debug(Geonet.HARVEST_MAN, String.format("thread(%s) Refreshed harvesters (%s)",
+            Thread.currentThread().getName(),
+            hmHarvesters.size()));
         hmHarvesters.forEach((s, abstractHarvester) ->
-            Log.debug(Geonet.HARVEST_MAN, "harvester " + s + " id(" + abstractHarvester.getID() + ") " +
-                "every(" + abstractHarvester.getParams().getEvery() + ")"));
+            Log.debug(Geonet.HARVEST_MAN, String.format("thread(%s) > harvester (%s) id (%s) every(%s)",
+                Thread.currentThread().getName(),
+                s,
+                abstractHarvester.getID(),
+                abstractHarvester.getParams().getEvery())));
     }
 
     /**

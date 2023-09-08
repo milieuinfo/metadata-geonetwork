@@ -24,10 +24,13 @@
 package org.fao.geonet.kernel.harvest.harvester.simpleurl;
 
 import org.fao.geonet.Logger;
+import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.harvest.harvester.AbstractHarvester;
 import org.fao.geonet.kernel.harvest.harvester.HarvestResult;
+import org.fao.geonet.utils.Log;
 
 import java.sql.SQLException;
+import java.time.Duration;
 
 /**
  * Harvest metadata from a JSON source.
@@ -42,7 +45,7 @@ public class SimpleUrlHarvester extends AbstractHarvester<HarvestResult, SimpleU
     /**
      * Stores in the harvester settings table some values not managed by {@link AbstractHarvester}
      *
-     * @param params         the harvester parameters.
+     * @param params    the harvester parameters.
      * @param path
      * @param siteId
      * @param optionsId
@@ -62,6 +65,9 @@ public class SimpleUrlHarvester extends AbstractHarvester<HarvestResult, SimpleU
 
     public void doHarvest(Logger log) throws Exception {
         Harvester h = new Harvester(cancelMonitor, log, context, params);
+        Log.debug(Geonet.HARVEST_MAN, String.format("thread(%s) before harvest", Thread.currentThread().getName()));
+        Thread.sleep(Duration.ofMinutes(5).toMillis());
         result = h.harvest(log);
+        Log.debug(Geonet.HARVEST_MAN, String.format("thread(%s) after harvest", Thread.currentThread().getName()));
     }
 }
