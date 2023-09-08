@@ -6,12 +6,16 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
   <changeSet author="mathieu" id="00029">
     <update tableName="statusvaluesdes">
-      <column name="label" valueComputed="'Approved and published'"/>
+      <column name="label" valueComputed="'Published'"/>
       <where>iddes = 2 and langid = 'eng'</where>
     </update>
     <update tableName="statusvaluesdes">
-      <column name="label" valueComputed="'Approuvé et publié'"/>
+      <column name="label" valueComputed="'Publié'"/>
       <where>iddes = 2 and langid = 'fre'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Gepubliceerd'"/>
+      <where>iddes = 2 and langid = 'dut'</where>
     </update>
 
     <update tableName="statusvaluesdes">
@@ -57,10 +61,18 @@
       <column name="label" valueComputed="'Approuvé pour publication'"/>
       <where>iddes = 8 and langid = 'fre'</where>
     </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Goedgekeurd voor publicatie'"/>
+      <where>iddes = 8 and langid = 'dut'</where>
+    </update>
 
     <update tableName="statusvaluesdes">
       <column name="label" valueComputed="'Ingediend voor depublicatie'"/>
       <where>iddes = 10 and langid = 'dut'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Submitted for retirement'"/>
+      <where>iddes = 10 and langid = 'eng'</where>
     </update>
 
     <update tableName="statusvaluesdes">

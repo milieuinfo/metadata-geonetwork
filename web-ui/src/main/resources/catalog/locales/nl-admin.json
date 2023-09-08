@@ -639,7 +639,7 @@
     "system/csw/metadataPublic-help": "Wanneer een transactie een nieuw record via het CSW-T protocol toevoegt, wordt dit record automatisch gepubliceerd voor alle gebruikers.",
     "system/csw/transactionUpdateCreateXPath": "Maak het element aan wanneer het niet bestaat, bij het gebruik van XPath in CSW transacties.",
     "system/csw/transactionUpdateCreateXPath-help": "Indien niet aangevinkt , kan alleen het bestaande element worden bijgewerkt.",
-    "system/feedback": "terugkoppeling",
+    "system/feedback": "Feedback",
     "system/feedback/email": "e-mail",
     "system/feedback/email-help": "Dit is het e-mailadres van de admin wat gebruikt wordt om een antwoord te versturen.",
     "system/feedback/mailServer/host": "SMTP host",

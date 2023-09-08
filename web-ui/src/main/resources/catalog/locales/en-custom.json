@@ -24,15 +24,15 @@
   "mdStatus-draft": "Draft",
   "mdStatus-rejected": "Rejected",
   "mdStatus-rejected_for_removed": "Rejected for removal",
-  "mdStatus-rejected_for_retired": "Rejected for retirement",
+  "mdStatus-rejected_for_retired": "Rejected for depublication",
   "mdStatus-removed": "Removed",
-  "mdStatus-retired": "Unpublished",
+  "mdStatus-retired": "Retired",
   "mdStatus-submitted": "Submitted for publication",
   "mdStatus-submitted_for_removed": "Submitted for removal",
   "mdStatus-submitted_for_retired": "Submitted for retirement",
   "onlyMyRecord": "My Metadata Records",
   "serviceType-discovery": "Discovery service",
   "serviceType-download": "Downloadable",
-  "serviceType-view": "Raadpleegbaar",
+  "serviceType-view": "Viewable",
   "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, using GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
 }
