@@ -28,7 +28,7 @@ additional harvester-disabled instances.
 
 ```bash
 # run 3 instances, of which one is a harvester
-docker-compose --profile scaled up --scale geonetwork=2 -d
+docker-compose --profile scaled up --scale geonetwork-replica=2 -d
 # open all geonetwork instances in one go (http://localhost:xxxx/):
 docker ps --format json --filter "name=geonetwork" | jq ".Ports" | sed -E "s/.*:([0-9]{4})->.*/http:\/\/localhost:\1/" | while read -r url; do xdg-open "$url"; done
 ```
