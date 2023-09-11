@@ -80,16 +80,16 @@ services:
     # Command to run the liquibase update service
     command: bash -c "mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2 -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
-  geonetwork:
+  geonetwork-replica:
     <<: *default-service-geonetwork
     depends_on:
-      geonetwork-harvester:
+      geonetwork:
         condition: service_healthy
     environment:
       <<: *default-geonetwork-environment
       HARVESTER_SCHEDULER_ENABLED: false
 
-  geonetwork-harvester:
+  geonetwork:
     <<: *default-service-geonetwork
     environment:
       <<: *default-geonetwork-environment
