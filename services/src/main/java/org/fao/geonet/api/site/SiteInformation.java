@@ -37,12 +37,12 @@ import javax.sql.DataSource;
 import javax.xml.transform.TransformerFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by francois on 04/06/16.
@@ -157,6 +157,16 @@ public class SiteInformation {
         systemProperties.put("mem.free", "" + freeMem);
         systemProperties.put("mem.total", "" + totMem);
 
+        // hostname could be present in various places, not guaranteed to be there
+        Set<String> hostNames = new HashSet<>();
+        try {
+            hostNames.add(InetAddress.getLocalHost().getHostName());
+        } catch (UnknownHostException ignored) {
+        }
+        hostNames.add(System.getenv("HOSTNAME"));
+        hostNames.add(System.getenv("COMPUTERNAME"));
+        systemProperties.put("host.name",
+            hostNames.stream().filter(s -> s != null && !s.isBlank()).collect(Collectors.joining(", ")));
     }
 
     /**
