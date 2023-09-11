@@ -61,9 +61,9 @@
     <Logger name="geonetwork.formatter" level="error"/>
     <Logger name="geonetwork.geoserver.publisher" level="error"/>
     <Logger name="geonetwork.geoserver.rest" level="error"/>
-    <Logger name="geonetwork.harvest.wfs.features" level="debug"/>
-    <Logger name="geonetwork.harvester" level="info"/>
-    <Logger name="geonetwork.harvester" level="info"/>
+    <Logger name="geonetwork.harvest.wfs.features" level="error"/>
+    <Logger name="geonetwork.harvester" level="error"/>
+    <Logger name="geonetwork.harvest-man" level="error"/>
     <Logger name="geonetwork.index" level="error"/>
     <Logger name="geonetwork.ldap" level="error"/>
     <Logger name="geonetwork.lucene" level="error"/>
@@ -71,7 +71,7 @@
     <Logger name="geonetwork.resources" level="error"/>
     <Logger name="geonetwork.schemamanager" level="error"/>
     <Logger name="geonetwork.search" level="error"/>
-    <Logger name="geonetwork.security" level="debug"/>
+    <Logger name="geonetwork.security" level="error"/>
     <Logger name="geonetwork.spatineo" level="error"/>
     <Logger name="geonetwork.sru" level="error"/>
     <Logger name="geonetwork.sru.search" level="error"/>
@@ -85,7 +85,7 @@
     <Logger name="geonetwork.engine" level="error"/>
     <Logger name="geonetwork.monitor" level="error"/>
     <Logger name="geonetwork.resources" level="error"/>
-    <Logger name="geonetwork.security" level="debug"/>
+    <Logger name="geonetwork.security" level="error"/>
     <Logger name="geonetwork.transformerFactory" level="error"/>
     <Logger name="geonetwork.xlinkprocessor" level="error"/>
     <Logger name="geonetwork.xmlresolver" level="error"/>
@@ -97,7 +97,7 @@
       <AppenderRef ref="File"/>
     </Logger>
     <Logger name="org.springframework.beans" level="error"/>
-    <Logger name="org.springframework.security" level="debug"/>
+    <Logger name="org.springframework.security" level="error"/>
     <Logger name="org.springframework.security.ldap" level="error"/>
     <Logger name="org.springframework.security.web.firewall" level="error"/>
     <Logger name="org.springframework.aop.framework.CglibAopProxy" level="error"/>

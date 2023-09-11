@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Backport facets and search options from old application](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26987)
 - [Display groups by pair in the editor group dropdown](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26988)
 - [Workflow tweaks and fixes](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27062)
+- [Fixing scheduler for high availability setups](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27084)
 - **core** 
   - [merged core-geonetwork 4.4.0-SNAPSHOT](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26874)
     - Upgraded to Java 11
