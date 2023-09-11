@@ -16,7 +16,7 @@ variables:
 jobs:
   - job: skipcheck
     # itss linux build server
-    pool: dv-alex-adobuildserves-ubuntu-vmss
+    pool: dv-dev-ubuntu2204
     steps:
       - bash: |
           echo "Testing whether we need to skip the pipeline."
