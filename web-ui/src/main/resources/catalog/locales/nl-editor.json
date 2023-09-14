@@ -44,7 +44,7 @@
     "removeField": "Verwijder dit veld",
     "addXpath-help": "Het bijwerken van records op basis van XPath vereist zorgvuldige definitie van de wijzigingen. Een wijziging wordt gedefinieerd door:",
     "addXpathTitle": "Optionele titel",
-    "addXpathXpath": "een verplicht <a href='http://xmlfr.org/w3c/TR/xpath/'> XPath </a> om naar het element(en) te verwijzen dat moet worden bijgewerkt. XPath kan geen filter expressie bevatten.",
+    "addXpathXpath": "een verplicht <a href='https://www.w3.org/TR/1999/REC-xpath-19991116/'>XPath</a> dat wijst naar de te updaten elementen. Het XPath mag een filter expressie bevatten.",
     "addXpathInsertMode": "een type wijziging",
     "xpath": "XPath",
     "xpathValue": "Tekst of XML waarde",

@@ -1303,8 +1303,6 @@
     "ui-logoInHeaderPosition-help": "Positie van logo in de header",
     "ui-isHeaderFixed": "Fixeer de header",
     "ui-isHeaderFixed-help": "De header staat vast en blijft steeds bovenaan de pagina. Let op: wanneer ook de optie [Toon het logo in header] is geselecteerd, heeft de header een vaste hoogte nodig. Dit kan worden ingesteld onder [CSS & Stijl] > [Header] > [Hoogte]",
-    "ui-isMenubarAccessible": "Menubalk toegankelijk maken",
-    "ui-isMenubarAccessible-help": "Open menubalk items na klikken, niet bij hoveren. Dit betekent dat de menuitems toegankelijk worden via het toetsenbord.",
     "ui-sortKeywordsAlphabetically": "Sorteer sleutelwoorden / categorieën / topic categorieën alfabetisch",
     "ui-sortKeywordsAlphabetically-help": "Toon de sleutelwoorden / categorieën / topic categorieën alfabetisch gesorteerd. Indien uitgeschakeld worden ze getoond in de volgorde zoals toegewezen aan de metadata.",
     "left": "Links",
