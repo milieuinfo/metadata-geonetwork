@@ -1,0 +1,28 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet author="joachim" id="00030" contextFilter="loc">
+    <!-- mailhog settings are passed using variables as loc can run both a docker container (host 'mail') and IDE (host 'localhost') instance -->
+    <update tableName="settings">
+      <column name="value" value="${mailhog.username}"/>
+      <where>name='system/feedback/mailServer/username'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="${mailhog.password}"/>
+      <where>name='system/feedback/mailServer/password'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="${mailhog.port}"/>
+      <where>name='system/feedback/mailServer/port'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="${mailhog.host}"/>
+      <where>name='system/feedback/mailServer/host'</where>
+    </update>
+    <update tableName="settings">
+      <column name="value" value="user@loc"/>
+      <where>name='system/feedback/email'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

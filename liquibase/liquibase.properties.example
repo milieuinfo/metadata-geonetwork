@@ -1,3 +1,16 @@
+# used in changeset 00010, active
 parameter.gn.system.feedback.mailServer.password=
+
+# used in changeset 00017, active
 # default password hash (password 'admin') is given below in the example
 parameter.mdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
+
+# used in changeset 00030, active, env=loc
+parameter.mailhog.username=
+parameter.mailhog.password=
+parameter.mailhog.port=1025
+# set this for mailhog's hostname (could be different, depending on running locally or in docker)
+# > IDE
+parameter.mailhog.host=localhost
+# > docker
+# parameter.mailhog.host=mail
