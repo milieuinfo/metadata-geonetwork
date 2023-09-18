@@ -8,6 +8,10 @@ where:
 Make sure you have the following environment variables set to satisfy the changesets:
 - LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD
 - LIQUIBASE_MDV_PASSWORDHASH
+- LIQUIBASE_MAILHOG_HOST
+- LIQUIBASE_MAILHOG_PASSWORD
+- LIQUIBASE_MAILHOG_PORT
+- LIQUIBASE_MAILHOG_USERNAME
 "
 
 valid_namespaces=("dev" "bet")
@@ -58,6 +62,22 @@ if [ -z "$LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION" ]; then
   echo 'Missing LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION' >&2
   exit 1
 fi
+if [ -z "$LIQUIBASE_MAILHOG_USERNAME" ]; then
+  echo 'Missing LIQUIBASE_MAILHOG_USERNAME' >&2
+  exit 1
+fi
+if [ -z "$LIQUIBASE_MAILHOG_PASSWORD" ]; then
+  echo 'Missing LIQUIBASE_MAILHOG_PASSWORD' >&2
+  exit 1
+fi
+if [ -z "$LIQUIBASE_MAILHOG_PORT" ]; then
+  echo 'Missing LIQUIBASE_MAILHOG_PORT' >&2
+  exit 1
+fi
+if [ -z "$LIQUIBASE_MAILHOG_HOST" ]; then
+  echo 'Missing LIQUIBASE_MAILHOG_HOST' >&2
+  exit 1
+fi
 
 # run the liquibase update
 deployment=deployment/postgres-geonetwork
@@ -75,6 +95,10 @@ mvn liquibase:update -P "$namespace" \
  -Dgn.system.feedback.mailServer.password="$LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD" \
  -Dgn.system.vlaanderen.version="$LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION" \
  -Dmdv.passwordhash="$LIQUIBASE_MDV_PASSWORDHASH" \
+ -Dmailhog.host="$LIQUIBASE_MAILHOG_HOST" \
+ -Dmailhog.password="$LIQUIBASE_MAILHOG_PASSWORD" \
+ -Dmailhog.port="$LIQUIBASE_MAILHOG_PORT" \
+ -Dmailhog.username="$LIQUIBASE_MAILHOG_USERNAME" \
  -Dliquibase.url=jdbc:postgresql://localhost:$localport/geonetwork
 mvnstatus=$?
 echo "mvn exit code: $mvnstatus"
