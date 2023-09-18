@@ -124,8 +124,6 @@ jobs:
           # get the pipeline variables into our task
           LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: $(liquibase.gn.system.feedback.mailserver.password)
           LIQUIBASE_MDV_PASSWORDHASH: $(liquibase.mdv.passwordhash)
-          LIQUIBASE_MAILHOG_USERNAME: $(liquibase.mailhog.username)
-          LIQUIBASE_MAILHOG_PASSWORD: $(liquibase.mailhog.password)
           LIQUIBASE_MAILHOG_PORT: $(liquibase.mailhog.port)
           LIQUIBASE_MAILHOG_HOST: $(liquibase.mailhog.host)
           # get additional variables into our task
