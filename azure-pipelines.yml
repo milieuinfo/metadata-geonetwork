@@ -38,7 +38,7 @@ jobs:
     condition: and(succeeded(), eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
     timeoutInMinutes: "60"
     # itss linux build server
-    pool: dv-alex-adobuildserves-ubuntu-vmss
+    pool: dv-dev-ubuntu2204
     steps:
       - checkout: self
         displayName: Set up repository
