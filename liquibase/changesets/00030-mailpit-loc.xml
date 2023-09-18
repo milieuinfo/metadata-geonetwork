@@ -2,8 +2,8 @@
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-  <changeSet author="joachim" id="00030-mailhog-settings" contextFilter="loc,dev">
-    <!-- mailhog settings are passed using variables as loc can run both a docker container (host 'mail') and IDE (host 'localhost') instance -->
+  <changeSet author="joachim" id="00030-mailpit-settings" contextFilter="loc,dev">
+    <!-- mailpit settings are passed using variables as loc can run both a docker container (host 'mail') and IDE (host 'localhost') instance -->
     <update tableName="settings">
       <column name="value"/>
       <where>name='system/feedback/mailServer/username'</where>
@@ -13,21 +13,21 @@
       <where>name='system/feedback/mailServer/password'</where>
     </update>
     <update tableName="settings">
-      <column name="value" value="${mailhog.port}"/>
+      <column name="value" value="${mailpit.port}"/>
       <where>name='system/feedback/mailServer/port'</where>
     </update>
     <update tableName="settings">
-      <column name="value" value="${mailhog.host}"/>
+      <column name="value" value="${mailpit.host}"/>
       <where>name='system/feedback/mailServer/host'</where>
     </update>
   </changeSet>
-  <changeSet author="joachim" id="00030-mailhog-mail" contextFilter="dev">
+  <changeSet author="joachim" id="00030-mailpit-mail" contextFilter="dev">
     <update tableName="settings">
       <column name="value" value="mdv@dev"/>
       <where>name='system/feedback/email'</where>
     </update>
   </changeSet>
-  <changeSet author="joachim" id="00030-mailhog-mail" contextFilter="loc">
+  <changeSet author="joachim" id="00030-mailpit-mail" contextFilter="loc">
     <update tableName="settings">
       <column name="value" value="mdv@loc"/>
       <where>name='system/feedback/email'</where>
