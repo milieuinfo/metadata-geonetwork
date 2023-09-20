@@ -21,7 +21,7 @@ x-geonetwork-environment:
   GEONETWORK_DB_TYPE: postgres
   GEONETWORK_DB_USERNAME: geonetwork
   GEONETWORK_DIR: /geonetwork-data
-  GEONETWORK_HTMLCACHE_DIR: /geonetwork-htmlcache
+  GEONETWORK_HTMLCACHE_DIR: /var/lib/jetty/webapps/root/WEB-INF/data/resources/htmlcache
   GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
   GEONETWORK_SCHEMA_DIR: /var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
   GEONETWORK_WEBBAPP_CONTEXTPATH: /
@@ -77,8 +77,10 @@ services:
     volumes:
       - ../liquibase:/liquibase
       - ./pom.xml:/vlaanderen.pom.xml
-    # Command to run the liquibase update service
-    command: bash -c "mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2 -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
+    # Command to run the liquibase update service, makes use of liquibase.properties file
+    command: >
+      bash -c "mvn liquibase:update -Ploc
+      -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
   geonetwork-replica:
     <<: *default-service-geonetwork
@@ -88,12 +90,14 @@ services:
     environment:
       <<: *default-geonetwork-environment
       HARVESTER_SCHEDULER_ENABLED: false
+      HARVESTER_REFRESH_INTERVAL_MINUTES: 0
 
   geonetwork:
     <<: *default-service-geonetwork
     environment:
       <<: *default-geonetwork-environment
       HARVESTER_SCHEDULER_ENABLED: true
+      HARVESTER_REFRESH_INTERVAL_MINUTES: 2
 
   geonetwork-reindexer:
     image: metadata/geonetwork-reindexer
