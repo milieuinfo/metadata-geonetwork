@@ -8,6 +8,8 @@ where:
 Make sure you have the following environment variables set to satisfy the changesets:
 - LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD
 - LIQUIBASE_MDV_PASSWORDHASH
+- LIQUIBASE_MAILPIT_HOST
+- LIQUIBASE_MAILPIT_PORT
 "
 
 valid_namespaces=("dev" "bet")
@@ -58,6 +60,14 @@ if [ -z "$LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION" ]; then
   echo 'Missing LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION' >&2
   exit 1
 fi
+if [ -z "$LIQUIBASE_MAILPIT_PORT" ]; then
+  echo 'Missing LIQUIBASE_MAILPIT_PORT' >&2
+  exit 1
+fi
+if [ -z "$LIQUIBASE_MAILPIT_HOST" ]; then
+  echo 'Missing LIQUIBASE_MAILPIT_HOST' >&2
+  exit 1
+fi
 
 # run the liquibase update
 deployment=deployment/postgres-geonetwork
@@ -75,6 +85,8 @@ mvn liquibase:update -P "$namespace" \
  -Dgn.system.feedback.mailServer.password="$LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD" \
  -Dgn.system.vlaanderen.version="$LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION" \
  -Dmdv.passwordhash="$LIQUIBASE_MDV_PASSWORDHASH" \
+ -Dmailpit.host="$LIQUIBASE_MAILPIT_HOST" \
+ -Dmailpit.port="$LIQUIBASE_MAILPIT_PORT" \
  -Dliquibase.url=jdbc:postgresql://localhost:$localport/geonetwork
 mvnstatus=$?
 echo "mvn exit code: $mvnstatus"

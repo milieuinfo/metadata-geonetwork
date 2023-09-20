@@ -42,6 +42,8 @@ RUN cd /var/lib/jetty/webapps/${WEBAPP_NAME}/ && \
      unzip -q ${GN_FILE} && \
      rm ${GN_FILE}
 
+# these files are added to the geonetwork context, see .dockerignore
+COPY jetty-context-docker.xml /var/lib/jetty/webapps/${WEBAPP_NAME}.xml
 COPY ./docker-entrypoint.sh /geonetwork-entrypoint.sh
 
 # necessary on DevOps, +x flag is lost there

@@ -2,3 +2,4 @@
 *
 !target/geonetwork.war
 !docker-entrypoint.sh
+!jetty-context-docker.xml

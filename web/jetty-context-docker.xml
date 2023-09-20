@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
+<!--see https://github.com/geonetwork/docker-geonetwork/blob/cd6af05c707c8b0f47f5411c8618ca75a3efe1fb/4.4.0/jetty/geonetwork_context_template.xml-->
+
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+  <!-- root context-->
+  <Set name="contextPath">/</Set>
+  <Set name="resourceBase">/var/lib/jetty/webapps/root</Set>
+  <!-- fix for Exception when sending mail -->
+  <Get name="systemClasspathPattern">
+    <Call name="add"><Arg>-javax.mail.</Arg></Call>
+  </Get>
+  <Get name="serverClasspathPattern">
+    <Call name="add"><Arg>javax.mail.</Arg></Call>
+  </Get>
+  <!-- default setting -->
+  <Call name="setAttribute">
+    <Arg>org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern</Arg>
+    <Arg>nomatches</Arg>
+  </Call>
+</Configure>

@@ -32,7 +32,16 @@ services:
       - ../liquibase:/liquibase
       - ./pom.xml:/vlaanderen.pom.xml
     # Command to run the liquibase update service
+    # Add only liquibase parameters that cannot be passed using the `liquibase.properties` file
     command: bash -c "mvn liquibase:update -Ploc -Dliquibase.username=geonetwork -Dliquibase.password=geonetwork -Dliquibase.url=jdbc:postgresql://database:5432/geonetwork -Dgn.system.feedback.mailServer.password=abc -Dmdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2 -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
+
+  mail:
+    image: axllent/mailpit:v1.8
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      TZ: Europe/Brussels
 
   geonetwork-reindexer:
     image: metadata/geonetwork-reindexer
