@@ -42,21 +42,13 @@ RUN cd /var/lib/jetty/webapps/${WEBAPP_NAME}/ && \
      unzip -q ${GN_FILE} && \
      rm ${GN_FILE}
 
+# these files are added to the geonetwork context, see .dockerignore
+COPY jetty-context-docker.xml /var/lib/jetty/webapps/${WEBAPP_NAME}.xml
 COPY ./docker-entrypoint.sh /geonetwork-entrypoint.sh
 
 # necessary on DevOps, +x flag is lost there
 USER root
 RUN chmod 755 /geonetwork-entrypoint.sh
-USER jetty
-
-# https://www.databasesandlife.com/activation-error-jetty-javamail-java11/
-# Jetty supplies Mail but not the activation dependency,
-# if you use JavaMail it uses Jetty's JavaMail
-# which then fails on Java >= 9 (even if we supply the
-# activation dependency in Maven, as Jetty's JavaMail
-# uses Jetty's classloader rather than ours)
-USER root
-RUN rm -r /usr/local/jetty/lib/mail
 USER jetty
 
 ENTRYPOINT ["/geonetwork-entrypoint.sh"]
