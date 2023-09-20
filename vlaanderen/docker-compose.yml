@@ -82,6 +82,14 @@ services:
       bash -c "mvn liquibase:update -Ploc
       -Dgn.system.vlaanderen.version=$(mvn -f /vlaanderen.pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
+  mail:
+    image: axllent/mailpit:v1.8
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      TZ: Europe/Brussels
+
   geonetwork-replica:
     <<: *default-service-geonetwork
     depends_on:
@@ -147,11 +155,3 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms1G -Xmx1G"
       discovery.type: single-node
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-
-volumes:
-  pgdata:
-  pglog:
-  esdata:
-  geonetworkdata:
