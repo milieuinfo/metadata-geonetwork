@@ -20,6 +20,8 @@ Topics:
   - make a copy and remove `.example` (this file is ignored in `.gitignore`) 
   - use `docker compose -f docker-compose.yml -f docker-compose.dev.yml` to override settings to your liking
   
+For detailed docker options, check the [docker docs](docs/docker.md).
+  
 ## Java and Maven
 
 Java 8 is needed to compile Geonetwork. The compiler is defined in the `pom.xml` file, but won't be picked up automatically if the current `java` version is not 8. 

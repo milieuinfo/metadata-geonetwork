@@ -1,4 +1,6 @@
-# A default docker-compose override file. When specifying your own override file, this will not automatically be added.
+# The default docker-compose override file. When specifying your own override file, this will not automatically be added.
+# When just running `docker-compose up` it will use both docker-compose.yml and this file.
+
 volumes:
   pgdata:
   pglog:
@@ -10,16 +12,20 @@ services:
     ports:
       - "5432:5432"
 
+  geonetwork-replica:
+    profiles: [ "scaled" ]
+    deploy:
+      mode: replicated
+      # you can pass the following to docker-compose to override the scale as well:
+      # --scale geonetwork=2
+      replicas: 1
+    ports:
+      - "8081-8089:8080"
+
   geonetwork:
-    profiles: [ "full" ]
-    environment:
-      DATA_DIR: /geonetwork-data
+    profiles: [ "full", "scaled" ]
     ports:
       - "8080:8080"
-    volumes:
-      - pgdata:/var/lib/postgresql/data/geonetwork
-      - pglog:/var/log/postgresql
-      - geonetworkdata:/geonetwork-data
 
   geonetwork-reindexer:
     profiles: [ "full" ]
@@ -27,8 +33,6 @@ services:
   elasticsearch:
     ports:
       - "9200:9200"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
 
   ogc-api-records-service:
     # use the locally built image, assumes it was tagged correctly

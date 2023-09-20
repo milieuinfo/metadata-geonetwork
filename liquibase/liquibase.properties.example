@@ -1,14 +1,15 @@
-# used in changeset 00010, active
+# used in changeset 00010, is active
+# sets the mailserver password used in sendgrid
 parameter.gn.system.feedback.mailServer.password=
 
-# used in changeset 00017, active
-# default password hash (password 'admin') is given below in the example
+# used in changeset 00017, is active
+# > password for the `mdv` user
+# > default password hash (password 'admin') is given below in the example
 parameter.mdv.passwordhash=46e44386069f7cf0d4f2a420b9a2383a612f316e2024b0fe84052b0b96c479a23e8a0be8b90fb8c2
 
-# used in changeset 00030, active, env=loc
+# used in changeset 00030, is active
+# > setting the mailpit port
 parameter.mailpit.port=1025
-# set this for mailpit's hostname (could be different, depending on running locally or in docker)
-# > IDE
-parameter.mailpit.host=localhost
-# > docker
-# parameter.mailpit.host=mail
+# > setting the mailpit host
+# > choose 1) `mail` for instance in docker-compose 2) `localhost` for an external instance
+parameter.mailpit.host=mail

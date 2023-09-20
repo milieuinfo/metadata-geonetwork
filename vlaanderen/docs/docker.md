@@ -11,19 +11,25 @@ It comprises:
 
 The docker configuration is also used in the Cypress end-2-end tests. 
 
+## Only dependencies
+When running Geonetwork in your IDE, docker can be used to only run the dependencies (databases, microservices, ...).
+The following command brings them up:
+`docker-compose up -d`
+
 ## Full stack for local setup
 Run Geonetwork, freshly built, with all dependencies. Volumes and default port bindings are included in the default `docker-compose.override.yml` file, automatically used.
-`docker-compose up -d` 
+`docker-compose --profile full up -d` 
 Clean up with:
-`docker-compose down -v`
+`docker-compose down -v --remove-orphans`
 
 ## Scaled version
-To test a scaled-up version, make use of `docker-compose.scaled.yml`. The following snippet illustrates usage:
+To test a scaled-up version, make use of the `scaled` profile. This enables a harvester-enabled geonetwork instance and
+additional harvester-disabled instances.
 
 ```bash
-# run 4 instances
-docker-compose --verbose -f docker-compose.yml -f docker-compose.scaled.yml up --scale geonetwork=4 geonetwork -d
-# open all scaled geonetworks in one go (http://localhost:{8085-8088}/):
+# run 3 instances, of which one is a harvester
+docker-compose --profile scaled up --scale geonetwork-replica=2 -d
+# open all geonetwork instances in one go (http://localhost:xxxx/):
 docker ps --format json --filter "name=geonetwork" | jq ".Ports" | sed -E "s/.*:([0-9]{4})->.*/http:\/\/localhost:\1/" | while read -r url; do xdg-open "$url"; done
 ```
 

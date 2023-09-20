@@ -22,7 +22,8 @@
     <profile>
       <id>loc</id>
       <properties>
-        <liquibase.url>jdbc:postgresql://localhost:5432/geonetwork</liquibase.url>
+        <!-- intended to run in docker-compose > you have access to 'database' host here -->
+        <liquibase.url>jdbc:postgresql://database:5432/geonetwork</liquibase.url>
         <liquibase.username>geonetwork</liquibase.username>
         <liquibase.password>geonetwork</liquibase.password>
         <liquibase.contexts>loc</liquibase.contexts>
@@ -31,6 +32,7 @@
     <profile>
       <id>dev</id>
       <properties>
+        <!-- intended to run using `port-forward-db.sh` to mirror those ports -->
         <liquibase.url>jdbc:postgresql://localhost:5433/geonetwork</liquibase.url>
         <liquibase.username>geonetwork</liquibase.username>
         <liquibase.password>geonetwork</liquibase.password>
@@ -40,6 +42,7 @@
     <profile>
       <id>bet</id>
       <properties>
+        <!-- intended to run using `port-forward-db.sh` to mirror those ports -->
         <liquibase.url>jdbc:postgresql://localhost:5434/geonetwork</liquibase.url>
         <liquibase.username>geonetwork</liquibase.username>
         <liquibase.password>geonetwork</liquibase.password>
@@ -49,6 +52,7 @@
     <profile>
       <id>prd</id>
       <properties>
+        <!-- intended to run using `port-forward-db.sh` to mirror those ports -->
         <liquibase.url>jdbc:postgresql://localhost:5435/geonetwork</liquibase.url>
         <liquibase.username>geonetwork</liquibase.username>
         <liquibase.password>geonetwork</liquibase.password>
