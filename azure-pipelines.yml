@@ -148,3 +148,4 @@ jobs:
           targetType: 'inline'
           script: |
             kubectl rollout restart -n dev deployment/geonetwork
+            kubectl rollout restart -n dev deployment/geonetwork-replica

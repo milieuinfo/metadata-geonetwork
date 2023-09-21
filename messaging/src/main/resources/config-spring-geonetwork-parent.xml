@@ -22,6 +22,14 @@
     <amq:transportConnectors>
       <amq:transportConnector uri="\${jms.url}" />
     </amq:transportConnectors>
+    <!-- preventing ERROR [org.apache.activemq.broker.BrokerService] - Temporary Store limit is 51200 mb -->
+    <amq:systemUsage>
+      <amq:systemUsage>
+        <amq:tempUsage>
+          <amq:tempUsage limit="5gb"/>
+        </amq:tempUsage>
+      </amq:systemUsage>
+    </amq:systemUsage>
   </amq:broker>
   <!--  Embedded ActiveMQ Broker
 
