@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [Workflow tweaks and fixes](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27062)
 - [Fixing scheduler for high availability setups](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27084)
 - [Improved status information in admin panel](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27311)
+- [Running replica GeoNetwork instances](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27534)
 - **core** 
   - [merged core-geonetwork 4.4.0-SNAPSHOT](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26874)
     - Upgraded to Java 11
