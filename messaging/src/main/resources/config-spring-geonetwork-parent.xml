@@ -20,7 +20,7 @@
 
   <amq:broker useJmx="false" persistent="false" useShutdownHook="false">
     <amq:transportConnectors>
-      <amq:transportConnector uri="\${jms.url}"/>
+      <amq:transportConnector uri="\${jms.url}" />
     </amq:transportConnectors>
     <!-- preventing ERROR [org.apache.activemq.broker.BrokerService] - Temporary Store limit is 51200 mb -->
     <amq:systemUsage>
