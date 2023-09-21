@@ -1,4 +1,6 @@
 {
+  "data.htmlCacheDir": "HTML cache map",
+  "data.schemaPublicationDir": "Schema publication map",
   "exportDCAT": "Exporteer (RDF/XML)",
   "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Toegangsrechten",
   "facet-OrgForResourceObject": "Organisatie",
