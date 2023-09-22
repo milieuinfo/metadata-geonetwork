@@ -84,7 +84,6 @@
     "cantDeleteGroupHavingRecords": "Deze groep bevat metadata bestanden. Verplaats alle bestanden naar een andere groep om deze groep te kunnen verwijderen.",
     "cantDeleteUserHavingRecords": "Een gebruiker in het bezit van metadata bestanden kan niet worden verwijderd. Verplaats de bestanden naar een andere gebruiker.",
     "catalogInformation": "Catalogus informatie",
-    "host.name": "Hostnaam",
     "categories": "Categorieën",
     "categoryDescriptionHelp": "Standaard categorie voor de metadata die aangemaakt wordt in deze groep",
     "categoryName": "Identifier",

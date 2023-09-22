@@ -85,7 +85,7 @@ mvn liquibase:rollback "-Dliquibase.rollbackCount=1"
 
 ## Reset checksums
 This will clear the checksums in the database. Useful when you changed a changeset and are sure that the database won't be messed up.
-Probably not a good idea in beta or dev.
+Probably not a good idea in `bet` or `prd`.
 ```bash
 mvn liquibase:clearCheckSums
 ```

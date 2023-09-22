@@ -428,5 +428,6 @@
     "confirmCancelEdit": "Wil je alle wijzigingen annuleren en de editor sluiten?",
     "allowEditGroupMembers": "Groepseditors toestaan om te bewerken",
     "wmsSelectedLayers": "Geselecteerde lagen",
-    "wmsSelectedLayersNone": "Geen lagen geselecteerd"
+    "wmsSelectedLayersNone": "Geen lagen geselecteerd",
+    "remoteAssociatedMetadataTitlePlaceholder": "Externe geassocieerde metadata titel"
 }

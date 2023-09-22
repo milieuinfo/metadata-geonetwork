@@ -19,6 +19,7 @@
   "featureAttributeTable": "Entiteit",
   "groupManagedByDatapublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
+  "host.name": "Hostnaam",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
   "mdStatus-approved": "Gepubliceerd",
