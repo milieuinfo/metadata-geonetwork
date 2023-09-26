@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.1.1-SNAPSHOT]
+- **core**
+  - [Improved handling of empty record titles]([PR1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27607) / [PR2](https://github.com/geonetwork/core-geonetwork/pull/7362))
 
 ## [1.1.0] - 2023-09-26
 - [Backport facets and search options from old application](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26987)
