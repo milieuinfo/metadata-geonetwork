@@ -85,7 +85,7 @@
             <a
               class="btn btn-default"
               href=""
-              data-ng-if="user.canManagePrivileges(md) && user.isEditorOrMore() && md.draft != 'y'"
+              data-ng-if="user.isAdmin() && md.draft != 'y'"
               data-ng-click="mdService.openPrivilegesPanel(md, getCatScope())"
               title="{{'privileges' | translate}}"
             >
