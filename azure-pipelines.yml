@@ -118,6 +118,7 @@ jobs:
             develop
             $(GIT_COMMIT_SHA)
             $(VL_GEONETWORK_VERSION)
+      - task: AdvancedSecurity-Dependency-Scanning@1
       - task: Bash@3
         displayName: Execute liquibase
         env:
