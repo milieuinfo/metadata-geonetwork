@@ -1,29 +1,25 @@
-//=============================================================================
-//===
-//=== SchemaManager
-//===
-//=============================================================================
-//=== Copyright (C) 2001-2011 Food and Agriculture Organization of the
-//=== United Nations (FAO-UN), United Nations World Food Programme (WFP)
-//=== and United Nations Environment Programme (UNEP)
-//===
-//===	This program is free software; you can redistribute it and/or modify
-//===	it under the terms of the GNU General Public License as published by
-//===	the Free Software Foundation; either version 2 of the License, or (at
-//===	your option) any later version.
-//===
-//===	This program is distributed in the hope that it will be useful, but
-//===	WITHOUT ANY WARRANTY; without even the implied warranty of
-//===	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-//===	General Public License for more details.
-//===
-//===	You should have received a copy of the GNU General Public License
-//===	along with this program; if not, write to the Free Software
-//===	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-//===
-//===	Contact: Jeroen Ticheler - FAO - Viale delle Terme di Caracalla 2,
-//===	Rome - Italy. email: geonetwork@osgeo.org
-//==============================================================================
+/*
+ * Copyright (C) 2001-2023 Food and Agriculture Organization of the
+ * United Nations (FAO-UN), United Nations World Food Programme (WFP)
+ * and United Nations Environment Programme (UNEP)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or (at
+ * your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ *
+ * Contact: Jeroen Ticheler - FAO - Viale delle Terme di Caracalla 2,
+ * Rome - Italy. email: geonetwork@osgeo.org
+ */
 
 package org.fao.geonet.kernel;
 
@@ -42,6 +38,7 @@ import org.fao.geonet.exceptions.NoSchemaMatchesException;
 import org.fao.geonet.exceptions.OperationAbortedEx;
 import org.fao.geonet.exceptions.SchemaMatchConflictException;
 import org.fao.geonet.kernel.schema.MetadataSchema;
+import org.fao.geonet.kernel.schema.MetadataSchemaOperationFilter;
 import org.fao.geonet.kernel.schema.SchemaLoader;
 import org.fao.geonet.kernel.schema.SchemaPlugin;
 import org.fao.geonet.kernel.setting.SettingInfo;
@@ -107,8 +104,8 @@ public class SchemaManager {
      * Active writers count
      */
     private static int activeWriters = 0;
-    private Map<String, Schema> hmSchemas = new HashMap<String, Schema>();
-    private Map<String, Namespace> hmSchemasTypenames = new HashMap<String, Namespace>();
+    private Map<String, Schema> hmSchemas = new HashMap<>();
+    private Map<String, Namespace> hmSchemasTypenames = new HashMap<>();
     private String[] fnames = {"labels.xml", "codelists.xml", "strings.xml"};
     private Path schemaPluginsDir;
     private Path schemaPluginsCat;
@@ -205,14 +202,23 @@ public class SchemaManager {
     /**
      * initialize and configure schema manager. should only be on startup.
      *
-     * @param basePath         the web app base path
-     * @param schemaPluginsCat the schema catalogue file
-     * @param sPDir            the schema plugin directory
-     * @param defaultLang      the default language (taken from context)
-     * @param defaultSchema    the default schema (taken from config.xml)
+     * @param basePath               the web app base path
+     * @param resourcePath           the resource folder (eg. images, logo)
+     * @param schemaPublicationDir   the schema publication folder (ie. schema plugin XSDs)
+     * @param schemaPluginsCat       the schema catalogue file (ie. schemaplugin-uri-catalog.xml)
+     * @param sPDir                  the schema plugin directory
+     * @param defaultLang            the default language (taken from context)
+     * @param defaultSchema          the default schema (taken from config.xml)
      */
-    public void configure(ApplicationContext applicationContext, Path basePath, Path resourcePath, Path schemaPublicationDir, Path schemaPluginsCat,
-                          Path sPDir, String defaultLang, String defaultSchema, boolean createOrUpdateSchemaCatalog) throws Exception {
+    public void configure(ApplicationContext applicationContext,
+                          Path basePath,
+                          Path resourcePath,
+                          Path schemaPublicationDir,
+                          Path schemaPluginsCat,
+                          Path sPDir,
+                          String defaultLang,
+                          String defaultSchema,
+                          boolean createOrUpdateSchemaCatalog) throws Exception {
 
         hmSchemas.clear();
 
@@ -274,11 +280,11 @@ public class SchemaManager {
         try {
             Schema schema = hmSchemas.get(name);
 
-            if (schema == null)
+            if (schema == null) {
                 throw new IllegalArgumentException("Schema not registered : " + name);
+            }
 
-            final MetadataSchema mds = schema.getMetadataSchema();
-            return mds;
+            return schema.getMetadataSchema();
         } finally {
             afterRead();
         }
@@ -291,7 +297,7 @@ public class SchemaManager {
      */
     public Set<String> getDependencies(String name) {
 
-        Set<String> dependencies = new HashSet<String>();
+        Set<String> dependencies = new HashSet<>();
 
         beforeRead();
         try {
@@ -544,7 +550,7 @@ public class SchemaManager {
         try {
             Schema schema = hmSchemas.get(name);
             List<Element> childs = schema.getConversionElements();
-            List<Element> dChilds = new ArrayList<Element>();
+            List<Element> dChilds = new ArrayList<>();
             for (Element child : childs) {
                 if (child != null) dChilds.add((Element) child.clone());
             }
@@ -715,40 +721,35 @@ public class SchemaManager {
             // -- specific test first, then in order of increasing generality,
             // -- first match wins
             schema = compareElementsAndAttributes(md, MODE_ATTRIBUTEWITHVALUE);
-            if (schema != null) {
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
-                    Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(attributes) examination");
+            if (schema != null && Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
+                Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(attributes) examination");
             }
 
             if (schema == null) {
                 schema = compareElementsAndAttributes(md, MODE_NEEDLEWITHVALUE);
-                if (schema != null) {
-                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
-                        Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements with value) examination");
+                if (schema != null && Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
+                    Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements with value) examination");
                 }
             }
 
             if (schema == null) {
                 schema = compareElementsAndAttributes(md, MODE_NEEDLE);
-                if (schema != null) {
-                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
-                        Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements) examination");
+                if (schema != null && Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
+                    Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements) examination");
                 }
             }
 
             if (schema == null) {
                 schema = compareElementsAndAttributes(md, MODE_ROOT);
-                if (schema != null) {
-                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
-                        Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements with root) examination");
+                if (schema != null && Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
+                    Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(elements with root) examination");
                 }
             }
 
             if (schema == null) {
                 schema = compareElementsAndAttributes(md, MODE_NAMESPACE);
-                if (schema != null) {
-                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
-                        Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(namespaces) examination");
+                if (schema != null && Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
+                    Log.debug(Geonet.SCHEMA_MANAGER, "  => Found schema " + schema + " using AUTODETECT(namespaces) examination");
                 }
             }
 
@@ -792,8 +793,9 @@ public class SchemaManager {
             MetadataSchema mds = getSchema(schema);
             if (mds != null) {
                 String primeNs = mds.getPrimeNS();
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                     Log.debug(Geonet.SCHEMA_MANAGER, "  primeNs " + primeNs + " for schema " + schema);
+                }
                 if (md.getNamespace().getURI().equals(primeNs)) {
                     result = schema;
                 } else {
@@ -803,8 +805,9 @@ public class SchemaManager {
                     Schema sch = hmSchemas.get(schema);
                     List<Element> dependsList = sch.getDependElements();
                     for (Element depends : dependsList) {
-                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                             Log.debug(Geonet.SCHEMA_MANAGER, "  checkNamespace for dependency: " + depends.getText());
+                        }
                         return checkNamespace(md, depends.getText());
                     }
                 }
@@ -872,7 +875,7 @@ public class SchemaManager {
         if (schema != null) {
             if (doDependencies) {
                 List<String> dependsOnMe = getSchemasThatDependOnMe(name);
-                if (dependsOnMe.size() > 0) {
+                if (!dependsOnMe.isEmpty()) {
                     String errStr = "Cannot remove schema " + name + " because the following schemas list it as a dependency: " + dependsOnMe;
                     Log.error(Geonet.SCHEMA_MANAGER, errStr);
                     throw new OperationAbortedEx(errStr);
@@ -962,19 +965,21 @@ public class SchemaManager {
 
         final String schemaName = schemaDir.getFileName().toString();
         Path locBase = schemaDir.resolve("loc");
-        Map<String, XmlFile> xfMap = new HashMap<String, XmlFile>();
+        Map<String, XmlFile> xfMap = new HashMap<>();
 
         for (String fname : fnames) {
             Path filePath = path.resolve("loc").resolve(defaultLang).resolve(fname);
-            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                 Log.debug(Geonet.SCHEMA_MANAGER, "Searching for " + filePath);
+            }
             if (Files.exists(filePath)) {
                 Element config = new Element("xml");
                 config.setAttribute("name", schemaName);
                 config.setAttribute("base", locBase.toUri().toString());
                 config.setAttribute("file", fname);
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                     Log.debug(Geonet.SCHEMA_MANAGER, "Adding XmlFile " + Xml.getString(config));
+                }
                 XmlFile xf = new XmlFile(config, defaultLang, true);
                 xfMap.put(fname, xf);
             } else {
@@ -1081,8 +1086,9 @@ public class SchemaManager {
             else continue; // skip this
 
             if (!uri.getName().equals("uri") || !uri.getNamespace().equals(Namespaces.OASIS_CATALOG)) {
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                     Log.debug(Geonet.SCHEMA_MANAGER, "Skipping element " + uri.getQualifiedName() + ":" + uri.getNamespace());
+                }
                 continue;
             }
 
@@ -1116,8 +1122,9 @@ public class SchemaManager {
             else continue; // skip this
 
             if (!uri.getName().equals("rewriteURI") || !uri.getNamespace().equals(Namespaces.OASIS_CATALOG)) {
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                     Log.debug(Geonet.SCHEMA_MANAGER, "Skipping element " + uri.getQualifiedName() + ":" + uri.getNamespace());
+                }
                 continue;
             }
 
@@ -1125,8 +1132,9 @@ public class SchemaManager {
             if (uri.getAttributeValue("rewritePrefix").equals(ourUri.toString())) return -1;
 
             String nameAttr = uri.getAttributeValue("uriStartString");
-            if (nameAttr.startsWith(Geonet.File.METADATA_BLANK)) {
-                if (nameAttr.compareTo(baseBlank) > 0) baseBlank = nameAttr;
+            if (nameAttr.startsWith(Geonet.File.METADATA_BLANK) &&
+                nameAttr.compareTo(baseBlank) > 0) {
+                baseBlank = nameAttr;
             }
         }
 
@@ -1321,17 +1329,17 @@ public class SchemaManager {
      * Check dependencies for all schemas - remove those that fail.
      */
     private void checkDependencies(Element schemaPluginCatRoot) throws Exception {
-        List<String> removes = new ArrayList<String>();
+        List<String> removes = new ArrayList<>();
 
         // process each schema to see whether its dependencies are present
-        for (String schemaName : hmSchemas.keySet()) {
-            Schema schema = hmSchemas.get(schemaName);
+        for (Map.Entry<String, Schema> schemaInfo : hmSchemas.entrySet()) {
+            Schema schema = schemaInfo.getValue();
             try {
-                checkDepends(schemaName, schema.getDependElements());
+                checkDepends(schemaInfo.getKey(), schema.getDependElements());
             } catch (Exception e) {
                 Log.error(Geonet.SCHEMA_MANAGER, "check dependencies failed: " + e.getMessage());
                 // add the schema to list for removal
-                removes.add(schemaName);
+                removes.add(schemaInfo.getKey());
             }
         }
 
@@ -1344,7 +1352,7 @@ public class SchemaManager {
     }
 
     private void checkAppSupported(Element schemaPluginCatRoot) throws Exception {
-        List<String> removes = new ArrayList<String>();
+        List<String> removes = new ArrayList<>();
 
         final SystemInfo systemInfo = ApplicationContextHolder.get().getBean(SystemInfo.class);
 
@@ -1352,17 +1360,17 @@ public class SchemaManager {
         Version appVersion = Version.parseVersionNumber(version);
 
         // process each schema to see whether its dependencies are present
-        for (String schemaName : hmSchemas.keySet()) {
-            Schema schema = hmSchemas.get(schemaName);
+        for (Map.Entry<String, Schema> schemaInfo : hmSchemas.entrySet()) {
+            Schema schema = schemaInfo.getValue();
             String minorAppVersionSupported = schema.getMetadataSchema().getAppMinorVersionSupported();
 
             Version schemaMinorAppVersion = Version.parseVersionNumber(minorAppVersionSupported);
 
             if (appVersion.compareTo(schemaMinorAppVersion) < 0) {
-                Log.error(Geonet.SCHEMA_MANAGER, "Schema " + schemaName +
+                Log.error(Geonet.SCHEMA_MANAGER, "Schema " + schemaInfo.getKey() +
                     " requires min Geonetwork version: " + minorAppVersionSupported + ", current is: " +
                     version + ". Skip load schema.");
-                removes.add(schemaName);
+                removes.add(schemaInfo.getKey());
                 continue;
             }
 
@@ -1371,10 +1379,10 @@ public class SchemaManager {
                 Version schemaMajorAppVersion = Version.parseVersionNumber(majorAppVersionSupported);
 
                 if (appVersion.compareTo(schemaMajorAppVersion) > 0) {
-                    Log.error(Geonet.SCHEMA_MANAGER, "Schema " + schemaName +
+                    Log.error(Geonet.SCHEMA_MANAGER, "Schema " + schemaInfo.getKey() +
                         " requires max Geonetwork version: " + majorAppVersionSupported + ", current is: " +
                         version + ". Skip load schema.");
-                    removes.add(schemaName);
+                    removes.add(schemaInfo.getKey());
                     continue;
                 }
             }
@@ -1399,17 +1407,17 @@ public class SchemaManager {
      */
     public List<String> getSchemasThatDependOnMe(String schemaName) {
 
-        List<String> myDepends = new ArrayList<String>();
+        List<String> myDepends = new ArrayList<>();
 
         // process each schema to see whether its dependencies are present
-        for (String schemaNameToTest : hmSchemas.keySet()) {
-            if (schemaNameToTest.equals(schemaName)) continue;
+        for (Map.Entry<String, Schema> schemaInfoToTest : hmSchemas.entrySet()) {
+            if (schemaInfoToTest.getKey().equals(schemaName)) continue;
 
-            Schema schema = hmSchemas.get(schemaNameToTest);
+            Schema schema = schemaInfoToTest.getValue();
             List<Element> dependsList = schema.getDependElements();
             for (Element depends : dependsList) {
                 if (depends.getText().equals(schemaName)) {
-                    myDepends.add(schemaNameToTest);
+                    myDepends.add(schemaInfoToTest.getKey());
                 }
             }
         }
@@ -1427,7 +1435,7 @@ public class SchemaManager {
         // process each dependency to see whether it is present
         for (Element depends : dependsList) {
             String schema = depends.getText();
-            if (schema.length() > 0) {
+            if (StringUtils.isNotBlank(schema)) {
                 if (!hmSchemas.containsKey(schema)) {
                     throw new IllegalArgumentException("Schema " + thisSchema + " depends on " + schema + ", but that schema is not loaded");
                 }
@@ -1447,7 +1455,7 @@ public class SchemaManager {
 
         // get list of depends elements from schema-ident.xml
         List<Element> dependsList = root.getChildren("depends", GEONET_SCHEMA_NS);
-        if (dependsList.size() == 0) {
+        if (dependsList.isEmpty()) {
             dependsList = root.getChildren("depends", GEONET_SCHEMA_PREFIX_NS);
         }
         return dependsList;
@@ -1505,11 +1513,11 @@ public class SchemaManager {
      * true if schema requires to synch the uuid column schema info with the uuid in the metadata
      * record (updated on editing or in UFO).
      */
-    private Map<String, Pair<String, Element>> extractOperationFilters(Path xmlIdFile) throws Exception {
+    private Map<String, MetadataSchemaOperationFilter> extractOperationFilters(Path xmlIdFile) throws Exception {
         Element root = Xml.loadFile(xmlIdFile);
         Element filters = root.getChild("filters", GEONET_SCHEMA_NS);
-        Map<String, Pair<String, Element>> filterRules =
-            new HashMap<String, Pair<String, Element>>();
+        Map<String, MetadataSchemaOperationFilter> filterRules =
+            new HashMap<>();
         if (filters == null) {
             return filterRules;
         } else {
@@ -1517,11 +1525,14 @@ public class SchemaManager {
                 if (rule instanceof Element) {
                     Element ruleElement = (Element) rule;
                     String xpath = ruleElement.getAttributeValue("xpath");
+                    String jsonpath = ruleElement.getAttributeValue("jsonpath");
                     String ifNotOperation = ruleElement.getAttributeValue("ifNotOperation");
                     Element markedElement = ruleElement.getChild("keepMarkedElement", GEONET_SCHEMA_NS);
+
                     if (StringUtils.isNotBlank(ifNotOperation) &&
                         StringUtils.isNotBlank(xpath)) {
-                        filterRules.put(ifNotOperation, Pair.read(xpath, markedElement));
+                        MetadataSchemaOperationFilter filter = new MetadataSchemaOperationFilter(xpath, jsonpath, ifNotOperation, markedElement);
+                        filterRules.put(ifNotOperation, filter);
                     }
                 }
             }
@@ -1577,11 +1588,12 @@ public class SchemaManager {
         if (!Files.exists(xmlConvFile)) {
             if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
                 Log.debug(Geonet.SCHEMA_MANAGER, "Schema conversions file not present");
-            return new ArrayList<Element>();
+            return new ArrayList<>();
         } else {
             Element root = Xml.loadFile(xmlConvFile);
-            if (root.getName() != "conversions")
+            if (!root.getName().equals("conversions")) {
                 throw new IllegalArgumentException("Schema conversions file " + xmlConvFile + " is invalid, no <conversions> root element");
+            }
             @SuppressWarnings("unchecked")
             List<Element> result = root.getChildren();
             return result;
@@ -1612,8 +1624,9 @@ public class SchemaManager {
         Set<String> allSchemas = getSchemas();
         List<String> matches = new ArrayList<>();
 
-        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
             Log.debug(Geonet.SCHEMA_MANAGER, "Schema autodetection starting on " + md.getName() + " (Namespace: " + md.getNamespace() + ") using mode: " + mode + "...");
+        }
 
         for (String schemaName : allSchemas) {
             if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
@@ -1622,8 +1635,9 @@ public class SchemaManager {
             List<Element> adElems = schema.getAutodetectElements();
 
             for (Element elem : adElems) {
-                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                     Log.debug(Geonet.SCHEMA_MANAGER, "		Checking autodetect element " + Xml.getString(elem) + " with name " + elem.getName());
+                }
 
                 @SuppressWarnings("unchecked")
                 List<Element> elemKids = elem.getChildren();
@@ -1632,12 +1646,13 @@ public class SchemaManager {
                 Attribute type = elem.getAttribute("type");
 
                 // --- try and find the attribute and value in md
-                if (mode == MODE_ATTRIBUTEWITHVALUE && elem.getName() == "attributes") {
+                if (mode == MODE_ATTRIBUTEWITHVALUE && elem.getName().equals("attributes")) {
                     @SuppressWarnings("unchecked")
                     List<Attribute> atts = elem.getAttributes();
                     for (Attribute searchAtt : atts) {
-                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                             Log.debug(Geonet.SCHEMA_MANAGER, "				Finding attribute " + searchAtt.toString());
+                        }
 
                         if (isMatchingAttributeInMetadata(searchAtt, md)) {
                             match = true;
@@ -1652,8 +1667,9 @@ public class SchemaManager {
                     @SuppressWarnings("unchecked")
                     List<Namespace> nss = elem.getAdditionalNamespaces();
                     for (Namespace ns : nss) {
-                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                             Log.debug(Geonet.SCHEMA_MANAGER, "				Finding namespace " + ns.toString());
+                        }
 
                         if (isMatchingNamespaceInMetadata(ns, md)) {
                             match = true;
@@ -1667,8 +1683,9 @@ public class SchemaManager {
 
                         // --- is the kid the same as the root of the md
                         if (mode == MODE_ROOT && type != null && "root".equals(type.getValue())) {
-                            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                                 Log.debug(Geonet.SCHEMA_MANAGER, "				Comparing " + Xml.getString(kid) + " with " + md.getName() + " with namespace " + md.getNamespace() + " : " + (kid.getName().equals(md.getName()) && kid.getNamespace().equals(md.getNamespace())));
+                            }
                             if (kid.getName().equals(md.getName()) &&
                                 kid.getNamespace().equals(md.getNamespace())) {
                                 match = true;
@@ -1678,8 +1695,9 @@ public class SchemaManager {
                             }
                             // --- try and find the kid in the md (kid only, not value)
                         } else if (mode == MODE_NEEDLE && type != null && "search".equals(type.getValue())) {
-                            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                            if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                                 Log.debug(Geonet.SCHEMA_MANAGER, "				Comparing " + Xml.getString(kid) + " with " + md.getName() + " with namespace " + md.getNamespace() + " : " + (kid.getName().equals(md.getName()) && kid.getNamespace().equals(md.getNamespace())));
+                            }
 
                             if (isMatchingElementInMetadata(kid, md, false)) {
                                 match = true;
@@ -1723,8 +1741,9 @@ public class SchemaManager {
         @SuppressWarnings("unchecked")
         Iterator<Element> haystackIterator = haystack.getDescendants(new ElementFilter());
 
-        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
             Log.debug(Geonet.SCHEMA_MANAGER, "Matching " + needle.toString());
+        }
 
         while (haystackIterator.hasNext()) {
             Element tempElement = haystackIterator.next();
@@ -1745,8 +1764,9 @@ public class SchemaManager {
      * @param haystack the XML metadata record we are searching
      */
     private boolean isMatchingNamespaceInMetadata(Namespace needle, Element haystack) {
-        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+        if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
             Log.debug(Geonet.SCHEMA_MANAGER, "Matching " + needle.toString());
+        }
 
         if (checkNamespacesOnElement(needle, haystack)) return true;
 
@@ -1800,8 +1820,9 @@ public class SchemaManager {
 
             if (tempElement.getName().equals(needleName) && tempElement.getNamespace().equals(needleNS)) {
                 if (checkValue) {
-                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
+                    if (Log.isDebugEnabled(Geonet.SCHEMA_MANAGER)) {
                         Log.debug(Geonet.SCHEMA_MANAGER, "  Searching value for element: " + tempElement.getName());
+                    }
 
                     String needleVal = StringUtils.deleteWhitespace(needle.getValue());
                     String tempVal = StringUtils.deleteWhitespace(tempElement.getValue());
@@ -1926,7 +1947,6 @@ public class SchemaManager {
         List<String> listOfTypenames = new ArrayList<>();
         while (iterator.hasNext()) {
             String typeName = iterator.next();
-            Namespace ns = hmSchemasTypenames.get(typeName);
             listOfTypenames.add(typeName);
         }
         return listOfTypenames;

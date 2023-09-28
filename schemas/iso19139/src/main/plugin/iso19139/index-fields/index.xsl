@@ -1002,7 +1002,7 @@
         <xsl:for-each select="$processSteps">
           <processSteps type="object">{
             "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
-                                'description', gmd:description, $allLanguages)"/>
+                                'description', gmd:description, $allLanguages, true())"/>
             <xsl:if test="normalize-space(gmd:dateTime) != ''">
               ,"date": "<xsl:value-of select="gmd:dateTime/gco:*/text()"/>"
             </xsl:if>
@@ -1012,7 +1012,7 @@
                 {
                   "descriptionObject": <xsl:value-of
                                           select="gn-fn-index:add-multilingual-field(
-                                            'description', gmd:description, $allLanguages)"/>
+                                            'description', gmd:description, $allLanguages, true())"/>
                 }
                 <xsl:if test="position() != last()">,</xsl:if>
               </xsl:for-each>
@@ -1028,7 +1028,7 @@
                 {
                   "organisationObject": <xsl:value-of
                                           select="gn-fn-index:add-multilingual-field(
-                                            'description', gmd:organisationName, $allLanguages)"/>
+                                            'description', gmd:organisationName, $allLanguages, true())"/>
                   <xsl:if test="gmd:individualName/gco:CharacterString/text()">
                     ,"individual":"<xsl:value-of select="gn-fn-index:json-escape(gmd:individualName/gco:CharacterString/text())"/>"
                   </xsl:if>
@@ -1049,6 +1049,7 @@
             <xsl:with-param name="languages" select="$allLanguages"/>
           </xsl:apply-templates>
         </xsl:for-each-group>
+
       </xsl:for-each>
 
       <xsl:variable name="atomProtocol" select="util:getSettingValue('system/inspire/atomProtocol')" />
@@ -1108,11 +1109,14 @@
             "urlObject":{"default": "<xsl:value-of select="gn-fn-index:json-escape(gmd:linkage/gmd:URL)"/>"},
             <xsl:if test="normalize-space(gmd:name) != ''">
               "nameObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
-                                'name', gmd:name, $allLanguages)"/>,
+                                'name', gmd:name, $allLanguages, true())"/>,
             </xsl:if>
             <xsl:if test="normalize-space(gmd:description) != ''">
               "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
-                                'description', gmd:description, $allLanguages)"/>,
+                                'description', gmd:description, $allLanguages, true())"/>,
+            </xsl:if>
+            <xsl:if test="../@gco:nilReason">
+              "nilReason": "<xsl:value-of select="../@gco:nilReason"/>",
             </xsl:if>
             "function":"<xsl:value-of select="gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue"/>",
             "applicationProfile":"<xsl:value-of select="gn-fn-index:json-escape(gmd:applicationProfile/gco:CharacterString/text())"/>",
@@ -1134,8 +1138,7 @@
               <recordOperatedByType>view</recordOperatedByType>
             </xsl:if>
             <xsl:if test="daobs:contains($protocol, 'wfs') or
-
-               daobs:contains($protocol, 'wcs') or
+                          daobs:contains($protocol, 'wcs') or
                           daobs:contains($protocol, 'download')">
               <recordOperatedByType>download</recordOperatedByType>
             </xsl:if>
@@ -1262,11 +1265,12 @@
       <xsl:copy-of select="gn-fn-index:add-multilingual-field(
                             $roleField, $organisationName, $languages)"/>
     </xsl:if>
+
     <xsl:element name="contact{$fieldSuffix}">
       <xsl:attribute name="type" select="'object'"/>{
       <xsl:if test="$organisationName">
         "organisationObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
-                              'organisation', $organisationName, $languages)"/>,
+                              'organisation', $organisationName, $languages, true())"/>,
       </xsl:if>
       "role":"<xsl:value-of select="$role"/>",
       "email":"<xsl:value-of select="gn-fn-index:json-escape($email[1])"/>",
@@ -1276,6 +1280,9 @@
       "position":"<xsl:value-of select="gn-fn-index:json-escape($positionName)"/>",
       "phone":"<xsl:value-of select="gn-fn-index:json-escape($phone[1])"/>",
       "address":"<xsl:value-of select="gn-fn-index:json-escape($address)"/>"
+      <xsl:if test="@gco:nilReason">
+        ,"nilReason": "<xsl:value-of select="@gco:nilReason"/>"
+      </xsl:if>
       }
     </xsl:element>
   </xsl:template>

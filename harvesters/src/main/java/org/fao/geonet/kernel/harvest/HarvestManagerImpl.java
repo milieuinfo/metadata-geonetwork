@@ -62,6 +62,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 /**
@@ -69,18 +70,13 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
  */
 public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
 
-    private int harvesterRefreshIntervalMinutes = 1;
+    private int harvesterRefreshIntervalMinutes = 0;
 
     private final List<String> summaryHarvesterSettings =
         Arrays.asList("harvesting", "node", "site", "name", "uuid",
             "url", "capabUrl", "baseUrl", "host", "useAccount",
             "ogctype", "options", "status", "info", "lastRun",
             "ownerGroup", "ownerUser");
-    //---------------------------------------------------------------------------
-    //---
-    //--- Vars
-    //---
-    //---------------------------------------------------------------------------
     private HarvesterSettingsManager settingMan;
     private DataManager dataMan;
     private Path xslPath;
@@ -118,25 +114,26 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         applicationContext = context.getApplicationContext();
 
         this.readOnly = isReadOnly;
-        Log.debug(Geonet.HARVEST_MAN, "HarvesterManager initializing, READONLYMODE is " + this.readOnly);
+        Log.debug(Geonet.HARVEST_MAN,
+            String.format("HarvesterManager initializing, readonly: %s, refresh interval: %d min",
+                this.readOnly, harvesterRefreshIntervalMinutes));
         xslPath = context.getAppPath().resolve(Geonet.Path.STYLESHEETS).resolve("xml/harvesting/");
         AbstractHarvester.getScheduler().getListenerManager().addJobListener(
             HarversterJobListener.getInstance(this));
 
-        // intialise the harvesters...
+
         initialiseHarvesters(context);
+        if (harvesterRefreshIntervalMinutes > 0) {
+            // ... and schedule a periodic refresh of the configuration
+            // in case a non harvesting node modify the harvester config.
+            long now = System.currentTimeMillis();
+            long nextSecond = (now / 1000) * 1000 + 1000;
+            long toSleep = nextSecond - now + 500;
 
-        // artificially delay the refresh job so it never coincides with execution of an actual harvesterjob
-        // probably fine to do it this way, but the _correct_ solution would be to integrate an update-mechanism
-        // for the harvesters that doesn't involve removing them and making them aware of a "last-updated" timestamp
-        long now = System.currentTimeMillis();
-        long nextSecond = (now/1000)*1000+1000;
-        long toSleep = nextSecond-now+500;
-        Log.debug(Geonet.HARVEST_MAN, String.format("Artificially sleeping to not refresh 'on' the minute for %s.", toSleep));
-        Thread.sleep(toSleep);
-
-        // ... and schedule a periodic refresh
-        startHarvesterRefreshJob();
+            Log.debug(Geonet.HARVEST_MAN, String.format("Artificially sleeping to not refresh 'on' the minute for %s.", toSleep));
+            Thread.sleep(toSleep);
+            startHarvesterRefreshJob();
+        }
     }
 
     public synchronized void initialiseHarvesters(ServiceContext context) {
@@ -345,9 +342,9 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
                         Element node = transform((Element) o);
                         Element nodeGroup = node.getChild("ownerGroup");
                         if ((nodeGroup != null)
-                            && (!StringUtils.isEmpty(nodeGroup.getValue()))
-                            && (StringUtils.isNumeric(nodeGroup.getValue()))
-                            && (groups.contains(Integer.valueOf(nodeGroup.getValue())))) {
+                                && (!StringUtils.isEmpty(nodeGroup.getValue()))
+                                && (StringUtils.isNumeric(nodeGroup.getValue()))
+                                && (groups.contains(Integer.valueOf(nodeGroup.getValue())))) {
                             addInfo(node);
                             result.addContent(node);
                         }
@@ -632,6 +629,7 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
     //---------------------------------------------------------------------------
 
     /**
+     *
      * @param node
      */
     private void addInfo(Element node) {
@@ -661,6 +659,7 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
     }
 
     /**
+     *
      * @return
      */
     @Override
@@ -669,6 +668,7 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
     }
 
     /**
+     *
      * @param readOnly
      */
     @Override
@@ -725,23 +725,23 @@ public class HarvestManagerImpl implements HarvestInfoProvider, HarvestManager {
         String defaultTimeZoneId = TimeZone.getDefault().getID();
 
         for (Map.Entry<String, AbstractHarvester> pair : hmHarvesters.entrySet()) {
-            AbstractHarvester harvester = pair.getValue();
-            if (Common.Status.ACTIVE.equals(harvester.getStatus())) {
-                try {
-                    TimeZone triggerTimeZone = harvester.getTriggerTimezone();
-                    String triggerTimeZoneId = defaultTimeZoneId;
-                    if (triggerTimeZone != null) {
-                        triggerTimeZoneId = triggerTimeZone.getID();
-                    }
+           AbstractHarvester harvester = pair.getValue();
+           if ( Common.Status.ACTIVE.equals(harvester.getStatus())) {
+               try {
+                   TimeZone triggerTimeZone =  harvester.getTriggerTimezone();
+                   String triggerTimeZoneId = defaultTimeZoneId;
+                   if (triggerTimeZone != null) {
+                       triggerTimeZoneId = triggerTimeZone.getID();
+                   }
 
-                    if (!StringUtils.equals(defaultTimeZoneId, triggerTimeZoneId)) {
-                        harvester.doReschedule();
-                    }
-                } catch (SchedulerException e) {
-                    Log.error(Geonet.HARVEST_MAN, String.format("Error rescheduling harvester %s - '%s'", harvester.getID(),
-                        harvester.getParams().getName()), e);
-                }
-            }
+                   if (!StringUtils.equals(defaultTimeZoneId, triggerTimeZoneId)) {
+                       harvester.doReschedule();
+                   }
+               } catch (SchedulerException e) {
+                   Log.error(Geonet.HARVEST_MAN, String.format("Error rescheduling harvester %s - '%s'", harvester.getID(),
+                       harvester.getParams().getName()), e);
+               }
+           }
         }
 
     }

@@ -85,6 +85,7 @@
     "cantDeleteUserHavingRecords": "A user with records can't be deleted. Transfer records to another user.",
     "catalogInformation": "Catalog information",
     "host.name": "Hostname",
+    "envInformation": "Environment variables",
     "categories": "Categories",
     "categoryDescriptionHelp": "Default category for metadata created in this group",
     "categoryName": "Identifier",
@@ -186,7 +187,9 @@
     "data.resources": "Resources folder: ",
     "data.backupDir": "Backup folder: ",
     "data.schemaPluginsDir": "Standard folder: ",
+    "data.schemaPublicationDir": "Schema publication folder: ",
     "data.subversionPath": "Subversion repository: ",
+    "data.geonetworkDataDir": "Base directory: ",
     "databaseStatus": "Database status",
     "db.maxactive": "Maximum number of connections",
     "db.numactive": "Active connections",
@@ -351,6 +354,7 @@
     "harvesterUnchangedRecords": "Unchanged",
     "harvesterType": "Node type",
     "harvesterUpdated": "Harvester updated",
+    "harvesterUpdateError": "Error on updating harvester",
     "harvesterValidate": "Validate records before import",
     "harvesterValidateHelp": "Invalid records will be rejected. Validation is based on the standard validation (ie. XSD, Schematrons).",
     "index.lucene.config": "Lucene configuration",
@@ -862,6 +866,9 @@
     "metadata/delete": "Metadata delete",
     "metadata/delete/profilePublishedMetadata": "Minimum user profile allowed to delete published metadata",
     "metadata/delete/profilePublishedMetadata-help": "Minimum user profile allowed to delete published metadata (Editor, Reviewer or Administrator). The default value is Editor.",
+    "metadata/batchediting": "Metadata Batch Editing",
+    "metadata/batchediting/accesslevel": "Select the minimum user profile allowed to access batch editing",
+    "metadata/batchediting/accesslevel-help": "Select the minimum user profile allowed to access batch editing (Editor, Reviewer or Administrator). The default value is Editor.",
     "metadata/publication": "Metadata publication",
     "metadata/publication/profilePublishMetadata": "Minimum user profile allowed to publish metadata",
     "metadata/publication/profilePublishMetadata-help": "Minimum user profile allowed to publish metadata (Reviewer or Administrator). The default value is Reviewer.",
@@ -1455,6 +1462,7 @@
     "ui-footerCustomMenu-help": "List of static page IDs associated with the footer section to display: <ul><li>When a list is provided, the links are displayed in the order provided and only for the pages listed.</li><li>When a list is not provided, all static pages configured for the footer section are displayed, with no guaranteed order.</li>",
     "es.url": "ElasticSearch server",
     "es.version": "ElasticSearch version",
-    "es.index": "Index name"
+    "es.index": "Index name",
+    "systemPropertiesProxyConfiguration": "Using http proxy settings in system properties."
 }
 

@@ -55,7 +55,7 @@ public interface HarvestManager {
      * Refresh the harvesters.
      * - Stops the existing scheduled jobs.
      * - Reloads the harvester definitions from the database.
-     * - Start the jobs again.
+     * - Schedule the jobs again.
      * <p>
      * Useful when running multiple instances as one instance is not aware of new harvesters added on the other one.
      * <p>
