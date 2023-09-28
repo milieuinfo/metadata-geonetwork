@@ -466,7 +466,7 @@ public final class XslUtil {
         return ApplicationContextHolder.get().getBean(org.fao.geonet.NodeInfo.class).getId();
     }
 
-    
+
     public static String getNodeLogo(String key) {
         Optional<Source> source = getSource(key);
         return source.isPresent() ? source.get().getLogo() : "";
@@ -1731,5 +1731,29 @@ public final class XslUtil {
             }
         });
         return listOfLinks;
+    }
+
+    public static String getRecordResourceURI(String uuid) {
+        var client = ApplicationContextHolder.get().getBean(EsRestClient.class);
+        var searchManager = ApplicationContextHolder.get().getBean(EsSearchManager.class);
+
+        try {
+            var request = new SearchRequest(searchManager.getDefaultIndex());
+            var ssb = new SearchSourceBuilder();
+            ssb.fetchSource(new String[]{"resourceIdentifier.link"}, null);
+            ssb.query(QueryBuilders.matchQuery("uuid", uuid));
+            request.source(ssb);
+
+            var response = client.getClient().search(request, RequestOptions.DEFAULT);
+            if (response.getHits().getTotalHits().value == 0) {
+                return null;
+            }
+            var resourceIdentifier = (ArrayList<HashMap<String, String>>) response.getHits().getHits()[0].getSourceAsMap().get("resourceIdentifier");
+            return resourceIdentifier.get(0).get("link");
+        } catch (Exception e) {
+            Log.error(Geonet.GEONETWORK,
+                "GET Record resource identifier '" + uuid + "' error: " + e.getMessage(), e);
+        }
+        return null;
     }
 }
