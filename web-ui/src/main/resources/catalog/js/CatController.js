@@ -845,7 +845,7 @@
                 sortOrder: ""
               },
               {
-                sortBy: "dateStamp",
+                sortBy: "changeDate", // VL: use changeDate instead of dateStamp, to enable timestamp-granularity
                 sortOrder: "desc"
               },
               {
