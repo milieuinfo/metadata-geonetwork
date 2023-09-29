@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - [Improved handling of empty record titles]([PR1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27607) / [PR2](https://github.com/geonetwork/core-geonetwork/pull/7362))
   - [merged core-geonetwork 4.4.0-SNAPSHOT](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27898)
     - Introducing HA capabilities, e.g., harvester modifications
+  - [Added capability to validate after harvesting]([PR1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27953) / [PR2](https://github.com/geonetwork/core-geonetwork/pull/7370))
 
 ## [1.1.0] - 2023-09-26
 - [Backport facets and search options from old application](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26987)
