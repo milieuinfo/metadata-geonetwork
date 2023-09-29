@@ -23,6 +23,13 @@
   -->
 
 <strings>
+  <mdConstraintsSection>Inhoudelijke beperkingen</mdConstraintsSection>
+  <mdAccessConstraints>Toegangsbeperkingen</mdAccessConstraints>
+  <mdUseConstraints>Gebruiksvoorwaarden</mdUseConstraints>
+  <mdOtherConstraints>Regeling</mdOtherConstraints>
+  <mdLegalConstraintsSection>Legale beperkingen</mdLegalConstraintsSection>
+  <mdLegalAndSecurityConstraintsSection>Legale en veiligheidsbeperkingen</mdLegalAndSecurityConstraintsSection>
+
   <vl-add-DQ_AbsoluteExternalPositionalAccuracy>Geometrische nauwkeurigheid</vl-add-DQ_AbsoluteExternalPositionalAccuracy>
   <vl-add-DQ_CompletenessCommission>Overbodige/aanvullende data</vl-add-DQ_CompletenessCommission>
   <vl-add-DQ_CompletenessOmission>Volledigheid</vl-add-DQ_CompletenessOmission>
