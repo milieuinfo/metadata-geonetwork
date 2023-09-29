@@ -1118,6 +1118,8 @@
     "ui-isExportMapAsImageEnabled-help": "Deze optie vereist de configuratie van CORS op ieder van de ontsloten diensten. Indien onbekend dient u deze optie te deactiveren. Lagen van diensten zonder CORS worden niet getoond op de kaart.",
     "ui-is3DModeAllowed": "Switch naar 3D modus toestaan",
     "ui-is3DModeAllowed-help": "Indien ingeschakeld, kan de gebruiker de kaart naar de 3D-modus schakelen. De kaartviewer moet ook zijn ingeschakeld. Als u de 3D-modus niet voor alle gebruikers wilt inschakelen, zal het toevoegen van 'catalog.search?with3d' in de URL ook de 3D-modus laden.",
+    "ui-singleTileWMS": "Use a single tile for WMS services",
+    "ui-singleTileWMS-help": "If enabled, a single image is requested to the WMS service, otherwise tiles are requested. When the 3D mode is enabled, the value of this setting is ignored and it's used tiling as 3D mode doesn't support single tiles.",
     "ui-isUserRecordsOnly": "Alleen eigen records",
     "ui-isUserRecordsOnly-help": "Indien ingeschakeld, wordt het selectievakje \"Alleen mijn records\" standaard aangevinkt in het editor dashboard",
     "ui-isFilterTagsDisplayed": "Toon filter tags op het dashboard",
