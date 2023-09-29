@@ -37,13 +37,6 @@
   <name>GeoNetwork schema plugins</name>
   <packaging>pom</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-    </dependency>
-  </dependencies>
-
   <modules>
     <module>schema-core</module>
     <module>csw-record</module>
@@ -54,11 +47,7 @@
     <module>dcat2</module>
   </modules>
 
-  <profiles>
-  </profiles>
-
   <properties>
     <rootProjectDir>../..</rootProjectDir>
   </properties>
-
 </project>
