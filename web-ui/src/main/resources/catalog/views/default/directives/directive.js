@@ -139,10 +139,8 @@
                 uuid +
                 url.replace("${lang}", scope.lang) +
                 (url.indexOf("?") !== -1 ? "&" : "?") +
-                "approved=" +
-                (isDraft != "y") +
-                "&attachment=" +
-                (asDownload == true)
+                (isDraft === "y" ? "approved=false" : "") +
+                "&attachment=" + (asDownload === true)
               );
             }
           };

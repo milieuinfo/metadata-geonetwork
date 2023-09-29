@@ -992,6 +992,7 @@
               valuesSeparator: ","
             },
             is3DModeAllowed: false,
+            singleTileWMS: true,
             isSaveMapInCatalogAllowed: true,
             isExportMapAsImageEnabled: false,
             isAccessible: false,
