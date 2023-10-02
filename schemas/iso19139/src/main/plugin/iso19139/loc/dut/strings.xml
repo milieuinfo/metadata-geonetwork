@@ -123,6 +123,19 @@
   <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
   <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
   <vl>Standaard</vl>
+  <vl-BeschrijvingenURL>Beschrijving en URL</vl-BeschrijvingenURL>
+  <vl-Beschrijving>Beschrijving</vl-Beschrijving>
+  <vl-Regelingvoornietvermeldtypevangebruik>Regeling voor niet vermeld type van gebruik</vl-Regelingvoornietvermeldtypevangebruik>
+  <vl-Bronvermeldingsvoorschrift>Bronvermeldingsvoorschrift</vl-Bronvermeldingsvoorschrift>
+  <vl-cc0>CC0 verklaring</vl-cc0>
+  <vl-Licentievoorhergebruikoptevragen>Licentie voor hergebruik op te vragen</vl-Licentievoorhergebruikoptevragen>
+  <vl-VlaamseModellicentievoorgratishergebruik>Vlaamse Modellicentie voor gratis hergebruik</vl-VlaamseModellicentievoorgratishergebruik>
+  <vl-VlaamseModellicentiehergebruiktegenvergoeding>Vlaamse Modellicentie voor hergebruik tegen vergoeding</vl-VlaamseModellicentiehergebruiktegenvergoeding>
+  <vl-Onvoorwaardelijkhergebruik>Onvoorwaardelijk hergebruik</vl-Onvoorwaardelijkhergebruik>
+  <vl-Geenbeperkingopdepublieketoegang>Geen beperking op de publieke toegang</vl-Geenbeperkingopdepublieketoegang>
+  <vl-GebruikdoorVlaamseinstanties>Gebruik door Vlaamse instanties</vl-GebruikdoorVlaamseinstanties>
+  <vl-Gebruikdoorniet-Vlaamseinstanties>Gebruik door niet-Vlaamse instanties</vl-Gebruikdoorniet-Vlaamseinstanties>
+
 
   <addConformity>Conformiteit toevoegen</addConformity>
   <constraintInfo>Toegang restrictie informatie</constraintInfo>
