@@ -260,7 +260,9 @@ public class DefaultStatusActions implements StatusActions {
             if(metadata instanceof MetadataDraft) {
                 MetadataDraft draft = (MetadataDraft) metadata;
                 Metadata approved = (Metadata) metadataRepository.findOne(draft.getApprovedVersion().getId());
-                approved.getSourceInfo().setGroupOwner(draft.getSourceInfo().getGroupOwner());
+                if(!draft.getSourceInfo().getGroupOwner().equals(approved.getSourceInfo().getGroupOwner())) {
+                    useDraftGroupOwner(draft, approved);
+                }
             }
             // publish
             setAllOperations(String.valueOf(status.getMetadataId()));
@@ -279,6 +281,33 @@ public class DefaultStatusActions implements StatusActions {
             metadataStatusManager.setStatusExt(status);
         }
         return deleted;
+    }
+
+    /**
+     * Set the group owner of the approved record to the draft's one.
+     * @param draft the draft that has the new owner
+     * @param approved the approved version whose owner needs to be overwritten
+     */
+    private void useDraftGroupOwner(MetadataDraft draft, Metadata approved) {
+        Integer oldGroupOwner = approved.getSourceInfo().getGroupOwner();
+        Integer newGroupOwner = draft.getSourceInfo().getGroupOwner();
+
+        metadataOperations.getAllOperations(approved.getId())
+            .stream()
+            .filter(op -> op.getId().getGroupId() == oldGroupOwner)
+            .forEach(op -> {
+                try {
+                    // remove the old privilege for the old group owner
+                    metadataOperations.forceUnsetOperation(context, approved.getId(), oldGroupOwner, op.getId().getOperationId());
+                    // add the same privilege, but for the new group owner
+                    metadataOperations.forceSetOperation(context, approved.getId(), newGroupOwner, op.getId().getOperationId());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        // set the new owner
+        approved.getSourceInfo().setGroupOwner(newGroupOwner);
     }
 
 
