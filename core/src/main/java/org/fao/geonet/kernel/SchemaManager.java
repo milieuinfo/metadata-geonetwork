@@ -60,6 +60,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -1312,10 +1313,15 @@ public class SchemaManager {
             if (hmSchemas.containsKey(schemaName)) { // exists so ignore it
                 Log.error(Geonet.SCHEMA_MANAGER, "Schema " + schemaName + " already exists - cannot add!");
             } else {
-                stage = "adding the schema information";
-                addSchema(applicationContext, schemasDir, schemaPluginCatRoot, schemaFile, suggestFile, substitutesFile,
-                    idFile, oasisCatFile, conversionsFile);
-                ResolverWrapper.createResolverForSchema(schemasDir.getFileName().toString(), oasisCatFile);
+                try {
+                    stage = "adding the schema information";
+                    addSchema(applicationContext, schemasDir, schemaPluginCatRoot, schemaFile, suggestFile, substitutesFile,
+                        idFile, oasisCatFile, conversionsFile);
+                    ResolverWrapper.createResolverForSchema(schemasDir.getFileName().toString(), oasisCatFile);
+                } catch(DataIntegrityViolationException e) {
+                    // This occurs when two instances start at the same moment: both try to add schemas based on a clean directory but only one of them manages to add it to the database
+                    Log.error(Geonet.SCHEMA_MANAGER, "Probable concurrency issue, could not add schema in this instance as it is most likely already present in the database. " + e.getMessage());
+                }
             }
         } catch (Exception e) {
             String errStr = "Failed whilst " + stage + ". Exception message if any is " + e.getMessage();
