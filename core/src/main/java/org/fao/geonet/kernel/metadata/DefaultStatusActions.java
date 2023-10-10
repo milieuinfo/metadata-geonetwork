@@ -200,7 +200,7 @@ public class DefaultStatusActions implements StatusActions {
                 context.debug("Change status of metadata with id " + status.getMetadataId() + " from " + currentStatusId + " to " + statusId);
 
             // we know we are allowed to do the change, apply any side effects
-            boolean deleted = applyStatusChange(status.getMetadataId(), status, statusId);
+            boolean deleted = applyStatusChange(status.getMetadataId(), status, statusId, metadata);
 
             // inform content reviewers if the status is submitted
             try {
@@ -233,7 +233,7 @@ public class DefaultStatusActions implements StatusActions {
         return results;
     }
 
-    private boolean applyStatusChange(int metadataId, MetadataStatus status, String toStatusId) throws Exception {
+    private boolean applyStatusChange(int metadataId, MetadataStatus status, String toStatusId, AbstractMetadata metadata) throws Exception {
         // in the case of rejected for retired/removed: fall back to the previous status
         boolean deleted = false;
         if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
@@ -256,6 +256,13 @@ public class DefaultStatusActions implements StatusActions {
         }
         // if we're approving, automatically publish
         else if (toStatusId.equals(StatusValue.Status.APPROVED)) {
+            // if we have a draft copy that has a modified groupowner we need to take that into account as well
+            if(metadata instanceof MetadataDraft) {
+                MetadataDraft draft = (MetadataDraft) metadata;
+                Metadata approved = (Metadata) metadataRepository.findOne(draft.getApprovedVersion().getId());
+                approved.getSourceInfo().setGroupOwner(draft.getSourceInfo().getGroupOwner());
+            }
+            // publish
             setAllOperations(String.valueOf(status.getMetadataId()));
         }
         // if we're rejecting, automatically unpublish
