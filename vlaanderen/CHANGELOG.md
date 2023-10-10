@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.1.2-SNAPSHOT]
 - Ordering workflow statuses in logical way - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27923)
+- [Publishing draft now sets group owner correctly](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28255)
+
 
 ## [1.1.1] - 2023-09-29
 
