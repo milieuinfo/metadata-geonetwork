@@ -186,6 +186,11 @@
           <xsl:apply-templates select="node()" />
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:for-each select="gmd:CI_Citation">
+        <xsl:copy>
+          <xsl:apply-templates select="node()"/>
+        </xsl:copy>
+      </xsl:for-each>
     </xsl:copy>
   </xsl:template>
 
