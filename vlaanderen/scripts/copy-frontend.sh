@@ -24,7 +24,7 @@ XSRF_TOKEN=$(grep XSRF /tmp/cookie | cut -f 7)
 inotifywait -e close_write,moved_to,create -m -r --include "\.(js|css|html|htm|json)$" $SOURCE |
 while read -r directory events filename; do
   # notification
-  echo "file changed: $filename"
+  echo "file changed: $filename in $directory"
 
   # sync the folder
   rsync --progress -a $SOURCE $TARGET

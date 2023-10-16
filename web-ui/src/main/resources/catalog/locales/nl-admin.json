@@ -1460,8 +1460,8 @@
     "ui-topCustomMenu-help": "Lijst van statische pagina IDs, geassocieerd met de header sectie, om te tonen: <ul><li>Wanneer een lijst is gegeven worden de link getoond in de gegeven volgorde en enkel voor de opgelijste pagina's.</li><li>Wanneer een lijst niet is gegeven worden alle geconfigureerde statische pagina's van de header sectie getoond, zonder gegarandeerde volgorde.</li>.\nPagina's kunnen toegevoegd worden tussen het standaardmenus van de cataloog: <pre>[\"gn-site-name-menu\",\n    \"gn-portal-switcher\",\n    \"gn-search-menu\",\n    \"gn-map-menu\",\n    \"gn-contribute-menu\",\n    \"gn-admin-menu\"]</pre>. Voeg een pagina toe als een simpel menu door het overeenkomstige id te gebruiken, e.g., <pre>\"documentation\"</pre> of als een submenu door een object te gebruiken: <pre>{\"Quick search\": [\n  \"searchForAfrica\", \n  \"forReview\"\n]}</pre>",
     "ui-footerCustomMenu": "Footer custom menu items",
     "ui-footerCustomMenu-help": "Lijst van statische pagina IDs, geassocieerd met de footer sectie, om te tonen: <ul><li>Wanneer een lijst is opgegeven worden de links getoond in de opgegeven volgorde en enkel voor de opgelijste pagina's.</li><li>Wanneer een lijst niet is gegeven worden alle statische pagina's getoond die zijn geconfigureerd voor de footer sectie, zonder een gegarandeerde volgorde.</li>",
-    "es.url": "ElasticSearch server",
-    "es.version": "ElasticSearch versie",
+    "es.url": "Elasticsearch server",
+    "es.version": "Elasticsearch version",
     "es.index": "Indexnaam",
     "systemPropertiesProxyConfiguration": "Using http proxy settings in system properties."
 }

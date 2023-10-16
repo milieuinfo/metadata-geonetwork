@@ -140,7 +140,8 @@
                 url.replace("${lang}", scope.lang) +
                 (url.indexOf("?") !== -1 ? "&" : "?") +
                 (isDraft === "y" ? "approved=false" : "") +
-                "&attachment=" + (asDownload === true)
+                "&attachment=" +
+                (asDownload === true)
               );
             }
           };
@@ -194,18 +195,25 @@
                   adminSteps = reviewerSteps;
 
                 // desired order of statuses, to be shown in, e.g., the actionmenu
-                var visualOrder = ["draft", "submitted", "rejected", "approved_for_published", "approved",
-                  "submitted_for_retired", "retired", "rejected_for_retired", "submitted_for_removed",
-                  "removed", "rejected_for_removed"]
-                adminSteps = adminSteps.sort(function (a, b) {
-                  return visualOrder.indexOf(a.to) > visualOrder.indexOf(b.to)
-                });
-                editorSteps = editorSteps.sort(function (a, b) {
-                  return visualOrder.indexOf(a.to) > visualOrder.indexOf(b.to)
-                });
-                reviewerSteps = reviewerSteps.sort(function (a, b) {
-                  return visualOrder.indexOf(a.to) > visualOrder.indexOf(b.to)
-                });
+                var visualOrder = [
+                  "draft",
+                  "submitted",
+                  "rejected",
+                  "approved_for_published",
+                  "approved",
+                  "submitted_for_retired",
+                  "retired",
+                  "rejected_for_retired",
+                  "submitted_for_removed",
+                  "removed",
+                  "rejected_for_removed"
+                ];
+                function sortFunction(a, b) {
+                  return visualOrder.indexOf(a.to) < visualOrder.indexOf(b.to) ? -1 : 1;
+                }
+                adminSteps = adminSteps.sort(sortFunction);
+                editorSteps = editorSteps.sort(sortFunction);
+                reviewerSteps = reviewerSteps.sort(sortFunction);
 
                 scope.statusEffects = {
                   editor: editorSteps,
