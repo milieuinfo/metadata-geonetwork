@@ -470,6 +470,16 @@
           };
           if (mode == "fcats") {
             params.uuidref = md.uuid;
+            var revisionDate = md.revisionDate;
+            if (!revisionDate) {
+              var rd = revisionDate.find(function (rd) {
+                return rd.type === "revision";
+              });
+              if (!rd) {
+                params.revisionDate = rd.date;
+              }
+            }
+            params.revisionNumber = md.revisionNumber;
           } else {
             params[mode + "Uuid"] = md.uuid;
           }

@@ -40,6 +40,9 @@ attached it to the metadata for data.
   <xsl:param name="siteUrl"/>
   <xsl:param name="fcatsUrl" select="''"/>
   <xsl:param name="fcatsTitle" select="''"/>
+  <!-- VL - 'select' is for default values, don't pass it and it becomes a required param -->
+  <xsl:param name="versionDate" select="''"/>
+  <xsl:param name="versionNumber" select="''"/>
 
   <xsl:template match="/gmd:MD_Metadata|*[@gco:isoType='gmd:MD_Metadata']">
     <xsl:copy>
@@ -131,14 +134,14 @@ attached it to the metadata for data.
     <gmd:CI_Citation>
       <gmd:title>
         <gco:CharacterString>
-          <xsl:value-of select="//mdToBeAggregated/gfc:FC_FeatureCatalogue/gmx:name/gco:CharacterString"/>
+          <xsl:value-of select="$fcatsTitle"/>
         </gco:CharacterString>
       </gmd:title>
       <gmd:date>
         <gmd:CI_Date>
           <gmd:date>
             <gco:Date>
-              <xsl:value-of select="//mdToBeAggregated/gfc:FC_FeatureCatalogue/gmx:versionDate/gco:Date"/>
+              <xsl:value-of select="$versionDate"/>
             </gco:Date>
           </gmd:date>
           <gmd:dateType>
@@ -149,7 +152,7 @@ attached it to the metadata for data.
       </gmd:date>
       <gmd:edition>
         <gco:CharacterString>
-          <xsl:value-of select="//mdToBeAggregated/gfc:FC_FeatureCatalogue/gmx:versionNumber/gco:CharacterString"/>
+          <xsl:value-of select="$versionNumber"/>
         </gco:CharacterString>
       </gmd:edition>
     </gmd:CI_Citation>
