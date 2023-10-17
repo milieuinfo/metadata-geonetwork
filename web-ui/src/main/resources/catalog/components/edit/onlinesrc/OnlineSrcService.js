@@ -470,16 +470,16 @@
           };
           if (mode == "fcats") {
             params.uuidref = md.uuid;
-            var revisionDate = md.revisionDate;
-            if (!revisionDate) {
-              var rd = revisionDate.find(function (rd) {
+            var resourceDate = md.resourceDate;
+            if (resourceDate) {
+              var revisionDate = resourceDate.find(function (rd) {
                 return rd.type === "revision";
               });
-              if (!rd) {
-                params.revisionDate = rd.date;
+              if (revisionDate) {
+                params.versionDate = revisionDate.date;
               }
             }
-            params.revisionNumber = md.revisionNumber;
+            params.versionNumber = md.resourceEdition;
           } else {
             params[mode + "Uuid"] = md.uuid;
           }
