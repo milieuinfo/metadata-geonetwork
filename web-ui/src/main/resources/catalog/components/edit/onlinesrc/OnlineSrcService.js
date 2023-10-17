@@ -470,6 +470,7 @@
           };
           if (mode == "fcats") {
             params.uuidref = md.uuid;
+            // vl: adding the following parameters as they are needed to populate CI_Citation for the embedded fcats
             var resourceDate = md.resourceDate;
             if (resourceDate) {
               var revisionDate = resourceDate.find(function (rd) {

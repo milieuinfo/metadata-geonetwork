@@ -73,13 +73,14 @@ attached it to the metadata for data.
         <xsl:when
           test="$citationWithRef">
           <gmd:contentInfo>
-            <gmd:MD_FeatureCatalogueDescription >
+            <gmd:MD_FeatureCatalogueDescription>
               <xsl:copy-of select="$citationWithRef/../gmd:complianceCode|
                                    $citationWithRef/../gmd:language|
                                    $citationWithRef/../gmd:includedWithDataset|
                                    $citationWithRef/../gmd:featureTypes"/>
 
               <xsl:call-template name="make-fcats-link"/>
+
             </gmd:MD_FeatureCatalogueDescription>
           </gmd:contentInfo>
         </xsl:when>
