@@ -1,0 +1,95 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet author="joachim" id="00032-dp">
+    <insert tableName="sources">
+      <column name="creationdate" value="2023-10-18T13:07:26.611797Z"/>
+      <column name="filter" value='+groupOwnerMdc:true'/>
+      <column name="islistableinheaderselector" value="y"/>
+      <column name="logo" value="dp.png"/>
+      <column name="name" value="Datapublicatie"/>
+      <column name="type" value="subportal"/>
+      <column name="uuid" value="dp"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="dp"/>
+      <column name="label" value="Datapublicatie"/>
+      <column name="langid" value="dut"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="dp"/>
+      <column name="label" value="Datapublicatie"/>
+      <column name="langid" value="ger"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="dp"/>
+      <column name="label" value="Datapublicatie"/>
+      <column name="langid" value="fre"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="dp"/>
+      <column name="label" value="Datapublicatie"/>
+      <column name="langid" value="eng"/>
+    </insert>
+  </changeSet>
+  <changeSet author="joachim" id="00032-mdc">
+    <insert tableName="sources">
+      <column name="creationdate" value="2023-10-18T13:07:27.611797Z"/>
+      <column name="filter" value='(+groupOwnerMdc:true OR (+groupOwnerName:Digitaal Vlaanderen))'/>
+      <column name="islistableinheaderselector" value="y"/>
+      <column name="logo" value="mdc.png"/>
+      <column name="name" value="Metadatacenter"/>
+      <column name="type" value="subportal"/>
+      <column name="uuid" value="mdc"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="mdc"/>
+      <column name="label" value="Metadatacenter"/>
+      <column name="langid" value="dut"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="mdc"/>
+      <column name="label" value="Metadatacenter"/>
+      <column name="langid" value="ger"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="mdc"/>
+      <column name="label" value="Metadatacenter"/>
+      <column name="langid" value="fre"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes" value="mdc"/>
+      <column name="label" value="Metadatacenter"/>
+      <column name="langid" value="eng"/>
+    </insert>
+  </changeSet>
+  <changeSet author="joachim" id="00032-groups" contextFilter="loc">
+    <insert tableName="groups">
+      <column name="id" value="100"/>
+      <column name="name" value="Datapublicatie ABC"/>
+      <column name="ismdc" value="true"/>
+    </insert>
+    <insert tableName="groups">
+      <column name="id" value="101"/>
+      <column name="name" value="ABC"/>
+      <column name="ismdc" value="false"/>
+    </insert>
+    <insert tableName="groups">
+      <column name="id" value="102"/>
+      <column name="name" value="Digitaal Vlaanderen"/>
+      <column name="ismdc" value="false"/>
+    </insert>
+    <sql dbms="postgresql">
+      insert into groupsdes (iddes, label, langid) (select id, name, unnest(array['dut', 'eng', 'ger', 'fre']) from groups where id in (100,101,102));
+    </sql>
+    <update tableName="metadata">
+      <column name="groupowner" value="100"/>
+      <where>id = 104</where>
+    </update>
+    <update tableName="metadata">
+      <column name="groupowner" value="102"/>
+      <where>id = 107</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
