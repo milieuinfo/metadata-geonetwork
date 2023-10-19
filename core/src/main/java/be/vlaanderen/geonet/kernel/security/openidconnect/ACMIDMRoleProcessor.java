@@ -52,13 +52,13 @@ public class ACMIDMRoleProcessor extends OIDCRoleProcessor {
 
     private List<String> getProfiles(String group, String profile) {
         String roleGroupSeparator = oidcConfiguration.groupPermissionSeparator;
-        String mdcPrefix = "mdc-" + group + roleGroupSeparator;
+        String dpPrefix = "dp-" + group + roleGroupSeparator;
         String mdvPrefix = "mdv-" + group + roleGroupSeparator;
         if (profile.equals(Profile.Administrator.name())) {
-            return Lists.newArrayList(mdcPrefix + profile,
+            return Lists.newArrayList(dpPrefix + profile,
                     mdvPrefix + profile);
         } else if (profile.equals(Profile.Reviewer.name())) {
-            return Lists.newArrayList(mdcPrefix + Profile.Editor.name(),
+            return Lists.newArrayList(dpPrefix + Profile.Editor.name(),
                     mdvPrefix + Profile.Reviewer.name());
         }
         return Lists.newArrayList();
