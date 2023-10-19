@@ -6,13 +6,9 @@
   data-ng-class="{'btn btn-default btn-sm': !isDropDown || iconMode === 'only'}"
   class="text-wrap {{btnClass}}"
   data-ng-click="service.doAction(mainType, link, record)"
+  title="{{link.origin === 'remote' ? ('remoteRecord' | translate) : ('link' | translate)}}"
 >
-  <i
-    class="fa"
-    title="{{link.origin === 'remote' ? ('remoteRecord' | translate) : ''}}"
-    data-ng-if="iconMode !== 'none'"
-    data-ng-class="icon"
-  />
+  <i class="fa" data-ng-if="iconMode !== 'none'" data-ng-class="icon" />
   <span class="visible-lg-*" data-ng-if="iconMode !== 'only'">
     {{::isDropDown ? link.desc || link.name || link.url : (service.getLabel(mainType,
     type) | translate)}}
@@ -24,11 +20,7 @@
     link.initiativeType != '' ? ' / ' + (link.initiativeType | translate) : '')}})
   </span>
 
-  <i
-    data-ng-if="link.origin === 'remote'"
-    class="fa fa-external-link"
-    title="{{'remoteRecord' | translate}}"
-  ></i>
+  <i data-ng-if="link.origin === 'remote'" class="fa fa-external-link"></i>
 </a>
 <a
   data-ng-show="!hasAction"

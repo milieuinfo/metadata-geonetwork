@@ -18,6 +18,7 @@
   "groupManagedByDatapublicatie": "Géré par DataPublicatie",
   "groupManagedByYourself": "Géré par vous-même",
   "host.name": "Hostname",
+  "link": "Lien",
   "linkToFeatureCatalog": "Lies vers un feature catalog",
   "linkToParent": "Lien vers un dataset series",
   "mdStatus-approved": "Approuvé et publié",
@@ -32,9 +33,10 @@
   "mdStatus-submitted_for_removed": "Soumis pour suppression",
   "mdStatus-submitted_for_retired": "Smouis pour la retraite",
   "onlyMyRecord": "Mon Metadata Records",
+  "pinAction": "Pin to list",
   "serviceType-discovery": "Discovery service",
   "serviceType-download": "Téléchargeable",
   "serviceType-view": "Visible",
   "sortBy-changeDateDesc": "dernière mise à jour",
-  "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, propulsé par GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, propulsé par GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
 }
