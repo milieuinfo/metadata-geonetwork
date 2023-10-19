@@ -83,7 +83,7 @@ public class Group extends Localized implements Serializable {
     private List<MetadataCategory> allowedCategories;
     private Boolean enableAllowedCategories;
     private String orgCode;
-    private Boolean mdc;
+    private String vlType;
 
     /**
      * Get the id of the group.
@@ -358,12 +358,12 @@ public class Group extends Localized implements Serializable {
         this.orgCode = orgCode;
     }
 
-    @Column(name = "ismdc", nullable = true)
-    public Boolean isMdc() {
-        return mdc;
+    @Column(name = "vltype", nullable = true)
+    public String getVlType() {
+        return vlType;
     }
 
-    public void setMdc(Boolean mdc) {
-        this.mdc = mdc;
+    public void setVlType(String vlType) {
+        this.vlType = vlType;
     }
 }

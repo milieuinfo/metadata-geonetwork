@@ -2,10 +2,21 @@
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="00032-remove-ismdc" author="joachim">
+    <addColumn tableName="groups">
+      <column name="vltype" type="varchar"/>
+    </addColumn>
+    <sql>
+      update groups set vltype = 'datapublicatie' where ismdc;
+      update groups set vltype = 'metadatavlaanderen' where not ismdc;
+      update groups set vltype = 'digitaalvlaanderen' where orgcode = 'OVO002949';
+    </sql>
+    <dropColumn tableName="groups" columnName="ismdc"/>
+  </changeSet>
   <changeSet author="joachim" id="00032-dp">
     <insert tableName="sources">
       <column name="creationdate" value="2023-10-18T13:07:26.611797Z"/>
-      <column name="filter" value='+groupOwnerMdc:true'/>
+      <column name="filter" value='+groupOwnerVlType:datapublicatie'/>
       <column name="islistableinheaderselector" value="y"/>
       <column name="logo" value="dp.png"/>
       <column name="name" value="Datapublicatie"/>
@@ -36,7 +47,7 @@
   <changeSet author="joachim" id="00032-mdc">
     <insert tableName="sources">
       <column name="creationdate" value="2023-10-18T13:07:27.611797Z"/>
-      <column name="filter" value='(+groupOwnerMdc:true OR (+groupOwnerName:Digitaal Vlaanderen))'/>
+      <column name="filter" value='+groupOwnerVlType:(datapublicatie OR digitaalvlaanderen)'/>
       <column name="islistableinheaderselector" value="y"/>
       <column name="logo" value="mdc.png"/>
       <column name="name" value="Metadatacenter"/>
@@ -68,20 +79,25 @@
     <insert tableName="groups">
       <column name="id" value="100"/>
       <column name="name" value="Datapublicatie ABC"/>
-      <column name="ismdc" value="true"/>
+      <column name="vltype" value="datapublicatie"/>
+      <column name="orgcode" value="OVOABC007"/>
     </insert>
     <insert tableName="groups">
       <column name="id" value="101"/>
       <column name="name" value="ABC"/>
-      <column name="ismdc" value="false"/>
+      <column name="vltype" value="metadatavlaanderen"/>
+      <column name="orgcode" value="OVOABC007"/>
     </insert>
     <insert tableName="groups">
       <column name="id" value="102"/>
       <column name="name" value="Digitaal Vlaanderen"/>
-      <column name="ismdc" value="false"/>
+      <column name="vltype" value="digitaalvlaanderen"/>
+      <column name="orgcode" value="OVO002949"/>
     </insert>
     <sql dbms="postgresql">
-      insert into groupsdes (iddes, label, langid) (select id, name, unnest(array['dut', 'eng', 'ger', 'fre']) from groups where id in (100,101,102));
+      insert into groupsdes (iddes, label, langid) (select id, name, unnest(array['dut', 'eng', 'ger', 'fre'])
+                                                    from groups
+                                                    where id in (100, 101, 102));
     </sql>
     <update tableName="metadata">
       <column name="groupowner" value="100"/>

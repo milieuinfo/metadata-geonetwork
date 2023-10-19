@@ -460,8 +460,7 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
                         if (group.getLogo() != null && preferGroup) {
                             logoUUID = group.getLogo();
                         }
-                        fields.put(Geonet.IndexFieldNames.GROUP_OWNER_MDC, String.valueOf(group.isMdc()!=null?group.isMdc():false));
-                        fields.put(Geonet.IndexFieldNames.GROUP_OWNER_NAME, String.valueOf(group.getName()));
+                        fields.put(Geonet.IndexFieldNames.GROUP_OWNER_VLTYPE, group.getVlType());
                     }
                 }
 
