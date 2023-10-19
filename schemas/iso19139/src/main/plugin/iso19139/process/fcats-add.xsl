@@ -88,7 +88,9 @@ attached it to the metadata for data.
           <xsl:copy-of select="gmd:contentInfo"/>
           <gmd:contentInfo>
             <gmd:MD_FeatureCatalogueDescription>
-              <gmd:includedWithDataset/>
+              <gmd:includedWithDataset>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:includedWithDataset>
               <xsl:call-template name="make-fcats-link"/>
             </gmd:MD_FeatureCatalogueDescription>
           </gmd:contentInfo>

@@ -34,7 +34,7 @@ Stylesheet used to detach a feature catalogue
 
   <!-- Remove attributes uuidref and xlink:href -->
   <xsl:template
-    match="gmd:contentInfo/*/gmd:featureCatalogueCitation[@uuidref = $uuidref]"
+    match="gmd:contentInfo[*/gmd:featureCatalogueCitation[@uuidref = $uuidref]]"
     priority="2"/>
 
 
