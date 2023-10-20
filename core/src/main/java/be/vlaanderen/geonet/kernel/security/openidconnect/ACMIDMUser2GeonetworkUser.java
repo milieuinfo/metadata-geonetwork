@@ -78,8 +78,15 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                     vlType = "digitaalvlaanderen";
                 }
 
-                Group group = groupRepository.findByOrgCodeAndVlType(roleOrgCode, vlType);
                 String groupName = computeGroupName(userOrgCode, userOrgName, roleOrgCode, isDp);
+                Group group;
+                if(roleOrgCode.trim().equals("OVO002949")) {
+                    // Digitaal Vlaanderen or Datapublicatie Digitaal Vlaanderen both have the same vlType+orgCode
+                    // we need to differentiate on name here
+                    group = groupRepository.findByName(groupName);
+                } else {
+                    group = groupRepository.findByOrgCodeAndVlType(roleOrgCode, vlType);
+                }
 
                 if (group == null) {
                     group = new Group();
