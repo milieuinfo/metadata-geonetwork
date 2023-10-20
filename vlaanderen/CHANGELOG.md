@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added missing hover labels for search buttons - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28193)
 - Enabled subportals - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28552)
 
+### core-geonetwork
+- Merged core-geonetwork 4.4.1-SNAPSHOT
+
 ## [1.1.2] - 2023-10-16
 - Ordering workflow statuses in logical way - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27923)
 - [Publishing draft now sets group owner correctly](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28255)
