@@ -73,7 +73,8 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                 else if(technicalGroupName.startsWith("dp-")) {
                     vlType = "datapublicatie";
                 }
-                else if(roleOrgCode.equals("OVO002949")) {
+                // special case: if we are Digitaal Vlaanderen, override the type (in both dp / mdv)
+                if(roleOrgCode.trim().equals("OVO002949")) {
                     vlType = "digitaalvlaanderen";
                 }
 
