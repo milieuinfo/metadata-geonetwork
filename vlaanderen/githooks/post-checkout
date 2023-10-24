@@ -21,9 +21,11 @@ echo "     new HEAD: $newHead"
 echo "   new BRANCH: $newBranch"
 
 # perform the transifex update if we're checking out a feature branch
-if [[ $checkoutType == "branch" && $newBranch == feature/* ]] ;
+# if [[ $checkoutType == "branch" && $newBranch == feature/* ]] ;
+# perform the transifex update if we're checking out develop
+if [[ $checkoutType == "branch" && $newBranch == "develop" ]] ;
 then
-  printf "\nPerforming transifex update for feature branch\n"
+  printf "\nPerforming transifex update for develop branch\n"
   (
       cd web-ui
       bash download-from-transifex-vl.sh
