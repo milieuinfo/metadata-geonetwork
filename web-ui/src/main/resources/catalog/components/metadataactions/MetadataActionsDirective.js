@@ -578,7 +578,7 @@
                 // Build a list of groups by pair (except for Digitaal Vlaanderen).
                 // eg.
                 // () Digitaal Vlaanderen
-                // () Datapublicatie Digitaal Vlaanderen
+                // () DataPublicatie Digitaal Vlaanderen
                 // Stad Gent
                 // () Managed by yourself
                 // () Managed by DataPublicatie
@@ -587,19 +587,22 @@
                   scope.mapOfGroups[group.name] = group;
                 });
 
+                var dvGroupNames = [
+                  "Digitaal Vlaanderen",
+                  "DataPublicatie Digitaal Vlaanderen"
+                ];
+
                 scope.vlGroups = response.data
                   .filter(function (group) {
-                    return (
-                      group.name.indexOf("Datapublicatie") === -1 &&
-                      group.name.indexOf("Digitaal Vlaanderen") === -1
-                    );
+                    // include 'empty' vlType for dev-purpose groups
+                    return group.vlType === "metadatavlaanderen" || !group.vlType;
                   })
                   .sort(function (a, b) {
                     return a.label[scope.lang].localeCompare(b.label[scope.lang]);
                   });
 
                 scope.dvGroup = response.data.filter(function (group) {
-                  return group.name.indexOf("Digitaal Vlaanderen") !== -1;
+                  return group.vlType === "digitaalvlaanderen";
                 });
 
                 //scope.groups = response.data;
@@ -616,10 +619,10 @@
                   scope.groups.push(group);
 
                   var datapublicatieGroup =
-                    scope.mapOfGroups["Datapublicatie " + group.name];
+                    scope.mapOfGroups["DataPublicatie " + group.name];
                   if (datapublicatieGroup) {
                     datapublicatieGroup.vllabel = $translate.instant(
-                      "groupManagedByDatapublicatie"
+                      "groupManagedByDataPublicatie"
                     );
                     scope.groups.push(datapublicatieGroup);
                   }
