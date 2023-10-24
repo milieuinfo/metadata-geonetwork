@@ -868,7 +868,7 @@
     "metadata/delete/profilePublishedMetadata-help": "Minimum gebruikersprofiel dat gepubliceerde metadata mag verwijderen (Editor, Reviewer, Administrator). De standaard waarde is Editor.",
     "metadata/batchediting": "Metadata Batch Editing",
     "metadata/batchediting/accesslevel": "Select the minimum user profile allowed to access batch editing",
-    "metadata/batchediting/accesslevel-help": "Select the minimum user profile allowed to access batch editing (Editor, Reviewer or Administrator). The default value is Editor.",
+    "metadata/batchediting/accesslevel-help": "Selecteer het minimum gebruikersprofiel dat records in batch mag editeren (Editor, Reviewer, Admin). De standaard waarde is Editor.",
     "metadata/publication": "Metadata publicatie",
     "metadata/publication/profilePublishMetadata": "Minimum gebruikersprofiel dat metadata mag publiceren",
     "metadata/publication/profilePublishMetadata-help": "Minimum gebruikersprofiel dat metadata mag publiceren (Reviewer, Administrator). De standaard waarde is Reviewer.",
