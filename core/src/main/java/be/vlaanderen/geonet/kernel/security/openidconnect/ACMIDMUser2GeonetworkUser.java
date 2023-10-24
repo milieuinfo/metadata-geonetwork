@@ -81,7 +81,7 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                 String groupName = computeGroupName(userOrgCode, userOrgName, roleOrgCode, isDp);
                 Group group;
                 if(roleOrgCode.trim().equals("OVO002949")) {
-                    // Digitaal Vlaanderen or Datapublicatie Digitaal Vlaanderen both have the same vlType+orgCode
+                    // Digitaal Vlaanderen or DataPublicatie Digitaal Vlaanderen both have the same vlType+orgCode
                     // we need to differentiate on name here
                     group = groupRepository.findByName(groupName);
                 } else {
@@ -142,7 +142,7 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                                     String userOrgName,
                                     String roleOrgCode,
                                     boolean isDp) {
-        String dpPrefix = "Datapublicatie ";
+        String dpPrefix = "DataPublicatie ";
         String result = "";
         if(roleOrgCode.equals(userOrgCode)) {
             result = (isDp ? dpPrefix + userOrgName : userOrgName);
