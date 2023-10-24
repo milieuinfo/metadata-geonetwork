@@ -132,7 +132,7 @@
   "valid_inspire--1": "Onbekend",
   "inspireApiQuotaCurrentValue": "JRC INSPIRE validator API usage information",
   "inspireApiQuotaValidation": "Number of validation:",
-  "inspireApiQuotaRemaining": "Remaining:",
+  "inspireApiQuotaRemaining": "Resterend:",
   "facet-OrgForResource": "Organisaties",
   "facet-sourceCatalogue": "Catalogen",
   "facet-groupOwner": "Record groepen",
