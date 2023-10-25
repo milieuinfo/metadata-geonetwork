@@ -1,5 +1,6 @@
 trigger:
   - develop
+  - beta
 
 variables:
   - name: subscription
@@ -12,6 +13,11 @@ variables:
     value: $(Pipeline.Workspace)/.m2/repository
   - name: mavenCacheOpts
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
+  - name: namespace
+    ${{ if eq(variables['Build.SourceBranchName'], 'beta') }}:
+    value: bet
+    ${{ else }}:
+    value: dev
 
 jobs:
   - job: skipcheck
@@ -23,6 +29,7 @@ jobs:
           substring='skipci'
           echo "> substring: $substring"
           echo "> commit message: $COMMIT_MESSAGE"
+          echo "> namespace: $(namespace)
           if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
           then
             echo "> '$substring' was found in the commit message."
@@ -43,6 +50,11 @@ jobs:
       - checkout: self
         displayName: Set up repository
         submodules: recursive # needed for submodules
+      - task: CmdLine@2
+        displayName: Display deployment
+        inputs:
+        script: |
+          echo '${{ variables.deployTarget }}'
       - task: AzureCLI@2
         displayName: Configure access to aks cluster
         inputs:
