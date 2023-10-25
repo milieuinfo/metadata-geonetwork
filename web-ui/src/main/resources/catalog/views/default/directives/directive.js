@@ -188,7 +188,6 @@
                     { from: "submitted_for_removed", to: "approved", level: "danger" },
                     { from: "submitted_for_removed", to: "removed" },
                     { from: "submitted_for_removed", to: "retired" },
-                    { from: "submitted_for_retired", to: "approved", level: "danger" },
                     { from: "submitted_for_retired", to: "removed" },
                     { from: "submitted_for_retired", to: "retired" }
                   ]),
