@@ -169,7 +169,7 @@
   "ui-facetConfig": "Configuratie facets",
   "ui-facetConfig-help": "Deze configuratie wordt gebruikt om facetten weer te geven, met behulp van term aggregaties of filters. Bekijk <a href=\"https://geonetwork-opensource.org/manuals/4.0.x/en/customizing-application/configuring-faceted-search.html\">de documentatie</a> voor meer informatie.",
   "resourceEvents": "Events in bronnen",
-  "resourceEdition": "Edition",
+  "resourceEdition": "Versiedatum",
   "resourceVerticalRange": "Verticale dekking",
   "searchBadRequest": "Query heeft een fout veroorzaakt. Bekijk de console voor meer details.",
   "searchInvalidResponse": "Query gaf een ongeldig resultaat terug. Bekijk de console voor meer details.",
