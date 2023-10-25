@@ -38,5 +38,7 @@
   "serviceType-download": "Downloadbaar",
   "serviceType-view": "Raadpleegbaar",
   "sortBy-changeDateDesc": "laatst aangepast",
-  "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
+  "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "Revision": "Versie",
+  "resourceEdition": "Versiedatum"
 }
