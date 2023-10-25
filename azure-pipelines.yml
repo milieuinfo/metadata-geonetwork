@@ -15,9 +15,9 @@ variables:
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
   - name: namespace
     ${{ if eq(variables['Build.SourceBranchName'], 'beta') }}:
-    value: bet
+      value: bet
     ${{ else }}:
-    value: dev
+      value: dev
 
 jobs:
   - job: skipcheck
