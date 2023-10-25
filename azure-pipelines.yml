@@ -1,7 +1,3 @@
-trigger:
-  - develop
-  - beta
-
 variables:
   - name: subscription
     value: METADATA-dev
