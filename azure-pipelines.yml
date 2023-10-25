@@ -1,6 +1,3 @@
-trigger:
-  - develop
-
 variables:
   - name: subscription
     value: METADATA-dev
@@ -12,6 +9,11 @@ variables:
     value: $(Pipeline.Workspace)/.m2/repository
   - name: mavenCacheOpts
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
+  - name: namespace
+    ${{ if eq(variables['Build.SourceBranchName'], 'beta') }}:
+      value: bet
+    ${{ else }}:
+      value: dev
 
 jobs:
   - job: skipcheck
@@ -23,6 +25,7 @@ jobs:
           substring='skipci'
           echo "> substring: $substring"
           echo "> commit message: $COMMIT_MESSAGE"
+          echo "> namespace: $(namespace)"
           if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
           then
             echo "> '$substring' was found in the commit message."
@@ -115,7 +118,7 @@ jobs:
           Dockerfile: 'web/Dockerfile'
           tags: |
             latest
-            develop
+            $(namespace)
             $(GIT_COMMIT_SHA)
             $(VL_GEONETWORK_VERSION)
       - task: Bash@3
@@ -138,14 +141,14 @@ jobs:
             # create an empty liquibase.properties file
             touch liquibase.properties
             # necessary variables are found in environment
-            bash execute-on-env.sh -n dev
+            bash execute-on-env.sh -n $(namespace)
       - task: Bash@3
-        displayName: Rolling restart of geonetwork
+        displayName: Rolling restart of geonetwork ($(namespace))
         env:
           AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
           AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
         inputs:
           targetType: 'inline'
           script: |
-            kubectl rollout restart -n dev deployment/geonetwork
-            kubectl rollout restart -n dev deployment/geonetwork-replica
+            kubectl rollout restart -n $(namespace) deployment/geonetwork
+            kubectl rollout restart -n $(namespace) deployment/geonetwork-replica
