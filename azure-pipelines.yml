@@ -29,7 +29,7 @@ jobs:
           substring='skipci'
           echo "> substring: $substring"
           echo "> commit message: $COMMIT_MESSAGE"
-          echo "> namespace: $(namespace)
+          echo "> namespace: $(namespace)"
           if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
           then
             echo "> '$substring' was found in the commit message."
