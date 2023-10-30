@@ -9,9 +9,6 @@ variables:
     value: $(Pipeline.Workspace)/.m2/repository
   - name: mavenCacheOpts
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
-  - name: namespace
-    displayName: Environment to deploy
-    type: string
 
 jobs:
   - job: skipcheck
@@ -41,6 +38,20 @@ jobs:
     # itss linux build server
     pool: dv-dev-ubuntu2204
     steps:
+      - task: Bash@3
+        displayName: Validate namespace variable
+        inputs:
+          targetType: 'inline'
+          script: |
+            array=("dev" "bet")
+            for i in ${array[@]}
+            do
+              if [[ $i == $(namespace) ]]
+              then
+                echo "namespace checks out" && exit 0
+              fi
+            done
+            exit 1
       - checkout: self
         displayName: Set up repository
         submodules: recursive # needed for submodules
