@@ -10,10 +10,8 @@ variables:
   - name: mavenCacheOpts
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
   - name: namespace
-    ${{ if eq(variables['Build.SourceBranchName'], 'beta') }}:
-      value: bet
-    ${{ else }}:
-      value: dev
+    displayName: Environment to deploy
+    type: string
 
 jobs:
   - job: skipcheck
