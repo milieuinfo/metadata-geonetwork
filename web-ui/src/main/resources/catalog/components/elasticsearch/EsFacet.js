@@ -38,6 +38,7 @@
           "uuid",
           "id",
           "groupOwner",
+          "groupOwnerName",
           "logo",
           "cat",
           "inspireThemeUri",
