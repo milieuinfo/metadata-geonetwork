@@ -833,7 +833,37 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:characterSet"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:supplementalInformation"/>
-        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"/>
+
+        <section name="gmd:extent"
+                 forEach="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"
+                 del=".">
+          <field xpath="*/gmd:description"/>
+
+          <field xpath="*/gmd:geographicElement"/>
+
+          <field xpath="*/gmd:temporalElement"/>
+          <action type="add"
+                  btnLabel="vl-add-temporalElement"
+                  or="temporalElement"
+                  in="*">
+            <template>
+              <snippet>
+                <gmd:temporalElement>
+                  <gmd:EX_TemporalExtent>
+                    <gmd:extent>
+                      <gml:TimePeriod gml:id="">
+                        <gml:beginPosition></gml:beginPosition>
+                        <gml:endPosition></gml:endPosition>
+                      </gml:TimePeriod>
+                    </gmd:extent>
+                  </gmd:EX_TemporalExtent>
+                </gmd:temporalElement>
+              </snippet>
+            </template>
+          </action>
+
+          <field xpath="*/gmd:verticalElement"/>
+        </section>
       </section>
     </tab>
 

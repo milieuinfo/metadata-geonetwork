@@ -123,6 +123,7 @@
   <vl-type-and-resolution>Ruimtelijke schema en resolutie</vl-type-and-resolution>
   <vl-useLimitation-add>Beperkingen van de dataset(serie)</vl-useLimitation-add>
   <vl>Standaard</vl>
+  <vl-add-temporalElement>Temporele begrenzing</vl-add-temporalElement>
 
   <addConformity>Conformiteit toevoegen</addConformity>
   <constraintInfo>Toegang restrictie informatie</constraintInfo>
