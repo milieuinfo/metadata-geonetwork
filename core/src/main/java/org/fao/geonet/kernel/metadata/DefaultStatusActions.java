@@ -627,7 +627,6 @@ public class DefaultStatusActions implements StatusActions {
                 StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
-                StatusValue.Status.APPROVED,
                 StatusValue.Status.RETIRED,
                 StatusValue.Status.REMOVED
         ));

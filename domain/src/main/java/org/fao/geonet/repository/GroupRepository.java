@@ -61,8 +61,8 @@ public interface GroupRepository extends GeonetRepository<Group, Integer>, Group
      * Look up a group by its orgCode
      *
      * @param orgCode the orgCode of the group
-     * @param isMdc whether the group is a metadatacenter group
+     * @param vlType the type of the groupOwner
      */
     @Nullable
-    Group findByOrgCodeAndMdc(@Nonnull String orgCode, @Nonnull Boolean isMdc);
+    Group findByOrgCodeAndVlType(@Nonnull String orgCode, @Nullable String vlType);
 }

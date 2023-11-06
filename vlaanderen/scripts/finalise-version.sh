@@ -96,7 +96,11 @@ git push --set-upstream $remote "$branch"
 git checkout "$current_branch"
 git branch -D "$branch"
 
+# not deleting the finalise branch anymore... this could be used to easily deploy to beta
+# - liquibase update
+# - ...
+
 # if the SNAPSHOT finalise branch was used... delete it
-if  [[ -n "$branch1" ]]; then
-  git branch -D "$branch1"
-fi
+#if  [[ -n "$branch1" ]]; then
+#  git branch -D "$branch1"
+#fi

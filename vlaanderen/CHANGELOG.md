@@ -3,13 +3,31 @@ All notable changes to this project will be documented in this file. These chang
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.3-SNAPSHOT]
+## [1.1.5-SNAPSHOT]
+- Added group owner detail to record cards - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29051)
+
+## [1.1.4] - 2023-10-25
+- Removed DataPublicatie portal - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28851)
+- Workflow optimisation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28849)
+
+
+## [1.1.3] - 2023-10-24
+
+### vlaanderen
+- Added WCS-2.0.0 as OGC-WCS service type - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28482)
+- Added missing hover labels for search buttons - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28193)
+- Enabled subportals - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28552)
 - Embedded feature catalog information reintroduced - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28306)
+
+### core-geonetwork
+- Merged core-geonetwork 4.4.1-SNAPSHOT
+- Handle empty code list values - [pr-core](https://metadata.vlaanderen.be/srv/dut/catalog.search#/metadata/f1e77b4f-a174-4e2d-9af7-fe7f548b5a5c)
+
 
 ## [1.1.2] - 2023-10-16
 - Ordering workflow statuses in logical way - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27923)
 - Publishing draft now sets group owner correctly - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28255)
-
+ 
 
 ## [1.1.1] - 2023-09-29
 

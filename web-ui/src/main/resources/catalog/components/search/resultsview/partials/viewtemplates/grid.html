@@ -74,8 +74,9 @@
       </div>
       <div class="gn-md-contact">
         <!-- Handle string and array results -->
-        {{[].concat(md[searchResultContact || 'OrgForResource'])[0]}}
+        {{ 'contact' | translate }}: <i>{{[].concat(md[searchResultContact || 'OrgForResource'])[0]}}</i>
       </div>
+      <div data-ng-show="md.groupOwnerName!=''">{{'groupOwner' | translate}}: <i>{{md.groupOwnerName}}</i></div>
     </div>
     <!-- /.gn-card-body -->
 

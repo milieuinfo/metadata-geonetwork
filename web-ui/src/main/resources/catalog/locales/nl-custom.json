@@ -15,9 +15,10 @@
   "facet-th_GEMET-INSPIREthemesversion1-0.link": "INSPIRE thema's",
   "facet-th_datatheme_tree": "Data.gov.be thema's",
   "featureAttributeTable": "Entiteit",
-  "groupManagedByDatapublicatie": "Beheerd door DataPublicatie",
+  "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
   "host.name": "Hostnaam",
+  "link": "Download",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
   "mdStatus-approved": "Gepubliceerd",
@@ -32,9 +33,12 @@
   "mdStatus-submitted_for_removed": "Ingediend voor verwijdering",
   "mdStatus-submitted_for_retired": "Ingediend voor depublicatie",
   "onlyMyRecord": "Mijn Metadatarecords",
+  "pinAction": "Aan lijst pinnen",
   "serviceType-discovery": "Zoekdienst",
   "serviceType-download": "Downloadbaar",
   "serviceType-view": "Raadpleegbaar",
   "sortBy-changeDateDesc": "laatst aangepast",
-  "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
+  "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "Revision": "Versie",
+  "resourceEdition": "Versiedatum"
 }
