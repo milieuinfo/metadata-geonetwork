@@ -2056,64 +2056,71 @@
               </snippet>
               <snippet label="vl-Regelingvoornietvermeldtypevangebruik">
                 <gmd:otherConstraints>
-                  <gco:CharacterString>De gegevens zijn beschermd door het auteursrecht. Indien u een ander type van gebruik wil maken
-                    van de gegevens, dan de hier vermelde, dient u zich te wenden tot de eigenaar van de gegevens.
+                  <gco:CharacterString>
+                    De gegevens zijn beschermd door het auteursrecht. Indien u een ander type van gebruik wil maken van de gegevens, dan de hier vermelde, dient u zich te wenden tot de eigenaar van de gegevens.
                   </gco:CharacterString>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-Bronvermeldingsvoorschrift">
                 <gmd:otherConstraints>
-                  <gco:CharacterString>Bronvermeldingsvoorschrift:</gco:CharacterString>
+                  <gco:CharacterString>
+                    Bronvermeldingsvoorschrift:
+                  </gco:CharacterString>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-cc0">
                 <gmd:otherConstraints>
-                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/creative-commons-zero-verklaring/v1.0">Creative Commons Zero verklaring</gmx:Anchor>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/creative-commons-zero-verklaring/v1.0">
+                    Creative Commons Zero verklaring
+                  </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-Licentievoorhergebruikoptevragen">
                 <gmd:otherConstraints>
-                  <gmx:Anchor
-                    xlink:href="http://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/conditionsUnknown">Deze
-                    dataset betreft overheidsinformatie. Indien u deze gegevens wil hergebruiken, dient u zich te wenden tot de eigenaar
-                    van de informatie.
+                  <gmx:Anchor xlink:href="http://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/conditionsUnknown">
+                    Deze dataset betreft overheidsinformatie. Indien u deze gegevens wil hergebruiken, dient u zich te wenden tot de eigenaar van de informatie.
                   </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-VlaamseModellicentievoorgratishergebruik">
                 <gmd:otherConstraints>
-                  <gmx:Anchor
-                    xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0">Modellicentie voor gratis hergebruik</gmx:Anchor>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0">
+                    Modellicentie voor gratis hergebruik
+                  </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-VlaamseModellicentiehergebruiktegenvergoeding">
                 <gmd:otherConstraints>
-                  <gmx:Anchor
-                    xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-hergebruik-tegen-vergoeding/v1.0">Modellicentie hergebruik tegen vergoeding</gmx:Anchor>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-hergebruik-tegen-vergoeding/v1.0">
+                    Modellicentie hergebruik tegen vergoeding
+                  </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-Onvoorwaardelijkhergebruik">
                 <gmd:otherConstraints>
-                  <gmx:Anchor
-                    xlink:href="https://data.vlaanderen.be/id/licentie/onvoorwaardelijk-hergebruik/v1.0">Onvoorwaardelijk hergebruik</gmx:Anchor>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/onvoorwaardelijk-hergebruik/v1.0">
+                    Onvoorwaardelijk hergebruik
+                  </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-Geenbeperkingopdepublieketoegang">
                 <gmd:otherConstraints>
-                  <gmx:Anchor xlink:href="http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations">Geen
-                    beperkingen op de publieke toegang.
+                  <gmx:Anchor xlink:href="http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations">
+                    Geen beperkingen op de publieke toegang.
                   </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-GebruikdoorVlaamseinstanties">
                 <gmd:otherConstraints>
-                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-deelnemers-GDI-Vlaanderen/v1.0">Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI, door deelnemers aan GDI-Vlaanderen
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-deelnemers-GDI-Vlaanderen/v1.0">
+                    Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI, door deelnemers aan GDI-Vlaanderen
                   </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
               <snippet label="vl-Gebruikdoorniet-Vlaamseinstanties">
                 <gmd:otherConstraints>
-                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-instanties-niet-deelnemers-GDI-Vlaanderen/v1.0">Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI door instanties die geen deelnemer zijn aan GDI-Vlaanderen
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-instanties-niet-deelnemers-GDI-Vlaanderen/v1.0">
+                    Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI door instanties die geen deelnemer zijn aan GDI-Vlaanderen
                   </gmx:Anchor>
                 </gmd:otherConstraints>
               </snippet>
