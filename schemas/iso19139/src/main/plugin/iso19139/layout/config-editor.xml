@@ -1089,6 +1089,21 @@
         <section name="gmd:lineage">
           <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:statement"/>
 
+          <action type="add"
+                  or="lineage" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+            <template>
+              <snippet>
+                <gmd:lineage>
+                  <gmd:LI_Lineage>
+                    <gmd:statement>
+                      <gco:CharacterString/>
+                    </gmd:statement>
+                  </gmd:LI_Lineage>
+                </gmd:lineage>
+              </snippet>
+            </template>
+          </action>
+          
           <section name="gmd:processStep"
                    forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep"
                    del=".">
