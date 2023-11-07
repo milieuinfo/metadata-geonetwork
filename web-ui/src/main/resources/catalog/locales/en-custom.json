@@ -22,7 +22,7 @@
   "linkToFeatureCatalog": "Link to a feature catalog",
   "linkToParent": "Link to a dataset series",
   "mdStatus-approved": "Approved and published",
-  "mdStatus-approved_for_published": "Approved for publication",
+  "mdStatus-approved_for_published": "Ready for publication",
   "mdStatus-draft": "Draft",
   "mdStatus-rejected": "Rejected",
   "mdStatus-rejected_for_removed": "Rejected for removal",

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+  <changeSet author="joachim" id="00035-status-description-label">
+    <!-- gepubliceerd > goedgekeurd en gepubliceerd -->
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Goedgekeurd en gepubliceerd'"/>
+      <where>iddes = 2 and langid = 'dut'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Genehmigt und veröffentlicht'"/>
+      <where>iddes = 2 and langid = 'ger'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approved and published'"/>
+      <where>iddes = 2 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Approuvé et publié'"/>
+      <where>iddes = 2 and langid = 'fre'</where>
+    </update>
+    <!-- goedgekeurd voor publicatie	> klaar voor publicatie-->
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Klaar voor publicatie'"/>
+      <where>iddes = 8 and langid = 'dut'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Zur Veröffentlichung bereit'"/>
+      <where>iddes = 8 and langid = 'ger'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Ready for publication'"/>
+      <where>iddes = 8 and langid = 'eng'</where>
+    </update>
+    <update tableName="statusvaluesdes">
+      <column name="label" valueComputed="'Prêt à être publié'"/>
+      <where>iddes = 8 and langid = 'fre'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
