@@ -38,7 +38,5 @@
   "serviceType-download": "Téléchargeable",
   "serviceType-view": "Visible",
   "sortBy-changeDateDesc": "dernière mise à jour",
-  "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, propulsé par GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
-  "Révision": "Version",
-  "resourceEdition": "Date de version"
+  "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, propulsé par GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
 }
