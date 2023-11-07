@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### core-geonetwork
 - Added Data Quality information to record view - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7469) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29153)
+- Modified display of draft copies - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7477) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29234)
 
 
 ## [1.1.4] - 2023-10-25
