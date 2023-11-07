@@ -470,6 +470,18 @@
           };
           if (mode == "fcats") {
             params.uuidref = md.uuid;
+            // vl: adding the following parameters as they are needed to populate CI_Citation for the embedded fcats
+            var resourceDate = md.resourceDate;
+            if (resourceDate) {
+              var revisionDate = resourceDate.find(function (rd) {
+                return rd.type === "revision";
+              });
+              if (revisionDate) {
+                // truncate to date (keep xxxx-xx-xx, drop the rest)
+                params.versionDate = revisionDate.date.replace(/^([0-9]{4}-[0-9]{2}-[0-9]{2}).*$/, '$1');
+              }
+            }
+            params.versionNumber = md.resourceEdition;
           } else {
             params[mode + "Uuid"] = md.uuid;
           }

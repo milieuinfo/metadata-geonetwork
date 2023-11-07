@@ -47,6 +47,8 @@
           "resourceType",
           "resourceTitle*",
           "resourceAbstract*",
+          "resourceDate",
+          "resourceEdition",
           "draft",
           "owner",
           "link",
