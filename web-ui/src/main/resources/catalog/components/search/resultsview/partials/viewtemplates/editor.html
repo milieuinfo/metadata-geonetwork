@@ -25,7 +25,7 @@
               <a
                 href=""
                 data-ng-show="md.isTemplate == 'n'"
-                data-ng-href="catalog.search#/{{(md.draft == 'y')?'metadraf':'metadata'}}/{{md.uuid}}"
+                data-ng-href="catalog.search#/{{(md.draft == 'y') ? 'metadraf' : 'metadata'}}/{{md.uuid}}"
                 title="{{md.resourceAbstract}}"
                 class="gn-break"
               >
@@ -39,10 +39,11 @@
               <a
                 href=""
                 data-ng-show="md.isTemplate == 'y'"
-                data-ng-href="catalog.search#/{{(md.draft == 'y')?'metadraf':'metadata'}}/{{md.getUuid()}}"
+                data-ng-href="catalog.search#/{{(md.draft == 'y') ? 'metadraf' : 'metadata'}}/{{md.getUuid()}}"
                 title="{{md.abstract}}"
                 ng-bind-html="md.resourceTitle"
               ></a>
+
               <span data-ng-show="md.isTemplate == 's'">{{md.resourceTitle}}</span>
               <div class="gn-record-details text-muted">
                 <small><span data-translate="">owner</span>:</small>
@@ -61,8 +62,14 @@
                     class="text-muted gn-status"
                     data-ng-class="{'text-success': md.mdStatus == 2, 'text-warning': md.mdStatus == 4}"
                     data-ng-if="md.mdStatus < 50 && isMdWorkflowEnable"
-                    >{{::md.statusWorkflow | getStatusLabel}}</small
                   >
+                    <span data-ng-if="md.draft = 'e'"
+                      >{{::md.statusWorkflow | getStatusLabel}}</span
+                    >
+                    <span data-ng-if="md.draft = 'y'"
+                      >{{::'status-' + md.mdStatus | translate}}</span
+                    >
+                  </small>
 
                   <small
                     class="text-muted gn-status"
@@ -76,8 +83,8 @@
             </div>
           </div>
           <gn-draft-validation-widget
-            data-ng-if="md.draft == 'e'"
-            metadata="md"
+            data-ng-if="md.draft == 'e' || md.draft == 'y'"
+            data-metadata="md"
           ></gn-draft-validation-widget>
         </div>
         <div class="col-lg-4 col-md-4 gn-nopadding-right">
