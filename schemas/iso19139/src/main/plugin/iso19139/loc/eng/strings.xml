@@ -123,7 +123,7 @@
   <vl-type-and-resolution>Spatial schema and resolution</vl-type-and-resolution>
   <vl-useLimitation-add>Constraints of the dataset(series)</vl-useLimitation-add>
   <vl>Standard</vl>
-  <vl-add-temporalElement>Temporele begrenzing</vl-add-temporalElement>
+  <vl-add-temporalElement>Temporal extent</vl-add-temporalElement>
 
   <addConformity>Add conformity</addConformity>
   <constraintInfo>Access constraint information</constraintInfo>
