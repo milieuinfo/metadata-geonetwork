@@ -756,13 +756,14 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceSpecificUsage"/>
 
 
-        <section name="vl-type-and-resolution">
+        <section name="vl-type-and-resolution"
+                 displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
 
           <action type="add"
                   btnLabel="vl-add-representationType"
                   if="count(gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType) = 0"
-                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+                  or="spatialRepresentationType" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
             <template>
               <snippet label="vl-representationType-is-a-vector">
                 <gmd:spatialRepresentationType gco:nilReason="missing">

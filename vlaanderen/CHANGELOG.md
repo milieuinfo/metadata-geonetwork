@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.1.5-SNAPSHOT]
-- Added schema plugin translations - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28984)
 
 ### vlaanderen
+- Added schema plugin translations - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28984)
 - Added group owner detail to record cards - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29051)
 - Tweaked workflow status labels - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29193)
 - Embedded feature catalog information reintroduced - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28306)
@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fixed thesaurus selection bug in editor - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29156)
 - [Added constraints in ISO editor](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27995)
 - Enable addition of temporal extent in editor - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29166)
+- Hiding inapplicable spatial resolution for services - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29198)
 
 ### core-geonetwork
 - Added Data Quality information to record view - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7469) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29153)
