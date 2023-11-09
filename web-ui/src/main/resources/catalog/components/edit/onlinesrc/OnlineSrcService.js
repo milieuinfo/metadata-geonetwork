@@ -478,7 +478,10 @@
               });
               if (revisionDate) {
                 // truncate to date (keep xxxx-xx-xx, drop the rest)
-                params.versionDate = revisionDate.date.replace(/^([0-9]{4}-[0-9]{2}-[0-9]{2}).*$/, '$1');
+                params.versionDate = revisionDate.date.replace(
+                  /^([0-9]{4}-[0-9]{2}-[0-9]{2}).*$/,
+                  "$1"
+                );
               }
             }
             params.versionNumber = md.resourceEdition;

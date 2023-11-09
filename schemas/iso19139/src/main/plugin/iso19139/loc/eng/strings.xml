@@ -135,6 +135,7 @@
   <vl-Geenbeperkingopdepublieketoegang>Geen beperking op de publieke toegang</vl-Geenbeperkingopdepublieketoegang>
   <vl-GebruikdoorVlaamseinstanties>Gebruik door Vlaamse instanties</vl-GebruikdoorVlaamseinstanties>
   <vl-Gebruikdoorniet-Vlaamseinstanties>Gebruik door niet-Vlaamse instanties</vl-Gebruikdoorniet-Vlaamseinstanties>
+  <vl-add-temporalElement>Temporal extent</vl-add-temporalElement>
 
   <addConformity>Add conformity</addConformity>
   <constraintInfo>Access constraint information</constraintInfo>

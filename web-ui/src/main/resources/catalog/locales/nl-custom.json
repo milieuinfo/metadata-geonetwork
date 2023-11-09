@@ -11,9 +11,9 @@
   "facet-publisherOrgForResource": "Uitgever",
   "facet-resolutionDistance": "Grondresolutie",
   "facet-standardNameObject.default.keyword": "Profiel",
-  "facet-th_GDI-Vlaanderen-trefwoorden": "GDI Vlaanderen Trefwoorden",
+  "facet-th_GDI-Vlaanderen-trefwoorden": "GDI Vlaanderen Trefwoord",
   "facet-th_GEMET-INSPIREthemesversion1-0.link": "INSPIRE thema's",
-  "facet-th_datatheme_tree": "Data.gov.be thema's",
+  "facet-th_datatheme_tree": "Thema",
   "featureAttributeTable": "Entiteit",
   "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
@@ -39,6 +39,6 @@
   "serviceType-view": "Raadpleegbaar",
   "sortBy-changeDateDesc": "laatst aangepast",
   "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
-  "Revision": "Versie",
-  "resourceEdition": "Versiedatum"
+  "saveDraft": "Bewaar",
+  "saveMetadata": "Bewaar"
 }
