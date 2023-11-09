@@ -63,10 +63,10 @@
                     data-ng-class="{'text-success': md.mdStatus == 2, 'text-warning': md.mdStatus == 4}"
                     data-ng-if="md.mdStatus < 50 && isMdWorkflowEnable"
                   >
-                    <span data-ng-if="md.draft = 'e'"
+                    <span data-ng-if="md.draft !== 'y'"
                       >{{::md.statusWorkflow | getStatusLabel}}</span
                     >
-                    <span data-ng-if="md.draft = 'y'"
+                    <span data-ng-if="md.draft === 'y'"
                       >{{::'status-' + md.mdStatus | translate}}</span
                     >
                   </small>
