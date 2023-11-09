@@ -52,6 +52,7 @@
                 title="{$i18n/selectView}"
                 aria-expanded="false">
           <i class="fa fa-eye"></i>
+          <span>{{'chooseAView' | translate}}</span>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
