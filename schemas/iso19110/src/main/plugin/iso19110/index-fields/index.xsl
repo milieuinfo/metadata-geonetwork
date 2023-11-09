@@ -57,11 +57,23 @@
                                'resourceTitleObject', $resourceTitleObject)"/>
       </xsl:for-each>
 
+     
       <resourceAbstract>
-        <xsl:value-of select="/gfc:FC_FeatureCatalogue/gmx:scope/gco:CharacterString|
-        /gfc:FC_FeatureCatalogue/gfc:scope/gco:CharacterString|
-        /gfc:FC_FeatureType/gfc:definition/gco:CharacterString"/>
+        <xsl:value-of select="/gfc:FC_FeatureType/gfc:definition/gco:CharacterString"/>
       </resourceAbstract>
+
+
+      <xsl:for-each select="/gfc:FC_FeatureCatalogue/gmx:scope/gco:CharacterString|
+                            /gfc:FC_FeatureCatalogue/gfc:scope/gco:CharacterString">
+        <xsl:variable name="value" as="node()">
+          <xsl:copy>
+            <xsl:attribute name="codeListValue" select="."/>
+          </xsl:copy>
+        </xsl:variable>
+        <xsl:copy-of select="gn-fn-index:add-codelist-field(
+                                'cl_topic', $value, noLanguages)"/>
+      </xsl:for-each>
+
 
       <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
       <!-- === Version identifier === -->
