@@ -9,4 +9,5 @@
 	url = https://github.com/wenzhixin/bootstrap-table.git
 [submodule "schemas/dcat2"]
 	path = schemas/dcat2
-	url = agiv@vs-ssh.visualstudio.com:v3/agiv/Metadata/MetadataDcatAp
+	url = https://agiv.visualstudio.com/DefaultCollection/Metadata/_git/MetadataDcatAp
+
