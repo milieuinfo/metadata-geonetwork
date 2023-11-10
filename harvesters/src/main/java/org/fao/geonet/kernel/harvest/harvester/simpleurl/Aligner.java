@@ -49,11 +49,7 @@ import org.jdom.Element;
 
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.fao.geonet.kernel.harvest.harvester.csw.Aligner.applyBatchEdits;
@@ -93,6 +89,9 @@ public class Aligner extends BaseAligner<SimpleUrlParams> {
         result.unretrievable = 0;
         result.uuidSkipped = 0;
         result.couldNotInsert = 0;
+        result.deletedUuids = new ArrayList<>();
+        result.createdUuids = new ArrayList<>();
+        result.modifiedUuids = new ArrayList<>();
     }
 
     public HarvestResult align(Map<String, Element> records, Collection<HarvestError> errors) throws Exception {
@@ -134,6 +133,7 @@ public class Aligner extends BaseAligner<SimpleUrlParams> {
                             updateMetadata(e, Integer.toString(metadataUtils.findOneByUuid(e.getKey()).getId()), true);
                             log.debug("Overriding record with uuid " + e.getKey());
                             result.updatedMetadata++;
+                            result.modifiedUuids.add(e.getKey());
                             break;
                         case RANDOM:
                             log.debug("Generating random uuid for remote record with uuid " + e.getKey());
@@ -184,6 +184,7 @@ public class Aligner extends BaseAligner<SimpleUrlParams> {
                 log.debug("  - Removing old metadata with local id:" + id);
                 metadataManager.deleteMetadata(context, id);
                 result.locallyRemoved ++;
+                result.deletedUuids.add(uuid);
             }
         }
         dataMan.forceIndexChanges();
@@ -252,6 +253,7 @@ public class Aligner extends BaseAligner<SimpleUrlParams> {
 
         metadataIndexer.indexMetadata(id, true, IndexingMode.full);
         result.addedMetadata++;
+        result.createdUuids.add(metadata.getUuid());
     }
 
 
@@ -290,6 +292,7 @@ public class Aligner extends BaseAligner<SimpleUrlParams> {
         metadata.getCategories().clear();
         addCategories(metadata, params.getCategories(), localCateg, context, null, true);
         result.updatedMetadata++;
+        result.modifiedUuids.add(metadata.getUuid());
         return true;
     }
 }

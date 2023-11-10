@@ -37,5 +37,6 @@
   "serviceType-discovery": "Zoekdienst",
   "serviceType-download": "Downloadbaar",
   "serviceType-view": "Raadpleegbaar",
+  "COMPUTE_VALIDATION_AFTER_HARVEST": "Valideer records na harvest",
   "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>"
 }

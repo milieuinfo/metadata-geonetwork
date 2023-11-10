@@ -29,6 +29,7 @@ import jeeves.server.context.ServiceContext;
 import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.api.records.editing.InspireValidatorUtils;
 import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.domain.HarvestHistory;
 import org.fao.geonet.domain.Metadata;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.datamanager.IMetadataIndexer;
@@ -36,6 +37,7 @@ import org.fao.geonet.kernel.datamanager.IMetadataValidator;
 import org.fao.geonet.kernel.harvest.event.HarvesterTaskCompletedEvent;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
+import org.fao.geonet.repository.HarvestHistoryRepository;
 import org.fao.geonet.repository.MetadataDraftRepository;
 import org.fao.geonet.repository.MetadataRepository;
 import org.fao.geonet.repository.MetadataValidationRepository;
@@ -43,6 +45,7 @@ import org.fao.geonet.schema.iso19139.ISO19139SchemaPlugin;
 import org.fao.geonet.utils.Xml;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.output.XMLOutputter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +65,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PostHarvestingValidationTask {
     private boolean applyInternalValidation = true;
@@ -89,6 +92,9 @@ public class PostHarvestingValidationTask {
 
     @Autowired
     MetadataValidationRepository validationRepository;
+
+    @Autowired
+    HarvestHistoryRepository historyRepository;
 
     @Autowired
     InspireValidatorUtils inspireValidatorUtils;
@@ -118,6 +124,35 @@ public class PostHarvestingValidationTask {
             harvesterTaskCompletedEvent.getHarvesterId()
         );
 
+        // optimise the records that are validated, make sure we don't validate anything that doesn't need to be
+        Optional<HarvestHistory> harvestHistory = historyRepository.findById(harvesterTaskCompletedEvent.getHarvestHistoryId());
+        if (harvestHistory.isPresent()) {
+            try {
+                // retrieve the uuids that were created or modified by the harvester job
+                Element infoAsXml = harvestHistory.get().getInfoAsXml();
+                // createdUuids/modifiedUuids is not set by all harvesters - only optimise validation tasks if they are set
+                if (infoAsXml != null &&
+                    infoAsXml.getChild("createdUuids") != null &&
+                    infoAsXml.getChild("modifiedUuids") != null) {
+                    Set<String> uuidsToConsider = new HashSet<>();
+                    Arrays.asList("createdUuids", "modifiedUuids").forEach(name -> {
+                        Element uuids = infoAsXml.getChild(name);
+                        if (uuids != null) {
+                            Stream<Element> children = uuids.getChildren().stream()
+                                .filter(e -> e instanceof Element);
+                            children
+                                .map(Element::getText)
+                                .forEach(uuidsToConsider::add);
+                        }
+                    });
+                    // remove uuids that were not created or modified, these don't have to be validated again
+                    harvesterRecords.removeIf(m -> !uuidsToConsider.contains(m.getUuid()));
+                }
+            } catch (IOException | JDOMException e) {
+                logger.error("Could not parse harvest history to optimise validation task (harvester id {})", harvestHistory.get().getId());
+            }
+        }
+
         List<Integer> recordIds = harvesterRecords.stream().map(Metadata::getId).collect(Collectors.toList());
         logger.debug("ValidationTask started on {} record(s)",
             recordIds.size());
@@ -137,7 +172,7 @@ public class PostHarvestingValidationTask {
                 if (schema.equals("iso19139")) {    // TODO: Support ISO19115-3
                     runInspireValidation(metadata);
                 } else {
-                    logger.debug("ValidationTask / {} ({}) / Validation done in {}.",
+                    logger.debug("ValidationTask / {} ({}) / Validation done in {}ms.",
                         metadata.getUuid(),
                         schema,
                         Duration.between(start, Instant.now()).toMillis());

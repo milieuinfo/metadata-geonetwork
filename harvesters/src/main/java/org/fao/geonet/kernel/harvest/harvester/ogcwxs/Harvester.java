@@ -176,6 +176,9 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
         this.params = params;
 
         result = new HarvestResult();
+        result.deletedUuids = new ArrayList<>();
+        result.createdUuids = new ArrayList<>();
+        result.modifiedUuids = new ArrayList<>();
 
         GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
         dataMan = gc.getBean(DataManager.class);
@@ -266,6 +269,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
                 metadataManager.deleteMetadata(context, id);
 
                 result.locallyRemoved++;
+                result.deletedUuids.add(uuid);
             }
         }
 
@@ -428,9 +432,11 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
 
         if (!dataMan.existsMetadataUuid(uuid)) {
             result.addedMetadata++;
+            result.createdUuids.add(metadata.getUuid());
             metadata = metadataManager.insertMetadata(context, metadata, md, IndexingMode.none, false, UpdateDatestamp.NO, false, false);
         } else {
             result.updatedMetadata++;
+            result.modifiedUuids.add(metadata.getUuid());
             String id = dataMan.getMetadataId(uuid);
             metadata.setId(Integer.valueOf(id));
             metadataManager.updateMetadata(context, id, md, false, false,
@@ -864,6 +870,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
             }
             if (!dataMan.existsMetadataUuid(reg.uuid)) {
                 result.addedMetadata++;
+                result.createdUuids.add(metadata.getUuid());
                 metadata = metadataManager.insertMetadata(context, metadata, xml, IndexingMode.none, false, UpdateDatestamp.NO, false, false);
             } else {
                 result.updatedMetadata++;

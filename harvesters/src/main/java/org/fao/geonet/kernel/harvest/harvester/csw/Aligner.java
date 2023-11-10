@@ -115,6 +115,9 @@ public class Aligner extends BaseAligner<CswParams> {
         result.uuidSkipped = 0;
         result.couldNotInsert = 0;
         result.xpathFilterExcluded = 0;
+        result.deletedUuids = new ArrayList<>();
+        result.createdUuids = new ArrayList<>();
+        result.modifiedUuids = new ArrayList<>();
 
         //--- setup get-record-by-id request
 
@@ -262,6 +265,7 @@ public class Aligner extends BaseAligner<CswParams> {
                 log.debug("  - Removing old metadata with local id:" + id);
                 metadataManager.deleteMetadata(context, id);
                 result.locallyRemoved++;
+                result.deletedUuids.add(uuid);
             }
         }
         dataMan.forceIndexChanges();
@@ -369,6 +373,7 @@ public class Aligner extends BaseAligner<CswParams> {
 
         metadataIndexer.indexMetadata(id, true, IndexingMode.full);
         result.addedMetadata++;
+        result.createdUuids.add(ri.uuid);
     }
 
     public static void applyBatchEdits(
@@ -433,6 +438,7 @@ public class Aligner extends BaseAligner<CswParams> {
                 if (updatingLocalMetadata(ri, id, force)) {
                     metadataIndexer.indexMetadata(id, true, IndexingMode.full);
                     result.updatedMetadata++;
+                    result.modifiedUuids.add(ri.getUuid());
                 }
             }
         }

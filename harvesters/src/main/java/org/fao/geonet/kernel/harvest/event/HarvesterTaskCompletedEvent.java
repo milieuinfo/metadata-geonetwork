@@ -30,17 +30,20 @@ import java.util.List;
 
 public class HarvesterTaskCompletedEvent extends ApplicationEvent {
 
-    private String harvesterId;
-    public HarvesterTaskCompletedEvent(Object source, String harvesterId) {
+    private final String harvesterId;
+    private final int harvestHistoryId;
+
+    public HarvesterTaskCompletedEvent(Object source, String harvesterId, int harvestHistoryId) {
         super(source);
         this.harvesterId = harvesterId;
+        this.harvestHistoryId = harvestHistoryId;
     }
 
     public String getHarvesterId() {
         return harvesterId;
     }
 
-    public void setHarvesterId(String harvesterId) {
-        this.harvesterId = harvesterId;
+    public int getHarvestHistoryId() {
+        return harvestHistoryId;
     }
 }
