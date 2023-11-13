@@ -333,6 +333,15 @@
             </xsl:for-each-group>
           </xsl:if>
 
+          <rdfResourceIdentifier type="object">
+            {
+            "code": "",
+            "codeSpace": "",
+            "link": "TODO"
+            }
+          </rdfResourceIdentifier>
+
+
           <xsl:for-each select="gmd:identifier/*[string(gmd:code/*)]">
             <resourceIdentifier type="object">{
               "code": "<xsl:value-of select="gn-fn-index:json-escape(gmd:code/(gco:CharacterString|gmx:Anchor))"/>",

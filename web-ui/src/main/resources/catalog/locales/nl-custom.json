@@ -41,6 +41,8 @@
   "saveDraft": "Bewaar",
   "saveMetadata": "Bewaar",
   "versionDetails": "Versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "resourceUriPattern": "Resource URI pattern",
+  "resourceUriPatternHelp": "Pattern gebruikt om URI van de bronnen te genereren tijdens de RDF export. Bv: https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Goedgekeurd record",

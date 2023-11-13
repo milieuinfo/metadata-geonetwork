@@ -40,5 +40,7 @@
   "sortBy-changeDateDesc": "dernière mise à jour",
   "versionDetails": "Version <span class='gn-version'>{{vlversion}}</span>, propulsé par GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
   "saveDraft": "Sauver",
-  "saveMetadata": "Sauver"
+  "saveMetadata": "Sauver",
+  "resourceUriPattern": "Patterne de l'URI des resources",
+  "resourceUriPatternHelp": "Patterne utilisé pour générer les URI des resources lors de l'export RDF. Exemple de valeur: https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}"
 }
