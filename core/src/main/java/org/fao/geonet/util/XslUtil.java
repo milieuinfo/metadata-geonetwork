@@ -1750,8 +1750,17 @@ public final class XslUtil {
             if (response.getHits().getTotalHits().value == 0) {
                 return null;
             }
-            var rdfResourceIdentifier = (ArrayList<HashMap<String, String>>) response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
-            return rdfResourceIdentifier.get(0).get("link");
+
+            var rdfResourceIdentifier = response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
+            // var rdfResourceIdentifier = (ArrayList<HashMap<String, String>>) response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
+            if (rdfResourceIdentifier instanceof HashMap) {
+                return ((HashMap<String, String>)rdfResourceIdentifier).get("link");
+            } else if (rdfResourceIdentifier instanceof ArrayList) {
+                return ((ArrayList<HashMap<String, String>>)rdfResourceIdentifier).get(0).get("link");
+            } else {
+                throw new Exception("Cannot obtain resource URI from " + rdfResourceIdentifier.toString());
+            }
+
         } catch (Exception e) {
             Log.error(Geonet.GEONETWORK,
                 "GET Record resource identifier '" + uuid + "' error: " + e.getMessage(), e);
@@ -1782,5 +1791,14 @@ public final class XslUtil {
 
         SettingManager sm = context.getBean(SettingManager.class);
         return sm.getValue(Settings.SYSTEM_RESOURCE_PREFIX) + "/{resourceType}/{resourceUuid}";
+    }
+
+    /**
+     * Generate a UUID based off a string for consistent results
+     * @param str
+     * @return UUID string
+     */
+    public static String uuidFromString(String str) {
+        return UUID.nameUUIDFromBytes(str.getBytes()).toString();
     }
 }
