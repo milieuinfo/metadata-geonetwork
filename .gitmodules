@@ -10,3 +10,4 @@
 [submodule "schemas/dcat2"]
 	path = schemas/dcat2
 	url = https://agiv.visualstudio.com/DefaultCollection/Metadata/_git/MetadataDcatAp
+

@@ -747,7 +747,7 @@
     "system/oai/cachesize-help": "Het aantal OAI ResultSets dat kan worden opgeslagen in de cache .",
     "system/oai/mdmode": "Datesearch",
     "system/oai/mdmode-help": "Beïnvloedt het gedrag van OAI wanneer de parameters van of tot worden gebruikt. Indien ingesteld op periode wordt de temporele omvang van de metadata doorzocht. Indien ingesteld op datum van wijziging wordt de datum waarop de metadata het laatst is bewerkt doorzocht.",
-    "system/oai/mdmode-valueModificationDate": "wijzigingsdatum",
+    "system/oai/mdmode-valueModificationDate": "Wijzigingsdatum",
     "system/oai/mdmode-valueTemporaExtent": "Temporele dekking",
     "system/oai/tokentimeout": "ResumptionToken Timeout",
     "system/oai/tokentimeout-help": "Het aantal seconden dat een OAI resultset in de cache blijft en kan worden gescrolled met behulp van het OAI resumptionToken. Merk op: herstart GeoNetwork om deze wijziging actief te maken.",
