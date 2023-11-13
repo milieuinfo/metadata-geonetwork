@@ -18,7 +18,7 @@
   "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
   "host.name": "Hostnaam",
-  "link": "Download",
+  "link": "Link",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
   "mdStatus-approved": "Goedgekeurd en gepubliceerd",
@@ -44,6 +44,5 @@
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Goedgekeurd record",
-
   "---end-of-file---": ""
 }
