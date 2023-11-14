@@ -32,9 +32,10 @@
     <!-- /.gn-card-heading -->
     <div class="panel-body gn-card-body">
       <div class="gn-md-contents">
+        <!-- vl - hide 'no thumbnail' indication for feature catalogs -->
         <div
           class="gn-md-thumbnail"
-          data-ng-class="{'gn-md-no-thumbnail': !md.overview[0]}"
+          data-ng-class="{'gn-md-no-thumbnail': !md.overview[0] && md.documentStandard!='iso19110'}"
         >
           <a
             href=""
