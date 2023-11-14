@@ -415,22 +415,6 @@
         return fieldsFilled;
       };
 
-      $scope.getGroup = function (id) {
-        if ($scope.groups) {
-          var result = $scope.groups.filter(function (value) {
-            return value.id === id;
-          });
-          if (result.length > 0) {
-            return result[0];
-          }
-        }
-        return null;
-      };
-
-      $scope.getSelectedGroup = function () {
-        return $scope.getGroup($scope.ownerGroup);
-      };
-
       String.prototype.replaceAll = function (find, replace) {
         var str = this;
         return str.replace(

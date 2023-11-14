@@ -18,7 +18,7 @@
         class="progress progress-striped active"
         data-ng-show="hasTemplates && mdList === null"
       >
-        <div class="progress-bar" style="width: 100%"/>
+        <div class="progress-bar" style="width: 100%" />
       </div>
     </div>
   </div>
@@ -89,28 +89,29 @@
             data-owner-group="ownerGroup"
             lang="lang"
             data-groups="groups"
-            data-selected-group="selectedGroup"
             data-profile="Editor"
             data-exclude-special-groups="true"
           />
         </div>
-        <div class="panel-body alert-success"
-             data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
-             data-ng-show="group.vlType==='datapublicatie'"
+        <div
+          class="panel-body alert-success"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType==='datapublicatie'"
         >
           <span class="fa fa-exclamation-circle"></span>
-          <span
-            data-translate="" data-translate-values="{groupName: getSelectedGroup().label[lang]}"
-          >managedByDp</span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >managedByDp</span
+          >
         </div>
-        <div class="panel-body alert-warning"
-             data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
-             data-ng-show="group.vlType!=='datapublicatie'"
+        <div
+          class="panel-body alert-warning"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType!=='datapublicatie'"
         >
           <span class="fa fa-exclamation-circle"></span>
-          <span
-            data-translate="" data-translate-values="{groupName: getSelectedGroup().label[lang]}"
-          >notManagedByDp</span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >notManagedByDp</span
+          >
         </div>
       </div>
     </div>
@@ -172,7 +173,7 @@
           data-gn-click-and-spin="createNewMetadata()"
           data-ng-disabled="(!activeTpl || !ownerGroup || ((!generateUuid) && (!isMdIdentifierFilled())))"
         >
-          <i class="fa fa-plus"/>
+          <i class="fa fa-plus" />
           <span data-translate="">createMetadata</span>
         </button>
         <button
@@ -197,7 +198,7 @@
         </ul>
       </div>
       <a data-ng-click="cancelCreateMetadata()" class="btn btn-default">
-        <i class="fa fa-close"/>&nbsp;
+        <i class="fa fa-close" />&nbsp;
         <span data-translate="">cancel</span>
       </a>
     </div>
