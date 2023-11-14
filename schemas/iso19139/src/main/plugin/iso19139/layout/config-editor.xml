@@ -559,7 +559,8 @@
       </thesaurusList>
     <sidePanel>
       <directive data-gn-overview-manager=""
-                 data-file-types=".png,.gif,.jpeg,.jpg"/>
+                 data-file-types=".png,.gif,.jpeg,.jpg"
+                 data-editable-thumbnail="true"/>
 
       <!--<directive data-gn-file-uploader=""
                  data-type="onlines"/>-->
@@ -1133,7 +1134,7 @@
               </snippet>
             </template>
           </action>
-          
+
           <section name="gmd:processStep"
                    forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep"
                    del=".">

@@ -41,7 +41,9 @@
         restrict: "A",
         templateUrl:
           "../../catalog/components/edit/onlinesrc/" + "partials/fileUploader.html",
-        scope: {},
+        scope: {
+          "editableThumbnail": "@"
+        },
         link: function (scope, element, attrs) {
           scope.relations = {};
           scope.uuid = undefined;
@@ -1944,7 +1946,7 @@
                  * @returns {boolean}
                  */
                 scope.canEnableLinkButton = function (selectRecords) {
-                  if (selectRecords.length < 1) return false;
+                  if (selectRecords !== undefined && selectRecords.length < 1) return false;
 
                   // Check if the metadata titles are defined
                   for (var i = 0; i < selectRecords.length; i++) {
