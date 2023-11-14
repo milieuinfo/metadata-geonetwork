@@ -52,10 +52,9 @@
         gn-formatter="formatter.defaultUrl"
       >
         <!-- Thumbnail -->
-        <!-- vl - hide 'no thumbnail' indication for feature catalogs -->
         <div
           class="gn-md-thumbnail"
-          data-ng-class="{'gn-md-no-thumbnail': !md.overview[0] && md.documentStandard!='iso19110'}"
+          data-ng-class="{'gn-md-no-thumbnail': !md.hideNoThumbnailIndicator()}"
         >
           <img
             class="gn-img-thumbnail"

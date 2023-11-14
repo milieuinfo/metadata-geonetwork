@@ -41,9 +41,7 @@
         restrict: "A",
         templateUrl:
           "../../catalog/components/edit/onlinesrc/" + "partials/fileUploader.html",
-        scope: {
-          "editableThumbnail": "@"
-        },
+        scope: {},
         link: function (scope, element, attrs) {
           scope.relations = {};
           scope.uuid = undefined;
@@ -71,6 +69,9 @@
             ? "removeThumbnailConfirm"
             : "removeOnlinesrcConfirm";
           scope.removeBtnTitle = scope.isOverview ? "removeThumbnail" : "remove";
+          scope.editableThumbnail = angular.isDefined(attrs["editableThumbnail"])
+              ? attrs["editableThumbnail"]
+              : "false";
 
           var loadRelations = function () {
             gnOnlinesrc.getAllResources([scope.type]).then(function (data) {
