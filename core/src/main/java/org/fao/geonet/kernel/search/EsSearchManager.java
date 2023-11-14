@@ -151,6 +151,7 @@ public class EsSearchManager implements ISearchManager {
             .add(Geonet.IndexFieldNames.RESOURCEABSTRACT + "Object")
             .add("operatesOn")
             .add("rdfResourceIdentifier")
+            .add("th_GDI-Vlaanderen-trefwoorden")
             .build();
 
         FIELDLIST_RELATED_SCRIPTED = ImmutableMap.<String, String>builder()

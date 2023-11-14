@@ -26,6 +26,8 @@ package org.fao.geonet.api.records;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
 import jeeves.server.context.ServiceContext;
@@ -329,6 +331,7 @@ public class MetadataUtils {
                     }
 
                     JsonNode source = mapper.readTree(e.getSourceAsString());
+                    computeDomain(source);
                     ObjectNode doc = mapper.createObjectNode();
                     doc.set("_source", source);
                     EsHTTPProxy.addUserInfo(doc, context);
@@ -924,4 +927,26 @@ public class MetadataUtils {
         }
     }
 
+    // VL Specific
+    private static void computeDomain(JsonNode source) {
+        var factory = JsonNodeFactory.instance;
+        var domain = factory.arrayNode();
+
+        if (source.has("th_GDI-Vlaanderen-trefwoorden")) {
+            var gdiKeywords = (ArrayNode) source.get("th_GDI-Vlaanderen-trefwoorden");
+            gdiKeywords.forEach(gdiKeyword -> {
+                if (gdiKeyword.get("default") == null) {
+                    return;
+                }
+                if ("Vlaamse Open data".equals(gdiKeyword.get("default").asText())) {
+                    domain.add("Open data");
+                }
+                if ("Geografische gegevens".equals(gdiKeyword.get("default").asText())) {
+                    domain.add("Geografisch");
+                }
+            });
+        }
+        var newNode = (ObjectNode) source;
+        newNode.set("domain", domain);
+    }
 }
