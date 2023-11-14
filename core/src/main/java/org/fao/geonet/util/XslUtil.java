@@ -1742,7 +1742,7 @@ public final class XslUtil {
         try {
             var request = new SearchRequest(searchManager.getDefaultIndex());
             var ssb = new SearchSourceBuilder();
-            ssb.fetchSource(new String[]{"rdfResourceIdentifier.link"}, null);
+            ssb.fetchSource(new String[]{"rdfResourceIdentifier"}, null);
             ssb.query(QueryBuilders.matchQuery("uuid", uuid));
             request.source(ssb);
 
@@ -1752,11 +1752,10 @@ public final class XslUtil {
             }
 
             var rdfResourceIdentifier = response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
-            // var rdfResourceIdentifier = (ArrayList<HashMap<String, String>>) response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
-            if (rdfResourceIdentifier instanceof HashMap) {
-                return ((HashMap<String, String>)rdfResourceIdentifier).get("link");
+            if (rdfResourceIdentifier instanceof String) {
+                return (String)rdfResourceIdentifier;
             } else if (rdfResourceIdentifier instanceof ArrayList) {
-                return ((ArrayList<HashMap<String, String>>)rdfResourceIdentifier).get(0).get("link");
+                return ((ArrayList<String>)rdfResourceIdentifier).get(0);
             } else {
                 throw new Exception("Cannot obtain resource URI from " + rdfResourceIdentifier.toString());
             }

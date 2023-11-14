@@ -1398,12 +1398,8 @@
   <!-- RDF URI functions -->
 
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
-    <rdfResourceIdentifier type="object">
-      {
-      "code": "",
-      "codeSpace": "",
-      "link": "<xsl:value-of select="geonet:getRDFResourceURI(.)"/>"
-      }
+    <rdfResourceIdentifier>
+      <xsl:value-of select="geonet:getRDFResourceURI(.)"/>
     </rdfResourceIdentifier>
   </xsl:template>
 
