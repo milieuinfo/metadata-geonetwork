@@ -93,6 +93,26 @@
             data-exclude-special-groups="true"
           />
         </div>
+        <div
+          class="panel-body alert-success"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType==='datapublicatie'"
+        >
+          <span class="fa fa-exclamation-circle"></span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >managedByDp</span
+          >
+        </div>
+        <div
+          class="panel-body alert-warning"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType!=='datapublicatie'"
+        >
+          <span class="fa fa-exclamation-circle"></span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >notManagedByDp</span
+          >
+        </div>
       </div>
     </div>
     <div class="col-sm-3">

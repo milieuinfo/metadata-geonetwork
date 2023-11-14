@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
 
+    private String dpPrefix = "DataPublicatie ";
+
     public UserDetails getUserDetails(OidcIdToken idToken, Map attributes, boolean withDbUpdate) throws Exception {
         SimpleOidcUser simpleUser = simpleOidcUserFactory.create(idToken, attributes);
         if (!StringUtils.hasText(simpleUser.getUsername()))
@@ -73,20 +75,9 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                 else if(technicalGroupName.startsWith("dp-")) {
                     vlType = "datapublicatie";
                 }
-                // special case: if we are Digitaal Vlaanderen, override the type (in both dp / mdv)
-                if(roleOrgCode.trim().equals("OVO002949")) {
-                    vlType = "digitaalvlaanderen";
-                }
 
                 String groupName = computeGroupName(userOrgCode, userOrgName, roleOrgCode, isDp);
-                Group group;
-                if(roleOrgCode.trim().equals("OVO002949")) {
-                    // Digitaal Vlaanderen or DataPublicatie Digitaal Vlaanderen both have the same vlType+orgCode
-                    // we need to differentiate on name here
-                    group = groupRepository.findByName(groupName);
-                } else {
-                    group = groupRepository.findByOrgCodeAndVlType(roleOrgCode, vlType);
-                }
+                Group group = groupRepository.findByOrgCodeAndVlType(roleOrgCode, vlType);
 
                 if (group == null) {
                     group = new Group();
@@ -142,7 +133,7 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                                     String userOrgName,
                                     String roleOrgCode,
                                     boolean isDp) {
-        String dpPrefix = "DataPublicatie ";
+        String dpPrefix = this.dpPrefix;
         String result = "";
         if(roleOrgCode.equals(userOrgCode)) {
             result = (isDp ? dpPrefix + userOrgName : userOrgName);
