@@ -1761,8 +1761,7 @@ public final class XslUtil {
             }
 
         } catch (Exception e) {
-            Log.error(Geonet.GEONETWORK,
-                "GET Record resource identifier '" + uuid + "' error: " + e.getMessage(), e);
+            Log.error(Log.JEEVES, "GET Record resource identifier '" + uuid + "' error: " + e.getMessage(), e);
         }
         return null;
     }
