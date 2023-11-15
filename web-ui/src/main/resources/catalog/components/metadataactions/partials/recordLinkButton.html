@@ -6,7 +6,7 @@
   data-ng-class="{'btn btn-default btn-sm': !isDropDown || iconMode === 'only'}"
   class="text-wrap {{btnClass}}"
   data-ng-click="service.doAction(mainType, link, record)"
-  title="{{link.origin === 'remote' ? ('remoteRecord' | translate) : ('link' | translate)}}"
+  title="{{(link.origin === 'remote' ? ('remoteRecord') : (icon === 'fa-download' ? 'download' : 'link')) | translate }}"
 >
   <i class="fa" data-ng-if="iconMode !== 'none'" data-ng-class="icon" />
   <span class="visible-lg-*" data-ng-if="iconMode !== 'only'">
