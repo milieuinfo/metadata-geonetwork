@@ -56,6 +56,12 @@
           >{{user.profile | translate}}</a
         >
       </li>
+      <li class="dropdown-header hidden-xs" role="menuitem" translate data-ng-show="!user.isAdmin()">group</li>
+      <li role="menuitem" data-ng-show="!user.isAdmin()">
+        <a>
+          <span data-ng-repeat="g in userGroups">{{g}}<br /></span>
+        </a>
+      </li>
       <li role="separator" class="divider hidden-xs"></li>
       <li role="menuitem">
         <a href="{{signoutUrl}}" title="{{'signout' | translate}}">

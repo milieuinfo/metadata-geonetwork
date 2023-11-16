@@ -70,8 +70,8 @@
             : "removeOnlinesrcConfirm";
           scope.removeBtnTitle = scope.isOverview ? "removeThumbnail" : "remove";
           scope.editableThumbnail = angular.isDefined(attrs["editableThumbnail"])
-              ? attrs["editableThumbnail"]
-              : "false";
+            ? attrs["editableThumbnail"]
+            : "false";
 
           var loadRelations = function () {
             gnOnlinesrc.getAllResources([scope.type]).then(function (data) {
@@ -1947,7 +1947,8 @@
                  * @returns {boolean}
                  */
                 scope.canEnableLinkButton = function (selectRecords) {
-                  if (selectRecords !== undefined && selectRecords.length < 1) return false;
+                  if (selectRecords !== undefined && selectRecords.length < 1)
+                    return false;
 
                   // Check if the metadata titles are defined
                   for (var i = 0; i < selectRecords.length; i++) {
