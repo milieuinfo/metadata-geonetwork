@@ -167,10 +167,11 @@
         </div>
       </div>
       <div class="btn-group">
+        <!-- vl - pass 'true' to createNewMetadata to allow editors to modify records in their group -->
         <button
           type="button"
           class="btn btn-success"
-          data-gn-click-and-spin="createNewMetadata()"
+          data-gn-click-and-spin="createNewMetadata(true)"
           data-ng-disabled="(!activeTpl || !ownerGroup || ((!generateUuid) && (!isMdIdentifierFilled())))"
         >
           <i class="fa fa-plus" />
