@@ -36,6 +36,7 @@
                 xmlns:util="java:org.fao.geonet.util.XslUtil"
                 xmlns:date-util="java:org.fao.geonet.utils.DateUtil"
                 xmlns:daobs="http://daobs.org"
+                xmlns:geonet="http://www.fao.org/geonetwork"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
@@ -70,6 +71,8 @@
   Define which association type should be considered as parent. -->
   <xsl:variable name="parentAssociatedResourceType" select="'partOfSeamlessDatabase'"/>
   <xsl:variable name="childrenAssociatedResourceType" select="'isComposedOf'"/>
+
+  <xsl:variable name="uuidRegex" select="'([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}'"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="index"/>
@@ -332,6 +335,7 @@
               </xsl:if>
             </xsl:for-each-group>
           </xsl:if>
+
 
           <xsl:for-each select="gmd:identifier/*[string(gmd:code/*)]">
             <resourceIdentifier type="object">{
@@ -1389,4 +1393,75 @@
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
+
+
+  <!-- RDF URI functions -->
+
+  <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
+    <rdfResourceIdentifier>
+      <xsl:value-of select="geonet:getRDFResourceURI(.)"/>
+    </rdfResourceIdentifier>
+  </xsl:template>
+
+  <xsl:function name="geonet:getRDFResourceURI">
+    <xsl:param name="md" as="node()"/>
+
+    <xsl:variable name="isoScopeCode">
+      <xsl:value-of select="normalize-space($md/gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue)"/>
+    </xsl:variable>
+    <xsl:variable name="resourceType">
+      <xsl:choose>
+        <xsl:when test="$isoScopeCode = 'dataset' or $isoScopeCode = 'nonGeographicDataset'">
+          <xsl:text>dataset</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$isoScopeCode"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="uriPattern" select="util:getUriPattern($md/gmd:fileIdentifier/gco:CharacterString)"/>
+    <xsl:variable name="resourceUUID" select="geonet:getResourceBaseURIOrUUID($md)"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($resourceUUID, 'http://') or starts-with($resourceUUID, 'https://')">
+        <xsl:value-of select="geonet:escapeURI($resourceUUID)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="geonet:escapeURI(replace(replace($uriPattern, '\{resourceType\}', concat($resourceType, 's')), '\{resourceUuid\}', $resourceUUID))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+
+  <xsl:function name="geonet:getResourceBaseURIOrUUID">
+    <xsl:param name="md" as="node()"/>
+    <xsl:variable name="resourceIdentifiers">
+      <xsl:for-each select="$md/gmd:identificationInfo[1]/*/gmd:citation/*/gmd:identifier/*">
+        <xsl:choose>
+          <xsl:when test="gmd:codeSpace/gco:CharacterString/text() != ''">
+            <xsl:value-of select="concat(gmd:codeSpace/gco:CharacterString/text(), gmd:code/gco:CharacterString/text())"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gmd:code/gco:CharacterString/text()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$resourceIdentifiers[matches(., $uuidRegex)][1]">
+        <xsl:value-of select="$resourceIdentifiers[matches(., $uuidRegex)][1]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="util:uuidFromString($md/gmd:fileIdentifier/gco:CharacterString)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="geonet:escapeURI">
+    <xsl:param name="uri"/>
+    <xsl:if test="$uri">
+      <xsl:value-of select="replace(replace(replace(replace(normalize-space($uri), ' ', '%20'), '&lt;', '%3C'), '&gt;', '%3E'), '\\', '%5C')"/>
+    </xsl:if>
+  </xsl:function>
+
 </xsl:stylesheet>

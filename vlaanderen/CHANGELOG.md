@@ -12,10 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Removed mdc portal, added messaging to clarify DataPublicatie group - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29525)
 - Allow editing thumbnails in side panel - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29591)
 - Showing usergroups in login menu - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29697)
+- Implement relation API for DCAT metadata - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29671)
+  - Add RDF resource URI to index for ISO-19139 and DCAT2 records
+  - Add resource URI pattern configuration for CSW and geonet harvesters
+  - Augment `related` object from relation API with `rdfResourceURI` & `domain`
+  - Implement relation linking in DCAT2 plugin
+- Editors can now edit records that were created by admins - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29714)
 - gmd:LanguageCode now uses iso639-2 - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29726)
 
 ### core-geonetwork
 - Modified display of draft copies - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7477) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29234)
+- Fix `linkServiceToDataset` directive default filter on resource type - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7489)
 
 
 ## [1.1.5] - 2023-11-08
