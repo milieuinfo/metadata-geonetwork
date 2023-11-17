@@ -97,10 +97,29 @@
     }
   ]);
   module.directive("gnSigninMenu", [
-    function () {
+    "$http",
+    function ($http) {
       return {
         replace: true,
-        templateUrl: "../../catalog/components/toolbar/partials/menu-signin.html"
+        templateUrl: "../../catalog/components/toolbar/partials/menu-signin.html",
+        link: function ($scope) {
+          $scope.$watch("$parent.user.id", function (newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+              return $http
+                .get("../api/users/" + newValue + "/groups", { cache: true })
+                .then(function (response) {
+                  var uniqueGroupNames = [];
+                  response.data.forEach(function (g) {
+                    var name = g.group.label[$scope.lang];
+                    if (uniqueGroupNames.indexOf(name) === -1) {
+                      uniqueGroupNames.push(name);
+                    }
+                  });
+                  $scope.userGroups = uniqueGroupNames;
+                });
+            }
+          });
+        }
       };
     }
   ]);
