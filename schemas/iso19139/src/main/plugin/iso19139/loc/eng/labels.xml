@@ -1287,6 +1287,11 @@
     <description>Date and time for the content of the dataset</description>
     <_condition>mandatory</_condition>
   </element>
+  <element name="gmd:extent">
+    <label>Extent</label>
+    <description>Information about the spatial, vertical and temporal extent of the dataset.</description>
+    <condition>conditional</condition>
+  </element>
   <element name="gmd:extentTypeCode" id="340.0">
     <label>Extent type code</label>
     <description>Indication of whether the bounding polygon encompasses an area covered by the
