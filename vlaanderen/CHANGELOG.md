@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Augment `related` object from relation API with `rdfResourceURI` & `domain`
   - Implement relation linking in DCAT2 plugin
 - Editors can now edit records that were created by admins - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29714)
+- gmd:LanguageCode now uses iso639-2 - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29726)
 
 ### core-geonetwork
 - Modified display of draft copies - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7477) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29234)
