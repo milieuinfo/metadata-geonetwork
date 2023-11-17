@@ -212,7 +212,8 @@
             $scope.groups.length === 1 &&
             $scope.generateUuid === true
           ) {
-            $scope.createNewMetadata(false);
+            // vl - pass 'true' to createNewMetadata to allow editors to modify records in their group
+            $scope.createNewMetadata(true);
           }
           unregisterFn();
           unregisterMdListFn();
