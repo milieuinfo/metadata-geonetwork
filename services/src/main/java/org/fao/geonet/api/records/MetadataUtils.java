@@ -26,6 +26,8 @@ package org.fao.geonet.api.records;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
 import jeeves.server.context.ServiceContext;
@@ -59,6 +61,7 @@ import org.fao.geonet.repository.MetadataValidationRepository;
 import org.fao.geonet.repository.SourceRepository;
 import org.fao.geonet.repository.specification.MetadataValidationSpecs;
 import org.fao.geonet.services.relations.Get;
+import org.fao.geonet.util.XslUtil;
 import org.fao.geonet.utils.Log;
 import org.jdom.Content;
 import org.jdom.Element;
@@ -173,16 +176,27 @@ public class MetadataUtils {
         // brothers&sisters
         //
         // * All of them could be remote records
+        String mdURI = XslUtil.getRecordResourceURI(md.getUuid());
         Arrays.stream(types).forEach(type -> {
             if (type == RelatedItemType.associated
                 || type == RelatedItemType.hasfeaturecats
                 || type == RelatedItemType.services
                 || type == RelatedItemType.hassources) {
-                queries.put(type,
-                    new RelatedTypeDetails(
-                        String.format("+%s:\"%s\"",
-                            RELATED_INDEX_FIELDS.get(type.value()), md.getUuid())
-                    ));
+                // VL Custom
+                String luceneQuery;
+                if (mdURI != null) {
+                    luceneQuery = String.format(
+                        "%s:\"%s\" OR %s:\"%s\"",
+                        RELATED_INDEX_FIELDS.get(type.value()),
+                        md.getUuid(),
+                        RELATED_INDEX_FIELDS.get(type.value()),
+                        mdURI
+                    );
+                } else {
+                    luceneQuery = String.format("+%s:\"%s\"", RELATED_INDEX_FIELDS.get(type.value()), md.getUuid());
+                }
+
+                queries.put(type, new RelatedTypeDetails(luceneQuery));
             } else if (schemaPlugin != null
                 && (type == RelatedItemType.siblings
                 || type == RelatedItemType.parent
@@ -317,6 +331,7 @@ public class MetadataUtils {
                     }
 
                     JsonNode source = mapper.readTree(e.getSourceAsString());
+                    computeDomain(source);
                     ObjectNode doc = mapper.createObjectNode();
                     doc.set("_source", source);
                     EsHTTPProxy.addUserInfo(doc, context);
@@ -912,4 +927,26 @@ public class MetadataUtils {
         }
     }
 
+    // VL Specific
+    private static void computeDomain(JsonNode source) {
+        var factory = JsonNodeFactory.instance;
+        var domain = factory.arrayNode();
+
+        if (source.has("th_GDI-Vlaanderen-trefwoorden")) {
+            var gdiKeywords = (ArrayNode) source.get("th_GDI-Vlaanderen-trefwoorden");
+            gdiKeywords.forEach(gdiKeyword -> {
+                if (gdiKeyword.get("default") == null) {
+                    return;
+                }
+                if ("Vlaamse Open data".equals(gdiKeyword.get("default").asText())) {
+                    domain.add("Open data");
+                }
+                if ("Geografische gegevens".equals(gdiKeyword.get("default").asText())) {
+                    domain.add("Geografisch");
+                }
+            });
+        }
+        var newNode = (ObjectNode) source;
+        newNode.set("domain", domain);
+    }
 }
