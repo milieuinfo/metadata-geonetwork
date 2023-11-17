@@ -62,6 +62,7 @@ import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.*;
 import org.fao.geonet.index.es.EsRestClient;
 import org.fao.geonet.kernel.*;
+import org.fao.geonet.kernel.datamanager.IMetadataUtils;
 import org.fao.geonet.kernel.datamanager.base.BaseMetadataUtils;
 import org.fao.geonet.kernel.search.CodeListTranslator;
 import org.fao.geonet.kernel.search.EsSearchManager;
@@ -69,6 +70,7 @@ import org.fao.geonet.kernel.search.Translator;
 import org.fao.geonet.kernel.security.SecurityProviderConfiguration;
 import org.fao.geonet.kernel.setting.SettingInfo;
 import org.fao.geonet.kernel.setting.SettingManager;
+import org.fao.geonet.kernel.setting.Settings;
 import org.fao.geonet.kernel.url.UrlChecker;
 import org.fao.geonet.languages.IsoLanguagesMapper;
 import org.fao.geonet.lib.Lib;
@@ -466,7 +468,7 @@ public final class XslUtil {
         return ApplicationContextHolder.get().getBean(org.fao.geonet.NodeInfo.class).getId();
     }
 
-    
+
     public static String getNodeLogo(String key) {
         Optional<Source> source = getSource(key);
         return source.isPresent() ? source.get().getLogo() : "";
@@ -1731,5 +1733,70 @@ public final class XslUtil {
             }
         });
         return listOfLinks;
+    }
+
+    public static String getRecordResourceURI(String uuid) {
+        var client = ApplicationContextHolder.get().getBean(EsRestClient.class);
+        var searchManager = ApplicationContextHolder.get().getBean(EsSearchManager.class);
+
+        try {
+            var request = new SearchRequest(searchManager.getDefaultIndex());
+            var ssb = new SearchSourceBuilder();
+            ssb.fetchSource(new String[]{"rdfResourceIdentifier"}, null);
+            ssb.query(QueryBuilders.matchQuery("uuid", uuid));
+            request.source(ssb);
+
+            var response = client.getClient().search(request, RequestOptions.DEFAULT);
+            if (response.getHits().getTotalHits().value == 0) {
+                return null;
+            }
+
+            var rdfResourceIdentifier = response.getHits().getHits()[0].getSourceAsMap().get("rdfResourceIdentifier");
+            if (rdfResourceIdentifier instanceof String) {
+                return (String)rdfResourceIdentifier;
+            } else if (rdfResourceIdentifier instanceof ArrayList) {
+                return ((ArrayList<String>)rdfResourceIdentifier).get(0);
+            } else {
+                throw new Exception("Cannot obtain resource URI from " + rdfResourceIdentifier.toString());
+            }
+
+        } catch (Exception e) {
+            Log.error(Log.JEEVES, "GET Record resource identifier '" + uuid + "' error: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * Get the metadata URI build pattern based on the source catalog
+     * @param uuid
+     */
+    public static String getUriPattern(String uuid) {
+        ApplicationContext context = ApplicationContextHolder.get();
+        IMetadataUtils metadataUtils = context.getBean(IMetadataUtils.class);
+
+        AbstractMetadata metadata = metadataUtils.findOneByUuid(uuid);
+
+        if (metadata != null && metadata.getHarvestInfo().isHarvested()) {
+            HarvesterSettingRepository harvesterSetting = context.getBean(HarvesterSettingRepository.class);
+            HarvesterSetting uuidSetting = harvesterSetting.findOneByNameAndStoredValueLike("uuid", metadata.getHarvestInfo().getUuid());
+            if (uuidSetting != null && uuidSetting.getParent() != null) {
+                List<HarvesterSetting> resourceUriPatternSetting = harvesterSetting.findChildrenByName(uuidSetting.getParent().getId(), "resourceUriPattern");
+                if (resourceUriPatternSetting.size() > 0 && StringUtils.isNotEmpty(resourceUriPatternSetting.get(0).getValue())) {
+                    return resourceUriPatternSetting.get(0).getValue();
+                }
+            }
+        }
+
+        SettingManager sm = context.getBean(SettingManager.class);
+        return sm.getValue(Settings.SYSTEM_RESOURCE_PREFIX) + "/{resourceType}/{resourceUuid}";
+    }
+
+    /**
+     * Generate a UUID based off a string for consistent results
+     * @param str
+     * @return UUID string
+     */
+    public static String uuidFromString(String str) {
+        return UUID.nameUUIDFromBytes(str.getBytes()).toString();
     }
 }
