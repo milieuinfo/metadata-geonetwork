@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.1.7-SNAPSHOT]
 
+### vlaanderen
+
+### core-geonetwork
+- Styling fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29747) / [core-pr](https://github.com/geonetwork/core-geonetwork/pull/7502)
+
 ## [1.1.6] - 2023-11-17
 
 ### vlaanderen
