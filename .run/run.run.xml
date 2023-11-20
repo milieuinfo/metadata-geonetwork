@@ -27,6 +27,7 @@
       </option>
       <option name="myRunnerParameters">
         <MavenRunnerParameters>
+          <option name="cmdOptions" />
           <option name="profiles">
             <set />
           </option>
@@ -34,11 +35,20 @@
             <list>
               <option value="jetty:run" />
               <option value="-Ddb.type=postgres" />
+              <option value="-Ddb.port=5432" />
+              <option value="-Ddb.username=geonetwork" />
+              <option value="-Ddb.password=geonetwork" />
+              <option value="-Ddb.name=geonetwork" />
+              <option value="-Dgeonetwork.webapp.contextpath=/" />
+              <option value="-Dharvester.scheduler.enabled=true" />
             </list>
           </option>
           <option name="pomFileName" />
           <option name="profilesMap">
             <map />
+          </option>
+          <option name="projectsCmdOptionValues">
+            <list />
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$/web" />
