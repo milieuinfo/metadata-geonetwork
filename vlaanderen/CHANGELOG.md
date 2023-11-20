@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.1.7-SNAPSHOT]
 
 ### vlaanderen
+- Changing group owner now disallowed - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29768)
 
 ### core-geonetwork
 - Styling fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29747) / [core-pr](https://github.com/geonetwork/core-geonetwork/pull/7502)
