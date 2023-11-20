@@ -60,3 +60,8 @@ legend[data-gn-slide-toggle]:before {
 div[ng-include="'../../catalog/views/default/templates/recordView/technical.html'"] > div {
   break-inside: auto;
 }
+
+// do not break a date-containing column
+td[data-ng-if="columnVisibility['date']"] {
+  word-break: inherit !important;
+}
