@@ -4,10 +4,11 @@ This section serves as an appendix to the current Geonetwork documentation. The 
 to the core that are either useful in our environment (e.g. scripts) or vlaanderen-specific.
 
 Topics:
+- [Docker](docs/docker.md)
 - [Git hooks](docs/githooks.md)
+- [Migration](docs/migration.md)
 - [Translation](docs/translation.md)
 - [Versioning](docs/versioning.md)
-- [Docker](docs/docker.md)
 
 ## Getting started
 - Run `git submodule update --init --recursive` before building.

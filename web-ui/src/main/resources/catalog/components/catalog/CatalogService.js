@@ -1000,6 +1000,13 @@
           }
           return res;
         },
+        // check whether we need to hide the 'no-thumbnail' indicator
+        // for VL, we never use thumbnails for iso19110
+        hideNoThumbnailIndicator: function () {
+          return (
+            (this.overview && !this.overview[0]) || this.documentStandard === "iso19110"
+          );
+        },
         getKeywordsGroupedByUriBase: function (thesaurusId, groupExtractionRegex) {
           var thesaurus = this.allKeywords[thesaurusId];
           if (thesaurus && thesaurus.keywords) {

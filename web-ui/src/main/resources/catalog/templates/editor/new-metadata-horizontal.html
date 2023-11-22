@@ -93,6 +93,26 @@
             data-exclude-special-groups="true"
           />
         </div>
+        <div
+          class="panel-body alert-success"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType==='datapublicatie'"
+        >
+          <span class="fa fa-exclamation-circle"></span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >managedByDp</span
+          >
+        </div>
+        <div
+          class="panel-body alert-warning"
+          data-ng-repeat="group in groups | filter:{id:ownerGroup}:true"
+          data-ng-show="group.vlType!=='datapublicatie'"
+        >
+          <span class="fa fa-exclamation-circle"></span>
+          <span data-translate="" data-translate-values="{groupName: group.label[lang]}"
+            >notManagedByDp</span
+          >
+        </div>
       </div>
     </div>
     <div class="col-sm-3">
@@ -147,10 +167,11 @@
         </div>
       </div>
       <div class="btn-group">
+        <!-- vl - pass 'true' to createNewMetadata to allow editors to modify records in their group -->
         <button
           type="button"
           class="btn btn-success"
-          data-gn-click-and-spin="createNewMetadata()"
+          data-gn-click-and-spin="createNewMetadata(true)"
           data-ng-disabled="(!activeTpl || !ownerGroup || ((!generateUuid) && (!isMdIdentifierFilled())))"
         >
           <i class="fa fa-plus" />

@@ -79,7 +79,7 @@
             </gmd:languageCode>
             <gmd:characterEncoding>
               <gmd:MD_CharacterSetCode codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_CharacterSetCode"
-                                       codeListValue="{$defaultEncoding}"/>
+                codeListValue="{$defaultEncoding}"/>
             </gmd:characterEncoding>
             <!-- Apply country if it exists.  -->
             <xsl:apply-templates select="gmd:locale/gmd:PT_Locale[gmd:languageCode/*/@codeListValue = $mainLanguage]/gmd:country"/>
@@ -321,7 +321,7 @@
   </xsl:template>
 
 
-  <xsl:template match="gmd:LanguageCode[@codeListValue]" priority="9000">
+  <xsl:template match="gmd:LanguageCode[@codeListValue]" priority="9001">
     <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/">
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <!-- Keep the translation for the codeListValue attribute in the xml if exists, see TG 2.0 -->
