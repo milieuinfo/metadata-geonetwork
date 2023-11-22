@@ -69,6 +69,11 @@ div[ng-include="'../../catalog/views/default/templates/recordView/technical.html
   break-inside: auto;
 }
 
+// do not break a date-containing column
+td[data-ng-if="columnVisibility['date']"] {
+  word-break: inherit !important;
+}
+
 #main-content {
   padding-top: 43px;
 
