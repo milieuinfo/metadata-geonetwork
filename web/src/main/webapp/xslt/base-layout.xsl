@@ -115,10 +115,12 @@
             </xsl:if>
             <!-- AngularJS application -->
             <xsl:if test="$angularApp != 'gn_search' and $angularApp != 'gn_viewer' and $angularApp != 'gn_formatter_viewer'">
-              <div class="navbar navbar-default gn-top-bar"
-                   role="navigation"
-                   data-ng-hide="layout.hideTopToolBar"
-                   data-gn-toolbar=""></div>
+
+              <nav
+                role="navigation"
+                data-gn-toolbar=""
+                data-ng-hide="layout.hideTopToolBar"
+              ></nav>
             </xsl:if>
 
             <xsl:apply-templates mode="content" select="."/>

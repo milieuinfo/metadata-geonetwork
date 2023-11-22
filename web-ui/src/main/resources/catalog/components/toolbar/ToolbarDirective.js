@@ -41,7 +41,7 @@
     "gnGlobalSettings",
     function (GN_DEFAULT_MENU, gnGlobalSettings) {
       return {
-        templateUrl: "../../catalog/components/toolbar/partials/top-toolbar.html",
+        templateUrl: "../../catalog/views/default/templates/aiv-header.html",
         link: function ($scope) {
           $scope.toolbarMenu =
             gnGlobalSettings.gnCfg.mods.header.topCustomMenu &&
@@ -101,7 +101,7 @@
     function ($http) {
       return {
         replace: true,
-        templateUrl: "../../catalog/components/toolbar/partials/menu-signin.html",
+        templateUrl: "../../catalog/views/default/templates/aiv-signin.html",
         link: function ($scope) {
           $scope.$watch("$parent.user.id", function (newValue, oldValue) {
             if (newValue && newValue !== oldValue) {
@@ -127,7 +127,7 @@
     function () {
       return {
         replace: true,
-        templateUrl: "../../catalog/components/toolbar/partials/menu-languages.html"
+        templateUrl: "../../catalog/views/default/templates/aiv-menu-languages.html"
       };
     }
   ]);

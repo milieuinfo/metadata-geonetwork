@@ -45,8 +45,7 @@
         templateUrl: function ($element, $attrs) {
           return (
             $attrs.templateUrl ||
-            "../../catalog/components/common/languageswitcher/partials/" +
-              "language-switcher.html"
+            "../../catalog/views/default/templates/aiv-language-switcher.html"
           );
         },
         link: function (scope) {

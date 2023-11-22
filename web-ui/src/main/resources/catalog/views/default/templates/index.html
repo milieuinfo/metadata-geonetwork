@@ -30,13 +30,15 @@
     </div>
   </div>
 </header>
-<nav
-  class="navbar navbar-default gn-top-bar"
-  role="navigation"
-  data-ng-show="gnCfg.mods.header.enabled"
-  data-gn-toolbar=""
-  xmlns="http://www.w3.org/1999/html"
-></nav>
+
+<nav role="navigation" data-ng-show="gnCfg.mods.header.enabled" data-gn-toolbar=""></nav>
+<!--<nav-->
+<!--  class="navbar navbar-default gn-top-bar"-->
+<!--  role="navigation"-->
+<!--  data-ng-show="gnCfg.mods.header.enabled"-->
+<!--  data-gn-toolbar=""-->
+<!--  xmlns="http://www.w3.org/1999/html"-->
+<!--&gt;</nav>-->
 
 <main class="gn-search-page" id="main-content" data-ng-controller="GnSearchController">
   <cookiewarning></cookiewarning>
@@ -75,7 +77,6 @@
 </main>
 
 <footer
-  class="navbar navbar-default gn-bottom-bar"
   data-ng-show="gnCfg.mods.footer.enabled"
-  data-ng-include="'../../catalog/views/default/templates/footer.html'"
+  data-ng-include="'../../catalog/views/default/templates/aiv-footer.html'"
 ></footer>
