@@ -1398,13 +1398,18 @@
   <!-- RDF URI functions -->
 
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
+    <xsl:variable name="uriPattern" select="util:getUriPattern(gmd:fileIdentifier/gco:CharacterString)"/>
+    <uriPattern>
+      <xsl:value-of select="$uriPattern"/>
+    </uriPattern>
     <rdfResourceIdentifier>
-      <xsl:value-of select="geonet:getRDFResourceURI(.)"/>
+      <xsl:value-of select="geonet:getRDFResourceURI(., $uriPattern)"/>
     </rdfResourceIdentifier>
   </xsl:template>
 
   <xsl:function name="geonet:getRDFResourceURI">
     <xsl:param name="md" as="node()"/>
+    <xsl:param name="uriPattern" as="xs:string"/>
 
     <xsl:variable name="isoScopeCode">
       <xsl:value-of select="normalize-space($md/gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue)"/>
@@ -1420,7 +1425,6 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="uriPattern" select="util:getUriPattern($md/gmd:fileIdentifier/gco:CharacterString)"/>
     <xsl:variable name="resourceUUID" select="geonet:getResourceBaseURIOrUUID($md)"/>
     <xsl:choose>
       <xsl:when test="starts-with($resourceUUID, 'http://') or starts-with($resourceUUID, 'https://')">
