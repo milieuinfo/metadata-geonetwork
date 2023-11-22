@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Dataset identifier now added for new records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29827)
 - Added "Add Geographic keyword" transformation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29829)
 - Lengthened 1089 conformance title - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29793)
+- Cleaned up quality section - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29782)
 
 ### core-geonetwork
 - Styling fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29747) / [core-pr](https://github.com/geonetwork/core-geonetwork/pull/7502)
