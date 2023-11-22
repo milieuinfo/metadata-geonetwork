@@ -102,7 +102,7 @@
   <vl-inspire-view>Technical Guidance for the implementation of INSPIRE View Services</vl-inspire-view>
   <vl-inspire-976>Verordening (EG) n r. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</vl-inspire-976>
   <vl-inspire-sds>Technical Guidance for INSPIRE Spatial Data Services and services allowing spatial data services to be invoked</vl-inspire-sds>
-  <vl-inspire-1089>Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</vl-inspire-1089>
+  <vl-inspire-1089>Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens</vl-inspire-1089>
   <vl-measureType>Type meting</vl-measureType>
   <vl-representationType-is-a-grid>grid</vl-representationType-is-a-grid>
   <vl-representationType-is-a-vector>vector</vl-representationType-is-a-vector>
