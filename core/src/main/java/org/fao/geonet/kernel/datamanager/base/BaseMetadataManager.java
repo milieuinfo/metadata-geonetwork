@@ -426,9 +426,11 @@ public class BaseMetadataManager implements IMetadataManager {
         Element xml = Xml.loadString(data, false);
 
         boolean isMetadata = templateMetadata.getDataInfo().getType() == MetadataType.METADATA;
+        boolean isTemplateBoolean = templateMetadata.getDataInfo().getType() == MetadataType.TEMPLATE;
         MetadataType type = MetadataType.lookup(isTemplate);
         setMetadataTitle(schema, xml, context.getLanguage(), !isMetadata);
-        if (isMetadata) {
+        // vl: we need to execute the duplicate-metadata.xsl transformations for templates as well
+        if (isMetadata || isTemplateBoolean) {
             xml = updateFixedInfo(schema, Optional.<Integer>absent(), uuid, xml, parentUuid, UpdateDatestamp.NO, context);
 
             xml = duplicateMetadata(schema, xml, context);
