@@ -150,6 +150,7 @@ public class EsSearchManager implements ISearchManager {
             .add(Geonet.IndexFieldNames.RESOURCEABSTRACT)
             .add(Geonet.IndexFieldNames.RESOURCEABSTRACT + "Object")
             .add("operatesOn")
+            .add("resourceIdentifier")
             .add("rdfResourceIdentifier")
             .add("th_GDI-Vlaanderen-trefwoorden")
             .build();
