@@ -1,3 +1,9 @@
+# Metadata Vlaanderen
+
+For Vlaanderen specific information, see [the dedicated README](vlaanderen/README.md). 
+For the default core-geonetwork README, see below.
+
+
 # GeoNetwork Open-source
 
 ## Build Health
