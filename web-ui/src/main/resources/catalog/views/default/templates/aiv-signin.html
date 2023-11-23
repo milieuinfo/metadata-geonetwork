@@ -2,8 +2,7 @@
   data-ng-if="gnCfg.mods.authentication.enabled || authenticated"
   style="list-style-type: none"
 >
-  <!-- logged in -->
-
+  <!-- logged in, show dropdown with user info and logout button -->
   <div data-ng-show="authenticated" class="logged-in-container">
     <li class="dropdown">
       <a
@@ -100,9 +99,12 @@
         </li>
       </ul>
     </li>
+  </div>
+
+  <!-- this is the login link generated for, e.g., ACM/IDM-->
+  <div data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink" class="logged-in-container">
     <li
-      class="open signin-dropdown"
-      data-ng-if="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink"
+      class="aiv-sign-in-link"
     >
       <a
         href="{{signInFormAction}}?_csrf={{csrf}}&redirectUrl={{redirectUrlAfterSign}}"
@@ -116,11 +118,11 @@
       </a>
     </li>
   </div>
-  <!-- not logged in -->
-  <div class="logged-in-container">
+
+  <!-- geonetwork login menu for user/password credentials -->
+  <div data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm" class="logged-in-container">
     <li
-      class="dropdown signin-dropdown"
-      data-ng-if="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm"
+      class="dropdown signin-dropdown aiv-sign-in-link"
     >
       <a
         href="{{gnCfg.mods.authentication.signinUrl | signInLink}}"

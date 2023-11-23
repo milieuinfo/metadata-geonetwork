@@ -1,6 +1,5 @@
 @import "../../../style/custom/font.less";
 
-
 .gn-editor-container {
   form[class*=' gn-tab-vl-tab-'] {
     .gn-attr-mandatory {
@@ -76,11 +75,9 @@ td[data-ng-if="columnVisibility['date']"] {
 
 #main-content {
   padding-top: 43px;
-
 }
 
 .aiv-header {
-
   font-family: flanders-sans, sans-serif;
   position: fixed;
   z-index: 10004;
@@ -105,7 +102,6 @@ td[data-ng-if="columnVisibility['date']"] {
       margin: 0;
       padding-left: 0;
 
-
       .divider {
         width: 100%;
       }
@@ -115,7 +111,6 @@ td[data-ng-if="columnVisibility['date']"] {
       }
 
       li {
-
         font-size: 14px;
         float: left;
         list-style: none;
@@ -209,7 +204,6 @@ td[data-ng-if="columnVisibility['date']"] {
           font-weight: 500;
           color: inherit;
         }
-
       }
 
       .aiv-header-brand-umbrella-logo:hover::before {
@@ -248,7 +242,6 @@ td[data-ng-if="columnVisibility['date']"] {
 
     }
 
-
     .aiv-header-brand-host {
       display: flex;
       align-items: center;
@@ -263,8 +256,6 @@ td[data-ng-if="columnVisibility['date']"] {
       padding-right: 10px;
       text-transform: uppercase;
       text-decoration: none;
-
-
     }
 
     .aiv-header-brand-host:hover {
@@ -461,11 +452,19 @@ td[data-ng-if="columnVisibility['date']"] {
       color: #0055CC;
       text-decoration: underline;
     }
+
+    .aiv-sign-in-link {
+      padding: 14px;
+
+      > span.fa-sign-in {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 
   .aiv-nav-login {
     padding-left: 0;
-
 
     .logged-in-container {
       font-family: flanders-sans, sans-serif;
@@ -479,6 +478,7 @@ td[data-ng-if="columnVisibility['date']"] {
         .aiv-sign-in-logo {
           width: 20px;
           margin: auto 0;
+
           &:hover {
             color: #0055CC;
           }
@@ -491,14 +491,13 @@ td[data-ng-if="columnVisibility['date']"] {
           text-transform: uppercase;
           text-decoration: none;
           font-size: 14px;
+
           &:hover {
             color: #0055CC;
             text-decoration: underline;
           }
 
         }
-
-
 
         .img-logged-in {
           width: 20px;
@@ -684,7 +683,6 @@ td[data-ng-if="columnVisibility['date']"] {
         line-height: 1;
       }
     }
-
   }
 }
 
@@ -720,10 +718,12 @@ td[data-ng-if="columnVisibility['date']"] {
   top: 55px;
   left: 10px;
 }
+
 // 2. remove spacing of the admin sidebar, making seamless transition into the header
 [ng-app="gn_admin"] [data-ng-controller="GnAdminController"] .sidebar {
   margin-top: -8px;
 }
+
 // 3. make sure cookie warning doesn't overlap with header
 .cookie-warning {
   margin-top: 10px;
