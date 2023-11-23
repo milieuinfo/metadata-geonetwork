@@ -19,7 +19,8 @@
           data-ng-src="../api/users/{{(user.id)}}.png?size=18"
         />
         <div class="aiv-login-user-info">
-          <span>{{user.name}} {{user.surname}}</span> \\ <span>{{user.profile | translate}}</span>
+          <span>{{user.name}} {{user.surname}}</span> \\
+          <span>{{user.profile | translate}}</span>
         </div>
         <span
           class="alert alert-danger ng-hide aiv-disconnect"
@@ -101,10 +102,11 @@
   </div>
 
   <!-- this is the login link generated for, e.g., ACM/IDM-->
-  <div data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink" class="logged-in-container">
-    <li
-      class="aiv-sign-in-link"
-    >
+  <div
+    data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink"
+    class="logged-in-container"
+  >
+    <li class="aiv-sign-in-link">
       <a
         href="{{signInFormAction}}?_csrf={{csrf}}&redirectUrl={{redirectUrlAfterSign}}"
         title="{{'signIn'|translate}}"
@@ -119,10 +121,11 @@
   </div>
 
   <!-- geonetwork login menu for user/password credentials -->
-  <div data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm" class="logged-in-container">
-    <li
-      class="dropdown signin-dropdown aiv-sign-in-link"
-    >
+  <div
+    data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm"
+    class="logged-in-container"
+  >
+    <li class="dropdown signin-dropdown aiv-sign-in-link">
       <a
         href="{{gnCfg.mods.authentication.signinUrl | signInLink}}"
         title="{{'signIn'|translate}}"

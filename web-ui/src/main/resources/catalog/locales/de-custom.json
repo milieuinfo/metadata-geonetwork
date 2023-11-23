@@ -1,4 +1,6 @@
 {
+  "callUs": "Rufen Sie uns an",
+  "contactUs": "Kontaktiere uns",
   "exportDCAT": "Export (RDF/XML)",
   "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Access rights",
   "facet-OrgForResourceObject": "Organisation",
@@ -21,6 +23,7 @@
   "link": "Herunterladen",
   "linkToFeatureCatalog": "Link zu einem Feature-Katalog",
   "linkToParent": "Link zu einer Datenreihe",
+  "mailUs": "Mailen Sie uns",
   "managedByDp": "<b>Warning</b><br/><i>{{groupName}}</i> is a DataPublicatie group. Your record will be assigned to a workflow that includes inspection by the DataPublicatie team.",
   "mdStatus-approved": "Genehmigt und veröffentlicht",
   "mdStatus-approved_for_published": "Zur Veröffentlichung freigegeben",

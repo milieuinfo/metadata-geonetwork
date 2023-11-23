@@ -1,4 +1,6 @@
 {
+  "callUs": "Telefoneer ons",
+  "contactUs": "Contacteer ons",
   "exportDCAT": "Exporteer (RDF/XML)",
   "facet-MD_LegalConstraintsUseLimitationObject.default.keyword": "Toegangsrechten",
   "facet-OrgForResourceObject": "Organisatie",
@@ -21,6 +23,7 @@
   "link": "Link",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
+  "mailUs": "Mail ons",
   "managedByDp": "<b>Opgelet</b><br/><i>{{groupName}}</i> is een DataPublicatie groep. Je record zal worden toegewezen aan een workflow die controle van het DataPublicatie team omvat.",
   "mdStatus-approved": "Goedgekeurd en gepubliceerd",
   "mdStatus-approved_for_published": "Klaar voor publicatie",
