@@ -110,10 +110,13 @@ td[data-ng-if="columnVisibility['date']"] {
         width: 100%;
       }
 
+      li[gn-site-name-menu] {
+        font-weight: 500;
+      }
+
       li {
 
         font-size: 14px;
-        font-weight: 500;
         float: left;
         list-style: none;
         color: #333332;
@@ -472,7 +475,6 @@ td[data-ng-if="columnVisibility['date']"] {
         display: flex;
         color: #333332;
         text-decoration: none;
-        height: 44px;
 
         .aiv-sign-in-logo {
           width: 20px;
@@ -722,6 +724,7 @@ td[data-ng-if="columnVisibility['date']"] {
 [ng-app="gn_admin"] [data-ng-controller="GnAdminController"] .sidebar {
   margin-top: -8px;
 }
+// 3. make sure cookie warning doesn't overlap with header
 .cookie-warning {
   margin-top: 10px;
 }
