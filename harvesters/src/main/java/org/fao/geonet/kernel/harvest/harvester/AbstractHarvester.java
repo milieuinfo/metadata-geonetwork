@@ -26,6 +26,7 @@ package org.fao.geonet.kernel.harvest.harvester;
 import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import org.apache.commons.lang.StringUtils;
+import org.fao.geonet.ApplicationContextHolder;
 import org.fao.geonet.Logger;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.exceptions.InvalidParameterValueEx;
@@ -44,11 +45,13 @@ import org.fao.geonet.exceptions.JeevesException;
 import org.fao.geonet.exceptions.OperationAbortedEx;
 import org.fao.geonet.exceptions.UnknownHostEx;
 import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.kernel.HarvestValidationEnum;
 import org.fao.geonet.kernel.MetadataIndexerProcessor;
 import org.fao.geonet.kernel.datamanager.IMetadataManager;
 import org.fao.geonet.kernel.datamanager.IMetadataUtils;
 import org.fao.geonet.kernel.harvest.Common.OperResult;
 import org.fao.geonet.kernel.harvest.Common.Status;
+import org.fao.geonet.kernel.harvest.event.HarvesterTaskCompletedEvent;
 import org.fao.geonet.kernel.setting.HarvesterSettingsManager;
 import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
@@ -85,15 +88,7 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
@@ -667,7 +662,15 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
 
                     long elapsedTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
 
-                    logHarvest(logfile, logger, nodeName, lastRun, elapsedTime);
+                    HarvestHistory harvestHistory = logHarvest(logfile, logger, nodeName, lastRun, elapsedTime);
+                    if(harvestHistory == null) {
+                        logger.error("A harvest history entry should have been made at this point, but could not be retrieved.");
+                    }
+
+                    if (params.getValidate().equals(HarvestValidationEnum.COMPUTE_VALIDATION_AFTER_HARVEST)) {
+                        ApplicationContextHolder.get().publishEvent(new HarvesterTaskCompletedEvent(
+                            ApplicationContextHolder.get(), params.getUuid(), harvestHistory.getId()));
+                    }
                 } finally {
                     cancelMonitor.set(false);
                     running = false;
@@ -690,7 +693,7 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
 
     }
 
-    private void logHarvest(String logfile, Logger logger, String nodeName, String lastRun, long elapsedTime) {
+    private HarvestHistory logHarvest(String logfile, Logger logger, String nodeName, String lastRun, long elapsedTime) {
         try {
             // record the results/errors for this harvest in the database
             Element result = getResult();
@@ -729,10 +732,13 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
                 logger.error(e2);
             }
 
+            return history;
+
         } catch (Exception e) {
             logger.warning("Raised exception while attempting to store harvest history from : " + nodeName);
             logger.warning(" (C) Exc   : " + e.getMessage());
             logger.error(e);
+            return null;
         }
     }
 
@@ -975,6 +981,10 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
         el.addContent(new Element(name).setText(Integer.toString(value)));
     }
 
+    protected void add(Element el, String name, String value) {
+        el.addContent(new Element(name).setText(value));
+    }
+
     public void setParams(P params) {
         this.params = params;
     }
@@ -1013,6 +1023,21 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
             add(res, "updated", result.updatedMetadata);
             add(res, "thumbnails", result.thumbnails);
             add(res, "thumbnailsFailed", result.thumbnailsFailed);
+            if(result.createdUuids!=null) {
+                Element createdUuids = new Element("createdUuids");
+                result.createdUuids.forEach(uuid -> add(createdUuids, "uuid", uuid));
+                res.addContent(createdUuids);
+            }
+            if(result.modifiedUuids!=null) {
+                Element modifiedUuids = new Element("modifiedUuids");
+                result.modifiedUuids.forEach(uuid -> add(modifiedUuids, "uuid", uuid));
+                res.addContent(modifiedUuids);
+            }
+            if(result.deletedUuids!=null) {
+                Element deletedUuids = new Element("deletedUuids");
+                result.deletedUuids.forEach(uuid -> add(deletedUuids, "uuid", uuid));
+                res.addContent(deletedUuids);
+            }
         } else if (this.loadedInfo != null) {
             return (Element) this.loadedInfo.clone();
         }

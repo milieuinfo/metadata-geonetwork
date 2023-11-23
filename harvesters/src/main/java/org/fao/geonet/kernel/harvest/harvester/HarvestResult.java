@@ -23,6 +23,8 @@
 
 package org.fao.geonet.kernel.harvest.harvester;
 
+import java.util.List;
+
 public class HarvestResult {
     public int addedMetadata;            // = total
     public int atomicDatasetRecords;        // = md for atomic datasets
@@ -61,4 +63,8 @@ public class HarvestResult {
     public int thumbnailsFailed;        // = number of thumbnail creation which failed
     /** Number of metadata managed by other harvester. */
     public int managedByOtherHarvester;
+    /** Keep track of all records that were created, modified and deleted by this harvester */
+    public List<String> createdUuids;
+    public List<String> modifiedUuids;
+    public List<String> deletedUuids;
 }

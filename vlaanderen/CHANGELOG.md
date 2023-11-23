@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Add more db information to the site information page
   - Fix cookies path when deployed on root "/" context
   - Security / Jolokia update
+- Added capability to validate after harvesting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27953) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7370)
+ 
 
 ## [1.1.6] - 2023-11-17
 
@@ -192,7 +194,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### core-geonetwork
 - Allow disabling the 'search map' - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7071) / [pr](https://agiv.visualstudio.com/Metadata/_workitems/edit/170315/)
 - Allow disabling automatic database migration - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/21726)
-- Config / add property file overlay, setting auto hibernate on startup - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/6954) 
+- Config / add property file overlay, setting auto hibernate on startup - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/6954)
 - Copy resources to data dir - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7110) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/23983)
 - Default tab configuration - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/6986)
 - Onhover mode for tooltips - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/6987)

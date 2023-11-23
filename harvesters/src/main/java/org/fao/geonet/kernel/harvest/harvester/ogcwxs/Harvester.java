@@ -138,7 +138,6 @@ import static org.fao.geonet.utils.AbstractHttpRequest.Method.GET;
  */
 class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestResult> {
 
-
     private static final int WIDTH = 900;
     private static final String GETCAPABILITIES = "GetCapabilities";
     private static final String GETMAP = "GetMap";
@@ -177,6 +176,9 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
         this.params = params;
 
         result = new HarvestResult();
+        result.deletedUuids = new ArrayList<>();
+        result.createdUuids = new ArrayList<>();
+        result.modifiedUuids = new ArrayList<>();
 
         GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
         dataMan = gc.getBean(DataManager.class);
@@ -267,6 +269,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
                 metadataManager.deleteMetadata(context, id);
 
                 result.locallyRemoved++;
+                result.deletedUuids.add(uuid);
             }
         }
 
@@ -374,6 +377,19 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
             }
         }
 
+        try {
+            Integer groupIdVal = null;
+            if (StringUtils.isNotEmpty(params.getOwnerIdGroup())) {
+                groupIdVal = Integer.parseInt(params.getOwnerIdGroup());
+            }
+
+            params.getValidate().validate(dataMan, context, md, groupIdVal);
+        } catch (Exception e) {
+            log.debug("Ignoring invalid metadata with uuid " + uuid);
+            result.doesNotValidate++;
+            return null;
+        }
+
         // Apply custom transformation if requested
         Path importXsl;
         String importXslFile = params.getImportXslt();
@@ -385,6 +401,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
             schema = dataMan.autodetectSchema(md, null);
         }
 
+        uuid = dataMan.extractUUID(schema, md);
 
         // Save iso19119 metadata in DB
         log.info("  - Adding metadata for services with " + uuid);
@@ -415,14 +432,17 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
 
         if (!dataMan.existsMetadataUuid(uuid)) {
             result.addedMetadata++;
+            result.createdUuids.add(metadata.getUuid());
             metadata = metadataManager.insertMetadata(context, metadata, md, IndexingMode.none, false, UpdateDatestamp.NO, false, false);
         } else {
             result.updatedMetadata++;
+            result.modifiedUuids.add(metadata.getUuid());
             String id = dataMan.getMetadataId(uuid);
             metadata.setId(Integer.valueOf(id));
             metadataManager.updateMetadata(context, id, md, false, false,
                 context.getLanguage(), dataMan.extractDateModified(schema, md), false, IndexingMode.none);
         }
+
 
         String id = String.valueOf(metadata.getId());
         uuids.add(uuid);
@@ -781,6 +801,20 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
 
                     xml = Xml.transform(capa, styleSheet, param);
 
+
+                    try {
+                        Integer groupIdVal = null;
+                        if (StringUtils.isNotEmpty(params.getOwnerIdGroup())) {
+                            groupIdVal = Integer.parseInt(params.getOwnerIdGroup());
+                        }
+
+                        params.getValidate().validate(dataMan, context, xml, groupIdVal);
+                    } catch (Exception e) {
+                        log.debug("Ignoring invalid metadata with uuid " + reg.uuid);
+                        result.doesNotValidate++;
+                        return null;
+                    }
+
                     // Apply custom transformation if requested
                     Path importXsl;
                     String importXslFile = params.getImportXslt();
@@ -790,6 +824,8 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
                         log.info("Applying custom import XSL " + importXsl.getFileName());
                         xml = Xml.transform(xml, importXsl);
                     }
+
+                    reg.uuid = dataMan.extractUUID(params.outputSchema, xml);
 
                     if (log.isDebugEnabled()) {
                         log.debug("  - Layer loaded using GetCapabilities document.");
@@ -834,6 +870,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
             }
             if (!dataMan.existsMetadataUuid(reg.uuid)) {
                 result.addedMetadata++;
+                result.createdUuids.add(metadata.getUuid());
                 metadata = metadataManager.insertMetadata(context, metadata, xml, IndexingMode.none, false, UpdateDatestamp.NO, false, false);
             } else {
                 result.updatedMetadata++;
@@ -1052,6 +1089,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
     public List<HarvestError> getErrors() {
         return new ArrayList<>();
     }
+
 
     private static class WxSLayerRegistry {
         public String uuid;
