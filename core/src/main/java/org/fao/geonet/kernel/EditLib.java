@@ -40,6 +40,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.jxpath.ri.parser.Token;
 import org.apache.commons.jxpath.ri.parser.XPathParser;
 import org.apache.commons.jxpath.ri.parser.XPathParserConstants;
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.constants.Edit;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.Pair;
@@ -588,7 +589,10 @@ public class EditLib {
                                 }
                             } else if (propNode instanceof Attribute) {
                                 Element parent = ((Attribute) propNode).getParent();
-                                parent.removeAttribute(((Attribute) propNode).getName());
+                                Attribute targetAttribute = (Attribute) propNode;
+                                parent.removeAttribute(
+                                    targetAttribute.getName(),
+                                    targetAttribute.getNamespace());
                             }
                         } else {
                             // Update element content with node
@@ -741,6 +745,7 @@ public class EditLib {
         boolean isAttribute = false;
         String currentElementName = "";
         String currentElementNamespacePrefix = "";
+        String currentAttributeNamespacePrefix = "";
 
         // Stop when token is null, start of an expression is found ie. "["
         //
@@ -763,10 +768,15 @@ public class EditLib {
                 isAttribute = true;
             }
             // Match namespace prefix
-            if (currentToken.kind == XPathParserLocalConstants.TEXT && previousToken.kind == XPathParserConstants.SLASH) {
+            if (currentToken.kind == XPathParserLocalConstants.TEXT &&
+                    previousToken.kind == XPathParserConstants.SLASH) {
                 // get element namespace if element is text and previous was /
                 // means qualified name only is supported
                 currentElementNamespacePrefix = currentToken.image;
+            } else if (isAttribute &&
+                        previousToken.kind == XPathParserLocalConstants.TEXT &&
+                        currentToken.kind == XPathParserLocalConstants.NAMESPACE_SEP) {
+                currentAttributeNamespacePrefix = previousToken.image;
             } else if (currentToken.kind == XPathParserLocalConstants.TEXT &&
                 previousToken.kind == XPathParserLocalConstants.NAMESPACE_SEP) {
                 // get element name if element is text and previous was /
@@ -793,7 +803,9 @@ public class EditLib {
                     } else {
                         LOGGER_ADD_ELEMENT.debug(" > add new node {} inserted in {}", qualifiedName, currentNode.getName());
 
-                        if (metadataSchema.getElementValues(qualifiedName, currentNode.getQualifiedName()) != null) {
+                        if (isAttribute) {
+                            existingElement = false; // Attribute is created and set after.
+                        } else if (metadataSchema.getElementValues(qualifiedName, currentNode.getQualifiedName()) != null) {
                             currentNode = addElement(metadataSchema, currentNode, qualifiedName);
                             existingElement = false;
                         } else {
@@ -838,7 +850,15 @@ public class EditLib {
             doAddFragmentFromXpath(metadataSchema, value.getNodeValue(), currentNode);
         } else {
             if (isAttribute) {
-                currentNode.setAttribute(previousToken.image, value.getStringValue());
+                if (StringUtils.isNotEmpty(currentAttributeNamespacePrefix)) {
+                    currentNode.setAttribute(previousToken.image,
+                        value.getStringValue(),
+                        Namespace.getNamespace(currentAttributeNamespacePrefix,
+                            metadataSchema.getNS(currentAttributeNamespacePrefix)));
+                } else {
+                    currentNode.setAttribute(previousToken.image, value.getStringValue());
+                }
+
             } else {
                 currentNode.setText(value.getStringValue());
             }

@@ -30,7 +30,7 @@
   <parent>
     <groupId>org.geonetwork-opensource</groupId>
     <artifactId>geonetwork</artifactId>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.4.1-0</version>
   </parent>
 
 
@@ -627,11 +627,6 @@
       <version>${xmlunit.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.geonetwork-opensource.schemas</groupId>
-      <artifactId>gn-schema-dcat2</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 
   <build>
@@ -1159,13 +1154,6 @@
                     <artifactItem>
                       <groupId>org.geonetwork-opensource.schemas</groupId>
                       <artifactId>gn-schema-iso19115-3.2018</artifactId>
-                      <type>zip</type>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${schema-plugins.dir}</outputDirectory>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.geonetwork-opensource.schemas</groupId>
-                      <artifactId>gn-schema-dcat2</artifactId>
                       <type>zip</type>
                       <overWrite>false</overWrite>
                       <outputDirectory>${schema-plugins.dir}</outputDirectory>
