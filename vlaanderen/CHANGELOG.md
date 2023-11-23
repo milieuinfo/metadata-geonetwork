@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### core-geonetwork
 - Styling fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29747) / [core-pr](https://github.com/geonetwork/core-geonetwork/pull/7502)
+- Merged v4.4.1 release - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29891) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7508) / [changelog-core](https://docs.geonetwork-opensource.org/4.4/overview/change-log/version-4.4.1/)
+  - Add more db information to the site information page
+  - Fix cookies path when deployed on root "/" context
+  - Security / Jolokia update
 
 ## [1.1.6] - 2023-11-17
 
