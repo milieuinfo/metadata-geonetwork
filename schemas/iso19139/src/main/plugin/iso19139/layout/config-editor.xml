@@ -28,7 +28,7 @@
         xmlns:gmd="http://www.isotc211.org/2005/gmd"
         xmlns:gmx="http://www.isotc211.org/2005/gmx"
         xmlns:srv="http://www.isotc211.org/2005/srv"
-        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gml="http://www.opengis.net/gml"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xsi:noNamespaceSchemaLocation="../../../../../../config-editor.xsd">
 
@@ -282,10 +282,9 @@
 
       Exclude all thesaurus already used in the metadata:
       -->
-      <directiveAttributes data-include="xpath::concat('external.place.GDI-Vlaanderenregios,external.theme.httpinspireeceuropaeutheme-theme,external.theme.gemet,external.theme.httpinspireeceuropaeufeatureconcept-featureconcept,external.theme.GDI-Vlaanderen-trefwoorden,external.theme.GDI-Vlaanderen-service-types,external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory,external.theme.datatheme,external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope,external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset,', string-join(*
-                                          //gmd:thesaurusName/*/gmd:identifier/*/
+      <directiveAttributes data-include="xpath::string-join(('external.place.GDI-Vlaanderenregios,external.theme.httpinspireeceuropaeutheme-theme,external.theme.gemet,external.theme.httpinspireeceuropaeufeatureconcept-featureconcept,external.theme.GDI-Vlaanderen-trefwoorden,external.theme.GDI-Vlaanderen-service-types,external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory,external.theme.datatheme,external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope,external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset', *//gmd:thesaurusName/*/gmd:identifier/*/
                                             gmd:code/gmx:Anchor/
-                                              concat('-', substring-after(text()[. != ''], 'geonetwork.thesaurus.')), ','))"/>
+                                              concat('-', substring-after(text()[. != ''], 'geonetwork.thesaurus.'))), ',')"/>
     </for>
   </fields>
 
@@ -560,7 +559,8 @@
       </thesaurusList>
     <sidePanel>
       <directive data-gn-overview-manager=""
-                 data-file-types=".png,.gif,.jpeg,.jpg"/>
+                 data-file-types=".png,.gif,.jpeg,.jpg"
+                 data-editable-thumbnail="true"/>
 
       <!--<directive data-gn-file-uploader=""
                  data-type="onlines"/>-->
@@ -757,13 +757,14 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceSpecificUsage"/>
 
 
-        <section name="vl-type-and-resolution">
+        <section name="vl-type-and-resolution"
+                 displayIfRecord="count(gmd:MD_Metadata/gmd:identificationInfo/srv:SV_ServiceIdentification) = 0">
           <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType"/>
 
           <action type="add"
                   btnLabel="vl-add-representationType"
                   if="count(gmd:MD_Metadata/gmd:identificationInfo/*/gmd:spatialRepresentationType) = 0"
-                  or="spatialResolution" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
+                  or="spatialRepresentationType" in="/gmd:MD_Metadata/gmd:identificationInfo/*">
             <template>
               <snippet label="vl-representationType-is-a-vector">
                 <gmd:spatialRepresentationType gco:nilReason="missing">
@@ -833,7 +834,37 @@
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:characterSet"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
         <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:supplementalInformation"/>
-        <field xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"/>
+
+        <section name="gmd:extent"
+                 forEach="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:extent"
+                 del=".">
+          <field xpath="*/gmd:description"/>
+
+          <field xpath="*/gmd:geographicElement"/>
+
+          <field xpath="*/gmd:temporalElement"/>
+          <action type="add"
+                  btnLabel="vl-add-temporalElement"
+                  or="temporalElement"
+                  in="*">
+            <template>
+              <snippet>
+                <gmd:temporalElement>
+                  <gmd:EX_TemporalExtent>
+                    <gmd:extent>
+                      <gml:TimePeriod gml:id="">
+                        <gml:beginPosition></gml:beginPosition>
+                        <gml:endPosition></gml:endPosition>
+                      </gml:TimePeriod>
+                    </gmd:extent>
+                  </gmd:EX_TemporalExtent>
+                </gmd:temporalElement>
+              </snippet>
+            </template>
+          </action>
+
+          <field xpath="*/gmd:verticalElement"/>
+        </section>
       </section>
     </tab>
 
@@ -1088,6 +1119,21 @@
 
         <section name="gmd:lineage">
           <field xpath="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:statement"/>
+
+          <action type="add"
+                  or="lineage" in="/gmd:MD_Metadata/gmd:dataQualityInfo/*">
+            <template>
+              <snippet>
+                <gmd:lineage>
+                  <gmd:LI_Lineage>
+                    <gmd:statement>
+                      <gco:CharacterString/>
+                    </gmd:statement>
+                  </gmd:LI_Lineage>
+                </gmd:lineage>
+              </snippet>
+            </template>
+          </action>
 
           <section name="gmd:processStep"
                    forEach="/gmd:MD_Metadata/gmd:dataQualityInfo/*/gmd:lineage/*/gmd:processStep"
@@ -1696,7 +1742,7 @@
                       <gmd:specification>
                         <gmd:CI_Citation>
                           <gmd:title>
-                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</gmx:Anchor>
+                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens</gmx:Anchor>
                           </gmd:title>
                           <gmd:alternateTitle>
                             <gco:CharacterString/>
@@ -1763,7 +1809,7 @@
                       <gmd:specification>
                         <gmd:CI_Citation>
                           <gmd:title>
-                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen</gmx:Anchor>
+                            <gmx:Anchor xlink:href="https://eur-lex.europa.eu/eli/reg/2010/1089">Verordening (EU) nr. 1089/2010 van de Commissie van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens</gmx:Anchor>
                           </gmd:title>
                           <gmd:alternateTitle>
                             <gco:CharacterString/>
@@ -2030,12 +2076,104 @@
             </snippet>
           </template>
         </action>
-        <section name="gmd:MD_LegalConstraints">
-          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_LegalConstraints]"/>
+        <section name="gmd:MD_LegalConstraints"
+                 forEach="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_LegalConstraints]"
+                 del=".">
+
+          <section xpath="*/gmd:useLimitation"/>
+          <section xpath="*/gmd:accessConstraints"/>
+          <section xpath="*/gmd:useConstraints"/>
+          <section xpath="*/gmd:otherConstraints"/>
+
+          <action type="add"
+                  btnLabel="vl-add-resourceConstraints"
+                  or="otherConstraints"
+                  in="gmd:MD_LegalConstraints">
+            <template>
+              <snippet label="vl-BeschrijvingenURL">
+                <gmd:otherConstraints>
+                  <gmx:Anchor gco:nilReason="custom" xlink:href=""/>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Beschrijving">
+                <gmd:otherConstraints>
+                  <gco:CharacterString/>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Regelingvoornietvermeldtypevangebruik">
+                <gmd:otherConstraints>
+                  <gco:CharacterString>
+                    De gegevens zijn beschermd door het auteursrecht. Indien u een ander type van gebruik wil maken van de gegevens, dan de hier vermelde, dient u zich te wenden tot de eigenaar van de gegevens.
+                  </gco:CharacterString>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Bronvermeldingsvoorschrift">
+                <gmd:otherConstraints>
+                  <gco:CharacterString>
+                    Bronvermeldingsvoorschrift:
+                  </gco:CharacterString>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-cc0">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/creative-commons-zero-verklaring/v1.0">
+                    Creative Commons Zero verklaring
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Licentievoorhergebruikoptevragen">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="http://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/conditionsUnknown">
+                    Deze dataset betreft overheidsinformatie. Indien u deze gegevens wil hergebruiken, dient u zich te wenden tot de eigenaar van de informatie.
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-VlaamseModellicentievoorgratishergebruik">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0">
+                    Modellicentie voor gratis hergebruik
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-VlaamseModellicentiehergebruiktegenvergoeding">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/modellicentie-hergebruik-tegen-vergoeding/v1.0">
+                    Modellicentie hergebruik tegen vergoeding
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Onvoorwaardelijkhergebruik">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/onvoorwaardelijk-hergebruik/v1.0">
+                    Onvoorwaardelijk hergebruik
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Geenbeperkingopdepublieketoegang">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations">
+                    Geen beperkingen op de publieke toegang.
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-GebruikdoorVlaamseinstanties">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-deelnemers-GDI-Vlaanderen/v1.0">
+                    Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI, door deelnemers aan GDI-Vlaanderen
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+              <snippet label="vl-Gebruikdoorniet-Vlaamseinstanties">
+                <gmd:otherConstraints>
+                  <gmx:Anchor xlink:href="https://data.vlaanderen.be/id/licentie/Gebruik-van-geografische-gegevens-voor-publieke-taken-door-instanties-niet-deelnemers-GDI-Vlaanderen/v1.0">
+                    Toegang en gebruik van geografische gegevensbronnen en -diensten toegevoegd aan de GDI door instanties die geen deelnemer zijn aan GDI-Vlaanderen
+                  </gmx:Anchor>
+                </gmd:otherConstraints>
+              </snippet>
+            </template>
+          </action>
         </section>
-        <section name="gmd:MD_SecurityConstraints">
-          <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_SecurityConstraints]"/>
-        </section>
+        <section xpath="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:resourceConstraints[gmd:MD_SecurityConstraints]"/>
       </section>
     </tab>
 

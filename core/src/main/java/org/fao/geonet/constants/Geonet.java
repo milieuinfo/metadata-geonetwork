@@ -649,6 +649,9 @@ public final class Geonet {
         public static final String EXTRA = "_extra";
         public static final String USERINFO = "_userinfo";
         public static final String GROUP_OWNER = "groupOwner";
+        public static final String GROUP_OWNER_NAME = "groupOwnerName";
+
+        public static final String GROUP_OWNER_VLTYPE = "groupOwnerVlType";
         public static final String GROUP_WEBSITE = "_groupWebsite";
         public static final String LOGO = "_logo";
         public static final String OP_PREFIX = "op";
@@ -674,6 +677,7 @@ public final class Geonet {
         public static final String FEATUREOFRECORD = "featureOfRecord";
         public static final String RECORDLINKFLAG = "record";
         public static final String RECORDLINK = "recordLink";
+
         public static class RecordLink {
             public static final String ORIGIN = "origin";
             public static final String TO = "to";

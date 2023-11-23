@@ -28,19 +28,19 @@
   <codelist name="gmd:CI_DateTypeCode">
     <entry>
       <code>creation</code>
-      <label>Création</label>
+      <label>Date de création</label>
       <description>Date à laquelle la ressource est créée</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
     <entry>
       <code>publication</code>
-      <label>Publication</label>
+      <label>Date de publication</label>
       <description>Date à laquelle la ressource est publiée</description>
     </entry>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
     <entry>
       <code>revision</code>
-      <label>Révision</label>
+      <label>Date de révision</label>
       <description>Date à laquelle la ressource est révisée</description>
     </entry>
     <!-- ISO PROFIL FRA ONLY

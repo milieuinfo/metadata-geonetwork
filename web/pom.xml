@@ -30,7 +30,7 @@
   <parent>
     <groupId>org.geonetwork-opensource</groupId>
     <artifactId>geonetwork</artifactId>
-    <version>4.4.0-SNAPSHOT</version>
+    <version>4.4.1-0</version>
   </parent>
 
 
@@ -622,9 +622,10 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.geonetwork-opensource.schemas</groupId>
-      <artifactId>gn-schema-dcat2</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-matchers</artifactId>
+      <version>${xmlunit.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -632,9 +633,9 @@
     <plugins>
       <!-- Generate a properties file with the commit hash to be displayed on the admin.console -->
 	    <plugin>
-          <groupId>io.github.git-commit-id</groupId>
-          <artifactId>git-commit-id-maven-plugin</artifactId>
-          <version>4.9.9</version>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>4.9.9</version>
         <executions>
           <execution>
             <phase>initialize</phase>
@@ -752,8 +753,7 @@
                   <includes>
                     <include>META-INF/MANIFEST.MF</include>
                     <include>data/**</include>
-                    <include>doc/en/**</include>
-                    <include>doc/fr/**</include>
+                    <include>doc/**</include>
                     <include>images/logos/*</include>
                     <include>images/logos/statTmp</include>
                     <include>scripts/lib/**</include>
@@ -807,6 +807,21 @@
               </sources>
             </configuration>
           </execution>
+          <execution>
+            <id>add-test-resource</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/main/webapp/xslt</directory>
+                  <targetPath>resources/xslt</targetPath>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
 
@@ -849,7 +864,7 @@
               <outputDirectory>${build.webapp.resources}</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/../docs/manuals/target/doc</directory>
+                  <directory>${project.basedir}/../docs/manual/target/help</directory>
                   <targetPath>${basedir}/src/main/webapp/doc</targetPath>
                 </resource>
               </resources>
@@ -1143,13 +1158,6 @@
                       <overWrite>false</overWrite>
                       <outputDirectory>${schema-plugins.dir}</outputDirectory>
                     </artifactItem>
-                    <artifactItem>
-                      <groupId>org.geonetwork-opensource.schemas</groupId>
-                      <artifactId>gn-schema-dcat2</artifactId>
-                      <type>zip</type>
-                      <overWrite>false</overWrite>
-                      <outputDirectory>${schema-plugins.dir}</outputDirectory>
-                    </artifactItem>
                   </artifactItems>
                 </configuration>
               </execution>
@@ -1309,6 +1317,39 @@
         <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>slave</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>datastorage-cmis</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.geonetwork-opensource.datastorage</groupId>
+          <artifactId>gn-datastorage-cmis</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>datastorage-jcloud</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.geonetwork-opensource.datastorage</groupId>
+          <artifactId>gn-datastorage-jcloud</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>datastorage-s3</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.geonetwork-opensource.datastorage</groupId>
+          <artifactId>gn-datastorage-s3</artifactId>
           <version>${project.version}</version>
         </dependency>
       </dependencies>

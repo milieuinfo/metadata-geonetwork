@@ -762,6 +762,12 @@
         getUuid: function () {
           return this.uuid;
         },
+        getMetadataLanguages: function () {
+          if (!this.mainLanguage) {
+            return [];
+          }
+          return [this.mainLanguage].concat(this.otherLanguage).unique();
+        },
         isPublished: function (pubOption) {
           if (pubOption) {
             return this.isPublishedToGroup(pubOption.publicationGroup);
@@ -993,6 +999,13 @@
             });
           }
           return res;
+        },
+        // check whether we need to hide the 'no-thumbnail' indicator
+        // for VL, we never use thumbnails for iso19110
+        hideNoThumbnailIndicator: function () {
+          return (
+            (this.overview && !this.overview[0]) || this.documentStandard === "iso19110"
+          );
         },
         getKeywordsGroupedByUriBase: function (thesaurusId, groupExtractionRegex) {
           var thesaurus = this.allKeywords[thesaurusId];

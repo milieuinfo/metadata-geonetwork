@@ -5,10 +5,12 @@
 >
   <button
     type="button"
-    class="btn btn-default dropdown-toggle"
+    class="btn btn-default btn-sm dropdown-toggle"
     data-toggle="dropdown"
     aria-haspopup="true"
     aria-expanded="false"
+    title="{{'pinAction' | translate}}"
+    aria-label="{{'pinAction' | translate}}"
   >
     <i class="fa fa-thumb-tack"></i>&nbsp;
     <span class="sr-only" data-translate="">addToSelection</span>
@@ -17,7 +19,7 @@
   <ul class="dropdown-menu" role="menu">
     <li
       class="dropdown-header"
-      data-ng-show="canBeAdded()"
+      data-ng-show="canBeAdded() && 'disabled-for' === 'vl'"
       role="menuitem"
       data-translate=""
     >

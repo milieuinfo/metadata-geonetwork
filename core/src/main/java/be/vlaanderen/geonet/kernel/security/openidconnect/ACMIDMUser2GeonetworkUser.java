@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
 
+    private String dpPrefix = "DataPublicatie ";
+
     public UserDetails getUserDetails(OidcIdToken idToken, Map attributes, boolean withDbUpdate) throws Exception {
         SimpleOidcUser simpleUser = simpleOidcUserFactory.create(idToken, attributes);
         if (!StringUtils.hasText(simpleUser.getUsername()))
@@ -63,11 +65,19 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
             List<String> groups = profileGroups.get(p);
             for (String technicalGroupName : groups) {
 
-                String roleOrgCode = technicalGroupName.replaceFirst("md[cv]-", "");
-                boolean isMdc = technicalGroupName.startsWith("mdc-");
+                String roleOrgCode = technicalGroupName.replaceFirst("(dp|mdv)-", "");
+                boolean isDp = technicalGroupName.startsWith("dp-");
+                // figure out the 'groupOwner' type, eventually used as a filter for the geonetwork portals
+                String vlType = null;
+                if(technicalGroupName.startsWith("mdv-")) {
+                    vlType = "metadatavlaanderen";
+                }
+                else if(technicalGroupName.startsWith("dp-")) {
+                    vlType = "datapublicatie";
+                }
 
-                Group group = groupRepository.findByOrgCodeAndMdc(roleOrgCode, isMdc);
-                String groupName = computeGroupName(userOrgCode, userOrgName, roleOrgCode, isMdc);
+                String groupName = computeGroupName(userOrgCode, userOrgName, roleOrgCode, isDp);
+                Group group = groupRepository.findByOrgCodeAndVlType(roleOrgCode, vlType);
 
                 if (group == null) {
                     group = new Group();
@@ -88,7 +98,7 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                     }
                 }
 
-                group.setMdc(isMdc);
+                group.setVlType(vlType);
                 groupRepository.save(group);
 
                 UserGroup usergroup = new UserGroup();
@@ -122,13 +132,13 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
     private String computeGroupName(String userOrgCode,
                                     String userOrgName,
                                     String roleOrgCode,
-                                    boolean isMdc) {
-        String mdcPrefix = "Datapublicatie ";
+                                    boolean isDp) {
+        String dpPrefix = this.dpPrefix;
         String result = "";
         if(roleOrgCode.equals(userOrgCode)) {
-            result = (isMdc ? mdcPrefix + userOrgName : userOrgName);
+            result = (isDp ? dpPrefix + userOrgName : userOrgName);
         } else {
-            result = (isMdc ? mdcPrefix + roleOrgCode : roleOrgCode);
+            result = (isDp ? dpPrefix + roleOrgCode : roleOrgCode);
         }
         return result;
     }

@@ -36,6 +36,7 @@
                 xmlns:util="java:org.fao.geonet.util.XslUtil"
                 xmlns:date-util="java:org.fao.geonet.utils.DateUtil"
                 xmlns:daobs="http://daobs.org"
+                xmlns:geonet="http://www.fao.org/geonetwork"
                 xmlns:saxon="http://saxon.sf.net/"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all"
@@ -70,6 +71,8 @@
   Define which association type should be considered as parent. -->
   <xsl:variable name="parentAssociatedResourceType" select="'partOfSeamlessDatabase'"/>
   <xsl:variable name="childrenAssociatedResourceType" select="'isComposedOf'"/>
+
+  <xsl:variable name="uuidRegex" select="'([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}'"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="index"/>
@@ -332,6 +335,7 @@
               </xsl:if>
             </xsl:for-each-group>
           </xsl:if>
+
 
           <xsl:for-each select="gmd:identifier/*[string(gmd:code/*)]">
             <resourceIdentifier type="object">{
@@ -967,19 +971,24 @@
 
 
         <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != ''
-                                          or gmd:measureDescription/gco:CharacterString != '']">
+                                          or gmd:measureDescription/gco:CharacterString != '']/gmd:result/gmd:DQ_QuantitativeResult">
           <xsl:variable name="name"
-                        select="(gmd:nameOfMeasure/gco:CharacterString)[1]"/>
+                        select="(../../gmd:nameOfMeasure/gco:CharacterString)[1]"/>
           <xsl:variable name="value"
-                        select="(gmd:result/gmd:DQ_QuantitativeResult/gmd:value)[1]"/>
+                        select="(gmd:value)[1]"/>
           <xsl:variable name="unit"
-                        select="(gmd:result/gmd:DQ_QuantitativeResult/gmd:valueUnit//(gml:identifier|gml320:identifier))[1]"/>
+                        select="(gmd:valueUnit//(gml:identifier|gml320:identifier))[1]"/>
           <xsl:variable name="description"
-                        select="(gmd:measureDescription/gco:CharacterString)[1]"/>
+                        select="(../../gmd:measureDescription/gco:CharacterString)[1]"/>
+          <xsl:variable name="measureDate"
+                        select="../../gmd:dateTime/gco:DateTime"/>
           <measure type="object">{
             "name": "<xsl:value-of select="gn-fn-index:json-escape($name)"/>",
             <xsl:if test="$description != ''">
               "description": "<xsl:value-of select="gn-fn-index:json-escape($description)"/>",
+            </xsl:if>
+            <xsl:if test="$measureDate != ''">
+              "date": "<xsl:value-of select="gn-fn-index:json-escape($measureDate)"/>",
             </xsl:if>
             <!-- First value only. -->
             "value": "<xsl:value-of select="gn-fn-index:json-escape($value/gco:Record[1])"/>",
@@ -990,7 +999,7 @@
             }
           </measure>
 
-          <xsl:for-each select="gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record[. != '']">
+          <xsl:for-each select="gmd:value/gco:Record[. != '']">
             <xsl:element name="measure_{gn-fn-index:build-field-name($name)}">
               <xsl:value-of select="."/>
             </xsl:element>
@@ -1384,4 +1393,79 @@
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
+
+
+  <!-- RDF URI functions -->
+
+  <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
+    <xsl:variable name="uriPattern" select="util:getUriPattern(gmd:fileIdentifier/gco:CharacterString)"/>
+    <uriPattern>
+      <xsl:value-of select="$uriPattern"/>
+    </uriPattern>
+    <rdfResourceIdentifier>
+      <xsl:value-of select="geonet:getRDFResourceURI(., $uriPattern)"/>
+    </rdfResourceIdentifier>
+  </xsl:template>
+
+  <xsl:function name="geonet:getRDFResourceURI">
+    <xsl:param name="md" as="node()"/>
+    <xsl:param name="uriPattern" as="xs:string"/>
+
+    <xsl:variable name="isoScopeCode">
+      <xsl:value-of select="normalize-space($md/gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue)"/>
+    </xsl:variable>
+    <xsl:variable name="resourceType">
+      <xsl:choose>
+        <xsl:when test="$isoScopeCode = 'dataset' or $isoScopeCode = 'nonGeographicDataset'">
+          <xsl:text>dataset</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$isoScopeCode"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="resourceUUID" select="geonet:getResourceBaseURIOrUUID($md)"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($resourceUUID, 'http://') or starts-with($resourceUUID, 'https://')">
+        <xsl:value-of select="geonet:escapeURI($resourceUUID)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="geonet:escapeURI(replace(replace($uriPattern, '\{resourceType\}', concat($resourceType, 's')), '\{resourceUuid\}', $resourceUUID))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+
+  <xsl:function name="geonet:getResourceBaseURIOrUUID">
+    <xsl:param name="md" as="node()"/>
+    <xsl:variable name="resourceIdentifiers">
+      <xsl:for-each select="$md/gmd:identificationInfo[1]/*/gmd:citation/*/gmd:identifier/*">
+        <xsl:choose>
+          <xsl:when test="gmd:codeSpace/gco:CharacterString/text() != ''">
+            <xsl:value-of select="concat(gmd:codeSpace/gco:CharacterString/text(), gmd:code/gco:CharacterString/text())"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gmd:code/gco:CharacterString/text()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$resourceIdentifiers[matches(., $uuidRegex)][1]">
+        <xsl:value-of select="$resourceIdentifiers[matches(., $uuidRegex)][1]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="util:uuidFromString($md/gmd:fileIdentifier/gco:CharacterString)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="geonet:escapeURI">
+    <xsl:param name="uri"/>
+    <xsl:if test="$uri">
+      <xsl:value-of select="replace(replace(replace(replace(normalize-space($uri), ' ', '%20'), '&lt;', '%3C'), '&gt;', '%3E'), '\\', '%5C')"/>
+    </xsl:if>
+  </xsl:function>
+
 </xsl:stylesheet>

@@ -43,6 +43,8 @@ cat <<EOF > .tx/config
 EOF
 
 
+tx pull --force --translations -l de
+tx pull --force --translations -l fr
 tx pull --force --translations -l nl_BE
 cd ..
 
@@ -50,6 +52,8 @@ TRANSLATION_DIR=transifex-src/translations/core-geonetwork.
 SRC_DIR=src/main/resources/catalog/locales
 
 l=(
+    'de::de'
+    'fr::fr'
     'nl::nl_BE'
 )
 

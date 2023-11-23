@@ -54,7 +54,7 @@
         <!-- Thumbnail -->
         <div
           class="gn-md-thumbnail"
-          data-ng-class="{'gn-md-no-thumbnail': !md.overview[0]}"
+          data-ng-class="{'gn-md-no-thumbnail': !md.hideNoThumbnailIndicator()}"
         >
           <img
             class="gn-img-thumbnail"
@@ -74,7 +74,11 @@
       </div>
       <div class="gn-md-contact">
         <!-- Handle string and array results -->
-        {{[].concat(md[searchResultContact || 'OrgForResource'])[0]}}
+        {{ 'contact' | translate }}:
+        <i>{{[].concat(md[searchResultContact || 'OrgForResource'])[0]}}</i>
+      </div>
+      <div data-ng-show="md.groupOwnerName!=''">
+        {{'groupOwner' | translate}}: <i>{{md.groupOwnerName}}</i>
       </div>
     </div>
     <!-- /.gn-card-body -->

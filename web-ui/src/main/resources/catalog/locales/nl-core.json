@@ -31,7 +31,7 @@
     "recordType-n": "Metadata",
     "recordType-s": "Addressenboek instantie",
     "recordType-t": "Template voor telefoonboek item",
-    "UserAdmin": "Gebruikersadmin",
+    "UserAdmin": "Gebruiker admin",
     "duplicatedValueFound": "Waarde '{{value}}' bestaat reeds. Kies een andere.",
     "duplicatedValueFoundHarvesterName": "Harvesternaam '{{value}}' bestaat reeds. Het is aangeraden een andere naam te kiezen.",
     "tooManyItemsInSelection": "Te veel records in selectie. Maximaal {{maxSize}} records toegestaan.",
@@ -288,7 +288,7 @@
     "resetOps": "Reset operatie",
     "addThoseOperations": "Voeg geselecteerde samen",
     "replaceByThoseOperations": "Update",
-    "spatialExtent": "Ruimtelijke dekking",
+    "spatialExtent": "Ruimtelijke begrenzing",
     "sessionIsAboutToBeCancelled": "Je sessie wordt bijna afgesloten!",
     "sessionAlertMsg": "Je laatste activiteit was om {{startedAt}} en je sessie zal verlopen in {{willBeCancelledIn}}s (max tijd inactief is {{length}}s). Sla je werk op, anders dreigen je wijzigingen verloren te gaan!",
     "sessionWillExpireIn": "Uw sessie zal aflopen in {{remainingTime}}s. Sla uw werk op.",
@@ -379,6 +379,7 @@
     "layerNotAvailableInMapProj": "De service biedt geen laag in de kaart projectie '{{proj}}'. De laag wordt aan de kaart toegevoegd maar wordt misschien niet goed weergegeven.",
     "layerCRSNotFound": "De service bevat geen projectie informatie. Mogelijk hangt dit samen met een WMS versie lager dan 1.3.0.",
     "layerTileLoadError": "Er is iets mis gegaan bij het laden van tegel <a href='{{url}}' target='_blank'>'{{url | limitTo: 30}} ...'</a> voor laag '{{layer}}'.",
+    "layerProtocolNotSupported": "The following protocol is not supported yet in the map viewer: {{type}}",
     "getCapFailure": "Het was niet mogelijk verbinding te leggen met de WMS service.  Het WMS getCapabilites request faalde.",
     "standards": "Metadata standaard",
     "documentStandard": "Metadata standaard",
@@ -553,7 +554,7 @@
     "wmtsLayerNoUsableMatrixSet": "WMTS laag kan niet toegevoegd worden. Mogelijk biedt de service geen data aan in een projectie die door de applicatie ondersteund wordt.",
     "chooseRegion": "Kies een regio",
     "clickToDrawABox": "Klik eenmaal om in te schakelen en selecteer een gebied . Klik nogmaals om te stoppen met tekenen.",
-    "drawRectangle": "Teken dekkingsgebied",
+    "drawRectangle": "Teken geografische begrenzing",
     "clickToClearMapBox": "Klik om de kaartweergave to legen.",
     "clearRectangle": "Kaartweergave leeg maken",
     "unselectChoiceNotAllowedTitle": "Selectie ongedaan maken",
@@ -576,5 +577,5 @@
     "reviewerNotAllowedPublish": "Reviewer not allowed to publish the metadata",
     "reviewerNotAllowedUnpublish": "Reviewer not allowed to un-publish the metadata",
     "reviewerNotAllowedPublishUnpublish": "Reviewer not allowed to publish / un-publish the metadata",
-    "missingTitle": "Missing title"
+    "missingTitle": "Ontbrekende titel"
 }

@@ -3,16 +3,47 @@ All notable changes to this project will be documented in this file. These chang
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.6-SNAPSHOT]
+## [1.1.7-SNAPSHOT]
 
 ### vlaanderen
-- Label fixes - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28988) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29360)
+- Dataset identifier now added for new records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29827)
+- Added "Add Geographic keyword" transformation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29829)
+- Lengthened 1089 conformance title - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29793)
+- Cleaned up quality section - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29782)
+- Changing group owner now disallowed - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29768)
+- Added custom header and footer - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29876)
+- Add additional information to the index & the relation API used by the microservice during RDF DCAT2 conversion - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29880)
+
+### core-geonetwork
+- Styling fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29747) / [core-pr](https://github.com/geonetwork/core-geonetwork/pull/7502)
+- Merged v4.4.1 release - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29891) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7508) / [changelog-core](https://docs.geonetwork-opensource.org/4.4/overview/change-log/version-4.4.1/)
+  - Add more db information to the site information page
+  - Fix cookies path when deployed on root "/" context
+  - Security / Jolokia update
+- Added capability to validate after harvesting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27953) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7370)
+ 
+
+## [1.1.6] - 2023-11-17
+
+### vlaanderen
+- Label fixes - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28988) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29360) / [pr3](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29489)
 - Search options & facet label fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29375)
 - Index scope as topic category for iso19110 - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29215)
+- Removed mdc portal, added messaging to clarify DataPublicatie group - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29525)
+- Allow editing thumbnails in side panel - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29591)
+- Showing usergroups in login menu - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29697)
+- Implement relation API for DCAT metadata - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29671)
+  - Add RDF resource URI to index for ISO-19139 and DCAT2 records
+  - Add resource URI pattern configuration for CSW and geonet harvesters
+  - Augment `related` object from relation API with `rdfResourceURI` & `domain`
+  - Implement relation linking in DCAT2 plugin
+- Editors can now edit records that were created by admins - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29714)
+- gmd:LanguageCode now uses iso639-2 - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29726)
 
 ### core-geonetwork
 - Modified display of draft copies - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7477) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29234)
-- Added capability to validate after harvesting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27953) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7370)
+- Fix `linkServiceToDataset` directive default filter on resource type - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7489)
+
 
 ## [1.1.5] - 2023-11-08
 
@@ -53,7 +84,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.1.2] - 2023-10-16
 - Ordering workflow statuses in logical way - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27923)
 - Publishing draft now sets group owner correctly - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28255)
-
+ 
 
 ## [1.1.1] - 2023-09-29
 

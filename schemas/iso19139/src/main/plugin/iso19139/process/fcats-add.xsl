@@ -28,6 +28,8 @@ attached it to the metadata for data.
 -->
 <xsl:stylesheet xmlns:gmd="http://www.isotc211.org/2005/gmd"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                xmlns:gfc="http://www.isotc211.org/2005/gfc"
+                xmlns:gmx="http://www.isotc211.org/2005/gmx"
                 xmlns:geonet="http://www.fao.org/geonetwork"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -38,6 +40,9 @@ attached it to the metadata for data.
   <xsl:param name="siteUrl"/>
   <xsl:param name="fcatsUrl" select="''"/>
   <xsl:param name="fcatsTitle" select="''"/>
+  <!-- VL - 'select' is for default values, don't pass it and it becomes a required param -->
+  <xsl:param name="versionDate" select="''"/>
+  <xsl:param name="versionNumber" select="''"/>
 
   <xsl:template match="/gmd:MD_Metadata|*[@gco:isoType='gmd:MD_Metadata']">
     <xsl:copy>
@@ -83,7 +88,9 @@ attached it to the metadata for data.
           <xsl:copy-of select="gmd:contentInfo"/>
           <gmd:contentInfo>
             <gmd:MD_FeatureCatalogueDescription>
-              <gmd:includedWithDataset/>
+              <gmd:includedWithDataset>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:includedWithDataset>
               <xsl:call-template name="make-fcats-link"/>
             </gmd:MD_FeatureCatalogueDescription>
           </gmd:contentInfo>
@@ -122,7 +129,36 @@ attached it to the metadata for data.
                          select="concat($siteUrl, 'csw?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=', $uuidref)"/>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:call-template name="add-citation"/>
     </gmd:featureCatalogueCitation>
+  </xsl:template>
+
+  <xsl:template name="add-citation">
+    <gmd:CI_Citation>
+      <gmd:title>
+        <gco:CharacterString>
+          <xsl:value-of select="$fcatsTitle"/>
+        </gco:CharacterString>
+      </gmd:title>
+      <gmd:date>
+        <gmd:CI_Date>
+          <gmd:date>
+            <gco:Date>
+              <xsl:value-of select="$versionDate"/>
+            </gco:Date>
+          </gmd:date>
+          <gmd:dateType>
+            <gmd:CI_DateTypeCode codeListValue="revision"
+                                 codeList="https://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode"/>
+          </gmd:dateType>
+        </gmd:CI_Date>
+      </gmd:date>
+      <gmd:edition>
+        <gco:CharacterString>
+          <xsl:value-of select="$versionNumber"/>
+        </gco:CharacterString>
+      </gmd:edition>
+    </gmd:CI_Citation>
   </xsl:template>
 
   <!-- Do a copy of every nodes and attributes -->

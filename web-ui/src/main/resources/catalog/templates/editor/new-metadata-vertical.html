@@ -148,10 +148,11 @@
     <div class="col-sm-8 col-sm-offset-4">
       <div class="dropup gn-margin-top">
         <div class="btn-group">
+          <!-- vl - pass 'true' to createNewMetadata to allow editors to modify records in their group -->
           <button
             type="button"
             class="btn btn-primary"
-            data-gn-click-and-spin="createNewMetadata()"
+            data-gn-click-and-spin="createNewMetadata(true)"
             data-ng-class="{'disabled': (!activeTpl || !ownerGroup || ((!generateUuid) && (!isMdIdentifierFilled())) )}"
           >
             <i class="fa fa-plus" />

@@ -1,0 +1,9 @@
+<div data-ng-show="isHidden()" data-ng-model="lang" id="language-switcher">
+  <ul class="aiv-language-switcher" aria-labelledby="language-switcher">
+    <li data-ng-repeat="(key, value) in langs" class="aiv-language-li">
+      <a data-ng-click="switchLanguage(key)" href class="aiv-language-item"
+        >{{langs[key]}}</a
+      >
+    </li>
+  </ul>
+</div>

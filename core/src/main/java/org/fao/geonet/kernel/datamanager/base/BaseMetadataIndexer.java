@@ -453,6 +453,7 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
                     if (groupOpt.isPresent()) {
                         Group group = groupOpt.get();
                         fields.put(Geonet.IndexFieldNames.GROUP_OWNER, String.valueOf(groupOwner));
+                        fields.put(Geonet.IndexFieldNames.GROUP_OWNER_NAME, group.getName());
                         final boolean preferGroup = settingManager.getValueAsBool(Settings.SYSTEM_PREFER_GROUP_LOGO, true);
                         if (group.getWebsite() != null && !group.getWebsite().isEmpty() && preferGroup) {
                             fields.put(Geonet.IndexFieldNames.GROUP_WEBSITE, group.getWebsite());
@@ -460,6 +461,7 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
                         if (group.getLogo() != null && preferGroup) {
                             logoUUID = group.getLogo();
                         }
+                        fields.put(Geonet.IndexFieldNames.GROUP_OWNER_VLTYPE, group.getVlType());
                     }
                 }
 
@@ -526,7 +528,11 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
 
                         // TODO: Check if ignore INSPIRE validation?
                         if (!type.equalsIgnoreCase("inspire")) {
-                            if (status == MetadataValidationStatus.INVALID && vi.isRequired()) {
+                            // If never validated and required then set status to never validated.
+                            if (status == MetadataValidationStatus.NEVER_CALCULATED && vi.isRequired()) {
+                                isValid = "-1";
+                            }
+                            if (status == MetadataValidationStatus.INVALID && vi.isRequired() && isValid != "-1") {
                                 isValid = "0";
                             }
                         } else {

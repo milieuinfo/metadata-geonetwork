@@ -14,7 +14,7 @@
                 xmlns:schema="http://schema.org/"
                 xmlns:locn="http://www.w3.org/ns/locn#"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:mdcat="http://data.vlaanderen.be/ns/metadata-dcat#"
+                xmlns:mdcat="https://data.vlaanderen.be/ns/metadata-dcat#"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 xmlns:util="java:org.fao.geonet.util.XslUtil"
                 xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/2.0"

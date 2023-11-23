@@ -43,6 +43,7 @@
     "gnMetadataManager",
     "gnConfigService",
     "gnConfig",
+    "gnESFacet",
     "Metadata",
     function (
       $scope,
@@ -56,6 +57,7 @@
       gnMetadataManager,
       gnConfigService,
       gnConfig,
+      gnESFacet,
       Metadata
     ) {
       $scope.isTemplate = false;
@@ -134,6 +136,7 @@
                   must: query
                 }
               },
+              _source: gnESFacet.configs.editor.source,
               from: 0,
               size: 1000
             })
@@ -209,7 +212,8 @@
             $scope.groups.length === 1 &&
             $scope.generateUuid === true
           ) {
-            $scope.createNewMetadata(false);
+            // vl - pass 'true' to createNewMetadata to allow editors to modify records in their group
+            $scope.createNewMetadata(true);
           }
           unregisterFn();
           unregisterMdListFn();

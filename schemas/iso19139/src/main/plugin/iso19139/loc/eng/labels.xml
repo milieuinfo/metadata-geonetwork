@@ -1287,6 +1287,11 @@
     <description>Date and time for the content of the dataset</description>
     <_condition>mandatory</_condition>
   </element>
+  <element name="gmd:extent">
+    <label>Extent</label>
+    <description>Information about the spatial, vertical and temporal extent of the dataset.</description>
+    <condition>conditional</condition>
+  </element>
   <element name="gmd:extentTypeCode" id="340.0">
     <label>Extent type code</label>
     <description>Indication of whether the bounding polygon encompasses an area covered by the
@@ -2273,6 +2278,8 @@
       <option value="OGC API - Features">OGC API - Features</option>
       <option value="OGC API - Maps">OGC API - Maps</option>
       <option value="OGC API - Records">OGC API - Records</option>
+      <option value="OGC:3DTILES">OGC-3DTiles Dataset</option>
+      <option value="OGC:COG">OGC-Cloud Optimized GeoTIFF</option>
       <option value="OGC:CSW">OGC-CSW Catalogue Service for the Web</option>
       <option value="OGC:KML">OGC-KML Keyhole Markup Language</option>
       <option value="OGC:GML">OGC-GML Geography Markup Language</option>

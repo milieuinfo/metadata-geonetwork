@@ -1,0 +1,58 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="00033-fix-datapublicatie-casing" author="joachim">
+    <!-- DataPublicatie has a capital P -->
+    <update tableName="sources">
+      <column name="name" value="DataPublicatie"/>
+      <where>uuid = 'dp'</where>
+    </update>
+    <update tableName="sourcesdes">
+      <column name="label" value="DataPublicatie"/>
+      <where>iddes = 'dp'</where>
+    </update>
+    <!-- update any groups that are already present -->
+    <update tableName="groups">
+      <column name="name" value="DataPublicatie Stad Gent"/>
+      <where>name = 'Datapublicatie Stad Gent'</where>
+    </update>
+    <update tableName="groups">
+      <column name="name" value="DataPublicatie Digitaal Vlaanderen"/>
+      <where>name = 'Datapublicatie Digitaal Vlaanderen'</where>
+    </update>
+    <update tableName="groupsdes">
+      <column name="label" value="DataPublicatie Stad Gent"/>
+      <where>label = 'Datapublicatie Stad Gent'</where>
+    </update>
+    <update tableName="groupsdes">
+      <column name="label" value="DataPublicatie Digitaal Vlaanderen"/>
+      <where>label = 'Datapublicatie Digitaal Vlaanderen'</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="joachim" id="00033-fix-datapublicatie-casing-loc" contextFilter="loc">
+    <update tableName="groups">
+      <column name="name" value="DataPublicatie ABC"/>
+      <where>id = 100</where>
+    </update>
+    <update tableName="groupsdes">
+      <column name="label" value="DataPublicatie ABC"/>
+      <where>iddes = 100</where>
+    </update>
+  </changeSet>
+
+  <changeSet author="joachim" id="00033-add-dp-digitaalvlaanderen" contextFilter="loc">
+    <insert tableName="groups">
+      <column name="id" value="103"/>
+      <column name="name" value="DataPublicatie Digitaal Vlaanderen"/>
+      <column name="vltype" value="digitaalvlaanderen"/>
+      <column name="orgcode" value="OVO002949"/>
+    </insert>
+    <sql dbms="postgresql">
+      insert into groupsdes (iddes, label, langid) (select id, name, unnest(array['dut', 'eng', 'ger', 'fre'])
+                                                    from groups
+                                                    where id in (103));
+    </sql>
+  </changeSet>
+</databaseChangeLog>

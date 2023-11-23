@@ -150,10 +150,13 @@ public class EsSearchManager implements ISearchManager {
             .add(Geonet.IndexFieldNames.RESOURCEABSTRACT)
             .add(Geonet.IndexFieldNames.RESOURCEABSTRACT + "Object")
             .add("operatesOn")
+            .add("resourceIdentifier")
+            .add("rdfResourceIdentifier")
+            .add("th_GDI-Vlaanderen-trefwoorden")
             .build();
 
         FIELDLIST_RELATED_SCRIPTED = ImmutableMap.<String, String>builder()
-            // ElasticSearch scripted field to get the first overview url. Scripted fields must return single values.
+            // Elasticsearch scripted field to get the first overview url. Scripted fields must return single values.
             .put("overview", "return params['_source'].overview == null ? [] : params['_source'].overview.stream().map(f -> f.url).findFirst().orElse('');")
             .build();
     }

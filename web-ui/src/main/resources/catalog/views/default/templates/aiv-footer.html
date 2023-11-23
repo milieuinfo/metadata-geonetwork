@@ -1,0 +1,69 @@
+<div class="aiv-footer">
+  <div class="aiv-footer-left-container">
+    <img
+      src="https://assets.vlaanderen.be/image/upload/widgets/vlaanderen-logo.svg"
+      alt="Vlaanderen verbeelding werkt logo"
+    />
+  </div>
+  <div class="aiv-footer-center-container">
+    <div>
+      <h2>
+        Metadata.vlaanderen.be is een officiële website van de Vlaamse overheid
+        <span class="aiv-vlaanderen-link-container">
+          <span>uitgegeven door</span>
+          <a href="https://www.vlaanderen.be/digitaal-vlaanderen/" target="_blank">
+            Digitaal Vlaanderen
+            <svg viewBox="0 0 32 32" role="img">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" href="#icon-external"></use>
+            </svg>
+            <span>(opent in nieuw venster)</span>
+          </a>
+        </span>
+        <span
+          class="aiv-versie-container"
+          data-translate=""
+          data-translate-values="{vlversion: '{{info['system/vlaanderen/version']}}', platform: '{{info['system/platform/name']}}', version: '{{info['system/platform/version']}}', subversion: '{{info['system/platform/subVersion']}}'}"
+        >
+          versionDetails
+        </span>
+      </h2>
+    </div>
+    <ul ng-show="::getApplicationInfoVisible()">
+      <li>
+        <a
+          href="https://www.vlaanderen.be/digitaal-vlaanderen/onze-oplossingen/informatiecatalogus"
+          target="_blank"
+        >
+          <span data-translate="">about</span>
+        </a>
+        <span class="aiv-footer-separator"></span>
+      </li>
+      <li>
+        <a href="https://www.vlaanderen.be/over-vlaanderenbe/disclaimer" target="_blank">
+          <span data-translate="">Disclaimer</span>
+        </a>
+        <span class="aiv-footer-separator"></span>
+      </li>
+      <li>
+        <a href="https://github.com/geonetwork/core-geonetwork" target="_blank">
+          <span data-translate="">github</span>
+        </a>
+        <span class="aiv-footer-separator"></span>
+      </li>
+      <li>
+        <a href="../../doc/api" title="{{'learnTheApi' | translate}}"> API </a>
+        <span class="aiv-footer-separator"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="aiv-footer-center-container">
+    <div class="aiv-footer-dv-container">
+      <img
+        src="https://assets.vlaanderen.be/image/upload/widgets/digitaal-vlaanderen-logo.svg"
+      />
+    </div>
+    <div>
+      <div gn-languages-menu=""></div>
+    </div>
+  </div>
+</div>
