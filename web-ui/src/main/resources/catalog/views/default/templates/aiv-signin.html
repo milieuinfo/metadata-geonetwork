@@ -2,8 +2,7 @@
   data-ng-if="gnCfg.mods.authentication.enabled || authenticated"
   style="list-style-type: none"
 >
-  <!-- logged in -->
-
+  <!-- logged in, show dropdown with user info and logout button -->
   <div data-ng-show="authenticated" class="logged-in-container">
     <li class="dropdown">
       <a
@@ -20,7 +19,7 @@
           data-ng-src="../api/users/{{(user.id)}}.png?size=18"
         />
         <div class="aiv-login-user-info">
-          <span>{{user.name}} {{user.surname}}</span><br />
+          <span>{{user.name}} {{user.surname}}</span> \\
           <span>{{user.profile | translate}}</span>
         </div>
         <span
@@ -100,10 +99,14 @@
         </li>
       </ul>
     </li>
-    <li
-      class="open signin-dropdown"
-      data-ng-if="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink"
-    >
+  </div>
+
+  <!-- this is the login link generated for, e.g., ACM/IDM-->
+  <div
+    data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && isShowLoginAsLink"
+    class="logged-in-container"
+  >
+    <li class="aiv-sign-in-link">
       <a
         href="{{signInFormAction}}?_csrf={{csrf}}&redirectUrl={{redirectUrlAfterSign}}"
         title="{{'signIn'|translate}}"
@@ -111,17 +114,18 @@
         data-ng-keypress="$event"
         id="signinLink"
       >
-        <span class="fa fa-fw fa-sign-in hidden-sm"></span>
-        {{'signIn' | translate}}
+        <span class="fa fa-fw fa-sign-in hidden-sm aiv-sign-in-logo"></span>
+        <span class="aiv-sign-in">{{'signIn' | translate}}</span>
       </a>
     </li>
   </div>
-  <!-- not logged in -->
-  <div class="logged-in-container">
-    <li
-      class="dropdown signin-dropdown"
-      data-ng-if="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm"
-    >
+
+  <!-- geonetwork login menu for user/password credentials -->
+  <div
+    data-ng-show="!authenticated && service !== 'catalog.signin' && service !== 'new.account' && !isShowLoginAsLink && !isDisableLoginForm"
+    class="logged-in-container"
+  >
+    <li class="dropdown signin-dropdown aiv-sign-in-link">
       <a
         href="{{gnCfg.mods.authentication.signinUrl | signInLink}}"
         title="{{'signIn'|translate}}"
