@@ -898,44 +898,64 @@
 										  lower-case(@vocabulary)!=lower-case($gemet-thesaurus) and
 										  lower-case(@vocabulary)!=lower-case($inspire-service-taxonomy-thesaurus) and
 										  lower-case(@vocabulary)!=lower-case($inspire-theme-thesaurus)]) > 0">
-      <!--Lijst M&R-->
-      <xsl:for-each select="ows:Keyword | ows11:Keyword | ows2:Keyword | wfs:Keyword | wcs:keyword">
-        <xsl:if test=".='Lijst M&amp;R INSPIRE'">
-          <descriptiveKeywords>
-            <MD_Keywords>
+      <!--GDI-Vlaanderen keywords-->
+      <descriptiveKeywords>
+        <MD_Keywords>
+          <xsl:for-each select="ows:Keyword | ows11:Keyword | ows2:Keyword | wfs:Keyword | wcs:keyword">
+            <xsl:if test=".='Lijst M&amp;R INSPIRE'">
               <keyword>
-                <!--	PETER :							<gmx:Anchor xlink:href="http://mir.geopunt.be/cl/Geopunt/GDI-Vlaanderen-Trefwoorden/LIJSTMRINSPIRE"><xsl:value-of select="."/></gmx:Anchor> -->
-                <gmx:Anchor
-                  xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/LIJSTMRINSPIRE">
-                  <xsl:value-of select="."/>
+                <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/LIJSTMRINSPIRE">
+                  Lijst M&amp;R INSPIRE
                 </gmx:Anchor>
               </keyword>
-              <thesaurusName>
-                <CI_Citation>
-                  <title>
-                    <gmx:Anchor xlink:href="{$gdi-vlaanderen-trefwoorden-thesaurus-anchor-href}">
-                      <xsl:value-of select="$gdi-vlaanderen-trefwoorden-thesaurus-anchor-value"/>
-                    </gmx:Anchor>
-                  </title>
+            </xsl:if>
+          </xsl:for-each>
+          <keyword>
+            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/GEODATA">
+              Geografische gegevens
+            </gmx:Anchor>
+          </keyword>
+          <keyword>
+            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/VLOPENDATASERVICE">
+              Vlaamse Open data Service
+            </gmx:Anchor>
+          </keyword>
+          <keyword>
+            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDINSPIRECONFORM">
+              Metadata INSPIRE-conform
+            </gmx:Anchor>
+          </keyword>
+          <keyword>
+            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDGDICONFORM">
+              Metadata GDI-Vl-conform
+            </gmx:Anchor>
+          </keyword>
+
+          <thesaurusName>
+            <CI_Citation>
+              <title>
+                <gmx:Anchor xlink:href="{$gdi-vlaanderen-trefwoorden-thesaurus-anchor-href}">
+                  <xsl:value-of select="$gdi-vlaanderen-trefwoorden-thesaurus-anchor-value"/>
+                </gmx:Anchor>
+              </title>
+              <date>
+                <CI_Date>
                   <date>
-                    <CI_Date>
-                      <date>
-                        <gco:Date>2014-02-26</gco:Date>
-                      </date>
-                      <dateType>
-                        <CI_DateTypeCode
-                          codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode"
-                          codeListValue="publication">publication
-                        </CI_DateTypeCode>
-                      </dateType>
-                    </CI_Date>
+                    <gco:Date>2014-02-26</gco:Date>
                   </date>
-                </CI_Citation>
-              </thesaurusName>
-            </MD_Keywords>
-          </descriptiveKeywords>
-        </xsl:if>
-      </xsl:for-each>
+                  <dateType>
+                    <CI_DateTypeCode
+                      codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#CI_DateTypeCode"
+                      codeListValue="publication">publication
+                    </CI_DateTypeCode>
+                  </dateType>
+                </CI_Date>
+              </date>
+            </CI_Citation>
+          </thesaurusName>
+        </MD_Keywords>
+      </descriptiveKeywords>
+
       <!--other keywords-->
       <descriptiveKeywords>
         <MD_Keywords>
@@ -946,9 +966,18 @@
 											  lower-case(@vocabulary)!=lower-case($gdi-vlaanderen-trefwoorden-thesaurus) and
 											  lower-case(@vocabulary)!=lower-case($gemet-thesaurus) and
 											  lower-case(@vocabulary)!=lower-case($inspire-service-taxonomy-thesaurus) and
-											  lower-case(@vocabulary)!=lower-case($inspire-theme-thesaurus)">
+											  lower-case(@vocabulary)!=lower-case($inspire-theme-thesaurus) ">
+
               <xsl:variable name="keywordValue" select="normalize-space(.)"/>
-              <xsl:if test="$keywordValue!='infoMapAccessService' and $keywordValue!='infoFeatureAccessService' and $keywordValue!='Lijst M&amp;R INSPIRE' and  $keywordValue!='infoCoverageAccessService'">
+              <xsl:if test="$keywordValue!='infoMapAccessService'
+              and $keywordValue!='infoFeatureAccessService'
+              and $keywordValue!='Lijst M&amp;R INSPIRE'
+              and  $keywordValue!='infoCoverageAccessService'
+              and  $keywordValue!='Geografische gegevens'
+              and  $keywordValue!='Metadata GDI-Vl-conform'
+              and  $keywordValue!='Geografische gegevens'
+              and  $keywordValue!='Vlaamse Open data Service'">
+
                 <keyword>
                   <gco:CharacterString>
                     <xsl:value-of select="."/>
