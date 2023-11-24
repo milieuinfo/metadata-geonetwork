@@ -135,6 +135,15 @@ td[data-ng-if="columnVisibility['date']"] {
         }
       }
 
+      ul {
+        li[gn-static-page-menu="menu"]{
+          a {
+            // fix for a static page link in the navbar
+            padding: 0px;
+          }
+        }
+      }
+
       // a bit more space between the icon of a menu item and its text
       ul.dropdown-menu > li[role="menuitem"] > a > span:first-of-type {
          margin-right: 10px;
