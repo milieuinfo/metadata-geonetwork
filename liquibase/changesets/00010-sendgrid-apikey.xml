@@ -2,7 +2,7 @@
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-  <changeSet author="joachim" id="00010" runAlways="true">
+  <changeSet author="joachim" id="00010" runOnChange="true">
     <update tableName="settings">
       <column name="value" value="${gn.system.feedback.mailServer.password}"/>
       <where>name='system/feedback/mailServer/password'</where>
