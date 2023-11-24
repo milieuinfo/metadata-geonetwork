@@ -136,8 +136,8 @@ td[data-ng-if="columnVisibility['date']"] {
       }
 
       // a bit more space between the icon of a menu item and its text
-      li[role="menuitem"] > a > span:first-of-type {
-        margin-right: 10px;
+      ul.dropdown-menu > li[role="menuitem"] > a > span:first-of-type {
+         margin-right: 10px;
       }
     }
 
@@ -221,7 +221,7 @@ td[data-ng-if="columnVisibility['date']"] {
 
       .aiv-header-brand-umbrella-logo:hover::after {
         box-sizing: inherit;
-        content: "";
+        content: "X";
         position: absolute;
         top: 0;
         left: 28px;
@@ -277,11 +277,13 @@ td[data-ng-if="columnVisibility['date']"] {
     cursor: pointer;
 
     .contact-redirect {
-      padding: 14px 0 14px 40px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0px 10px;
       background-color: #e8ebee;
       margin: 0;
       position: relative;
-      top: 13px;
       transition: all 0.2s ease;
       color: #333332;
       text-transform: uppercase;
@@ -300,11 +302,11 @@ td[data-ng-if="columnVisibility['date']"] {
         left: 0;
         top: 0;
         border-bottom: 43px solid #fff;
-        border-right: 14.70687px solid transparent;
+        //border-right: 14.70687px solid transparent;
       }
 
       .contact-label {
-        padding-right: 10px;
+        padding-left: 5px;
         text-transform: uppercase;
         font-size: 14px;
         font-weight: 500;
@@ -318,6 +320,7 @@ td[data-ng-if="columnVisibility['date']"] {
           color: #95989b;
           font-size: 14px;
           padding-left: 10px;
+          cursor: pointer;
         }
       }
     }
@@ -467,10 +470,16 @@ td[data-ng-if="columnVisibility['date']"] {
 
   .aiv-nav-login {
     padding-left: 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
 
     .logged-in-container {
       font-family: flanders-sans, sans-serif;
       font-weight: 500;
+      padding-left: 5px;
+      padding-right: 10px;
 
       a {
         display: flex;
@@ -508,7 +517,7 @@ td[data-ng-if="columnVisibility['date']"] {
         }
 
         .aiv-login-user-info {
-          padding: 13px;
+          padding-left: 7px;
 
           .aiv-disconnect {
             border: none;

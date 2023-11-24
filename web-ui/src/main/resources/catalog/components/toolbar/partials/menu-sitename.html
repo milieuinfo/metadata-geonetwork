@@ -7,7 +7,7 @@
       data-ng-src="{{gnUrl}}../images/logos/{{info['node/id'] || info['system/site/siteId']}}.png?random{{info['system/site/lastUpdate']}}"
     />
     <span
-      class="gn-name gn-margin-left hidden-sm"
+      class="gn-name gn-margin-left hidden-xs"
       data-ng-if="gnCfg.mods.header.showGNName"
       data-ng-class="authenticated && user.isEditorOrMore() ? 'gn-truncate' : ''"
       title="{{info['node/name'] || info['system/site/name']}}"
