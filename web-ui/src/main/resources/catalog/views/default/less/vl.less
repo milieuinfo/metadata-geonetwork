@@ -282,8 +282,18 @@ td[data-ng-if="columnVisibility['date']"] {
   .contact-wrapper {
     float: right;
     position: relative;
-    height: 44px;
+    height: 43px;
     cursor: pointer;
+
+    &::after {
+      display: block;
+      content: '';
+      position: absolute;
+      left: -13.5px;
+      top: 0;
+      border-top: 43px solid #e8ebee;
+      border-left: 14px solid transparent;
+    }
 
     .contact-redirect {
       height: 100%;
@@ -302,16 +312,6 @@ td[data-ng-if="columnVisibility['date']"] {
         background-color: #f3f6f9;
         color: #0055CC;
         text-decoration: underline;
-      }
-
-      &::after {
-        display: block;
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        border-bottom: 43px solid #fff;
-        //border-right: 14.70687px solid transparent;
       }
 
       .contact-label {
