@@ -798,7 +798,15 @@
             <xsl:if test="$zuluStartDate castable as xs:dateTime
                           and $zuluEndDate  castable as xs:dateTime
                           and $start &gt; $end">
-              <indexingErrorMsg>Warning / Field resourceTemporalDateRange / Lower range bound '<xsl:value-of select="$start"/>' can not be greater than upper bound '<xsl:value-of select="$end"/>'.</indexingErrorMsg>
+              <indexingErrorMsg type="object">{
+                  "string": "indexingErrorMsg-temporalRangeLowerGreaterThanUpper",
+                  "type": "warning",
+                  "values": {
+                    "lowerBound": "<xsl:value-of select="$start"/>",
+                    "upperBound": "<xsl:value-of select="$end"/>"
+                  }
+                }
+              </indexingErrorMsg>
             </xsl:if>
 
             <xsl:call-template name="build-range-details">
