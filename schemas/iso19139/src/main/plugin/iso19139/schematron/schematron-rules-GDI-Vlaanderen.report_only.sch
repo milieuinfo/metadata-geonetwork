@@ -130,7 +130,6 @@
 
   <sch:pattern>
     <sch:title>Een temporele begrenzing moet een geldige begin- en einddatum hebben.</sch:title>
-    <sch:let name="fixedString" value="'some-fixed-string-value'" />
     <sch:rule context="/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml320:TimePeriod">
       <sch:let name="begin-position" value="//gml320:beginPosition/text()"/>
       <sch:let name="end-position" value="//gml320:endPosition/text()"/>
