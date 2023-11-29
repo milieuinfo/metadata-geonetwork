@@ -129,7 +129,7 @@
   </sch:pattern>
 
   <sch:pattern>
-    <sch:title>Een temporele begrenzing moet een geldige begin- en einddatum hebben.</sch:title>
+    <sch:title>$loc/strings/M900</sch:title>
     <sch:rule context="/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml320:TimePeriod">
       <sch:let name="begin-position" value="//gml320:beginPosition/text()"/>
       <sch:let name="end-position" value="//gml320:endPosition/text()"/>
@@ -137,8 +137,8 @@
       <sch:let name="check-order" value="$begin-position &lt; $end-position"/>
       <!-- only interested when we filled in both fields: we want to check the order -->
       <sch:let name="check-presence" value="not(boolean($begin-position) and boolean($end-position))"/>
-      <sch:assert test="$check-order or $check-presence">Begindatum <sch:value-of select="$begin-position"/> valt na de einddatum <sch:value-of select="$end-position"/>.</sch:assert>
-      <sch:report test="$check-order and $check-presence">Begindatum <sch:value-of select="$begin-position"/> valt na de einddatum <sch:value-of select="$end-position"/>.</sch:report>
+      <sch:assert test="$check-order or $check-presence"><sch:value-of select="$loc/strings/alert.M900.1"/>&#160;<sch:value-of select="$begin-position"/>&#160;<sch:value-of select="$loc/strings/alert.M900.2"/>&#160;<sch:value-of select="$end-position"/>.</sch:assert>
+      <sch:report test="$check-order or $check-presence"><sch:value-of select="$loc/strings/alert.M900.1"/>&#160;<sch:value-of select="$begin-position"/>&#160;<sch:value-of select="$loc/strings/alert.M900.2"/>&#160;<sch:value-of select="$end-position"/>.</sch:report>
     </sch:rule>
   </sch:pattern>
 </sch:schema>
