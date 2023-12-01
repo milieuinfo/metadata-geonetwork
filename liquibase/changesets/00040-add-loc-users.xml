@@ -1,0 +1,101 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="00040-add-editor" author="joachim" contextFilter="loc">
+    <insert tableName="users">
+      <column name="name">Edith</column>
+      <column name="surname">Dor</column>
+      <column name="username">editor</column>
+      <!-- password: Editor$1 -->
+      <column name="password">9840dec57f427ed00c90f44f191c3d20bd1679dab3f273f5908dbf181a659948567628c6da0ca070</column>
+      <column name="nodeid">srv</column>
+      <column name="profile">3</column>
+      <column name="isenabled">y</column>
+      <column name="id">2</column>
+    </insert>
+    <insert tableName="email">
+      <column name="user_id">2</column>
+      <column name="email">edith@dor.be</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">102</column>
+      <column name="profile">3</column>
+      <column name="userid">2</column>
+    </insert>
+  </changeSet>
+  <changeSet id="00040-add-reviewer" author="joachim" contextFilter="loc">
+    <insert tableName="users">
+      <column name="name">Chris</column>
+      <column name="surname">Tique</column>
+      <column name="username">reviewer</column>
+      <!-- password: Reviewer$1 -->
+      <column name="password">77af2743a1e26d303967c4dc489ce1d03dcf7b8ba0c6659419c76158db59380650e4c5dfc4b51c1a</column>
+      <column name="nodeid">srv</column>
+      <column name="profile">2</column>
+      <column name="isenabled">y</column>
+      <column name="id">3</column>
+    </insert>
+    <insert tableName="email">
+      <column name="user_id">3</column>
+      <column name="email">chris@tique.be</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">102</column>
+      <column name="profile">3</column>
+      <column name="userid">3</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">103</column>
+      <column name="profile">3</column>
+      <column name="userid">3</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">103</column>
+      <column name="profile">2</column>
+      <column name="userid">3</column>
+    </insert>
+  </changeSet>
+  <changeSet id="00040-add-dv-admin" author="joachim" contextFilter="loc">
+    <insert tableName="users">
+      <column name="name">Ada</column>
+      <column name="surname">Ming</column>
+      <column name="username">dvadmin</column>
+      <!-- password: Dvadmin$1 -->
+      <column name="password">104ad2d87ed63fc84e12c22cd650f931407c96362a9207239480aee2a0d4f3391897bf9b9d7c6d64</column>
+      <column name="nodeid">srv</column>
+      <column name="profile">0</column>
+      <column name="isenabled">y</column>
+      <column name="id">4</column>
+    </insert>
+    <insert tableName="email">
+      <column name="user_id">4</column>
+      <column name="email">ada@ming.be</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">102</column>
+      <column name="profile">1</column>
+      <column name="userid">4</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">102</column>
+      <column name="profile">3</column>
+      <column name="userid">4</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">103</column>
+      <column name="profile">1</column>
+      <column name="userid">4</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">103</column>
+      <column name="profile">2</column>
+      <column name="userid">4</column>
+    </insert>
+    <insert tableName="usergroups">
+      <column name="groupid">103</column>
+      <column name="profile">3</column>
+      <column name="userid">4</column>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
