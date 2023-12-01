@@ -920,17 +920,6 @@
               Vlaamse Open data Service
             </gmx:Anchor>
           </keyword>
-          <keyword>
-            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDINSPIRECONFORM">
-              Metadata INSPIRE-conform
-            </gmx:Anchor>
-          </keyword>
-          <keyword>
-            <gmx:Anchor xlink:href="https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDGDICONFORM">
-              Metadata GDI-Vl-conform
-            </gmx:Anchor>
-          </keyword>
-
           <thesaurusName>
             <CI_Citation>
               <title>
