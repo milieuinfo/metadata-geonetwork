@@ -4,6 +4,7 @@ This section serves as an appendix to the current Geonetwork documentation. The 
 to the core that are either useful in our environment (e.g. scripts) or vlaanderen-specific.
 
 Topics:
+- [Development](docs/development.md)
 - [Docker](docs/docker.md)
 - [Git hooks](docs/githooks.md)
 - [Migration](docs/migration.md)

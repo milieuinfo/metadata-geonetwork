@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+  <style>
+    div {
+      font-family: Calibri, Arial, sans-serif;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      border-bottom: 5px solid #FFED00;
+    }
+
+    #vl-logo {
+    }
+
+    .paragraph {
+      margin-bottom: 10px;
+    }
+
+    #greeting {
+      margin-bottom: 20px;
+    }
+
+    #finish {
+      padding-top: 10px;
+    }
+
+    #vl-logo img {
+      height: 40px;
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    #mdv-title {
+      border-bottom: 3px solid #333332;
+      color: #333332;
+      font-weight: 600;
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    body {
+      margin-left: auto;
+      margin-right: auto;
+      width: 500px;
+    }
+
+    .footer {
+      margin-top: 20px;
+    }
+
+    #content {
+      padding: 0 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <div id="vl-logo">
+    <img src="https://file-eu.clickdimensions.com/vlaanderenbe-aqwrf/files/hoofdingalgemeencopy.png"/>
+  </div>
+</div>
+<div class="body">
+  <div id="content">
+    <div id="mdv-title">
+      ${artifact}
+    </div>
+    <div id="greeting">
+      Beste metadata-editor,
+    </div>
+    <div id="action" class="paragraph">
+      ${section-action}
+    </div>
+    <div class="paragraph">
+      ${section-reason}
+    </div>
+    <div class="paragraph">
+      ${section-link}
+    </div>
+    <div id="finish">
+      Met vriendelijke groeten,<br/>
+      Het Metadata-team
+    </div>
+  </div>
+</div>
+<div class="footer" style="width: 100%; height: 30px; background-color: #FFED00;">
+</div>
+</body>
+</html>
