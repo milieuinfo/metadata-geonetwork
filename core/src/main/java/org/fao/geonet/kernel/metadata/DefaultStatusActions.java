@@ -23,11 +23,12 @@
 
 package org.fao.geonet.kernel.metadata;
 
-import com.google.common.collect.Sets;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
 import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.fao.geonet.ApplicationContextHolder;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.domain.*;
@@ -38,13 +39,16 @@ import org.fao.geonet.kernel.setting.SettingManager;
 import org.fao.geonet.kernel.setting.Settings;
 import org.fao.geonet.repository.*;
 import org.fao.geonet.repository.specification.GroupSpecs;
+import org.fao.geonet.repository.specification.UserGroupSpecs;
 import org.fao.geonet.util.MailUtil;
+import org.fao.geonet.util.XslUtil;
 import org.fao.geonet.utils.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.fao.geonet.kernel.setting.Settings.SYSTEM_FEEDBACK_EMAIL;
 
@@ -204,11 +208,13 @@ public class DefaultStatusActions implements StatusActions {
 
             // inform content reviewers if the status is submitted
             try {
-                notify(getUserToNotify(status), status);
+                vlNotify(vlGetUserToNotify(currentStatus, status, metadata), currentStatus, status);
             } catch (Exception e) {
-                context.warning(String.format(
-                        "Failed to send notification on status change for metadata %s with status %s. Error is: %s",
-                        status.getMetadataId(), status.getStatusValue().getId(), e.getMessage()));
+                String msg = String.format(
+                    "Failed to send notification on status change for metadata %s with status %s. Error is: %s",
+                    status.getMetadataId(), status.getStatusValue().getId(), e.getMessage());
+                Log.debug(Geonet.DATA_MANAGER, msg);
+                context.warning(msg);
             }
 
             if (deleted) {
@@ -310,6 +316,135 @@ public class DefaultStatusActions implements StatusActions {
         approved.getSourceInfo().setGroupOwner(newGroupOwner);
     }
 
+    /**
+     * Customised version of the notify function. Sends out a custom HTML mail to interested users.
+     *
+     * @param userToNotify the users that will be notified by the change
+     * @param currentStatus the current status of the record
+     * @param status the new status of the record
+     */
+    protected void vlNotify(List<User> userToNotify, MetadataStatus currentStatus, MetadataStatus status) {
+        // validate
+        if ((userToNotify == null) || userToNotify.isEmpty()) {
+            return;
+        }
+
+        // prerequisites
+        ApplicationContext applicationContext = ApplicationContextHolder.get();
+        GroupRepository groupRepository = context.getBean(GroupRepository.class);
+        SettingManager sm = applicationContext.getBean(SettingManager.class);
+        SourceRepository sourceRepository = context.getBean(SourceRepository.class);
+        UserGroupRepository userGroupRepository = context.getBean(UserGroupRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        IMetadataUtils metadataRepository = ApplicationContextHolder.get().getBean(IMetadataUtils.class);
+        ResourceBundle messages = ResourceBundle.getBundle("org.fao.geonet.api.Messages", new Locale(this.language));
+        AbstractMetadata metadata = metadataRepository.findOne(status.getMetadataId());
+
+        // gather required data
+        String statusName = getTranslatedStatusName(status.getStatusValue().getId());
+        String currentStatusName = getTranslatedStatusName(currentStatus.getStatusValue().getId());
+        String subjectTemplate = messages.getString("vl_status_change_email_subject");
+        String textTemplate = messages.getString("vl_status_change_email_text");
+        String recordTypeDraft = messages.getString("vl_record_type_draft");
+        String recordTypeNonDraft = messages.getString("vl_record_type_nondraft");
+        // what groups does our user belong to?
+        List<UserGroup> userGroups = userGroupRepository.findAll(
+            UserGroupSpecs.hasUserId(Integer.parseInt(context.getUserSession().getUserId())));
+        // we want to show the group the user belongs to: we want the non-datapublicatie one
+        Optional<UserGroup> groupOfUser = userGroups
+            .stream()
+            .filter((g) -> !g.getGroup().getVlType().equals("datapublicatie"))
+            .findFirst();
+        boolean isAdmin = session.getProfile().equals(Profile.Administrator);
+        String metadataUrl = metadataUtils.getDefaultUrl(metadata.getUuid(), this.language);
+        VlEnvironment environment = getEnvironment(sm.getNodeURL());
+        boolean isDraft = metadata instanceof MetadataDraft;
+        String userFullName = String.join(" ", context.getUserSession().getName(), context.getUserSession().getSurname());
+        Optional<Group> groupOwner = groupRepository.findById(metadata.getSourceInfo().getGroupOwner());
+        String dpPrefix = groupOwner.filter(g -> g.getVlType().equals("datapublicatie")).isPresent() ? "Datapublicatie " : "";
+        String statusChangeReason = status.getChangeMessage().trim();
+
+        // gather parameters for the email
+        // top-level, the mail is composed of 'sections', these need to be replaced first
+        Map<String, String> sections = new HashMap<>();
+        if (isAdmin) {
+            sections.put("section-action", messages.getString("vl_status_change_email_text_action_admin"));
+        } else {
+            sections.put("section-action", messages.getString("vl_status_change_email_text_action_user"));
+        }
+        if (status.getStatusValue().getId() == Integer.parseInt(StatusValue.Status.REMOVED)) {
+            sections.put("section-link", messages.getString("vl_status_change_email_text_link_removed"));
+        } else {
+            sections.put("section-link", messages.getString("vl_status_change_email_text_link_present"));
+        }
+        if(statusChangeReason.isBlank()) {
+            sections.put("section-reason", messages.getString("vl_status_change_email_text_reason_absent"));
+        } else {
+            sections.put("section-reason", messages.getString("vl_status_change_email_text_reason_present"));
+        }
+        // then, replace the bottom-level parameters
+        Map<String, String> values = new HashMap<>();
+        values.put("environment", environment.getLongText());
+        values.put("userFullName", userFullName);
+        values.put("recordTitle", XslUtil.getIndexField(null, metadata.getUuid(), "resourceTitleObject", this.language));
+        values.put("previousStatus", currentStatusName);
+        values.put("newStatus", statusName);
+        values.put("organisationName", (groupOfUser.map(g -> g.getGroup().getName())).orElse("<error>"));
+        values.put("recordUrl", metadataUrl);
+        values.put("statusChangeReason", statusChangeReason);
+        values.put("artifact", environment.getArtifactName());
+        values.put("recordType", isDraft ? recordTypeDraft : recordTypeNonDraft);
+        values.put("datapublicatiePrefix", dpPrefix);
+
+        // format the mail body
+        //  - top level replacements
+        String message = StringSubstitutor.replace(textTemplate, sections);
+        //  - value replacements
+        message = StringSubstitutor.replace(message, values);
+
+        // format the subject matter
+        String subject = StringSubstitutor.replace(subjectTemplate, values);
+
+        // mix in index fields (not sure we use these presently, but keeping it in here for reference)
+        subject = MailUtil.compileMessageWithIndexFields(subject, metadata.getUuid(), this.language);
+        message = MailUtil.compileMessageWithIndexFields(message, metadata.getUuid(), this.language);
+
+        // send out the mails
+        for (User user : userToNotify) {
+            sendEmail(user.getEmail(), subject, message);
+        }
+    }
+
+    private static VlEnvironment getEnvironment(String nodeUrl) {
+        if (nodeUrl.contains("localhost:8080")) {
+            return VlEnvironment.LOC;
+        } else if (nodeUrl.contains("metadata.bet-vlaanderen.be")) {
+            return VlEnvironment.BET;
+        } else if (nodeUrl.contains("metadata.dev-vlaanderen.be")) {
+            return VlEnvironment.DEV;
+        } else return VlEnvironment.PRD;
+    }
+
+    private enum VlEnvironment {
+        LOC("Local"), DEV("Dev"), BET("Beta"), PRD("Productie");
+
+        private String longText;
+
+        VlEnvironment(String longText) {
+            this.longText = longText;
+        }
+
+        ;
+
+        public String getLongText() {
+            return longText;
+        }
+
+        public String getArtifactName() {
+            return "Metadata Vlaanderen" + ((this != PRD) ? " (" + longText + ")" : "");
+        }
+    }
+
 
     /**
      * Send email to a list of users. The list of users is defined based on the
@@ -408,6 +543,58 @@ public class DefaultStatusActions implements StatusActions {
         Set<Integer> listOfId = new HashSet<>(1);
         listOfId.add(status.getMetadataId());
         return getUserToNotify(notificationLevel, listOfId, status.getOwner());
+    }
+
+    public static List<User> vlGetUserToNotify(MetadataStatus currentStatus, MetadataStatus status, AbstractMetadata metadata) {
+        StatusValueNotificationLevel notificationLevel = status.getStatusValue().getNotificationLevel();
+        UserRepository userRepository = ApplicationContextHolder.get().getBean(UserRepository.class);
+        UserGroupRepository userGroupRepository = ApplicationContextHolder.get().getBean(UserGroupRepository.class);
+        GroupRepository groupRepository = ApplicationContextHolder.get().getBean(GroupRepository.class);
+
+        // If new status is DRAFT and previous status is not SUBMITTED (which means a rejection),
+        // ignore notifications as the DRAFT status is used also when creating the working copy.
+        // We don't want to notify when creating a working copy.
+        if (status.getStatusValue().getId() == Integer.parseInt(StatusValue.Status.DRAFT) &&
+            ((StringUtils.isEmpty(status.getPreviousState())) ||
+                (Integer.parseInt(status.getPreviousState()) != Integer.parseInt(StatusValue.Status.SUBMITTED)))) {
+            return new ArrayList<>();
+        }
+
+        // get the record owner group of the record
+        Optional<Group> recordOwnerGroup = groupRepository.findById(metadata.getSourceInfo().getGroupOwner());
+        if(recordOwnerGroup.isEmpty()) {
+            // if we have no record owner group we cannot determine our next action - do nothing
+            return new ArrayList<>();
+        }
+        boolean isDatapublicatie = recordOwnerGroup.get().getVlType().equals("datapublicatie");
+        // all users from the record owner group
+        List<UserGroup> recordOwnerGroupUsers = userGroupRepository.findAll(UserGroupSpecs.hasGroupId(metadata.getSourceInfo().getGroupOwner()));
+        // all admins of Digitaal Vlaanderen
+        Group digitaalVlaanderen = groupRepository.findByOrgCodeAndVlType("OVO002949", "metadatavlaanderen");
+        List<UserGroup> digitaalVlaanderenAdmins = userGroupRepository
+                .findAll(UserGroupSpecs.hasGroupId(digitaalVlaanderen.getId()))
+                .stream()
+                .filter(u -> u.getProfile() == Profile.UserAdmin)
+                .collect(Collectors.toList());
+
+
+        Set<Integer> userIdsToNotify = new HashSet<>();
+        userIdsToNotify.addAll(recordOwnerGroupUsers.stream().map(UserGroup::getUser).map(User::getId).collect(Collectors.toList()));
+        if(isDatapublicatie) {
+            userIdsToNotify.addAll(digitaalVlaanderenAdmins.stream().map(UserGroup::getUser).map(User::getId).collect(Collectors.toList()));
+        } else {
+            String statusId = String.valueOf(status.getStatusValue().getId());
+            if(Sets.newHashSet(StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED).contains(statusId)) {
+                userIdsToNotify.addAll(
+                    digitaalVlaanderenAdmins.stream()
+                        .map(UserGroup::getUser)
+                        .map(User::getId)
+                        .collect(Collectors.toList()));
+            }
+        }
+        return userRepository.findAllById(userIdsToNotify);
     }
 
     public static List<User> getUserToNotify(StatusValueNotificationLevel notificationLevel, Set<Integer> recordIds, Integer ownerId) {
@@ -537,7 +724,8 @@ public class DefaultStatusActions implements StatusActions {
             if (StringUtils.isNotBlank(sm.getValue(Settings.SYSTEM_FEEDBACK_MAILSERVER_HOST))) {
                 List<String> to = new ArrayList<>();
                 to.add(sendTo);
-                MailUtil.sendMail(to, subject, message, null, sm, replyTo, replyToDescr);
+                // vl: we send HTML messages, not plain text
+                MailUtil.sendMail(to, subject, null, message, sm, replyTo, replyToDescr);
             }
         }
     }
