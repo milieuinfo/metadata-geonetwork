@@ -7,7 +7,8 @@
     if (
       !event.target.matches(".aiv-dropdown-content") &&
       !event.target.matches(".contact-redirect") &&
-      !event.target.matches(".contact-label")
+      !event.target.matches(".contact-label") &&
+      !event.target.matches(".contact-icon")
     ) {
       var dropdown = document.getElementsByClassName("aiv-dropdown-content")[0];
       if (dropdown.classList.contains("show-dropdown")) {
@@ -26,9 +27,6 @@
     >
       <div class="aiv-header-brand-umbrella-logo">
         <span aria-hidden="true"> </span>
-        <!--        <svg viewBox="0 0 32 32" role="presentation" class="aiv-header-umbrella-logo-icon">-->
-        <!--          <use href="https://download.vlaanderen.be/#icon-flanders-logo"></use>-->
-        <!--        </svg>-->
         <div class="aiv-header-logo-container">
           <img
             alt="AIV-logo"
@@ -39,8 +37,13 @@
           />
         </div>
         <span aria-hidden="true" class="aiv-header-umbrella-logo-after"> </span>
-        <span class="aiv-header-umbrella-logo-label">Vlaanderen</span>
-        <span aria-hidden="true" class="aiv-header-separator"></span>
+        <span class="aiv-header-umbrella-logo-label hidden-xs hidden-sm hidden-md"
+          >Vlaanderen</span
+        >
+        <span
+          aria-hidden="true"
+          class="aiv-header-separator hidden-xs hidden-sm hidden-md"
+        ></span>
       </div>
     </a>
     <ul class="aiv-navbar" role="menu">
@@ -71,9 +74,8 @@
   <div class="aiv-header-right-container">
     <div class="contact-wrapper">
       <a class="contact-redirect" onclick="toggleDropdown()">
-        <span class="contact-label"
-          >{{'contactUs' | translate}}<i class="fa fa-question-circle"></i
-        ></span>
+        <i class="fa fa-question-circle contact-icon"></i>
+        <span class="contact-label hidden-xs hidden-sm hidden-md">{{'contactUs' | translate}}</span>
       </a>
       <div id="aiv-contact-dropdown" class="aiv-dropdown-content">
         <div class="contact-menu-header aiv-dropdown-content">
