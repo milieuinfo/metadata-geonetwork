@@ -243,7 +243,7 @@ public class DefaultStatusActions implements StatusActions {
         // in the case of rejected for retired/removed: fall back to the previous status
         boolean deleted = false;
         if (Sets.newHashSet(StatusValue.Status.REJECTED_FOR_RETIRED, StatusValue.Status.REJECTED_FOR_REMOVED)
-            .contains(toStatusId)) {
+                .contains(toStatusId)) {
             MetadataStatus previousStatus = metadataStatusManager.getPreviousStatus(metadataId);
             // only if we actually have a previous state
             if (previousStatus != null) {
@@ -263,10 +263,10 @@ public class DefaultStatusActions implements StatusActions {
         // if we're approving, automatically publish
         else if (toStatusId.equals(StatusValue.Status.APPROVED)) {
             // if we have a draft copy that has a modified groupowner we need to take that into account as well
-            if (metadata instanceof MetadataDraft) {
+            if(metadata instanceof MetadataDraft) {
                 MetadataDraft draft = (MetadataDraft) metadata;
                 Metadata approved = (Metadata) metadataRepository.findOne(draft.getApprovedVersion().getId());
-                if (!draft.getSourceInfo().getGroupOwner().equals(approved.getSourceInfo().getGroupOwner())) {
+                if(!draft.getSourceInfo().getGroupOwner().equals(approved.getSourceInfo().getGroupOwner())) {
                     useDraftGroupOwner(draft, approved);
                 }
             }
@@ -291,7 +291,7 @@ public class DefaultStatusActions implements StatusActions {
 
     /**
      * Set the group owner of the approved record to the draft's one.
-     * @param draft    the draft that has the new owner
+     * @param draft the draft that has the new owner
      * @param approved the approved version whose owner needs to be overwritten
      */
     private void useDraftGroupOwner(MetadataDraft draft, Metadata approved) {
@@ -486,7 +486,7 @@ public class DefaultStatusActions implements StatusActions {
         // Replace link in message
         ApplicationContext applicationContext = ApplicationContextHolder.get();
         SettingManager sm = applicationContext.getBean(SettingManager.class);
-        textTemplate = textTemplate.replace("{{link}}", sm.getNodeURL() + "api/records/'{{'index:uuid'}}'");
+        textTemplate = textTemplate.replace("{{link}}", sm.getNodeURL()+ "api/records/'{{'index:uuid'}}'");
 
         UserRepository userRepository = context.getBean(UserRepository.class);
         User owner = userRepository.findById(status.getOwner()).orElse(null);
@@ -533,7 +533,7 @@ public class DefaultStatusActions implements StatusActions {
         if (status.getStatusValue().getId() == Integer.parseInt(StatusValue.Status.DRAFT) &&
             ((StringUtils.isEmpty(status.getPreviousState())) ||
                 (Integer.parseInt(status.getPreviousState()) != Integer.parseInt(StatusValue.Status.SUBMITTED)))) {
-            return new ArrayList<>();
+                return new ArrayList<>();
         }
 
         // TODO: Status does not provide batch update
@@ -741,43 +741,43 @@ public class DefaultStatusActions implements StatusActions {
         HashMap<String, Set<String>> result = new HashMap<>();
         // initialise the map
         Sets.newHashSet(
-            StatusValue.Status.DRAFT,
-            StatusValue.Status.APPROVED,
-            StatusValue.Status.RETIRED,
-            StatusValue.Status.SUBMITTED,
-            StatusValue.Status.REJECTED,
-            StatusValue.Status.APPROVED_FOR_PUBLISHED,
-            StatusValue.Status.SUBMITTED_FOR_RETIRED,
-            StatusValue.Status.SUBMITTED_FOR_REMOVED,
-            StatusValue.Status.REMOVED,
-            StatusValue.Status.REJECTED_FOR_RETIRED,
-            StatusValue.Status.REJECTED_FOR_REMOVED
+                StatusValue.Status.DRAFT,
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED_FOR_PUBLISHED,
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED,
+                StatusValue.Status.REMOVED,
+                StatusValue.Status.REJECTED_FOR_RETIRED,
+                StatusValue.Status.REJECTED_FOR_REMOVED
         ).forEach(s -> result.put(s, new HashSet<>()));
 
         // set the values for editor
         result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
-            StatusValue.Status.REMOVED,
-            StatusValue.Status.SUBMITTED
+                StatusValue.Status.REMOVED,
+                StatusValue.Status.SUBMITTED
         ));
         result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
-            StatusValue.Status.REMOVED
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.REJECTED).addAll(Sets.newHashSet(
-            StatusValue.Status.SUBMITTED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
-            StatusValue.Status.SUBMITTED_FOR_RETIRED,
-            StatusValue.Status.SUBMITTED_FOR_REMOVED
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
             StatusValue.Status.REJECTED_FOR_RETIRED
         ));
         result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
-            StatusValue.Status.SUBMITTED_FOR_REMOVED
+                StatusValue.Status.SUBMITTED_FOR_REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
-            StatusValue.Status.REJECTED_FOR_REMOVED
+                StatusValue.Status.REJECTED_FOR_REMOVED
         ));
         return result;
     }
@@ -793,42 +793,42 @@ public class DefaultStatusActions implements StatusActions {
     private Map<String, Set<String>> getReviewerFlow() {
         Map<String, Set<String>> result = getEditorFlow();
         result.get(StatusValue.Status.DRAFT).addAll(Sets.newHashSet(
-            StatusValue.Status.APPROVED_FOR_PUBLISHED,
-            StatusValue.Status.APPROVED
+                StatusValue.Status.APPROVED_FOR_PUBLISHED,
+                StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.SUBMITTED).addAll(Sets.newHashSet(
-            StatusValue.Status.REJECTED,
-            StatusValue.Status.APPROVED_FOR_PUBLISHED,
-            StatusValue.Status.APPROVED
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED_FOR_PUBLISHED,
+                StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.APPROVED_FOR_PUBLISHED).addAll(Sets.newHashSet(
-            StatusValue.Status.SUBMITTED,
-            StatusValue.Status.REJECTED,
-            StatusValue.Status.APPROVED,
-            StatusValue.Status.SUBMITTED_FOR_RETIRED,
-            StatusValue.Status.RETIRED,
-            StatusValue.Status.SUBMITTED_FOR_REMOVED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.SUBMITTED,
+                StatusValue.Status.REJECTED,
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.SUBMITTED_FOR_RETIRED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.SUBMITTED_FOR_REMOVED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
-            StatusValue.Status.RETIRED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_RETIRED).addAll(Sets.newHashSet(
-            StatusValue.Status.RETIRED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.RETIRED).addAll(Sets.newHashSet(
-            StatusValue.Status.APPROVED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.REJECTED_FOR_RETIRED).addAll(Sets.newHashSet(
-            StatusValue.Status.APPROVED
+                StatusValue.Status.APPROVED
         ));
         result.get(StatusValue.Status.SUBMITTED_FOR_REMOVED).addAll(Sets.newHashSet(
-            StatusValue.Status.APPROVED,
-            StatusValue.Status.RETIRED,
-            StatusValue.Status.REMOVED
+                StatusValue.Status.APPROVED,
+                StatusValue.Status.RETIRED,
+                StatusValue.Status.REMOVED
         ));
         return result;
     }
