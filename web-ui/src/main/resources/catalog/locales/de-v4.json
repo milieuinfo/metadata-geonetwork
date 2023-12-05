@@ -393,6 +393,7 @@
   "measureName": "Measure",
   "measureDescription": "Description",
   "measureValue": "Value",
+  "measureDate": "Date",
   "switchPortals": "Zu einem anderen Portal wechseln",
   "dataPreview":  "Discover data",
   "tableOfContents": "Table of Contents",

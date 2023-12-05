@@ -545,8 +545,8 @@
     "fieldRequired": "De waarde is vereist",
     "fieldTooLong": "De waarde is te lang",
     "fieldTooLongMax": "The value is too long (max {{maxChar}} characters)",
-    "fieldTooShort": "The value is too short",
-    "fieldEmailNotValid": "A valid email address is required",
+    "fieldTooShort": "De waarde is te kort",
+    "fieldEmailNotValid": "Een geldig email adres is vereist",
     "addLayerPrefix": "Add layer",
     "addLayerPostfix": "to the map",
     "submit": "Indienen"
