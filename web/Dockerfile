@@ -22,6 +22,7 @@ ENV JAVA_OPTS -Dorg.eclipse.jetty.annotations.AnnotationParser.LEVEL=OFF \
         # separate this, otherwise it lands within the geonetwork.resources.dir folder
         -Dgeonetwork.htmlcache.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/resources/htmlcache \
         -Dgeonetwork.schemapublication.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/resources/schemapublication \
+        -Dgeonetwork.indexConfig.dir=/var/lib/jetty/webapps/${WEBAPP_NAME}/WEB-INF/data/config/index \
         # improve performance of editing large forms
         -Djetty.httpConfig.requestHeaderSize=32768 \
         -Dorg.eclipse.jetty.server.Request.maxFormContentSize=500000
