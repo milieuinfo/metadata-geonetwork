@@ -1395,6 +1395,8 @@
     "metadata/pdfReport/tocPage": "Toevoegen inhoudsopgave",
     "metadata/pdfReport/pdfName": "Bestandsnaam rapport",
     "metadata/pdfReport/pdfName-help": "Bestandsnaam rapport De volgend template waardes mogen gebruikt worden: {year}, {month}, {day}, {date} and {datetime}. Template velden worden vervangen door de gerelateerde datum waardes. {date} gebruikt het 'yyyyMMdd' formaat en {datetime} gebruikt het 'yyyyMMddHHmmss' formaat.",
+    "metadata/pdfReport/headerLogoFileName": "Bestandsnaam bovenste banner",
+    "metadata/pdfReport/headerLogoFileName-help": "Wanneer een bestand is opgegeven zal de pdf worden gegenereerd met dit bestand als bovenste banner in de plaats van zijn standaard banner. Voeg deze afbeelding toe via de \"voeg nieuw logo toe\" functionaliteit.",
     "metadata/csvReport": "Metadata selectie - csv export",
     "metadata/csvReport/csvName": "CSV export bestandsnaam",
     "metadata/csvReport/csvName-help": "Exporteer metadata in CSV formaat. The volgende sjabloonvelden zijn toegestaan: {year}, {month}, {day}, {date} en {datetime}. Sjabloonvelden worden vervangen met de overeenkomstige datumwaarden. {date} gebruikt het 'yyyyMMdd' formaat en {datetime} gebruikt het 'yyyyMMddHHmmss' formaat.",
@@ -1470,5 +1472,10 @@
     "es.url": "Elasticsearch server",
     "es.version": "Elasticsearch version",
     "es.index": "Indexnaam",
-    "systemPropertiesProxyConfiguration": "Using http proxy settings in system properties."
+    "systemPropertiesProxyConfiguration": "Gebruikt http proxy instellingen in system properties.",
+    "fieldRequired": "De waarde is vereist",
+    "fieldTooLong": "De waarde is te lang",
+    "fieldTooShort": "De waarde is te kort",
+    "fieldEmailNotValid": "Een geldig email adres is vereist",
+    "formConfirmExit": "Het formulier bevat wijzigingen, als je weg navigeert zullen deze verloren gaan. Wil je de pagina sluiten?"
 }
