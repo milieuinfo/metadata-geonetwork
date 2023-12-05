@@ -22,6 +22,7 @@ x-geonetwork-environment:
   GEONETWORK_DB_USERNAME: geonetwork
   GEONETWORK_DIR: /geonetwork-data
   GEONETWORK_HTMLCACHE_DIR: /var/lib/jetty/webapps/root/WEB-INF/data/resources/htmlcache
+  GEONETWORK_INDEXCONFIG_DIR: /var/lib/jetty/webapps/root/WEB-INF/data/config/index
   GEONETWORK_MICROSERVICESPROXY_TARGETURI: http://ogc-api-records-service:8080
   GEONETWORK_SCHEMA_DIR: /var/lib/jetty/webapps/root/WEB-INF/data/config/schema_plugins
   GEONETWORK_WEBBAPP_CONTEXTPATH: /
