@@ -1165,15 +1165,14 @@ public final class XslUtil {
         return null;
     }
 
-    public static String getRecordValidationStatus(String uuid, String validationType) {
+    public static String getRecordValidationStatus(String uuid, String validationType, Integer mdId) {
         ApplicationContext applicationContext = ApplicationContextHolder.get();
         DataManager dataManager = applicationContext.getBean(DataManager.class);
         try {
-            String id = dataManager.getMetadataId(uuid);
             MetadataValidationRepository metadataValidationRepository =
                 applicationContext.getBean(MetadataValidationRepository.class);
 
-            List<MetadataValidation> validationInfo = metadataValidationRepository.findAllById_MetadataId(Integer.parseInt(id));
+            List<MetadataValidation> validationInfo = metadataValidationRepository.findAllById_MetadataId(Integer.parseInt(String.valueOf(mdId)));
             if (validationInfo.isEmpty()) {
                 return "";
             } else {
