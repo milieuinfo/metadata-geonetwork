@@ -380,7 +380,7 @@ class Harvester extends BaseAligner<OgcWxSParams> implements IHarvester<HarvestR
         try {
             Integer groupIdVal = null;
             if (StringUtils.isNotEmpty(params.getOwnerIdGroup())) {
-                groupIdVal = Integer.parseInt(params.getOwnerIdGroup());
+                groupIdVal = getGroupOwner();
             }
 
             params.getValidate().validate(dataMan, context, md, groupIdVal);
