@@ -534,6 +534,15 @@
 
                       <!-- Read only fields -->
                       <input
+                        data-ng-switch-when="system/vlaanderen/version"
+                        type="text"
+                        class="form-control"
+                        id="{{s['name']}}"
+                        name="{{s.name}}"
+                        value="{{s.value}}"
+                        readonly="readonly"
+                      />
+                      <input
                         data-ng-switch-when="system/platform/version"
                         type="text"
                         class="form-control"
