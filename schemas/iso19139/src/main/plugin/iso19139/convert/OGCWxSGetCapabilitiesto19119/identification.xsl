@@ -955,18 +955,16 @@
 											  lower-case(@vocabulary)!=lower-case($gdi-vlaanderen-trefwoorden-thesaurus) and
 											  lower-case(@vocabulary)!=lower-case($gemet-thesaurus) and
 											  lower-case(@vocabulary)!=lower-case($inspire-service-taxonomy-thesaurus) and
-											  lower-case(@vocabulary)!=lower-case($inspire-theme-thesaurus) ">
-
+											  lower-case(@vocabulary)!=lower-case($inspire-theme-thesaurus)">
               <xsl:variable name="keywordValue" select="normalize-space(.)"/>
               <xsl:if test="$keywordValue!='infoMapAccessService'
-              and $keywordValue!='infoFeatureAccessService'
-              and $keywordValue!='Lijst M&amp;R INSPIRE'
-              and  $keywordValue!='infoCoverageAccessService'
-              and  $keywordValue!='Geografische gegevens'
-              and  $keywordValue!='Metadata GDI-Vl-conform'
-              and  $keywordValue!='Geografische gegevens'
-              and  $keywordValue!='Vlaamse Open data Service'">
-
+                        and $keywordValue!='infoFeatureAccessService'
+                        and $keywordValue!='Lijst M&amp;R INSPIRE'
+                        and $keywordValue!='infoCoverageAccessService'
+                        and $keywordValue!='Geografische gegevens'
+                        and $keywordValue!='Metadata GDI-Vl-conform'
+                        and $keywordValue!='Geografische gegevens'
+                        and $keywordValue!='Vlaamse Open data Service'">
                 <keyword>
                   <gco:CharacterString>
                     <xsl:value-of select="."/>
