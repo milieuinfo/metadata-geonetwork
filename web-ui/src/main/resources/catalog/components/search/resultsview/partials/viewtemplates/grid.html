@@ -30,13 +30,13 @@
             gn-metadata-open="md"
             gn-records="searchResults.records"
             gn-formatter="formatter.defaultUrl"
-            title="{{md.resourceTitle}}"
+            title="{{md.resourceTitle | splat}}"
             class="gn-break"
           >
             <i data-ng-show="md.resourceTitle.trim()=='' || md.resourceTitle===undefined"
               >{{'missingTitle' | translate}}</i
             >
-            {{(md.resourceTitle) | characters:80}}
+            {{md.resourceTitle | splat | characters:80}}
           </a>
         </h1>
       </div>
@@ -58,7 +58,7 @@
         >
           <img
             class="gn-img-thumbnail"
-            alt="{{md.resourceTitle}}"
+            alt="{{md.resourceTitle | splat}}"
             data-ng-src="{{md.overview[0].data || (md.overview[0].url | thumbnailUrlSize)}}"
             data-ng-if="md.overview[0]"
           />

@@ -43,14 +43,14 @@
               && options.selection.mode === undefined"
         >
           <gn-md-type-widget metadata="md"></gn-md-type-widget>
-          <a href="catalog.search#/metadata/{{md.uuid}}"> {{md.resourceTitle}} </a>
+          <a href="catalog.search#/metadata/{{md.uuid}}"> {{md.resourceTitle | splat}} </a>
         </div>
         <div
           data-ng-if="options.mode == 'title'
               && options.selection.mode !== undefined"
         >
           <gn-md-type-widget metadata="md"></gn-md-type-widget>
-          {{md.resourceTitle}}
+          {{md.resourceTitle | splat}}
 
           <a class="pull-right" href="catalog.search#/metadata/{{md.uuid}}">
             <i class="fa fa-eye"></i>
@@ -62,7 +62,7 @@
               class="fa gn-icon-{{md.resourceType[0]}}"
               title="{{md.resourceType[0] | translate}}"
             />
-            <strong>{{md.resourceTitle}}</strong>
+            <strong>{{md.resourceTitle | splat}}</strong>
             <p ng-if="::md.resourceAbstract" class="small">
               {{md.resourceAbstract | characters:200}}
             </p>
@@ -72,7 +72,7 @@
           <div class="flex-row flex-align-center">
             <gn-md-type-widget metadata="md"></gn-md-type-widget>
             <div class="flex-spacer" />
-            <strong>{{md.resourceTitle}}</strong>
+            <strong>{{md.resourceTitle | splat}}</strong>
           </div>
           <p ng-if="::md.resourceAbstract" class="small">
             {{md.resourceAbstract | characters:200}}
