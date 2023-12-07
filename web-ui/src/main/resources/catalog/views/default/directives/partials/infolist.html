@@ -12,7 +12,7 @@
       <div class="gn-md-title">
         <a
           href=""
-          title="{{md.resourceTitle}}"
+          title="{{md.resourceTitle | splat}}"
           gn-metadata-open="md"
           gn-records="searchResults.records"
           gn-formatter="formatter.defaultUrl"
@@ -23,7 +23,7 @@
                 data-ng-show="md.resourceTitle.trim()=='' || md.resourceTitle===undefined"
                 >{{'missingTitle' | translate}}</i
               >
-              {{md.resourceTitle}}
+              {{md.resourceTitle | splat}}
             </span>
           </h1>
         </a>
