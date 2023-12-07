@@ -150,4 +150,8 @@
     <property name="applyRemoteInspireValidation" value="true"/>
     <property name="xsltPostProcess" value="after-validation-process.xsl"/>
   </bean>
+
+  <bean class="org.fao.geonet.api.records.InspireValidationTask"
+        lazy-init="false">
+  </bean>
 </beans>
