@@ -1216,8 +1216,8 @@
                     <gmd:description>
                       <gco:CharacterString/>
                     </gmd:description>
-                    <gmd:dateTime gco:nilReason="missing">
-                      <gco:DateTime/>
+                    <gmd:dateTime>
+                      <gco:DateTime>T00:00:00</gco:DateTime>
                     </gmd:dateTime>
                     <gmd:processor>
                       <gmd:CI_ResponsibleParty>
