@@ -205,11 +205,11 @@
      * If input is an array, flatten it with ', '. Otherwise, keep the value.
      *
      * ... 'flatten' was taken :).
-      */
+     */
     .filter("splat", function () {
       return function (input) {
         if (Array.isArray(input)) {
-          return input.join(', ');
+          return input.join(", ");
         } else {
           return input;
         }
