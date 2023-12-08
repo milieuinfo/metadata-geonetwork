@@ -407,7 +407,7 @@
     "saveLinkToSibling": "Bewaar link naar andere bron",
     "addTheFollowingLinkInDataset": "Voeg de volgende link toe in de dataset (als online bron in de distributie sectie)",
     "confirmCloseInvalidTitle": "Bevestig het sluiten van de editor",
-    "confirmCloseInvalidMetadata": "De huidige metadata is invalide. Als u de editor sluit, zal het record niet meer publiek toegankelijk zijn (dit gedrag is te wijzigen in applicatie settings).<br><br>Wilt u doorgaan?",
+    "confirmCloseInvalidMetadata": "De huidige metadata zijn invalide. Als u de editor sluit, zal het record niet meer publiek toegankelijk zijn (dit gedrag is te wijzigen in applicatie settings).<br><br>Wilt u doorgaan?",
     "hotkeyDirectory": "Beheer snippets (oa contact)",
     "hotkeyImportRecord": "Records importeren",
     "hotkeyAddRecord": "Record toevoegen",
