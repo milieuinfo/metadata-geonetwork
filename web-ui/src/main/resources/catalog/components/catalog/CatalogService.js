@@ -705,6 +705,7 @@
       }
 
       Metadata.prototype = {
+        contactsForSource: [],
         translateMultilingualObjects: function (multilingualObjects) {
           var mlObjs = angular.isArray(multilingualObjects)
             ? multilingualObjects
@@ -803,6 +804,25 @@
         },
         getSchema: function () {
           return this.schema;
+        },
+        // can't directly access the contactForSourceX - could be object or array
+        // using method, can't return 'desiredValue directly' - infdig angularjs issue otherwise
+        // instead, cache the value in the object so $digest doesn't go into an infinite loop
+        // underlying issue:
+        // 1. 'contactForSource+$index' is returned as object when only 1, otherwise array
+        // 2. other 'index-contact' template results are stored top level, only once. for gmd:source it's multiple
+        getContactsForSource: function (index) {
+          var actualValue = this['contactForSource'+index];
+          var desiredValue = [];
+          if(actualValue) {
+            desiredValue = Array.isArray(actualValue) ? actualValue : [actualValue];
+          }
+          var cachedValue = this.contactsForSource[index];
+          // check whether we need to update the cached value
+          if(!angular.equals(cachedValue,desiredValue)) {
+            this.contactsForSource[index] = desiredValue;
+          }
+          return this.contactsForSource[index];
         },
         publish: function (pubOption) {
           if (pubOption) {

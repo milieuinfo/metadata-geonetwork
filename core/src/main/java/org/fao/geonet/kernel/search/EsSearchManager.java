@@ -561,6 +561,8 @@ public class EsSearchManager implements ISearchManager {
             .add("resourceDate")
             .add("link")
             .add("linkProtocol")
+            .add("sources")
+            .add("sourceSteps")
             .add("crsDetails")
             .add("format")
             .add("orderingInstructionsObject")
