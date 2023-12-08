@@ -812,14 +812,14 @@
         // 1. 'contactForSource+$index' is returned as object when only 1, otherwise array
         // 2. other 'index-contact' template results are stored top level, only once. for gmd:source it's multiple
         getContactsForSource: function (index) {
-          var actualValue = this['contactForSource'+index];
+          var actualValue = this["contactForSource" + index];
           var desiredValue = [];
-          if(actualValue) {
+          if (actualValue) {
             desiredValue = Array.isArray(actualValue) ? actualValue : [actualValue];
           }
           var cachedValue = this.contactsForSource[index];
           // check whether we need to update the cached value
-          if(!angular.equals(cachedValue,desiredValue)) {
+          if (!angular.equals(cachedValue, desiredValue)) {
             this.contactsForSource[index] = desiredValue;
           }
           return this.contactsForSource[index];

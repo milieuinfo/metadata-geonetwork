@@ -43,7 +43,9 @@
               && options.selection.mode === undefined"
         >
           <gn-md-type-widget metadata="md"></gn-md-type-widget>
-          <a href="catalog.search#/metadata/{{md.uuid}}"> {{md.resourceTitle | splat}} </a>
+          <a href="catalog.search#/metadata/{{md.uuid}}">
+            {{md.resourceTitle | splat}}
+          </a>
         </div>
         <div
           data-ng-if="options.mode == 'title'
