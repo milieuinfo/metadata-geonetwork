@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.1.8-SNAPSHOT]
+## [8.1.8] - 2023-12-08
 - Added custom mailing to workflow notifications - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30315) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30496)
 - Header/footer improvements, responsiveness - [pr](https://agiv.visualstudio.com/DefaultCollection/Metadata/_git/MetadataGeonetwork/pullrequest/29987)
 - Translations - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30481) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30641)
@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Tweaks to servicetype view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30637)
 
 
-## [1.1.7] - 2023-11-23
+## [8.1.7] - 2023-11-23
 
 ### vlaanderen
 - Dataset identifier now added for new records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29827)
@@ -34,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added capability to validate after harvesting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27953) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7370)
  
 
-## [1.1.6] - 2023-11-17
+## [8.1.6] - 2023-11-17
 
 ### vlaanderen
 - Label fixes - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28988) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29360) / [pr3](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29489)
@@ -56,7 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fix `linkServiceToDataset` directive default filter on resource type - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7489)
 
 
-## [1.1.5] - 2023-11-08
+## [8.1.5] - 2023-11-08
 
 ### vlaanderen
 - Added schema plugin translations - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28984)
@@ -75,12 +75,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Record view improvements - [pr-core1](https://github.com/geonetwork/core-geonetwork/pull/7473) / [pr-core2](https://github.com/geonetwork/core-geonetwork/pull/7472) / [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/29194)
 
 
-## [1.1.4] - 2023-10-25
+## [8.1.4] - 2023-10-25
 - Removed DataPublicatie portal - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28851)
 - Workflow optimisation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28849)
 
 
-## [1.1.3] - 2023-10-24
+## [8.1.3] - 2023-10-24
 
 ### vlaanderen
 - Added WCS-2.0.0 as OGC-WCS service type - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28482)
@@ -92,12 +92,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Handle empty code list values - [pr-core](https://metadata.vlaanderen.be/srv/dut/catalog.search#/metadata/f1e77b4f-a174-4e2d-9af7-fe7f548b5a5c)
 
 
-## [1.1.2] - 2023-10-16
+## [8.1.2] - 2023-10-16
 - Ordering workflow statuses in logical way - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27923)
 - Publishing draft now sets group owner correctly - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/28255)
  
 
-## [1.1.1] - 2023-09-29
+## [8.1.1] - 2023-09-29
 
 ### vlaanderen
 - Backporting lineage and legal constraints formatter - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/27955)
@@ -110,7 +110,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - ISO19110 improvements - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7365)
 
 
-## [1.1.0] - 2023-09-26
+## [8.1.0] - 2023-09-26
 
 ### vlaanderen
 
@@ -126,12 +126,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Upgraded to Java 11
 
 
-## [1.0.4] - 2023-09-04
+## [8.0.4] - 2023-09-04
 - Synced translations files with Transifex nl_BE - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/25634) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/26995) / [docs](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork?path=/vlaanderen/docs/translation.md&version=GBdevelop)
 - Remove unused core metadata templates from ISO19139 plugin to avoid including them when loading the templates
 
 
-## [1.0.3] - 2023-07-14
+## [8.0.3] - 2023-07-14
 
 ### vlaanderen
 
@@ -155,7 +155,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Enforce values for metadataStandardName and metadataStandardVersion during edition
 
 
-## [1.0.2] - 2023-06-26
+## [8.0.2] - 2023-06-26
 
 ### vlaanderen
 - Adding download link for RDF
@@ -168,7 +168,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Work in progress: high availability - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/6990)
 
 
-## [1.0.1] - 2023-06-15
+## [8.0.1] - 2023-06-15
 
 ### vlaanderen
 - Vlaanderen Geonetwork version now visible and automatically updating
@@ -183,7 +183,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fixed nullpointer bug in LocaleRedirects - [vlaanderen](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24802)
 
 
-## [1.0.0] - 2023-06-09
+## [8.0.0] - 2023-06-09
 
 ### vlaanderen
 - Introduced semver versioning
