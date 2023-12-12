@@ -84,12 +84,11 @@ import org.fao.geonet.repository.MetadataDraftRepository;
 import org.fao.geonet.repository.MetadataRepository;
 import org.fao.geonet.repository.UserGroupRepository;
 import org.fao.geonet.repository.specification.UserGroupSpecs;
+import org.fao.geonet.schema.iso19139.ISO19139SchemaPlugin;
 import org.fao.geonet.util.UserUtil;
-import org.fao.geonet.utils.FilePathChecker;
-import org.fao.geonet.utils.IO;
-import org.fao.geonet.utils.Log;
-import org.fao.geonet.utils.Xml;
+import org.fao.geonet.utils.*;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.JDOMParseException;
 import org.jdom.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -963,6 +962,9 @@ public class MetadataInsertDeleteApi {
         final List<Element> md = new ArrayList<>();
         md.add(xmlElement);
 
+        // vl-specific - do not keep thumbnails when importing a record
+        removeThumbnails(md.get(0), schema);
+
         // Import record
         Map<String, String> sourceTranslations = Maps.newHashMap();
         try {
@@ -1015,6 +1017,28 @@ public class MetadataInsertDeleteApi {
 
         dataManager.indexMetadata(id.get(0), true);
         return Pair.read(Integer.valueOf(id.get(0)), uuid);
+    }
+
+    /**
+     * Remove thumbnails from the record.
+     *
+     * @param md
+     * @param schema
+     */
+    private void removeThumbnails(Element md, String schema) {
+        if(schema.equals(ISO19139SchemaPlugin.IDENTIFIER)) {
+            try {
+                List<?> graphicOverviews = Xml.selectNodes(md, "gmd:identificationInfo/*//gmd:graphicOverview", ISO19139SchemaPlugin.allNamespaces.asList());
+                graphicOverviews.stream()
+                    .filter(o -> o instanceof org.jdom.Element)
+                    .map(o -> (org.jdom.Element) o)
+                    .forEach(o -> o.getParent().removeContent(o));
+            } catch (JDOMException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            Log.warning(Geonet.DATA_MANAGER, "Could not remove thumbnails for schema "+schema);
+        }
     }
 
 }

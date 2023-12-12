@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+  <M900>Een temporele begrenzing mag geen einddatum hebben die voor de begindatum valt.</M900>
+  <alert.M900.1>Begindatum</alert.M900.1>
+  <alert.M900.2>valt na de einddatum</alert.M900.2>
+</strings>

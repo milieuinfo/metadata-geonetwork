@@ -44,12 +44,6 @@
           class="dropdown-header hidden-xs"
           role="menuitem"
           translate
-          style="
-            font-family: flanders-sans, sans-serif;
-            font-weight: 500;
-            font-size: 16px;
-            padding: 0 10px 0 10px !important;
-          "
         >
           username
         </li>
@@ -62,12 +56,6 @@
         <li
           class="dropdown-header hidden-xs"
           role="menuitem"
-          style="
-            font-family: flanders-sans, sans-serif;
-            font-weight: 500;
-            font-size: 16px;
-            padding: 0 10px 0 10px !important;
-          "
           translate
         >
           profile
@@ -78,6 +66,19 @@
             data-gn-active-tb-item="{{gnCfg.mods.admin.appUrl}}#/organization/users?userOrGroup={{user.username}}"
             >{{user.profile | translate}}</a
           >
+        </li>
+        <li
+          class="dropdown-header hidden-xs"
+          role="menuitem"
+          translate
+          data-ng-show="!user.isAdmin()"
+        >
+          group
+        </li>
+        <li role="menuitem" data-ng-show="!user.isAdmin()">
+          <a>
+            <span data-ng-repeat="g in userGroups">{{g}}<br /></span>
+          </a>
         </li>
         <li role="separator" class="divider hidden-xs"></li>
         <li role="menuitem">
