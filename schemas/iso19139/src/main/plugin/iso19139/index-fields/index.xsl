@@ -31,6 +31,8 @@
                 xmlns:gml="http://www.opengis.net/gml/3.2"
                 xmlns:gml320="http://www.opengis.net/gml"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+                xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                 xmlns:gn-fn-index="http://geonetwork-opensource.org/xsl/functions/index"
                 xmlns:index="java:org.fao.geonet.kernel.search.EsSearchManager"
                 xmlns:util="java:org.fao.geonet.util.XslUtil"
@@ -73,6 +75,9 @@
   <xsl:variable name="childrenAssociatedResourceType" select="'isComposedOf'"/>
 
   <xsl:variable name="uuidRegex" select="'([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}'"/>
+
+
+  <xsl:variable name="protocolConcepts" select="document('./thesauri/protocol.rdf')/rdf:RDF"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="index"/>
@@ -1150,6 +1155,51 @@
                           daobs:contains($protocol, 'wcs') or
                           daobs:contains($protocol, 'download')">
               <recordOperatedByType>download</recordOperatedByType>
+            </xsl:if>
+          </xsl:if>
+
+          <xsl:variable name="download_check">
+            <xsl:text>&amp;fname=&amp;access</xsl:text>
+          </xsl:variable>
+          <xsl:variable name="linkage" select="gmd:linkage/gmd:URL"/>
+          <xsl:if test="string($linkage) != '' and not(contains($linkage, $download_check))">
+            <xsl:variable name="topLevelProtocol">
+              <xsl:choose>
+                <xsl:when test="starts-with($protocol, 'WWW:DOWNLOAD-1.0') or $protocol = 'LINK download-store'">
+                  <xsl:value-of select="'download'"/>
+                </xsl:when>
+                <xsl:when test="starts-with($protocol, 'WWW:LINK-1.0') or $protocol = 'ESRI:AIMS-http-configuration'">
+                  <xsl:value-of select="'link'"/>
+                </xsl:when>
+                <xsl:when test="$protocolConcepts/skos:Concept[skos:notation = $protocol]/skos:hasTopConcept">
+                  <xsl:variable name="topProtocolUri" select="$protocolConcepts/skos:Concept[skos:notation = $protocol]/skos:hasTopConcept/@rdf:resource"/>
+                  <xsl:variable name="topProtocol" select="$protocolConcepts/skos:Concept[@rdf:about = $topProtocolUri]"/>
+                  <xsl:choose>
+                    <xsl:when test="$topProtocol/skos:prefLabel[@xml:lang = 'nl']">
+                      <xsl:value-of select="$topProtocol/skos:prefLabel[@xml:lang = 'nl']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="$topProtocol/skos:prefLabel[1]"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:when test="$protocolConcepts/skos:Concept[skos:notation = $protocol]">
+                  <xsl:variable name="topProtocol" select="$protocolConcepts/skos:Concept[skos:notation = $protocol]"/>
+                  <xsl:choose>
+                    <xsl:when test="$topProtocol/skos:prefLabel[@xml:lang = 'nl']">
+                      <xsl:value-of select="$topProtocol/skos:prefLabel[@xml:lang = 'nl']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="$topProtocol/skos:prefLabel[1]"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="normalize-space($topLevelProtocol) != ''">
+              <topLevelProtocol>
+                <xsl:value-of select="gn-fn-index:json-escape($topLevelProtocol)"/>
+              </topLevelProtocol>
             </xsl:if>
           </xsl:if>
         </xsl:for-each>

@@ -30,6 +30,8 @@
   data-ng-href="{{link.url}}"
 >
   <i class="fa" data-ng-if="iconMode !== 'none'" data-ng-class="icon" />
-  <span data-ng-if="link.title" class="visible-lg-*">{{(::link.title | gnLocalized: lang}}</span>
+  <span data-ng-if="link.title" class="visible-lg-*"
+    >{{(::link.title | gnLocalized: lang}}</span
+  >
   <span data-ng-if="!link.title" class="visible-lg-*">{{'openPage' | translate}}</span>
 </a>
