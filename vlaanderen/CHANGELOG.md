@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### vlaanderen
 - Remove thumbnails on import - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30536)
+- Header/footer improvements - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30526) 
 
 ### core-geonetwork
 - Configurable icon for static pages - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30491) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7536)
