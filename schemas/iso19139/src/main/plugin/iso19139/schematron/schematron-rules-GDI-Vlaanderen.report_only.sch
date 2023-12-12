@@ -130,9 +130,9 @@
 
   <sch:pattern>
     <sch:title>$loc/strings/M900</sch:title>
-    <sch:rule context="/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml320:TimePeriod">
-      <sch:let name="begin-position" value="//gml320:beginPosition/text()"/>
-      <sch:let name="end-position" value="//gml320:endPosition/text()"/>
+    <sch:rule context="/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml320:TimePeriod|/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml:TimePeriod">
+      <sch:let name="begin-position" value=".//gml320:beginPosition/text()|.//gml:beginPosition/text()"/>
+      <sch:let name="end-position" value=".//gml320:endPosition/text()|.//gml:endPosition/text()"/>
       <!-- check whether end is before begin -->
       <sch:let name="check-order" value="$begin-position &lt; $end-position"/>
       <!-- only interested when we filled in both fields: we want to check the order -->
