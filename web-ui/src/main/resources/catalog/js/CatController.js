@@ -828,7 +828,7 @@
                   field: "statusWorkflow",
                   collapsed: true,
                   userHasRole: "isEditorOrMore",
-                  orderByTranslation: true,
+                  orderByVLStatus: true,
                   filterByTranslation: true
                 }
               }
@@ -1285,7 +1285,8 @@
                   size: 20
                 },
                 meta: {
-                  field: "statusWorkflow"
+                  field: "statusWorkflow",
+                  orderByVLStatus: true
                 }
               },
               "cl_topic.key": {
