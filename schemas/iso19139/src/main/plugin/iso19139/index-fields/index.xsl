@@ -1046,7 +1046,6 @@
 
         <xsl:for-each select="gmd:lineage/*/gmd:source/*/gmd:sourceStep">
           <xsl:variable name="sourceStepIndex" select="position()"/>
-          <xsl:message>sourceStepIndex: <xsl:value-of select="$sourceStepIndex"/></xsl:message>
           <xsl:for-each-group select="*/gmd:processor[*/gmd:organisationName/gco:CharacterString != '']"
                               group-by="*/gmd:organisationName/gco:CharacterString">
             <xsl:apply-templates mode="index-contact" select=".">
