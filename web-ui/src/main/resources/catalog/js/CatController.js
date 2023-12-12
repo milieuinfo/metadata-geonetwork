@@ -456,9 +456,9 @@
                 }
               },
               // #9 PROTOCOL SERVICE
-              linkProtocol: {
+              "topLevelProtocol.keyword": {
                 terms: {
-                  field: "linkProtocol",
+                  field: "topLevelProtocol.keyword",
                   size: 10
                 },
                 meta: {
@@ -1300,9 +1300,9 @@
                   }
                 }
               },
-              linkProtocol: {
+              "topLevelProtocol.keyword": {
                 terms: {
-                  field: "linkProtocol",
+                  field: "topLevelProtocol.keyword",
                   size: 10
                 },
                 meta: {
