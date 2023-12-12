@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [8.1.9-SNAPSHOT]
 
+### vlaanderen
+
+### core-geonetwork
+- Configurable icon for static pages - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30491) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7536)
+
 ## [8.1.8] - 2023-12-08
 - Added custom mailing to workflow notifications - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30315) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30496)
 - Header/footer improvements, responsiveness - [pr](https://agiv.visualstudio.com/DefaultCollection/Metadata/_git/MetadataGeonetwork/pullrequest/29987)
