@@ -1002,6 +1002,55 @@
         <xsl:copy-of select="gn-fn-index:add-multilingual-field('lineage', gmd:lineage/gmd:LI_Lineage/
                                 gmd:statement, $allLanguages)"/>
 
+        <xsl:variable name="sources"
+                      select="gmd:lineage/*/gmd:source/gmd:LI_Source[gmd:description/gco:CharacterString != '']"/>
+        <xsl:for-each select="$sources">
+          <sources type="object">{
+            "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
+                                'description', gmd:description, $allLanguages, true())"/>
+            ,"sourceSteps": [
+              <xsl:for-each select="gmd:sourceStep/gmd:LI_ProcessStep">
+                {
+                  "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
+                                                'description', gmd:description, $allLanguages, true())"/>
+                  <xsl:variable name="processors"
+                                select="gmd:processor/*[gmd:organisationName/gco:CharacterString != '']"/>
+                  <xsl:if test="count($processors) > 0">
+                    ,"processor": [
+                    <xsl:for-each select="$processors">
+                      {
+                      "organisationObject": <xsl:value-of
+                      select="gn-fn-index:add-multilingual-field(
+                                                'description', gmd:organisationName, $allLanguages, true())"/>
+                      <xsl:if test="gmd:individualName/gco:CharacterString/text()">
+                        ,"individual":"<xsl:value-of select="gn-fn-index:json-escape(gmd:individualName/gco:CharacterString/text())"/>"
+                      </xsl:if>
+                      }
+                      <xsl:if test="position() != last()">,</xsl:if>
+                    </xsl:for-each>
+                    ]
+                  </xsl:if>
+                }
+                <xsl:if test="position() != last()">,</xsl:if>
+              </xsl:for-each>
+            ]
+            <xsl:variable name="sourceContact">
+              <xsl:for-each-group select="gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor[*/gmd:organisationName/gco:CharacterString != '']"
+                                  group-by="*/gmd:organisationName/gco:CharacterString">
+                <xsl:apply-templates mode="index-contact" select=".">
+                  <xsl:with-param name="fieldSuffix" select="'ForSource'"/>
+                  <xsl:with-param name="languages" select="$allLanguages"/>
+                </xsl:apply-templates>
+              </xsl:for-each-group>
+            </xsl:variable>
+            ,"contacts": [
+            <xsl:for-each select="$sourceContact/contactForSource">
+              <xsl:value-of select="./text()"/>
+              <xsl:if test="position() != last()">,</xsl:if>
+            </xsl:for-each>
+            ]
+          }</sources>
+        </xsl:for-each>
 
         <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != ''
                                           or gmd:measureDescription/gco:CharacterString != '']/gmd:result/gmd:DQ_QuantitativeResult">

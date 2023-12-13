@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Header/footer improvements - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30526)
 - Schematron rule for temporalExtent + translations - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30160)
 - Fixed bug related to adding conform keywords on save - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30468)
+- Correctly saving gmd:date in editor for quality measurements - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30832)
+- Added gmd:source and the contained gmd:sourceStep objects to record view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30633)
 - Run INSPIRE validation after save/close - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30546)
 
 ### core-geonetwork

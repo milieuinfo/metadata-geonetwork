@@ -771,7 +771,7 @@
 
   <!-- Force element with DateTime_PropertyType to have gco:DateTime -->
   <xsl:template match="gmd:dateTime|gmd:plannedAvailableDateTime|gmd:usageDateTime"
-                priority="200">
+                priority="9000">
     <xsl:variable name="value" select="gco:Date|gco:DateTime" />
     <xsl:copy>
       <gco:DateTime>
