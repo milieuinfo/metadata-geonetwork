@@ -1,7 +1,7 @@
 <div data-ng-if="mdView.current.record.sources">
   <h2 data-translate="">sources</h2>
-  <div data-ng-repeat="p in mdView.current.record.sources track by $index">
-    <h3 data-ng-bind-html="p.description | linky | newlines" />
+  <div data-ng-repeat="p in mdView.current.record.sources">
+    <h3 data-ng-bind-html="p.description | linky | newlines"/>
     <div class="row">
       <div class="col-md-8">
         <ul class="timeline timeline-1-col">
@@ -39,8 +39,8 @@
       </div>
       <div
         class="col-md-4 gn-contact-col-1"
-        data-ng-if="mdView.current.record.getContactsForSource($index+1) && mdView.current.record.getContactsForSource($index+1).length>0"
-        data-gn-metadata-contacts="mdView.current.record.getContactsForSource($index+1)"
+        data-ng-if="p.contacts && p.contacts.length > 0"
+        data-gn-metadata-contacts="p.contacts"
         data-gn-mode="default"
         data-layout="icon"
       />

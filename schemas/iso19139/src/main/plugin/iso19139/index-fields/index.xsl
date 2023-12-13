@@ -1029,30 +1029,27 @@
                       <xsl:if test="position() != last()">,</xsl:if>
                     </xsl:for-each>
                     ]
-                    <xsl:for-each-group select="$processors"
-                                        group-by="*/gmd:organisationName/gco:CharacterString">
-                      <xsl:apply-templates mode="index-contact" select=".">
-                        <xsl:with-param name="fieldSuffix" select="'ForSource'"/>
-                        <xsl:with-param name="languages" select="$allLanguages"/>
-                      </xsl:apply-templates>
-                    </xsl:for-each-group>
                   </xsl:if>
                 }
                 <xsl:if test="position() != last()">,</xsl:if>
               </xsl:for-each>
             ]
+            <xsl:variable name="sourceContact">
+              <xsl:for-each-group select="gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor[*/gmd:organisationName/gco:CharacterString != '']"
+                                  group-by="*/gmd:organisationName/gco:CharacterString">
+                <xsl:apply-templates mode="index-contact" select=".">
+                  <xsl:with-param name="fieldSuffix" select="'ForSource'"/>
+                  <xsl:with-param name="languages" select="$allLanguages"/>
+                </xsl:apply-templates>
+              </xsl:for-each-group>
+            </xsl:variable>
+            ,"contacts": [
+            <xsl:for-each select="$sourceContact/contactForSource">
+              <xsl:value-of select="./text()"/>
+              <xsl:if test="position() != last()">,</xsl:if>
+            </xsl:for-each>
+            ]
           }</sources>
-        </xsl:for-each>
-
-        <xsl:for-each select="gmd:lineage/*/gmd:source/*/gmd:sourceStep">
-          <xsl:variable name="sourceStepIndex" select="position()"/>
-          <xsl:for-each-group select="*/gmd:processor[*/gmd:organisationName/gco:CharacterString != '']"
-                              group-by="*/gmd:organisationName/gco:CharacterString">
-            <xsl:apply-templates mode="index-contact" select=".">
-              <xsl:with-param name="fieldSuffix" select="concat('ForSource', $sourceStepIndex)"/>
-              <xsl:with-param name="languages" select="$allLanguages"/>
-            </xsl:apply-templates>
-          </xsl:for-each-group>
         </xsl:for-each>
 
         <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != ''
