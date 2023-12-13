@@ -780,8 +780,4 @@
     </xsl:copy>
   </xsl:template>
 
-  <!-- remove the INSPIRE-conform keyword after each update -->
-<!--  <xsl:template-->
-<!--    match="gmd:keyword[gmx:Anchor[@xlink:href='https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDINSPIRECONFORM']]"-->
-<!--    priority="9001"/>-->
 </xsl:stylesheet>
