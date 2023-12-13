@@ -131,7 +131,8 @@ public class PostHarvestingValidationTask extends ValidationTask {
                     ApplicationContextHolder.get().publishEvent(
                         new InspireValidationTask.Event(
                             ApplicationContextHolder.get(),
-                            metadata.getId()));
+                            metadata.getId(),
+                            false));
                 } else {
                     log(LogLevel.DEBUG, "{} ({}) / Validation done in {}ms.",
                         metadata.getUuid(),

@@ -398,7 +398,7 @@ public class MetadataEditingApi {
 
                 // launch async inspire validation
                 ApplicationContextHolder.get().publishEvent(new InspireValidationTask.Event(
-                    ApplicationContextHolder.get(), metadata.getId()));
+                    ApplicationContextHolder.get(), metadata.getId(), metadata instanceof MetadataDraft));
             }
 
             // Automatically change the workflow state after save

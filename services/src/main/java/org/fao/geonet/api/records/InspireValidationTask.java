@@ -23,12 +23,14 @@
 
 package org.fao.geonet.api.records;
 
+import be.vlaanderen.geonet.kernel.validation.VlaanderenPostValidationProcess;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import jeeves.server.context.ServiceContext;
 import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.api.records.editing.InspireValidatorUtils;
-import org.fao.geonet.domain.Metadata;
+import org.fao.geonet.domain.AbstractMetadata;
+import org.fao.geonet.domain.MetadataDraft;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.datamanager.IMetadataValidator;
 import org.fao.geonet.kernel.setting.Settings;
@@ -36,6 +38,7 @@ import org.fao.geonet.repository.HarvestHistoryRepository;
 import org.fao.geonet.repository.MetadataDraftRepository;
 import org.fao.geonet.repository.MetadataValidationRepository;
 import org.fao.geonet.schema.iso19139.ISO19139SchemaPlugin;
+import org.fao.geonet.utils.Log;
 import org.fao.geonet.utils.Xml;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -58,6 +61,7 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class InspireValidationTask extends ValidationTask {
@@ -86,20 +90,29 @@ public class InspireValidationTask extends ValidationTask {
     @Autowired
     SchemaManager schemaManager;
 
+    @Autowired
+    VlaanderenPostValidationProcess vlaanderenPostValidationProcess;
+
     public InspireValidationTask() {
     }
 
     public static class Event extends ApplicationEvent {
 
         private final int metadataId;
+        private final boolean draft;
 
-        public Event(Object source, int metadataId) {
+        public Event(Object source, int metadataId, boolean draft) {
             super(source);
             this.metadataId = metadataId;
+            this.draft = draft;
         }
 
         public int getMetadataId() {
             return metadataId;
+        }
+
+        public boolean isDraft() {
+            return draft;
         }
     }
 
@@ -110,9 +123,22 @@ public class InspireValidationTask extends ValidationTask {
         fallbackExecution = true)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void apply(Event event) {
-        Metadata metadata = metadataRepository.findOneById(event.metadataId);
-        if(metadata!=null) {
+        AbstractMetadata metadata = null;
+        if(event.isDraft()) {
+            Optional<MetadataDraft> byId = metadataDraftRepository.findById(event.metadataId);
+            if(byId.isPresent())
+                metadata = byId.get();
+        } else {
+            metadata = metadataRepository.findOneById(event.metadataId);
+        }
+        if (metadata != null) {
             runInspireValidation(metadata);
+            try {
+                vlaanderenPostValidationProcess.addConformKeywords(metadata, true);
+            } catch(Exception e) {
+                log(LogLevel.DEBUG, "{} / Error while adding conform-keywords to xml for metadata record: {}",
+                    metadata.getUuid(), e.getMessage());
+            }
             try {
                 metadataIndexer.indexMetadata(List.of(String.valueOf(metadata.getId())));
             } catch (Exception e) {
@@ -125,7 +151,7 @@ public class InspireValidationTask extends ValidationTask {
         }
     }
 
-    private void runInspireValidation(Metadata metadata) {
+    private void runInspireValidation(AbstractMetadata metadata) {
         Instant start = Instant.now();
 
         log(LogLevel.DEBUG, "{} / INSPIRE validation started.",

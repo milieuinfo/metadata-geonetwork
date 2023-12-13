@@ -1,6 +1,6 @@
 package org.fao.geonet.api.records;
 
-import org.fao.geonet.domain.Metadata;
+import org.fao.geonet.domain.AbstractMetadata;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.datamanager.IMetadataIndexer;
 import org.fao.geonet.kernel.setting.SettingManager;
@@ -36,7 +36,7 @@ abstract public class ValidationTask {
      */
     protected String xsltPostProcess;
 
-    protected void applyXsltProcess(Metadata metadata) {
+    protected void applyXsltProcess(AbstractMetadata metadata) {
         Path xslt = schemaManager.getSchemaDir(metadata.getDataInfo().getSchemaId())
             .resolve("process")
             .resolve(xsltPostProcess);
