@@ -21,6 +21,11 @@
   "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
   "host.name": "Hostnaam",
+  "indexingErrorMsg-invalidBounds": "Waarschuwing / Veld resourceTemporalDateRange / Onder- en bovengrens leeg of ongeldige datum. Datum bereik niet geïndexeerd.",
+  "indexingErrorMsg-invalidDateFormat": "Waarschuwing / Datum {{dateType}} met waarde '{{date}}' was geen geldig datum formaat.",
+  "indexingErrorMsg-keywordNotFoundInThesaurus": "Waarschuwing / Sleutelwoord {{keyword}} niet gevonden in {{thesaurus}}.",
+  "indexingErrorMsg-temporalDateRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}. Datumbereik niet geïndexeerd.",
+  "indexingErrorMsg-temporalRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}.",
   "link": "Link",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
@@ -57,4 +62,5 @@
   "measureDate": "Datum",
   "COMPUTE_VALIDATION_AFTER_HARVEST": "Valideer records na harvest",
   "---end-of-file---": ""
+
 }
