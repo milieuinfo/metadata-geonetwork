@@ -806,10 +806,11 @@
                   collapsed: true
                 }
               },
-              // #28 GroupPublished
-              groupPublished: {
+              // #28 groupOwnerName
+              groupOwnerName: {
                 terms: {
-                  field: "groupPublished"
+                  field: "groupOwnerName.keyword",
+                  size: 20
                 },
                 meta: {
                   collapsed: true,
@@ -1381,9 +1382,9 @@
                   }
                 }
               },
-              groupPublishedId: {
+              groupOwnerName: {
                 terms: {
-                  field: "groupPublishedId",
+                  field: "groupOwnerName.keyword",
                   size: 200,
                   include: ".*"
                 },

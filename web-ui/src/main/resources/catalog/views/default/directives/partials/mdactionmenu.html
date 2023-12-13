@@ -91,12 +91,14 @@
           ></span>
         </a>
       </li>
-      <li class="divider" role="menuitem"
-          data-ng-if="(user.isAdmin() && md.draft != 'y') ||
+      <li
+        class="divider"
+        role="menuitem"
+        data-ng-if="(user.isAdmin() && md.draft != 'y') ||
                       (md.isOwned() && user.isUserAdminOrMore()) ||
-                      (publicationOptions.length > 0 && displayPublicationOption(md, user, pubOption))">
-
-      <!-- Workflow -->
+                      (publicationOptions.length > 0 && displayPublicationOption(md, user, pubOption))"
+      >
+        <!-- Workflow -->
       </li>
       <li role="menuitem" data-ng-show="isMdWorkflowEnable">
         <span data-translate="" class="dropdown-header">workflow</span>

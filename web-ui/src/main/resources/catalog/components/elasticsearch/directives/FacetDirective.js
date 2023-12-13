@@ -186,7 +186,7 @@
             "rejected_for_retired",
             "rejected_for_removed"
           ];
-          return function(item) {
+          return function (item) {
             var index = visualOrder.indexOf(item.value);
             if (index === -1) {
               index = visualOrder.length;
