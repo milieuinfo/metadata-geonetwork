@@ -1,0 +1,49 @@
+<div data-ng-if="mdView.current.record.sources">
+  <h2 data-translate="">sources</h2>
+  <div data-ng-repeat="s in mdView.current.record.sources">
+    <h3 data-ng-bind-html="s.description | linky | newlines"/>
+    <div class="row">
+      <div class="col-md-8">
+        <ul class="timeline timeline-1-col">
+          <li class="timeline-inverted" data-ng-repeat="ss in s.sourceSteps">
+            <div class="timeline-badge timeline-badge-small">
+              <i class="fa fa-fw fa-cog"></i>
+            </div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+                <strong data-gn-humanize-time="{{ss.date}}">{{ss.date}}</strong>
+                <strong data-ng-if="ss.processor" title="{{'processor' | translate}}">
+                  <span data-ng-if="ss.date"> - </span
+                  ><i class="fa fa-fw fa-user-gear"></i>
+                  <span data-ng-repeat="o in ss.processor track by $index">
+                    <span data-ng-if="o.individual"
+                      >{{o.individual}} ({{o.organisation}})<span data-ng-if="!$last"
+                        >,
+                      </span></span
+                    >
+                    <span data-ng-if="!o.individual"
+                      >{{o.organisation}}<span data-ng-if="!$last">, </span></span
+                    >
+                  </span>
+                </strong>
+                <br data-ng-if="ss.date || ss.processor" />
+                {{ss.description}}
+              </div>
+              <div class="timeline-body" data-ng-if="ss.source">
+                <span data-translate="">sourceDescription</span>
+                <p data-ng-repeat="s in ss.source">{{s.description}}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col-md-4 gn-contact-col-1"
+        data-ng-if="s.contacts && s.contacts.length > 0"
+        data-gn-metadata-contacts="s.contacts"
+        data-gn-mode="default"
+        data-layout="icon"
+      />
+    </div>
+  </div>
+</div>

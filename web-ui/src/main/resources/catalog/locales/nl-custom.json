@@ -26,6 +26,7 @@
   "indexingErrorMsg-keywordNotFoundInThesaurus": "Waarschuwing / Sleutelwoord {{keyword}} niet gevonden in {{thesaurus}}.",
   "indexingErrorMsg-temporalDateRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}. Datumbereik niet geïndexeerd.",
   "indexingErrorMsg-temporalRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}.",
+  "sources": "Bronnen",
   "link": "Link",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",

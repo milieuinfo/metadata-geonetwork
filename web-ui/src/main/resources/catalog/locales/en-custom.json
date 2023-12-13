@@ -52,6 +52,7 @@
   "serviceType-download": "Downloadable",
   "serviceType-view": "Viewable",
   "sortBy-changeDateDesc": "last updated",
+  "sources": "Sources",
   "system/vlaanderen": "Flemish GeoNetwork fork",
   "system/vlaanderen/version": "Version",
   "versionDetails": "version <span class='gn-version'>{{vlversion}}</span>, using GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
