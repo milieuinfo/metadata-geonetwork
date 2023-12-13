@@ -12,6 +12,7 @@ import org.jdom.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.file.Path;
+import java.util.Map;
 
 /**
  * Records validation result inside the metadata itself.
@@ -94,7 +95,7 @@ public class VlaanderenPostValidationProcess {
         try {
             Element mdTemp = mdElement;
 
-            mdElement = updateKeywordsBasedOnValidationStatus(mdElement, schema);
+            mdElement = updateKeywordsBasedOnValidationStatus(mdElement, schema, mdId);
 
             boolean changed = !mdElement.equals(mdTemp);
 
@@ -103,13 +104,13 @@ public class VlaanderenPostValidationProcess {
             throw new ValidationHookException(e.getMessage(), e);
         }
     }
-    private Element updateKeywordsBasedOnValidationStatus(Element metadata, String schema) throws Exception {
-        return transformMd(metadata, schema, AFTER_VALIDATION_XSLT);
+    private Element updateKeywordsBasedOnValidationStatus(Element metadata, String schema, Integer mdId) throws Exception {
+        return transformMd(metadata, schema, AFTER_VALIDATION_XSLT, mdId);
     }
 
-    private Element transformMd(Element md, String schema, String styleSheet) throws Exception {
+    private Element transformMd(Element md, String schema, String styleSheet, Integer mdId) throws Exception {
         Path xslt = dm.getSchemaDir(schema).resolve("process").resolve(styleSheet);
-        return Xml.transform(md, xslt);
+        return Xml.transform(md, xslt, Map.of("mdId", mdId));
     }
 
 }
