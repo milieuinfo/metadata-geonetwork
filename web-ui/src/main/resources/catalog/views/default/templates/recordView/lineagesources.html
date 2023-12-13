@@ -1,11 +1,11 @@
 <div data-ng-if="mdView.current.record.sources">
   <h2 data-translate="">sources</h2>
-  <div data-ng-repeat="p in mdView.current.record.sources">
-    <h3 data-ng-bind-html="p.description | linky | newlines"/>
+  <div data-ng-repeat="s in mdView.current.record.sources">
+    <h3 data-ng-bind-html="s.description | linky | newlines"/>
     <div class="row">
       <div class="col-md-8">
         <ul class="timeline timeline-1-col">
-          <li class="timeline-inverted" data-ng-repeat="ss in p.sourceSteps">
+          <li class="timeline-inverted" data-ng-repeat="ss in s.sourceSteps">
             <div class="timeline-badge timeline-badge-small">
               <i class="fa fa-fw fa-cog"></i>
             </div>
@@ -39,8 +39,8 @@
       </div>
       <div
         class="col-md-4 gn-contact-col-1"
-        data-ng-if="p.contacts && p.contacts.length > 0"
-        data-gn-metadata-contacts="p.contacts"
+        data-ng-if="s.contacts && s.contacts.length > 0"
+        data-gn-metadata-contacts="s.contacts"
         data-gn-mode="default"
         data-layout="icon"
       />
