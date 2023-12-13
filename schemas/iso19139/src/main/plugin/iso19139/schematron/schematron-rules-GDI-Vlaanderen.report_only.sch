@@ -3,7 +3,8 @@
 <!-- 2013-01-30 Versie 0.9 -->
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2">
 	<sch:title xmlns="http://www.w3.org/2001/XMLSchema">Technisch GDI Vlaanderen voorschrift voor metadata 3.0</sch:title>
-	<sch:ns prefix="gml" uri="http://www.opengis.net/gml"/>
+	<sch:ns prefix="gml" uri="http://www.opengis.net/gml/3.2"/>
+  <sch:ns prefix="gml320" uri="http://www.opengis.net/gml"/>
 	<sch:ns prefix="gmd" uri="http://www.isotc211.org/2005/gmd"/>
 	<sch:ns prefix="srv" uri="http://www.isotc211.org/2005/srv"/>
 	<sch:ns prefix="gco" uri="http://www.isotc211.org/2005/gco"/>
@@ -124,6 +125,20 @@
       <sch:report test="$spatial-scope-found > 0">
         Er werd een Nederlandstalig sleutelwoord: <sch:value-of select="$keyword"/> gevonden dat afkomstig is uit de <sch:value-of select="$thesaurusNameWithDate"/>.
       </sch:report>
+    </sch:rule>
+  </sch:pattern>
+
+  <sch:pattern>
+    <sch:title>$loc/strings/M900</sch:title>
+    <sch:rule context="/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml320:TimePeriod|/gmd:MD_Metadata//gmd:temporalElement/*/gmd:extent/gml:TimePeriod">
+      <sch:let name="begin-position" value=".//gml320:beginPosition/text()|.//gml:beginPosition/text()"/>
+      <sch:let name="end-position" value=".//gml320:endPosition/text()|.//gml:endPosition/text()"/>
+      <!-- check whether end is before begin -->
+      <sch:let name="check-order" value="$begin-position &lt; $end-position"/>
+      <!-- only interested when we filled in both fields: we want to check the order -->
+      <sch:let name="check-presence" value="not(boolean($begin-position) and boolean($end-position))"/>
+      <sch:assert test="$check-order or $check-presence"><sch:value-of select="$loc/strings/alert.M900.1"/>&#160;<sch:value-of select="$begin-position"/>&#160;<sch:value-of select="$loc/strings/alert.M900.2"/>&#160;<sch:value-of select="$end-position"/>.</sch:assert>
+      <sch:report test="$check-order or $check-presence"><sch:value-of select="$loc/strings/alert.M900.1"/>&#160;<sch:value-of select="$begin-position"/>&#160;<sch:value-of select="$loc/strings/alert.M900.2"/>&#160;<sch:value-of select="$end-position"/>.</sch:report>
     </sch:rule>
   </sch:pattern>
 </sch:schema>

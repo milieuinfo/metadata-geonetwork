@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+  <M900>A temporal extent can not have an end date that is before the begin date.</M900>
+  <alert.M900.1>Begin date</alert.M900.1>
+  <alert.M900.2>is after the end date</alert.M900.2>
+</strings>

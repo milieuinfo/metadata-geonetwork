@@ -202,6 +202,21 @@
     })
 
     /**
+     * If input is an array, flatten it with ', '. Otherwise, keep the value.
+     *
+     * ... 'flatten' was taken :).
+     */
+    .filter("splat", function () {
+      return function (input) {
+        if (Array.isArray(input)) {
+          return input.join(", ");
+        } else {
+          return input;
+        }
+      };
+    })
+
+    /**
      * Filter to call window.encodeURIComponent.
      *
      * The encodeURIComponent() function encodes a URI by replacing each instance of certain characters by one,

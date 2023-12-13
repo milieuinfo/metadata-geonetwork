@@ -160,14 +160,14 @@
   <inspire>INSPIRE</inspire>
   <inspire_sds>SDS</inspire_sds>
 
-  <resource>Resource</resource>
+  <resource>Bron</resource>
   <xml>XML</xml>
   <metadata>Metadata</metadata>
-  <identificationInfo>Identification</identificationInfo>
-  <distributionInfo>Distribution</distributionInfo>
-  <dataQualityInfo>Quality</dataQualityInfo>
+  <identificationInfo>Identificatie</identificationInfo>
+  <distributionInfo>Distributie</distributionInfo>
+  <dataQualityInfo>Kwaliteit</dataQualityInfo>
   <referenceSystemInfo>Referentiesysteem</referenceSystemInfo>
-  <contentInfo>Content</contentInfo>
+  <contentInfo>Inhoud</contentInfo>
   <portrayalCatalogueInfo>Weergave</portrayalCatalogueInfo>
   <applicationSchemaInfo>Schema info</applicationSchemaInfo>
   <noThesaurusName>Zoekwoorden</noThesaurusName>
@@ -195,8 +195,8 @@
   <linkToPortal>Toegang tot het portaal</linkToPortal>
   <linkToPortal-help>Lees hier de volle details en krijg toegang tot de data.</linkToPortal-help>
   <citationProposal>Citatie voorstel</citationProposal>
-  <citationProposal-help>This proposal was automatically generated, check if the metadata authors did not specified custom citation requirements.</citationProposal-help>
-  <citationAdditional>When using this resource in a publication, also cite the related work(s) with:</citationAdditional>
+  <citationProposal-help>Dit voorstel werd automatisch gegenereerd, kijk na of de metadata auteurs custom citatie vereisten hebben opgegeven.</citationProposal-help>
+  <citationAdditional>Wanneer deze bron in een publicatie wordt gebruikt, citeer dan ook eventuele gerelateerde werken met:</citationAdditional>
   <associatedResources>Gerelateerde bronnen</associatedResources>
 
   <!-- XSD error translation -->
@@ -215,60 +215,60 @@
   <enum3>Mogelijke waarden zijn: </enum3>
 
   <!-- INSPIRE view labels and help -->
-  <url>Online resource</url>
-  <identifier>Resource identifier</identifier>
-  <rsIdentifier>Projection</rsIdentifier>
-  <referenceDate>Temporal information</referenceDate>
-  <creationDate>Creation date</creationDate>
-  <hierarchyLevel>Hierarchy level</hierarchyLevel>
-  <publicationDate>Publication date</publicationDate>
-  <revisionDate>Revision date</revisionDate>
-  <temporalRangeSection>Temporal extent</temporalRangeSection>
+  <url>Online bron</url>
+  <identifier>Bron identificator</identifier>
+  <rsIdentifier>Projectie</rsIdentifier>
+  <referenceDate>Temporele informatie</referenceDate>
+  <creationDate>Aanmaakdatum</creationDate>
+  <hierarchyLevel>Hiërarchie niveau</hierarchyLevel>
+  <publicationDate>Publicatiedatum</publicationDate>
+  <revisionDate>Revisiedatum</revisionDate>
+  <temporalRangeSection>Temporele begrenzing</temporalRangeSection>
   <beginPosition>Begin</beginPosition>
-  <endPosition>End</endPosition>
-  <conformity>Conformity</conformity>
-  <conformity_title>Title</conformity_title>
-  <conformity_date>Date</conformity_date>
-  <explanation>Explanation</explanation>
-  <pass>Conformity</pass>
-  <indeterminatePosition>Indeterminate position</indeterminatePosition>
-  <pointOfContact>Contact for the resource</pointOfContact>
-  <metadataPointOfContact>Contact for the metadata</metadataPointOfContact>
-  <organisationName>Organisation name</organisationName>
+  <endPosition>Eind</endPosition>
+  <conformity>Conformiteit</conformity>
+  <conformity_title>Titel</conformity_title>
+  <conformity_date>Datum</conformity_date>
+  <explanation>Uitleg</explanation>
+  <pass>Conformiteit</pass>
+  <indeterminatePosition>Onbepaalde positie</indeterminatePosition>
+  <pointOfContact>Contact voor de bron</pointOfContact>
+  <metadataPointOfContact>Contact voor de metadata</metadataPointOfContact>
+  <organisationName>Organisatienaam</organisationName>
   <electronicMailAddress>Email</electronicMailAddress>
-  <role>Role</role>
+  <role>Rol</role>
   <encoding>Encoding</encoding>
-  <inspireTheme>INSPIRE themes</inspireTheme>
-  <inspireThemeURI>INSPIRE themes</inspireThemeURI>
-  <format>Format</format>
-  <format_version>Version</format_version>
-  <format_specification>Specification</format_specification>
+  <inspireTheme>INSPIRE themas</inspireTheme>
+  <inspireThemeURI>INSPIRE themas</inspireThemeURI>
+  <format>Formaat</format>
+  <format_version>Versie</format_version>
+  <format_specification>Specificatie</format_specification>
   <lineage>Lineage</lineage>
-  <spatialResolution>Spatial resolution (scale)</spatialResolution>
-  <spatialDistance>Spatial resolution (distance)</spatialDistance>
-  <accessConstraints>Access constraints</accessConstraints>
-  <useConstraints>Use constraints</useConstraints>
-  <useLimitation>Use limitation</useLimitation>
-  <add-resource-id>Compute resource identifier</add-resource-id>
-  <add-resource-idHelp>Compose the resource identifier using the catalog URL and the metadata
-    identifier (eg. http://www.organization.org/catalogue/5391bf69-44bc-4ea0-8cc0-6cf6c3bc81ae).
+  <spatialResolution>Ruimtelijke resolutie (schaal)</spatialResolution>
+  <spatialDistance>Ruimtelijke resolutie (afstand)</spatialDistance>
+  <accessConstraints>Toegangsbeperkingen</accessConstraints>
+  <useConstraints>Gebruiksbeperkingen</useConstraints>
+  <useLimitation>Gebruik beperking</useLimitation>
+  <add-resource-id>Bereken bron identificator</add-resource-id>
+  <add-resource-idHelp>Bouw de bron identificator aan de hand van de cataloog URL en de metadata identificator, e.g.,
+    http://www.organization.org/catalogue/5391bf69-44bc-4ea0-8cc0-6cf6c3bc81ae.
   </add-resource-idHelp>
-  <add-extent-from-geokeywords>Add extent for each keywords</add-extent-from-geokeywords>
-  <add-one-extent-from-geokeywords>Add one extent from all keywords</add-one-extent-from-geokeywords>
-  <add-extent-from-geokeywordsHelp>Analyze each keyword of type place and add matching extent.
+  <add-extent-from-geokeywords>Voeg begrenzing toe voor elk sleutelwoord</add-extent-from-geokeywords>
+  <add-one-extent-from-geokeywords>Voeg één begrenzing toe voor alle sleutelwoorden</add-one-extent-from-geokeywords>
+  <add-extent-from-geokeywordsHelp>Analyseer elk sleutelwoord van het plaatstype en voeg overeenkomstige begrenzing toe.
   </add-extent-from-geokeywordsHelp>
   <classificationSection>Classificatie van data en services</classificationSection>
-  <temporalSection>Temperele referentie</temporalSection>
+  <temporalSection>Temporele referentie</temporalSection>
   <restrictionsSection>Beperkingen op toegang en gebruik</restrictionsSection>
   <metadataSection>Metadata informatie</metadataSection>
   <responsibleOrganisationSection>Verantwoordelijke organisatie(s)</responsibleOrganisationSection>
   <qualityAndValiditySection>Kwaliteit en geldigheid</qualityAndValiditySection>
   <spatialRepresentationType>Spatiaal representatietype</spatialRepresentationType>
-  <topicCategory>Topic category code</topicCategory>
+  <topicCategory>Onderwerp categorie code</topicCategory>
   <metadataLanguage>Metadata taal</metadataLanguage>
-  <inspireServiceTaxonomy>INSPIRE Service Taxonomy</inspireServiceTaxonomy>
+  <inspireServiceTaxonomy>INSPIRE Service Taxonomie</inspireServiceTaxonomy>
   <otherConstraints>Andere beperkingen</otherConstraints>
-  <operatesOn>Gekoppelde resources</operatesOn>
+  <operatesOn>Gekoppelde bronnen</operatesOn>
   <extent>Geografische bounding box</extent>
   <spatialExtent>Ruimtelijke dekking</spatialExtent>
   <freeTextKeywords>Vrije keywords</freeTextKeywords>
@@ -276,7 +276,7 @@
   <resource_url>URL</resource_url>
   <resource_protocol>Protocol</resource_protocol>
 
-  <addCrs>Projection</addCrs>
+  <addCrs>Projectie</addCrs>
   <addCrs4936>ETRS89-XYZ</addCrs4936>
   <addCrs4937>ETRS89-GRS80h</addCrs4937>
   <addCrs4258>ETRS89-GRS80</addCrs4258>
@@ -306,7 +306,7 @@
   <inspire_sds_cc3>Conformance class 3: harmonized</inspire_sds_cc3>
 
   <sds-category>Categorie</sds-category>
-  <inspire_add_pass>Add pass element</inspire_add_pass>
+  <inspire_add_pass>Voeg pass element toe</inspire_add_pass>
   <sds-add-dataquality>Voeg DataQuality element toe</sds-add-dataquality>
   <sds-add-dataqualityHelp>TG4: For each spatial data service, there shall be one and only one set
     of quality information (dataQualityInfo element) scoped to “service”.
