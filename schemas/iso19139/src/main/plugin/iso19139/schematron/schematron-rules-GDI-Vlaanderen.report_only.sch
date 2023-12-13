@@ -77,7 +77,7 @@
 	<sch:pattern>
 		<sch:title>Er moet minstens één Nederlandstalig trefwoord aanwezig zijn uit de thesaurus ‘GEMET - INSPIRE themes, version 1.0’ met als datum 2008-06-01 indien de MD_Metadata.language gelijk is aan NL (ISO-element 55)</sch:title>
 		<sch:rule context="//gmd:MD_DataIdentification[/gmd:MD_Metadata/gmd:language/*/text()='dut' or /gmd:MD_Metadata/gmd:language/gmd:LanguageCode/@codeListValue='dut']">
-			<sch:let name="inspire-thesaurus" value="document(concat('file:///', replace($thesaurusDir, '\\', '/'), '/external/thesauri/theme/httpinspireeceuropaeutheme-theme.rdf'))"/>
+			<sch:let name="inspire-thesaurus" value="document(concat('file:///', replace($thesaurusDir, '\\', '/'), '/external/thesauri/theme/inspire-theme.rdf'))"/>
 			<sch:let name="inspire-theme" value="$inspire-thesaurus//skos:Concept"/>
 			<sch:assert test="count($inspire-theme) > 0">
 				INSPIRE Thema thesaurus niet gevonden.
@@ -106,8 +106,8 @@
     <sch:title>Er moet minstens één Nederlandstalig trefwoord aanwezig zijn uit de thesaurus ‘INSPIRE - Spatial scope’ met als datum 2019-05-22 indien de MD_Metadata.language gelijk is aan NL (ISO-element 55)</sch:title>
     <!--sch:title><sch:value-of select="concat('Er moet minstens één Nederlandstalig trefwoord aanwezig zijn uit de ',' indien de MD_Metadata.language gelijk is aan NL (ISO-element 55)')"/></sch:title-->
     <sch:rule context="//gmd:MD_DataIdentification[/gmd:MD_Metadata/gmd:language/*/text()='dut' or /gmd:MD_Metadata/gmd:language/gmd:LanguageCode/@codeListValue='dut']">
-      <sch:let name="spatial-scope-thesaurus" value="document(concat('file:///', replace($thesaurusDir, '\\', '/'), '/external/thesauri/theme/httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope.rdf'))"/>
-      <sch:let name="spatial-scope" value="$spatial-scope-thesaurus//rdf:Description"/>
+      <sch:let name="spatial-scope-thesaurus" value="document(concat('file:///', replace($thesaurusDir, '\\', '/'), '/external/thesauri/theme/SpatialScope.rdf'))"/>
+      <sch:let name="spatial-scope" value="$spatial-scope-thesaurus//skos:Concept"/>
       <sch:assert test="count($spatial-scope) > 0">
         <sch:value-of select="$thesaurusName"/> niet gevonden.
       </sch:assert>
@@ -118,7 +118,7 @@
 					[../../gmd:thesaurusName/*/gmd:title/*/text()='INSPIRE - Spatial scope' and
 					../../gmd:thesaurusName/*/gmd:date/*/gmd:date/gco:Date/text()=$thesaurusDate and
 					../../gmd:thesaurusName/*/gmd:date/*/gmd:dateType/gmd:CI_DateTypeCode/@codeListValue='publication']"/>
-      <sch:let name="spatial-scope-found" value="count($spatial-scope-thesaurus//rdf:Description[skos:prefLabel[@xml:lang='nl'] = $keyword])"/>
+      <sch:let name="spatial-scope-found" value="count($spatial-scope-thesaurus//skos:Concept[skos:prefLabel[@xml:lang='nl'] = $keyword])"/>
       <sch:assert test="$spatial-scope-found >0">
         Er werd geen Nederlandstalig sleutelwoord gevonden afkomstig uit de <sch:value-of select="$thesaurusNameWithDate"/>.
       </sch:assert>
