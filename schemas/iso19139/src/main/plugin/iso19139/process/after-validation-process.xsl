@@ -9,6 +9,8 @@
                 xmlns:util="java:org.fao.geonet.util.XslUtil"
                 exclude-result-prefixes="#all">
 
+  <xsl:param name="mdId" />
+
   <xsl:variable name="thesaurusTitle"
                 select="'GDI-Vlaanderen Trefwoorden'"/>
 
@@ -18,11 +20,11 @@
 
   <xsl:variable name="isVlValid"
                 select="util:getRecordValidationStatus(
-                          $metadataUuid, 'schematron-rules-GDI-Vlaanderen') = '1'"
+                          $metadataUuid, 'schematron-rules-GDI-Vlaanderen', $mdId) = '1'"
                 as="xs:boolean"/>
   <xsl:variable name="isInspireValid"
                 select="util:getRecordValidationStatus(
-                          $metadataUuid, 'inspire') = '1'"
+                          $metadataUuid, 'inspire', $mdId) = '1'"
                 as="xs:boolean"/>
 
   <xsl:template match="/root">
