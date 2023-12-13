@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <skos:ConceptScheme xmlns:skos="http://www.w3.org/2004/02/skos/core#" rdf:about="http://inspire.ec.europa.eu/metadata-codelist/SpatialScope">
-    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Spatial scope</dc:title>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">INSPIRE - Spatial scope</dc:title>
     <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/" xml:lang="en">Administrative level that the data set intends to cover.</dc:description>
     <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/">2019-05-22</dcterms:issued>
     <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/">2019-05-22</dcterms:modified>
