@@ -705,7 +705,6 @@
       }
 
       Metadata.prototype = {
-        contactsForSource: [],
         translateMultilingualObjects: function (multilingualObjects) {
           var mlObjs = angular.isArray(multilingualObjects)
             ? multilingualObjects
