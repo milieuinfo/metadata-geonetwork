@@ -171,7 +171,7 @@ public class InspireValidationTask extends ValidationTask {
         try {
             Element xml = metadata.getXmlData(false);
             boolean isService = Xml.selectBoolean(xml,
-                "gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue = 'service'",
+                "gmd:hierarchyLevel/gmd:MD_ScopeCode[@codeListValue = 'service']/@codeListValue",
                 ISO19139SchemaPlugin.allNamespaces.asList());
             // TODO: Should this be configurable?
             String testsuite = isService
