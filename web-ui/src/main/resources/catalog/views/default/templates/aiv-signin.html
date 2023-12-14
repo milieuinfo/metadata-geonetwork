@@ -64,8 +64,8 @@
           group
         </li>
         <li role="menuitem" data-ng-show="!user.isAdmin()">
-          <a>
-            <span data-ng-repeat="g in userGroups">{{g}}<br /></span>
+          <a data-ng-repeat="g in userGroups">
+            <span>{{g}}</span>
           </a>
         </li>
         <li role="separator" class="divider hidden-xs"></li>
