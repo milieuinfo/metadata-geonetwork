@@ -245,10 +245,10 @@
           <xsl:when test="$languages and count($element//(*:CharacterString|*:Anchor|*:LocalisedCharacterString)) = 0">
             <xsl:if test="position() = 1">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                             $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                             $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
               <xsl:for-each select="$elements">
                 <value><xsl:value-of select="concat($doubleQuote, 'lang', @xml:lang, $doubleQuote, ':',
-                                             $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                             $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
               </xsl:for-each>
             </xsl:if>
           </xsl:when>
@@ -256,9 +256,9 @@
             <!-- The default language -->
             <xsl:for-each select="$element//(*:CharacterString|*:Anchor)[. != '']">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                           $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                           $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
               <value><xsl:value-of select="concat($doubleQuote, 'lang', $mainLanguage, $doubleQuote, ':',
-                                           $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                           $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
             </xsl:for-each>
 
             <xsl:variable name="translations"
@@ -272,9 +272,9 @@
 
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
                                            $doubleQuote, gn-fn-index:json-escape(
-                                           if ($translations[@local = $mainLanguageId])
+                                           normalize-space(if ($translations[@local = $mainLanguageId])
                                            then $translations[@local = $mainLanguageId]
-                                           else $translations[1]), $doubleQuote)"/></value>
+                                           else $translations[1])), $doubleQuote)"/></value>
             </xsl:if>
 
             <xsl:for-each select="$translations">
@@ -296,16 +296,16 @@
             <!-- Index each values in a field. -->
             <xsl:for-each select="distinct-values($element[. != ''])">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                           $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                           $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
               <value><xsl:value-of select="concat($doubleQuote, 'lang', $mainLanguage, $doubleQuote, ':',
-                                           $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                           $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
 
         <xsl:for-each select="$element//*:Anchor/@xlink:href">
           <value><xsl:value-of select="concat($doubleQuote, 'link', $doubleQuote, ':',
-                                           $doubleQuote, gn-fn-index:json-escape(.), $doubleQuote)"/></value>
+                                           $doubleQuote, gn-fn-index:json-escape(normalize-space(.)), $doubleQuote)"/></value>
         </xsl:for-each>
       </xsl:variable>
 
