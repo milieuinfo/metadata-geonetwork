@@ -38,6 +38,7 @@ import org.fao.geonet.ApplicationContextHolder;
 import org.fao.geonet.api.ApiParams;
 import org.fao.geonet.api.ApiUtils;
 import org.fao.geonet.api.exception.NotAllowedException;
+import org.fao.geonet.api.records.InspireValidationTask;
 import org.fao.geonet.api.records.MetadataUtils;
 import org.fao.geonet.api.records.model.Direction;
 import org.fao.geonet.api.tools.i18n.LanguageUtils;
@@ -394,6 +395,10 @@ public class MetadataEditingApi {
                         new Object[]{metadataUuid, e.getMessage()});
                 }
                 reindex = true;
+
+                // launch async inspire validation
+                ApplicationContextHolder.get().publishEvent(new InspireValidationTask.Event(
+                    ApplicationContextHolder.get(), metadata.getId(), metadata instanceof MetadataDraft));
             }
 
             // Automatically change the workflow state after save

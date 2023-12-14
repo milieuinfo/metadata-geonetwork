@@ -5,6 +5,7 @@
                 xmlns:srv="http://www.isotc211.org/2005/srv"
                 xmlns:gco="http://www.isotc211.org/2005/gco"
                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                xmlns:gmx="http://www.isotc211.org/2005/gmx"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:java="java:org.fao.geonet.util.XslUtil"
@@ -379,6 +380,14 @@
       </xsl:copy>
     </xsl:if>
   </xsl:template>
+
+  <!-- Remove the conformity keywords after each update -->
+   <xsl:template
+     match="gmd:keyword[gmx:Anchor/@xlink:href= (
+      'https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDINSPIRECONFORM',
+      'https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/MDGDICONFORM'
+     )]"
+     priority="9001"/>
 
 
   <!-- Fix INSPIRE codelist still under HTTPS instead of HTTP -->

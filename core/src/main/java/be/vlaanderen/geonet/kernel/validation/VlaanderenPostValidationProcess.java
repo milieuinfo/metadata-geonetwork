@@ -43,47 +43,45 @@ public class VlaanderenPostValidationProcess {
     private static final String AFTER_VALIDATION_XSLT = "after-validation-process.xsl";
 
     /**
-     * Invoked when validation has finished. The arguments should be :
-     * - the metadata
-     * - a boolean if needs to update the database from within this function
-     * @param metadata
-     * @param save
+     * Invoked when validation has finished.
+     *
+     * @param metadata the record
+     * @param save when true, persists the record
      * @return Pair containing a boolean (true if the metadata has changed, false otherwise) and the changed metadata
-     * @throws ValidationHookException hmm
+     * @throws ValidationHookException when any Exception occurs during the addition of the conform keywords
      */
     public Pair<Boolean, AbstractMetadata> addConformKeywords(AbstractMetadata metadata, boolean save) throws ValidationHookException {
         try {
-            Pair result = addConformKeywordsToElement(
+            Pair<Boolean, Element> result = addConformKeywordsToElement(
                 metadata.getXmlData(false),
                 metadata.getDataInfo().getSchemaId(),
                 metadata.getId()
             );
 
-            if ((Boolean) result.one()) {
+            if (result.one()) {
                 if (save) {
                     if (metadata instanceof MetadataDraft) {
-                        metadata = metadataDraftRepository.update(metadata.getId(), entity -> entity.setDataAndFixCR((Element) result.two()));
+                        metadata = metadataDraftRepository.update(metadata.getId(), entity -> entity.setDataAndFixCR(result.two()));
                     } else {
-                        metadata = metadataRepository.update(metadata.getId(), entity -> entity.setDataAndFixCR((Element) result.two()));
+                        metadata = metadataRepository.update(metadata.getId(), entity -> entity.setDataAndFixCR(result.two()));
                     }
                 } else {
-                    metadata.setDataAndFixCR((Element) result.two());
+                    metadata.setDataAndFixCR(result.two());
                 }
             }
-            return Pair.read((Boolean) result.one(), metadata);
+            return Pair.read(result.one(), metadata);
         } catch (Exception x) {
             throw new ValidationHookException(x.getMessage(), x);
         }
     }
 
     /**
-     * Invoked when validation has finished. The arguments should be :
-     * - the metadata ID
-     * - a boolean if needs to update the database from within this function
-     * @param metadataId
-     * @param save
+     * Invoked when validation has finished.
+     *
+     * @param metadataId id of the record
+     * @param save when true, persists the record
      * @return Pair containing a boolean (true if the metadata has changed, false otherwise) and the changed metadata
-     * @throws ValidationHookException hmm
+     * @throws ValidationHookException when any Exception occurs during the addition of the conform keywords
      */
     public Pair<Boolean, AbstractMetadata> addConformKeywords(String metadataId, boolean save) throws ValidationHookException {
         return addConformKeywords(metadataRepository.findOneById(
