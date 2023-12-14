@@ -146,6 +146,14 @@
             }
           };
 
+          scope.shouldDisplayFormatter = function(md, formatter) {
+            if(formatter.label === 'exportDCAT') {
+              return (['iso19139','dcat2'].includes(md.documentStandard))
+            } else {
+              return true;
+            }
+          }
+
           function loadWorkflowStatus() {
             return $http
               .get("../api/status/workflow", { cache: true })
