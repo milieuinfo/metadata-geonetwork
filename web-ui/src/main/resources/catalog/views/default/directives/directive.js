@@ -148,7 +148,7 @@
 
           scope.shouldDisplayFormatter = function(md, formatter) {
             if(formatter.label === 'exportDCAT') {
-              return (['iso19139','dcat2'].includes(md.documentStandard))
+              return (['iso19139','dcat2'].includes(md.documentStandard)) && md.isPublishedToAll
             } else {
               return true;
             }
