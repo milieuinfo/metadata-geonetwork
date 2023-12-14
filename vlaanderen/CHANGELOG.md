@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 ## [8.1.10-SNAPSHOT]
+- Hiding RDF export when not applicable - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30878)
 
 ## [8.1.9] - 2023-12-14
 
