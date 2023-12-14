@@ -29,94 +29,98 @@
         xmlns:gmd="http://www.isotc211.org/2005/gmd">
 
   <element name="gfc:FC_FeatureCatalogue">
-    <label>Feature Catalogue description</label>
+    <label>Beschrijving objectencatalogus</label>
     <description></description>
   </element>
   <element name="gfc:FC_FeatureAttribute">
-    <label>Attribute</label>
+    <label>Attribuut</label>
   </element>
   <element name="gfc:name">
-    <label>Name</label>
-    <description>Feature catalogue name</description>
+    <label>Naam</label>
+    <description>Naam objectencatalogus</description>
+  </element>
+  <element name="gco:range">
+    <label>Bereik</label>
+    <description></description>
   </element>
   <element name="gfc:scope">
-    <label>Scope</label>
-    <description>Scope definition</description>
+    <label>Domein</label>
+    <description>Definitie domein</description>
   </element>
   <element name="gfc:versionNumber">
-    <label>Version</label>
-    <description>Catalogue version</description>
+    <label>Versie</label>
+    <description>Catalogus versie</description>
   </element>
   <element name="gfc:versionDate">
-    <label>Date</label>
-    <description>Catalogue date</description>
+    <label>Datum</label>
+    <description>Datum catalogus</description>
   </element>
   <element name="gfc:producer">
-    <label>Catalogue producer</label>
-    <description>Catalogue responsible</description>
+    <label>Catalogus producent</label>
+    <description>Verantwoordelijke catalogus</description>
   </element>
   <element name="gfc:featureType">
-    <label>Property description</label>
-    <description>Property description</description>
+    <label>Beschrijving eigenschap</label>
+    <description>Beschrijving eigenschap</description>
   </element>
   <element name="gfc:isAbstract">
     <label>Abstract</label>
-    <description>Is this element an abstract element ?</description>
+    <description>Is dit element een abstract element ?</description>
   </element>
   <element name="gfc:FC_FeatureType">
-    <label>Attribute table description</label>
-    <description>Attribute table description</description>
+    <label>Beschrijving attributentabel</label>
+    <description>Beschrijving attributentabel</description>
   </element>
   <element name="gfc:typeName">
-    <label>Property name</label>
+    <label>Naam eigenschap</label>
     <description></description>
   </element>
   <element name="gfc:carrierOfCharacteristics">
-    <label>Elements</label>
-    <description>Association, attribute, operation, ...</description>
+    <label>Elementen</label>
+    <description>Associatie, attribuut, operatie, ...</description>
   </element>
   <element name="gfc:definition">
-    <label>Definition</label>
-    <description>Property definition</description>
+    <label>Definitie</label>
+    <description>Definitie eigenschap</description>
   </element>
   <element name="gfc:fieldOfApplication">
-    <label>Field of application</label>
-    <description>Field of application</description>
+    <label>Toepassingsgebied</label>
+    <description>Toepassingsgebied</description>
   </element>
   <element name="gmd:responsibleParty">
-    <label>Responsible party</label>
-    <description>Responsible party</description>
+    <label>Verantwoordelijke</label>
+    <description>Verantwoordelijke</description>
   </element>
   <element name="gmd:CI_ResponsibleParty">
-    <label>Responsible party</label>
-    <description>Responsible party</description>
+    <label>Verantwoordelijke</label>
+    <description>Verantwoordelijke</description>
   </element>
   <element name="gco:lower">
-    <label>Lower cardinality</label>
-    <description>Lower cardinality</description>
+    <label>Minimale cardinaliteit</label>
+    <description>Minimale cardinaliteit</description>
   </element>
   <element name="gco:upper">
-    <label>Upper cardinality</label>
-    <description>Upper cardinality</description>
+    <label>Maximale cardinaliteit</label>
+    <description>Maximale cardinaliteit</description>
   </element>
   <element name="gfc:cardinality">
-    <label>Cardinalities</label>
-    <description>Cardinalities</description>
+    <label>Cardinaliteiten</label>
+    <description>Cardinaliteiten</description>
   </element>
   <element name="gfc:label">
     <label>Label</label>
     <description/>
   </element>
   <element name="gfc:listedValue">
-    <label>Codelist</label>
-    <description>List of values for this element.</description>
+    <label>Codelijst</label>
+    <description>Lijst van waarden voor dit element.</description>
   </element>
   <element name="gfc:constrainedBy">
-    <label>Constrained by</label>
+    <label>Beperkt door</label>
     <description></description>
   </element>
   <element name="gfc:definitionReference">
-    <label>Definition reference</label>
+    <label>Definitie referentie</label>
     <description></description>
   </element>
   <element name="gfc:code">
@@ -124,79 +128,79 @@
     <description></description>
   </element>
   <element name="gfc:isOrdered">
-    <label>Is ordered</label>
+    <label>Is gesorteeerd</label>
     <description></description>
   </element>
   <element name="gfc:isNavigable">
-    <label>Is navigable</label>
+    <label>Is navigeerbaar</label>
     <description></description>
   </element>
   <element name="gfc:roleType">
-    <label>Role type</label>
+    <label>Roltype</label>
     <description></description>
   </element>
   <element name="gfc:inheritsFrom">
-    <label>Inherits from</label>
+    <label>Erft van</label>
     <description></description>
   </element>
   <element name="gfc:inheritsTo">
-    <label>Inherits to</label>
+    <label>Erft aan</label>
     <description></description>
   </element>
   <element name="gfc:FC_InheritanceRelation">
-    <label>Heritance relation</label>
+    <label>Erfrelatie</label>
     <description></description>
   </element>
   <element name="gfc:functionalLanguage">
-    <label>Functional language</label>
+    <label>Functionele taal</label>
     <description></description>
   </element>
   <element name="gfc:definitionSource">
-    <label>Definition source</label>
+    <label>Definitie bron</label>
     <description></description>
   </element>
   <element name="gfc:FC_FeatureOperation">
-    <label>Feature operation</label>
+    <label>Object operatie</label>
     <description></description>
   </element>
   <element name="gfc:FC_FeatureAssociation">
-    <label>Feature association</label>
+    <label>Object associatie</label>
     <description></description>
   </element>
   <element name="gfc:FC_AssociationRole">
-    <label>Association role</label>
+    <label>Associatierol</label>
     <description></description>
   </element>
   <element name="gfc:FC_RoleType">
-    <label>Role type</label>
+    <label>Roltype</label>
     <description></description>
   </element>
   <element name="gfc:description">
-    <label>Description</label>
+    <label>Beschrijving</label>
     <description></description>
   </element>
   <element name="gfc:aliases">
-    <label>Aliases</label>
+    <label>Aliasen</label>
     <description></description>
   </element>
   <element name="gfc:FC_ListedValue">
-    <label>Codelist</label>
+    <label>Codelijst</label>
     <description></description>
   </element>
   <element name="gfc:valueType">
-    <label>Value type</label>
+    <label>Waardetype</label>
     <description></description>
   </element>
   <element name="gfc:memberName">
-    <label>Member name</label>
+    <label>Naam lid</label>
     <description></description>
   </element>
   <element name="gfc:FC_Constraint">
-    <label>Constraint</label>
+    <label>Beperking</label>
     <description></description>
   </element>
   <element name="gfc:uniqueInstance">
-    <label>Unique instance</label>
+    <label>Unieke instantie</label>
     <description></description>
   </element>
   <element name="gfc:type">
@@ -204,57 +208,111 @@
     <description></description>
   </element>
   <element name="gfc:relation">
-    <label>Relation</label>
+    <label>Relatie</label>
     <description></description>
   </element>
   <element name="gfc:featureCatalogue">
-    <label>Feature catalogue</label>
+    <label>Objectencatalogus</label>
     <description></description>
   </element>
   <element name="gfc:roleName">
-    <label>Role name</label>
+    <label>Rolnaam</label>
     <description></description>
   </element>
   <element name="gfc:signature">
-    <label>Signature</label>
+    <label>Handtekening</label>
     <description></description>
   </element>
   <element name="gfc:formalDefinition">
-    <label>Formal definition</label>
+    <label>Formele definitie</label>
     <description></description>
   </element>
   <element name="gfc:triggeredByValueOf">
-    <label>Triggered by value of</label>
+    <label>Getriggerd door de waarde van</label>
     <description></description>
   </element>
   <element name="gfc:affectsValueOf">
-    <label>Affects value of</label>
+    <label>Beïnvloedt waarde van</label>
   </element>
   <element name="gfc:observesValueOf">
-    <label>Observes value of</label>
+    <label>Observeert waarde van</label>
   </element>
   <element name="gfc:valueMeasurementUnit">
-    <label>Value measurement unit</label>
+    <label>Eenheid waardemeting</label>
+  </element>
+  <element name="gco:CharacterString">
+    <label>Tekst</label>
+    <description></description>
+  </element>
+  <element name="gmx:Anchor">
+    <label>Anker</label>
+    <description></description>
+  </element>
+  <element name="gmx:FileName">
+    <label>Bestandsnaam</label>
+    <description></description>
   </element>
   <!-- ==================================================== -->
   <element name="gmx:name">
-    <label>Name</label>
+    <label>Naam</label>
     <description>Feature catalogue name</description>
   </element>
   <element name="gmx:scope">
-    <label>Scope</label>
-    <description>Scope definition</description>
+    <label>Domein</label>
+    <description>Definitie domein</description>
   </element>
   <element name="gmx:versionNumber">
-    <label>Version</label>
-    <description>Catalogue version</description>
+    <label>Versie</label>
+    <description>Cataloogversie</description>
   </element>
   <element name="gmx:versionDate">
-    <label>Date</label>
-    <description>Catalogue date</description>
+    <label>Datum</label>
+    <description>Cataloogdatum</description>
   </element>
   <element name="gmx:fieldOfApplication">
-    <label>Field of application</label>
-    <description>Field of application</description>
+    <label>Toepassingsgebied</label>
+    <description>Toepassingsgebied</description>
+  </element>
+  <element name="gco:nilReason">
+    <label>Reden voor leeg zijn</label>
+  </element>
+  <element name="xsi:nil">
+    <label>Nil</label>
+    <description>Geeft aan dat een zeker element geen of een onbekende waarde heeft.</description>
+  </element>
+  <element name="isInfinite">
+    <label>Is oneindig</label>
+  </element>
+  <element name="gmd:codeSpace">
+    <label>Codespace</label>
+    <description>Naam of identificerende term van de persoon of organisatie die verantwoordelijk is voor de code (namespace).</description>
+  </element>
+  <element name="codeSpace">
+    <label>Codespace</label>
+    <description>Authoriteit verantwoordelijk voor de codes. bv EPSG</description>
+  </element>
+  <element name="gmd:country">
+    <label>Land</label>
+    <description>Land</description>
+  </element>
+  <element name="gmd:deliveryPoint">
+    <label>Adres</label>
+    <description>Contactadres van de organisatie.</description>
+  </element>
+  <element name="gmd:organisationName">
+    <label>Organisatie</label>
+    <description>Naam van de verantwoordelijke organisatie.</description>
+  </element>
+  <element name="gmd:city">
+    <label>Plaats</label>
+    <description>Plaatsnaam behorende bij het contactadres van de organisatie.</description>
+  </element>
+  <element name="gmd:postalCode">
+    <label>Postcode</label>
+    <description>Postcode</description>
+  </element>
+  <element name="gmd:electronicMailAddress">
+    <label>E-mail</label>
+    <description>E-mail adres van de verantwoordelijke organisatie of persoon.</description>
   </element>
 </labels>

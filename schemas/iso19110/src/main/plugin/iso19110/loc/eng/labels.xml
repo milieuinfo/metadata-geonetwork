@@ -279,4 +279,43 @@
     <help/>
     <condition/>
   </element>
+  <element name="xsi:nil">
+    <label>Nil</label>
+    <description>Indicates that a certain element does not have a value or that the value is unknown.</description>
+  </element>
+  <element name="isInfinite">
+    <label>Is infinite</label>
+  </element>
+  <element name="gmd:codeSpace">
+    <label>Codespace</label>
+    <description>Name or identifier of the person or organization responsible for namespace</description>
+  </element>
+  <element name="codeSpace">
+    <label>Codespace</label>
+    <description>Name or identifier of the person or organization responsible for namespace</description>
+  </element>
+  <element name="gmd:country">
+    <label>Country</label>
+    <description>Address line for the location</description>
+  </element>
+  <element name="gmd:deliveryPoint">
+    <label>Delivery point</label>
+    <description>Address line for the location</description>
+  </element>
+  <element name="gmd:organisationName">
+    <label>Organisatie</label>
+    <description>Name of the responsible organization</description>
+  </element>
+  <element name="gmd:city">
+    <label>City</label>
+    <description>City of the location</description>
+  </element>
+  <element name="gmd:postalCode">
+    <label>Postal code</label>
+    <description>ZIP or other postal code</description>
+  </element>
+  <element name="gmd:electronicMailAddress">
+    <label>Electronic mail address</label>
+    <description>Address of the electronic mailbox of the responsible organization or individual</description>
+  </element>
 </labels>
