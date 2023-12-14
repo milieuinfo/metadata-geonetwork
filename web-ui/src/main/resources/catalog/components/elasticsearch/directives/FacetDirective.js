@@ -172,6 +172,27 @@
           return function (facet) {
             return $filter("facetTranslator")(facet.value || facet.key, bucket);
           };
+        } else if (agg && agg.meta && agg.meta.orderByVLStatus) {
+          var visualOrder = [
+            "draft",
+            "approved",
+            "retired",
+            "submitted",
+            "rejected",
+            "approved_for_published",
+            "submitted_for_retired",
+            "submitted_for_removed",
+            "removed",
+            "rejected_for_retired",
+            "rejected_for_removed"
+          ];
+          return function (item) {
+            var index = visualOrder.indexOf(item.value);
+            if (index === -1) {
+              index = visualOrder.length;
+            }
+            return index;
+          };
         } else {
           return function (facet) {
             return facet.key;

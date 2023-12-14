@@ -456,9 +456,9 @@
                 }
               },
               // #9 PROTOCOL SERVICE
-              linkProtocol: {
+              "topLevelProtocol.keyword": {
                 terms: {
-                  field: "linkProtocol",
+                  field: "topLevelProtocol.keyword",
                   size: 10
                 },
                 meta: {
@@ -806,10 +806,11 @@
                   collapsed: true
                 }
               },
-              // #28 GroupPublished
-              groupPublished: {
+              // #28 groupOwnerName
+              groupOwnerName: {
                 terms: {
-                  field: "groupPublished"
+                  field: "groupOwnerName.keyword",
+                  size: 20
                 },
                 meta: {
                   collapsed: true,
@@ -828,7 +829,7 @@
                   field: "statusWorkflow",
                   collapsed: true,
                   userHasRole: "isEditorOrMore",
-                  orderByTranslation: true,
+                  orderByVLStatus: true,
                   filterByTranslation: true
                 }
               }
@@ -1285,7 +1286,8 @@
                   size: 20
                 },
                 meta: {
-                  field: "statusWorkflow"
+                  field: "statusWorkflow",
+                  orderByVLStatus: true
                 }
               },
               "cl_topic.key": {
@@ -1300,9 +1302,9 @@
                   }
                 }
               },
-              linkProtocol: {
+              "topLevelProtocol.keyword": {
                 terms: {
-                  field: "linkProtocol",
+                  field: "topLevelProtocol.keyword",
                   size: 10
                 },
                 meta: {
@@ -1380,9 +1382,9 @@
                   }
                 }
               },
-              groupPublishedId: {
+              groupOwnerName: {
                 terms: {
-                  field: "groupPublishedId",
+                  field: "groupOwnerName.keyword",
                   size: 200,
                   include: ".*"
                 },

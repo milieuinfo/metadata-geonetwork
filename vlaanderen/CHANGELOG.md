@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fixed bug related to adding conform keywords on save - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30468)
 - Correctly saving gmd:date in editor for quality measurements - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30832)
 - Added gmd:source and the contained gmd:sourceStep objects to record view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30633)
+- Add `topLevelProtocol` to index and replace "Service Protocole" with it - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30757)
+- Improve slightly layout of status workflow dropdown - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30757)
+- Implement fixed order for status workflow facet - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30757)
 
 ### core-geonetwork
 - Configurable icon for static pages - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30491) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7536)
