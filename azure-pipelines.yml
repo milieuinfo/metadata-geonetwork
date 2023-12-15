@@ -10,71 +10,40 @@ variables:
   - name: mavenCacheOpts
     value: '-Dmaven.repo.local=$(mavenCacheFolder)'
 
-jobs:
-  - job: skipcheck
-    # itss linux build server
+stages:
+  - stage: prebuild
     pool: dv-dev-ubuntu2204
-    steps:
-      - bash: |
-          echo "Testing whether we need to skip the pipeline."
-          substring='skipci'
-          echo "> substring: $substring"
-          echo "> commit message: $COMMIT_MESSAGE"
-          echo "> namespace: $(namespace)"
-          if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
-          then
-            echo "> '$substring' was found in the commit message."
-            echo "##vso[task.setvariable variable=skip;isoutput=true]true"
-          else
-            echo "##vso[task.setvariable variable=skip;isoutput=true]false"
-          fi
-        name: skipcheck
-        env:
-          COMMIT_MESSAGE: $(Build.SourceVersionMessage)
-  - job: publish
-    dependsOn: skipcheck
-    condition: and(succeeded(), eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
-    timeoutInMinutes: "60"
-    # itss linux build server
+    jobs:
+    # check whether we can/should skip this pipeline, e.g., for comment-only fixes
+    - job: skipcheck
+      steps:
+        - bash: |
+            echo "Testing whether we need to skip the pipeline."
+            substring='skipci'
+            echo "> substring: $substring"
+            echo "> commit message: $COMMIT_MESSAGE"
+            if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
+            then
+              echo "> '$substring' was found in the commit message."
+              echo "##vso[task.setvariable variable=skip;isoutput=true]true"
+            else
+              echo "##vso[task.setvariable variable=skip;isoutput=true]false"
+            fi
+          name: skipcheck
+          env:
+            COMMIT_MESSAGE: $(Build.SourceVersionMessage)
+
+  - stage: build
     pool: dv-dev-ubuntu2204
-    steps:
-      - task: Bash@3
-        displayName: Validate namespace variable
-        inputs:
-          targetType: 'inline'
-          script: |
-            array=("dev" "bet")
-            for i in ${array[@]}
-            do
-              if [[ $i == $(namespace) ]]
-              then
-                echo "namespace checks out" && exit 0
-              fi
-            done
-            exit 1
+    dependsOn: prebuild
+    condition: succeeded('prebuild')
+    jobs:
+    - job: build
+      timeoutInMinutes: "60"
+      steps:
       - checkout: self
         displayName: Set up repository
         submodules: recursive # needed for submodules
-      - task: AzureCLI@2
-        displayName: Configure access to aks cluster
-        inputs:
-          azureSubscription: 'dvl-dev-infocat-ARM'
-          addSpnToEnvironment: true
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            # download kubectl and kubelogin
-            sudo az aks install-cli --subscription ${{ variables.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
-
-            # download ~/.kube/config file
-            az aks get-credentials --resource-group ${{ variables.clusterRg }} --name ${{ variables.clusterName }} --only-show-errors
-
-            # convert ~/.kube/config to a format compatible with kubelogin
-            kubelogin convert-kubeconfig --login spn
-
-            # create secure azure devops variables for later steps
-            echo "##vso[task.setvariable variable=spnId;isSecret=true]$servicePrincipalId"
-            echo "##vso[task.setvariable variable=spnSecret;isSecret=true]$servicePrincipalKey"
       - task: Bash@3
         displayName: Set git commit sha as env var
         inputs:
@@ -127,37 +96,71 @@ jobs:
           Dockerfile: 'web/Dockerfile'
           tags: |
             latest
-            $(namespace)
             $(GIT_COMMIT_SHA)
             $(VL_GEONETWORK_VERSION)
-      - task: Bash@3
-        displayName: Execute liquibase
-        env:
-          # get the pipeline variables into our task
-          LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: $(liquibase.gn.system.feedback.mailserver.password)
-          LIQUIBASE_MDV_PASSWORDHASH: $(liquibase.mdv.passwordhash)
-          LIQUIBASE_MAILPIT_PORT: $(liquibase.mailpit.port)
-          LIQUIBASE_MAILPIT_HOST: $(liquibase.mailpit.host)
-          # get additional variables into our task
-          LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION: $(VL_GEONETWORK_VERSION)
-          # needed for kube access
-          AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
-          AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
-        inputs:
-          targetType: 'inline'
-          workingDirectory: 'liquibase'
-          script: |
-            # create an empty liquibase.properties file
-            touch liquibase.properties
-            # necessary variables are found in environment
-            bash execute-on-env.sh -n $(namespace)
-      - task: Bash@3
-        displayName: Rolling restart of geonetwork ($(namespace))
-        env:
-          AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
-          AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
-        inputs:
-          targetType: 'inline'
-          script: |
-            kubectl rollout restart -n $(namespace) deployment/geonetwork
-            kubectl rollout restart -n $(namespace) deployment/geonetwork-replica
+
+  - stage: dev
+    pool: dv-dev-ubuntu2204
+    dependsOn: build
+    condition: succeeded('build')
+    jobs:
+    - deployment: devdeploy
+      environment: dev
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+              displayName: Set up repository
+              submodules: recursive # needed for submodules
+            - task: AzureCLI@2
+              displayName: Configure access to aks cluster
+              inputs:
+                azureSubscription: 'dvl-dev-infocat-ARM'
+                addSpnToEnvironment: true
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  # download kubectl and kubelogin
+                  sudo az aks install-cli --subscription ${{ variables.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
+
+                  # download ~/.kube/config file
+                  az aks get-credentials --resource-group ${{ variables.clusterRg }} --name ${{ variables.clusterName }} --only-show-errors
+
+                  # convert ~/.kube/config to a format compatible with kubelogin
+                  kubelogin convert-kubeconfig --login spn
+
+                  # create secure azure devops variables for later steps
+                  echo "##vso[task.setvariable variable=spnId;isSecret=true]$servicePrincipalId"
+                  echo "##vso[task.setvariable variable=spnSecret;isSecret=true]$servicePrincipalKey"
+            - task: Bash@3
+              displayName: Execute liquibase
+              env:
+                # get the pipeline variables into our task
+                LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: $(liquibase.gn.system.feedback.mailserver.password)
+                LIQUIBASE_MDV_PASSWORDHASH: $(liquibase.mdv.passwordhash)
+                LIQUIBASE_MAILPIT_PORT: $(liquibase.mailpit.port)
+                LIQUIBASE_MAILPIT_HOST: $(liquibase.mailpit.host)
+                # get additional variables into our task
+                LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION: $(VL_GEONETWORK_VERSION)
+                # needed for kube access
+                AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+                AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'liquibase'
+                script: |
+                  # create an empty liquibase.properties file
+                  touch liquibase.properties
+                  # necessary variables are found in environment
+                  bash execute-on-env.sh -n dev
+            - task: Bash@3
+              displayName: Rolling restart of geonetwork (dev)
+              env:
+                AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+                AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
+              inputs:
+                targetType: 'inline'
+                script: |
+                  kubectl rollout restart -n dev deployment/geonetwork
+                  kubectl rollout restart -n dev deployment/geonetwork-replica
