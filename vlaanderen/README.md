@@ -66,5 +66,5 @@ Liquibase is used to version the Geonetwork database. It describes all updates i
 - `core-geonetwork` migrations (as we are disabling the native auto-migration of core-geonetwork)
 - hibernate model changes
 - our own custom changes, to be executed on top
-- 
+ 
 See [the liquibase documentation](/liquibase/README.md) for further info.
