@@ -5,9 +5,32 @@ parameters:
   - name: namespace
 
 stages:
+  - stage: skipcheck
+    pool: dv-dev-ubuntu2204
+    jobs:
+      # check whether we can/should skip this pipeline, e.g., for comment-only fixes
+      - job: skipcheck
+        steps:
+          - bash: |
+              echo "Testing whether we need to skip the pipeline."
+              substring='skipci'
+              echo "> substring: $substring"
+              echo "> commit message: $COMMIT_MESSAGE"
+              if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
+              then
+                echo "> '$substring' was found in the commit message."
+                echo "##vso[task.setvariable variable=skip;isoutput=true]true"
+              else
+                echo "##vso[task.setvariable variable=skip;isoutput=true]false"
+              fi
+            name: skipcheck
+            env:
+              COMMIT_MESSAGE: $(Build.SourceVersionMessage)
   # environment specific deployment steps, repeatable on each env/namespace
   - stage: ${{ parameters.namespace }}
     pool: dv-dev-ubuntu2204
+    dependsOn: skipcheck
+    condition: and(succeeded('skipcheck'),eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
     jobs:
     - deployment: deploy
       environment: ${{ parameters.namespace }}
