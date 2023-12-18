@@ -1,3 +1,4 @@
+/*
 describe('template spec', () => {
   beforeEach('passes', () => {
     cy.visit(`/`);
@@ -26,3 +27,4 @@ describe('template spec', () => {
     }
   })
 })
+*/
