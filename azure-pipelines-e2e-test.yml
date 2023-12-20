@@ -16,7 +16,7 @@ stages:
       - task: Cache@2
         inputs:
           # bump 'versionx' to make sure the cache is cleared
-          key: 'version2 | maven | "$(Agent.OS)" | **/pom.xml'
+          key: 'version3 | maven | "$(Agent.OS)" | **/pom.xml'
           restoreKeys: |
             maven | "$(Agent.OS)"
             maven
@@ -47,14 +47,18 @@ stages:
           workingDirectory: vlaanderen/cypress-e2e
           targetType: inline
           script: |
+            # make the folders to make sure they're not created by root
+            mkdir -p cypress/downloads
+            mkdir -p cypress/results
+            mkdir -p cypress/screenshots
+            mkdir -p cypress/videos
+
             # for some weird reason, just upping e2e doesn't work and geonetwork fails with unhealthy state
             # first get geonetwork 'warm', then launch e2e
             docker compose up -d --wait geonetwork-reindexer
             docker compose up e2e
             docker compose down -v
-            ls -lsa cypress
-            ls -lsa cypress/downloads
-            chown -R AzDevOps:AzDevOps cypress
+
             ls -lsa cypress
             ls -lsa cypress/downloads
             echo "done"
