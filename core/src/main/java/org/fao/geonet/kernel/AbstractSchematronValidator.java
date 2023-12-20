@@ -71,6 +71,14 @@ public class AbstractSchematronValidator {
             params.put("thesaurusDir", thesaurusManager.getThesauriDirectory().toString());
 
             Path file = schemaDir.resolve(SCHEMATRON_DIR).resolve(schematron.getFile());
+
+            // if the file does not exist, rebuild the schematron rule
+            // this prevents having to reload the application when the .xsl file disappears
+            if(!file.toFile().exists()) {
+                SchemaManager schemaManager = ApplicationContextHolder.get().getBean(SchemaManager.class);
+                schemaManager.rebuildSchematronRule(md, file);
+            }
+
             Element xmlReport = Xml.transform(md, file, params);
             if (xmlReport != null) {
                 report.addContent(xmlReport);
