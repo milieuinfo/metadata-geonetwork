@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [8.1.10-SNAPSHOT]
 
+### vlaanderen
+- Translations - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31081)
+
+### core-geonetwork
+- Fixed minor UI bug when listing languages - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31081) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7568)
+
 ## [8.1.9] - 2023-12-14
 
 ### vlaanderen
