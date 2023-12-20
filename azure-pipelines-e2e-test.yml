@@ -52,7 +52,16 @@ stages:
             docker compose up -d --wait geonetwork-reindexer
             docker compose up e2e
             docker compose down -v
+            ls -lsa cypress
+            ls -lsa cypress/downloads
+            echo "done"
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: 'JUnit'
           testResultsFiles: '**/TEST-*.xml'
+          searchFolder: 'vlaanderen/cypress-e2e/cypress/results'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          searchFolder: 'web/target/surefire-reports'
