@@ -47,46 +47,10 @@ stages:
           workingDirectory: vlaanderen/cypress-e2e
           targetType: inline
           script: |
-            # echo "echoing liquibase dir"
-            # ls ../../liquibase
-            # echo "echoing target dir"
-            # ls ../../web/target
-            # /usr/libexec/docker/cli-plugins/docker-compose version
-            # /usr/local/bin/docker-compose version
-            # docker-compose version
-            # echo ">>> build geonetwork"
-            # /usr/libexec/docker/cli-plugins/docker-compose build geonetwork
-            # echo ">>> listing images"
-            # docker image ls | grep geonetwork
-            # echo ">>> attempt 2"
-            # docker --version
-            # docker -D compose run --rm e2e
-            # echo ">>> run e2e"
-            # /usr/libexec/docker/cli-plugins/docker-compose run --rm e2e
-            # echo ">>> liquibase logs"
-            # # docker logs $(docker ps -aqf "name=cypress-e2e-liquibase-1")
-            # # echo ">>> geonetwork logs"
-            # docker logs $(docker ps -aqf "name=cypress-e2e-geonetwork-1")
-            # echo ">>> inspect geonetwork"
-            # docker inspect $(docker ps -aqf "name=cypress-e2e-geonetwork-1")
-            # echo ">>> memory"
-            # free -h
-            # echo ">>> docker down"
-            # /usr/libexec/docker/cli-plugins/docker-compose down -v
-            # echo ">>> geonetwork logs"
-            # /usr/libexec/docker/cli-plugins/docker-compose logs geonetwork
-            # echo ">>> database logs"
-            # /usr/libexec/docker/cli-plugins/docker-compose logs database
-            # echo ">>> elasticsearch logs"
-            # /usr/libexec/docker/cli-plugins/docker-compose logs elasticsearch
             # for some weird reason, just upping e2e doesn't work and geonetwork fails with unhealthy state
             # first get geonetwork 'warm', then launch e2e
-            echo ">>> geonetwork reindexer"
             docker compose up -d --wait geonetwork-reindexer
-            echo ">>> e2e"
             docker compose up e2e
-            echo ">>> checking test results"
-            find . -name "*.xml"
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: 'JUnit'
