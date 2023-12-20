@@ -49,6 +49,15 @@ stages:
                   GIT_COMMIT_SHA=$(git rev-parse HEAD)
                   echo "GIT_COMMIT_SHA: ${GIT_COMMIT_SHA}"
                   echo "##vso[task.setvariable variable=GIT_COMMIT_SHA]${GIT_COMMIT_SHA}"
+            - task: Bash@3
+              displayName: Retrieve project version
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'vlaanderen'
+                script: |
+                  VL_GEONETWORK_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                  echo "VL_GEONETWORK_VERSION: ${VL_GEONETWORK_VERSION}"
+                  echo "##vso[task.setvariable variable=VL_GEONETWORK_VERSION]${VL_GEONETWORK_VERSION}"
             - task: AzureCLI@2
               displayName: Configure access to aks cluster
               inputs:
