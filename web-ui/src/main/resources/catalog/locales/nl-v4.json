@@ -81,7 +81,7 @@
   "sortBy-recordOwner": "eigenaar",
   "csw-sortByHelp": "Definieer sorteer optie voor de GetRecords zoekopdracht. Dit kan problemen oplossen bij grote sets waarvan sommige records op de externe node wijzigen tijdens het harvesten en teruggeven worden in verschillende pagina's. Sorteren op 'identifier:A' betekent 'alfabetisch op UUID sorteren'. Gelijk welke CSW zoekoptie kan gebruikt worden in combinatie met A of D om de sortering te definiëren.",
   "moreLikeThis": "Gelijkaardige records",
-  "moreLikeType": "Gelijkaardig",
+  "moreLikeType": "Gelijkaardige",
   "readMore": "Bekijk meer...",
   "onTheWeb": "Meer online informatie",
   "pdfReportTocTitle": "Inhoud",
@@ -293,6 +293,8 @@
   "pageContent": "Pagina inhoud",
   "pageContentFile": "Pagina bestand",
   "pageLabel": "Pagina label",
+  "pageIcon": "Page icon",
+  "pageIcon-help": "Optionally, define a <a target='_blank' href='https://fontawesome.com/v4/icons/'>font-awesome icon</a>. Example: 'fa-wrench'.",
   "pageSection": "Pagina sectie",
   "pageApiLink": "Pagina API link",
   "uiRestorePrevious": "Herstel laatst opgeslagen",
@@ -415,5 +417,6 @@
   "lastCreatedRecords": "Laatst aangemaakte records",
   "associationType": "Association type",
   "initiativeType": "Initiative type",
-  "associatedTo": "Associated "
+  "associatedTo": "Associated ",
+  "filterHelp": "Please click on one of the buttons below to activate the filter"
 }

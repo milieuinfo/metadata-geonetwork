@@ -36,7 +36,7 @@ stages:
   - stage: build
     pool: dv-dev-ubuntu2204
     dependsOn: prebuild
-    condition: and(succeeded('prebuild'),eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
+    condition: and(succeeded('prebuild'),eq(dependencies.prebuild.outputs['skipcheck.skipcheck.skip'], 'false'))
     jobs:
     - job: build
       timeoutInMinutes: "60"

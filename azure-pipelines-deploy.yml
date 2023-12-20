@@ -30,7 +30,7 @@ stages:
   - stage: ${{ parameters.namespace }}
     pool: dv-dev-ubuntu2204
     dependsOn: skipcheck
-    condition: and(succeeded('skipcheck'),eq(dependencies.skipcheck.outputs['skipcheck.skip'], 'false'))
+    condition: and(succeeded('skipcheck'),eq(dependencies.skipcheck.outputs['skipcheck.skipcheck.skip'], 'false'))
     jobs:
     - deployment: deploy
       environment: ${{ parameters.namespace }}

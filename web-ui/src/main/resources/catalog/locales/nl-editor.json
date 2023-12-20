@@ -1,5 +1,5 @@
 {
-    "featureCatReplace": "Vervang bestaande feature catalog?",
+    "featureCatReplace": "Vervang bestaande objectencatalogus?",
     "add-extent-from-geokeywords": "Bereken de dekking uit de trefwoorden",
     "add-extent-from-geokeywords-help": "Doorzoek alle trefwoorden uit de thesaurus van het type 'plaats' en voeg de bijbehorende geografische dekking toe.",
     "addCRS-help": "Voeg nieuw projectie systeem toeVoeg nieuw coördinatensysteem toe",
@@ -231,7 +231,7 @@
     "onlineDownloadWCS": "Download Service WCS (Web Coverage Service)",
     "onlineUse": "Gebruik de bron",
     "onlineUseFcats": "Data model van de bron",
-    "onlineUseFcats-help": "Data model (feature catalog) kan direct in de metadata beschreven worden in het \"inhoud\" tabblad of in een apart document (bv pdf) dat gekoppeld wordt",
+    "onlineUseFcats-help": "Data model (objectencatalogus) kan direct in de metadata beschreven worden in het \"inhoud\" tabblad of in een apart document (bv pdf) dat gekoppeld wordt",
     "onlineUseDQReport": "Data kwaliteits rapport",
     "onlineUseDQTOR": "Data kwaliteits specificatie",
     "onlineUseDQProdReport": "Data kwaliteits productie rapport",
