@@ -51,6 +51,7 @@ stages:
             # first get geonetwork 'warm', then launch e2e
             docker compose up -d --wait geonetwork-reindexer
             docker compose up e2e
+            docker compose down -v
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: 'JUnit'
