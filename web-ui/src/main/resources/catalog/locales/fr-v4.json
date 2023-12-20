@@ -293,6 +293,8 @@
   "pageContent": "Contenu",
   "pageContentFile": "Fichier",
   "pageLabel": "Libellé",
+  "pageIcon": "Page icon",
+  "pageIcon-help": "Optionally, define a <a target='_blank' href='https://fontawesome.com/v4/icons/'>font-awesome icon</a>. Example: 'fa-wrench'.",
   "pageSection": "Section",
   "pageApiLink": "API link",
   "uiRestorePrevious": "Restaurer la dernière sauvegarde",
@@ -415,5 +417,6 @@
   "lastCreatedRecords": "Nouvelles fiches",
   "associationType": "Type d'association",
   "initiativeType": "Type d'initiative",
-  "associatedTo": "Ressources associées"
+  "associatedTo": "Ressources associées",
+  "filterHelp": "Please click on one of the buttons below to activate the filter"
 }

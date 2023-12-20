@@ -483,7 +483,7 @@
     "GUFtooLong": "Te lang",
     "GUFnotValidFormat": "Geen geldig formaat",
     "clickToSelect": "Klik om te selecteren of deselecteren",
-    "filterDataDescription": "Selecteer een laag op de kaart om te starten met filteren van geassocieerde WFS features (indien beschikbaar). Features dienen vooraf in de catalogus geïndexeerd te worden door een beheerder.",
+    "filterDataDescription": "Selecteer een laag op de kaart om te starten met filteren van geassocieerde WFS features (indien beschikbaar). Objecten dienen vooraf in de catalogus geïndexeerd te worden door een admin.",
     "WPSDescription": "Voeg een WPS url in, om gebruik te maken van een dynamisch formulier om de service te bevragen. Recent gebruikte url's worden getoond in het tweede tabblad.",
     "noLayersFound": "Geen lagen gevonden",
     "featuredUserSearches": "Aanbevolen zoek opdrachten",
