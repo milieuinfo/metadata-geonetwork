@@ -54,6 +54,9 @@ stages:
             docker compose down -v
             ls -lsa cypress
             ls -lsa cypress/downloads
+            chown -R AzDevOps:AzDevOps cypress
+            ls -lsa cypress
+            ls -lsa cypress/downloads
             echo "done"
       - task: PublishTestResults@2
         inputs:
