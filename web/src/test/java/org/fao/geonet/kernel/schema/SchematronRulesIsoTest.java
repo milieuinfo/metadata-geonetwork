@@ -99,14 +99,14 @@ public class SchematronRulesIsoTest extends AbstractSchematronTest {
         citationEl.detach();
 
         Element results = Xml.transform(testMetadata, getSchematronXsl(), params);
-        assertEquals(1, countFailures(results));
+        assertEquals(2, countFailures(results));
 
         testMetadata.getChild("identificationInfo", GMD)
             .getChild("MD_DataIdentification", GMD)
             .getChild("citation", GMD).setAttribute("nilReason", "missing", GCO);
 
         results = Xml.transform(testMetadata, getSchematronXsl(), params);
-        assertEquals(0, countFailures(results));
+        assertEquals(1, countFailures(results));
 
     }
 
@@ -138,7 +138,7 @@ public class SchematronRulesIsoTest extends AbstractSchematronTest {
         final Element testMetadata = Xml.loadStream(SchematronRulesIsoTest.class.getResourceAsStream(INSPIRE_VALID_ISO19139_XML));
         final Element dateEl = Xml.selectElement(testMetadata, "gmd:identificationInfo/*/gmd:citation/*/gmd:date/*/gmd:date",
             Arrays.asList(GMD, GCO));
-        testNoStringErrors(testMetadata, dateEl);
+        testNoStringErrors(testMetadata, dateEl, 2, 1);
     }
 
     @Test
@@ -146,18 +146,22 @@ public class SchematronRulesIsoTest extends AbstractSchematronTest {
         final Element testMetadata = Xml.loadStream(SchematronRulesIsoTest.class.getResourceAsStream(INSPIRE_VALID_ISO19139_XML));
         final Element dateTypeEl = Xml.selectElement(testMetadata, "gmd:identificationInfo/*/gmd:citation/*/gmd:date/*/gmd:dateType",
             Arrays.asList(GMD, GCO));
-        testNoStringErrors(testMetadata, dateTypeEl);
+        testNoStringErrors(testMetadata, dateTypeEl, 2, 1);
     }
 
-    private void testNoStringErrors(Element testMetadata, Element contact) throws Exception {
+    private void testNoStringErrors(Element testMetadata, Element contact, int failuresWithoutNilReason, int failuresWithNilReason) throws Exception {
         contact.setContent(Collections.emptyList());
 
         Element results = Xml.transform(testMetadata, getSchematronXsl(), params);
-        assertEquals(1, countFailures(results));
+        assertEquals(failuresWithoutNilReason, countFailures(results));
 
         contact.setAttribute("nilReason", "missing", GCO);
         results = Xml.transform(testMetadata, getSchematronXsl(), params);
-        assertEquals(0, countFailures(results));
+        assertEquals(failuresWithNilReason, countFailures(results));
+    }
+
+    private void testNoStringErrors(Element testMetadata, Element contact) throws Exception {
+        testNoStringErrors(testMetadata, contact, 1, 0);
     }
 
     private void testEmptyStringErrors(Element testMetadata, Element charStringEl) throws Exception {

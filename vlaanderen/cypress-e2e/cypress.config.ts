@@ -1,9 +1,9 @@
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
-  reporter: 'mochawesome',
+  reporter: "junit",
   reporterOptions: {
-    mochaFile: 'cypress/results/output.xml',
+    mochaFile: "./cypress/results/TEST-[hash].xml"
   },
   viewportWidth: 1280,
   viewportHeight: 700,
@@ -15,7 +15,8 @@ module.exports = defineConfig({
     },
     baseUrl: 'http://localhost:8080',
     env: {
-      GN_BASE_URL: 'http://localhost:8080'
+      GN_BASE_URL: 'http://localhost:8080',
+      ELECTRON_EXTRA_LAUNCH_ARGS: '--disable-gpu'
     }
   },
 })
