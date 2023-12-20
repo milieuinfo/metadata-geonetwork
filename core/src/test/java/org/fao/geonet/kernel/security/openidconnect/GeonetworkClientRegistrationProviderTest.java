@@ -176,7 +176,7 @@ public class GeonetworkClientRegistrationProviderTest {
         assertEquals(ClientAuthenticationMethod.BASIC, out.getClientRegistration().getClientAuthenticationMethod());
         assertEquals(AuthorizationGrantType.AUTHORIZATION_CODE, out.getClientRegistration().getAuthorizationGrantType());
 
-        assertEquals("{baseUrl}/{action}/oauth2/code/{registrationId}", out.getClientRegistration().getRedirectUriTemplate());
+        assertEquals("https://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}", out.getClientRegistration().getRedirectUriTemplate());
         assertEquals("http://localhost:8080/realms/demo/protocol/openid-connect/token", out.getClientRegistration().getProviderDetails().getTokenUri());
         assertEquals("http://localhost:8080/realms/demo/protocol/openid-connect/auth", out.getClientRegistration().getProviderDetails().getAuthorizationUri());
 
@@ -205,7 +205,7 @@ public class GeonetworkClientRegistrationProviderTest {
         assertEquals(ClientAuthenticationMethod.BASIC, out.getClientRegistration().getClientAuthenticationMethod());
         assertEquals(AuthorizationGrantType.AUTHORIZATION_CODE, out.getClientRegistration().getAuthorizationGrantType());
 
-        assertEquals("{baseUrl}/{action}/oauth2/code/{registrationId}", out.getClientRegistration().getRedirectUriTemplate());
+        assertEquals("https://{baseHost}{basePort}{basePath}/{action}/oauth2/code/{registrationId}", out.getClientRegistration().getRedirectUriTemplate());
         assertEquals("https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/oauth2/v2.0/token", out.getClientRegistration().getProviderDetails().getTokenUri());
         assertEquals("https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/oauth2/v2.0/authorize", out.getClientRegistration().getProviderDetails().getAuthorizationUri());
 

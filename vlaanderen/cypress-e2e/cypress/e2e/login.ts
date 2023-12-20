@@ -1,15 +1,15 @@
 describe('template spec', () => {
   beforeEach('passes', () => {
-    cy.visit(`/`);
-    cy.acceptCookies();
+    cy.visit(`/`)
+    cy.acceptCookies()
     // should be able to run this function twice without crashing
-    cy.acceptCookies();
-  });
+    cy.acceptCookies()
+  })
 
   it.only('should show the admin username on the top bar when logged in', () => {
-  cy.visit('/');
+    cy.visit('/')
     cy.get('.dropdown-toggle').contains('Inloggen')
-    cy.login();
+    cy.login()
     cy.get('.dropdown-toggle').contains('mdv admin')
-  });
-});
+  })
+})
