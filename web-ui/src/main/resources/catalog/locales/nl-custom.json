@@ -8,6 +8,7 @@
   "facet-accessRights": "Toegankelijkheid",
   "facet-distributorOrgForDistribution": "Verdeler",
   "facet-domain": "Domein",
+  "facet-groupOwnerName": "Groep",
   "facet-licenseObject.default.keyword": "Licentie",
   "facet-ownerOrgForResource": "Eigenaar",
   "facet-pointOfContactOrgForResource": "Contactpunt",
@@ -18,8 +19,8 @@
   "facet-th_GEMET-INSPIREthemesversion1-0.link": "INSPIRE thema's",
   "facet-th_datatheme_tree": "Thema",
   "facet-topLevelProtocol.keyword": "Protocol service",
-  "facet-groupOwnerName": "Groep",
   "featureAttributeTable": "Entiteit",
+  "featureCatalog": "Objectencatalogus",
   "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
   "host.name": "Hostnaam",
@@ -28,7 +29,6 @@
   "indexingErrorMsg-keywordNotFoundInThesaurus": "Waarschuwing / Sleutelwoord {{keyword}} niet gevonden in {{thesaurus}}.",
   "indexingErrorMsg-temporalDateRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}. Datumbereik niet geïndexeerd.",
   "indexingErrorMsg-temporalRangeLowerGreaterThanUpper": "Waarschuwing / Veld resourceTemporalDateRange / Ondergrens {{lowerBound}} kan niet groter zijn dan bovengrens {{upperBound}}.",
-  "sources": "Bronnen",
   "link": "Link",
   "linkToFeatureCatalog": "Link naar een objectencatalogus",
   "linkToParent": "Link naar een datasetserie",
@@ -48,6 +48,7 @@
   "notManagedByDp": "<b>Opgelet</b><br/>Door <i>{{groupName}}</i> te selecteren zal je het nieuwe record volledig zelf beheren. Als je support van het DataPublicatie team wil moet je een DataPublicatie groep selecteren.",
   "onlyMyRecord": "Mijn Metadatarecords",
   "pinAction": "Aan lijst pinnen",
+  "resourceType-featureCatalog": "Objectencatalogus",
   "resourceUriPattern": "Bron URI patroon",
   "resourceUriPatternHelp": "Patroon gebruikt om URI van de bronnen te genereren tijdens de RDF export, e.g., https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}",
   "saveDraft": "Bewaar",
@@ -56,6 +57,7 @@
   "serviceType-download": "Downloadbaar",
   "serviceType-view": "Raadpleegbaar",
   "sortBy-changeDateDesc": "laatst aangepast",
+  "sources": "Bronnen",
   "system/vlaanderen": "Vlaamse GeoNetwork fork",
   "system/vlaanderen/version": "Versie",
   "versionDetails": "versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
@@ -65,5 +67,7 @@
   "measureDate": "Datum",
   "COMPUTE_VALIDATION_AFTER_HARVEST": "Valideer records na harvest",
   "---end-of-file---": ""
+
+
 
 }
