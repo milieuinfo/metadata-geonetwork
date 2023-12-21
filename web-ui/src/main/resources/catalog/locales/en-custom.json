@@ -46,6 +46,7 @@
   "notManagedByDp": "<b>Warning</b><br/>By selecting <i>{{groupName}}</i>, you agree to manage the new record yourself. If you want to have support by the DataPublicatie team, select a DataPublicatie group instead.",
   "onlyMyRecord": "My Metadata Records",
   "pinAction": "Pin to list",
+  "resourceType-featureCatalog": "Feature catalog",
   "resourceUriPattern": "Resource URI pattern",
   "resourceUriPatternHelp": "Pattern used to generate URI of the resources during the RDF export. Example of value: https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}",
   "saveDraft": "Save",
