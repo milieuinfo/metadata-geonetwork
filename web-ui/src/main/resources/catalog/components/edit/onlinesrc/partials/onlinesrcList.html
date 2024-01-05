@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="dropdown-header" data-translate>linkMetadata</li>
-          <li data-ng-show="::isCategoryEnable('parent')">
+          <li data-ng-show="::isCategoryEnable('parent') && !gnCurrentEdit.isService">
             <a href="" data-ng-click="onlinesrcService.onOpenPopup('parent')">
               <i class="fa gn-icon-series"></i>
               <i class="icon-external-link"></i>&nbsp;
