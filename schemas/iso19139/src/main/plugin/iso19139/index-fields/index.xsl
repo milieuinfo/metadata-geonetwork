@@ -1069,6 +1069,8 @@
                         select="(../../gmd:measureDescription/gco:CharacterString)[1]"/>
           <xsl:variable name="measureDate"
                         select="../../gmd:dateTime/gco:DateTime"/>
+          <xsl:variable name="reportType"
+                        select="local-name(../..)"/>
           <measure type="object">{
             "name": "<xsl:value-of select="gn-fn-index:json-escape($name)"/>",
             <xsl:if test="$description != ''">
@@ -1082,7 +1084,8 @@
             <xsl:if test="$unit != ''">
               "unit": "<xsl:value-of select="gn-fn-index:json-escape($unit)"/>",
             </xsl:if>
-            "type": "<xsl:value-of select="local-name(.)"/>"
+            "type": "<xsl:value-of select="local-name(.)"/>",
+            "reportType": "<xsl:value-of select="gn-fn-index:json-escape($reportType)"/>"
             }
           </measure>
 
