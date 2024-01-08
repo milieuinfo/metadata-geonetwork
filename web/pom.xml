@@ -30,7 +30,7 @@
   <parent>
     <groupId>org.geonetwork-opensource</groupId>
     <artifactId>geonetwork</artifactId>
-    <version>4.4.1-0</version>
+    <version>4.4.2-SNAPSHOT</version>
   </parent>
 
 
@@ -673,7 +673,6 @@
             <includeOnlyProperty>^git.tags$</includeOnlyProperty>
             <includeOnlyProperty>^git.branch$</includeOnlyProperty>
             <includeOnlyProperty>^git.commit.id$</includeOnlyProperty>
-            <includeOnlyProperty>^git.commit.id.describe.*$</includeOnlyProperty>
             <includeOnlyProperty>^git.build.time$</includeOnlyProperty>
           </includeOnlyProperties>
           <replacementProperties>
