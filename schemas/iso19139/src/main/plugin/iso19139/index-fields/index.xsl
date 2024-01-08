@@ -1028,7 +1028,7 @@
                       select="gn-fn-index:add-multilingual-field(
                                                 'description', gmd:organisationName, $allLanguages, true())"/>
                       <xsl:if test="gmd:individualName/gco:CharacterString/text()">
-                        ,"individual":"<xsl:value-of select="gn-fn-index:json-escape(gmd:individualName/gco:CharacterString/text())"/>"
+                        ,"individual":"<xsl:value-of select="util:escapeForJson(gmd:individualName/gco:CharacterString/text())"/>"
                       </xsl:if>
                       }
                       <xsl:if test="position() != last()">,</xsl:if>
@@ -1076,9 +1076,6 @@
             </xsl:if>
             <xsl:if test="$measureDate != ''">
               "date": "<xsl:value-of select="util:escapeForJson($measureDate)"/>",
-            </xsl:if>
-            <xsl:if test="$measureDate != ''">
-              "date": "<xsl:value-of select="gn-fn-index:json-escape($measureDate)"/>",
             </xsl:if>
             <!-- First value only. -->
             "value": "<xsl:value-of select="util:escapeForJson($value/gco:Record[1])"/>",
@@ -1283,7 +1280,7 @@
             </xsl:variable>
             <xsl:if test="normalize-space($topLevelProtocol) != ''">
               <topLevelProtocol>
-                <xsl:value-of select="gn-fn-index:json-escape($topLevelProtocol)"/>
+                <xsl:value-of select="util:escapeForJson($topLevelProtocol)"/>
               </topLevelProtocol>
             </xsl:if>
           </xsl:if>

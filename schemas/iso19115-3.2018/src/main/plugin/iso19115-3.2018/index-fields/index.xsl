@@ -1227,9 +1227,6 @@
             <xsl:if test="$measureDate != ''">
               "date": "<xsl:value-of select="util:escapeForJson($measureDate)"/>",
             </xsl:if>
-            <xsl:if test="$measureDate != ''">
-              "date": "<xsl:value-of select="gn-fn-index:json-escape($measureDate)"/>",
-            </xsl:if>
             <!-- First value only. -->
             "value": "<xsl:value-of select="util:escapeForJson($value/gco:Record[1])"/>",
             <xsl:if test="$unit != ''">
