@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [8.1.10-SNAPSHOT]
+## [8.1.11-SNAPSHOT]
+
+### core-geonetwork
+- Displaying phone with icon - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31471) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7598)
+
+
+## [8.1.10]
 - Clearing iso19110 title on duplication - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30873)
 - Translations iso19110 editor - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30873)
 - Footer tweaks - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31200)
-- Displaying phone with icon - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31471)
 
 ### vlaanderen
 - Translations - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31081) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31123)
