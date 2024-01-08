@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [8.1.11-SNAPSHOT]
 
+### vlaanderen
+- Bug fix for iso19139 indexing error - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31512)
+
 ### core-geonetwork
 - Merged 4.4.2-SNAPSHOT - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31500)
   - Fix for duplicates-check in validation of related records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31075) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7567)
