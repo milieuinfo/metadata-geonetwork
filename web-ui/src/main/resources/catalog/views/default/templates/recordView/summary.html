@@ -45,7 +45,7 @@
     <div>
       <h3 data-translate="">resourceVerticalRange</h3>
       <div class="flex flex-col">
-        <div data-ng-repeat="range in mdView.current.record.resourceVerticalRange">
+        <p data-ng-repeat="range in mdView.current.record.resourceVerticalRange">
           <span data-ng-show="range.gte || range.gte===0"> {{range.gte}}m </span>
           <span
             class="spacer"
@@ -54,7 +54,7 @@
             <i class="fa fa-long-arrow-right"></i>
           </span>
           <span data-ng-show="range.lte || range.lte===0"> {{range.lte}}m </span>
-        </div>
+        </p>
       </div>
     </div>
   </div>
