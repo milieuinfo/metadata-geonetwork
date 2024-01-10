@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Reordered sections of dataset view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31527)
 - Date instead of dateTime in ISO19110 - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31126)
 - Tweaks to "add link to ..." dropdown - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31473)
+- Bugfix in organisation facet, spurious whitespace - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30906)
 
 ### core-geonetwork
 - Merged 4.4.2-SNAPSHOT - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31500)
