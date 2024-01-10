@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fix for cryptic error for ownerless harvesters - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7539)
 - Improved label for vertical extent - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31519) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7604)
 - Bug fix for iso19139 indexing error - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31512) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7605)
+- Fix Linux specific file separator used for harvester transform option list - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31604) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7603)
+  - DCAT `rdf:resource` attribute now correctly harvested by the simple URL harvester
 
 
 ## [8.1.10] - 2024-01-05
