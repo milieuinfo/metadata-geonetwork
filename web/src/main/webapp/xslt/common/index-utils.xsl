@@ -245,10 +245,10 @@
           <xsl:when test="$languages and count($element//(*:CharacterString|*:Anchor|*:LocalisedCharacterString)) = 0">
             <xsl:if test="position() = 1">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                             $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                             $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
               <xsl:for-each select="$elements">
                 <value><xsl:value-of select="concat($doubleQuote, 'lang', @xml:lang, $doubleQuote, ':',
-                                             $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                             $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
               </xsl:for-each>
             </xsl:if>
           </xsl:when>
@@ -256,9 +256,9 @@
             <!-- The default language -->
             <xsl:for-each select="$element//(*:CharacterString|*:Anchor)[. != '']">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                           $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                           $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
               <value><xsl:value-of select="concat($doubleQuote, 'lang', $mainLanguage, $doubleQuote, ':',
-                                           $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                           $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
             </xsl:for-each>
 
             <xsl:variable name="translations"
@@ -272,9 +272,9 @@
 
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
                                            $doubleQuote, util:escapeForJson(
-                                           if ($translations[@local = $mainLanguageId])
+                                           normalize-space(if ($translations[@local = $mainLanguageId])
                                            then $translations[@local = $mainLanguageId]
-                                           else $translations[1]), $doubleQuote)"/></value>
+                                           else $translations[1])), $doubleQuote)"/></value>
             </xsl:if>
 
             <xsl:for-each select="$translations">
@@ -296,16 +296,16 @@
             <!-- Index each values in a field. -->
             <xsl:for-each select="distinct-values($element[. != ''])">
               <value><xsl:value-of select="concat($doubleQuote, 'default', $doubleQuote, ':',
-                                           $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                           $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
               <value><xsl:value-of select="concat($doubleQuote, 'lang', $mainLanguage, $doubleQuote, ':',
-                                           $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                           $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
 
         <xsl:for-each select="$element//*:Anchor/@xlink:href">
           <value><xsl:value-of select="concat($doubleQuote, 'link', $doubleQuote, ':',
-                                           $doubleQuote, util:escapeForJson(.), $doubleQuote)"/></value>
+                                           $doubleQuote, util:escapeForJson(normalize-space(.)), $doubleQuote)"/></value>
         </xsl:for-each>
       </xsl:variable>
 
@@ -685,10 +685,10 @@
   <xsl:function name="gn-fn-index:json-escape" as="xs:string?">
     <!-- This function is deprecated. Please update your code to define the following namespace:
             xmlns:util="java:org.fao.geonet.util.XslUtil"
-            
-            and use util:escapeForJson function 
+
+            and use util:escapeForJson function
     -->
-    
+
       <xsl:param name="v" as="xs:string?" />
       <xsl:choose>
         <xsl:when test="normalize-space($v) = ''"></xsl:when>

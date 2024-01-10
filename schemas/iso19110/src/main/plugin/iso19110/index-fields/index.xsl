@@ -175,7 +175,7 @@
     not valid and they will be ignored.
      Same for organisationName eg. de:b86a8604-bf78-480f-a5a8-8edff5586679 -->
     <xsl:variable name="organisationName"
-                  select="*[1]/gmd:organisationName[1]"
+                  select="*[1]/gmd:organisationName[1]/gmx:Anchor"
                   as="node()?"/>
     <xsl:variable name="uuid" select="@uuid"/>
 
