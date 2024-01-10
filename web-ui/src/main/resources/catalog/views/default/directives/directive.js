@@ -146,13 +146,15 @@
             }
           };
 
-          scope.shouldDisplayFormatter = function(md, formatter) {
-            if(formatter.label === 'exportDCAT') {
-              return (['iso19139','dcat2'].includes(md.documentStandard)) && md.isPublishedToAll
+          scope.shouldDisplayFormatter = function (md, formatter) {
+            if (formatter.label === "exportDCAT") {
+              return (
+                ["iso19139", "dcat2"].includes(md.documentStandard) && md.isPublishedToAll
+              );
             } else {
               return true;
             }
-          }
+          };
 
           function loadWorkflowStatus() {
             return $http
