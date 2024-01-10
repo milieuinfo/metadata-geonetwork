@@ -1024,7 +1024,7 @@
                     ,"date": "<xsl:value-of select="util:escapeForJson($dateTime/text())"/>"
                   </xsl:if>
                   <xsl:variable name="processors"
-                                select="gmd:processor/*[gmd:organisationName/gco:CharacterString != '']"/>
+                                select="gmd:processor/*[gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"/>
                   <xsl:if test="count($processors) > 0">
                     ,"processor": [
                     <xsl:for-each select="$processors">
@@ -1045,7 +1045,7 @@
               </xsl:for-each>
             ]
             <xsl:variable name="sourceContact">
-              <xsl:for-each-group select="gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor[*/gmd:organisationName/gco:CharacterString != '']"
+              <xsl:for-each-group select="gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor[*/gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"
                                   group-by="*/gmd:organisationName/gco:CharacterString">
                 <xsl:apply-templates mode="index-contact" select=".">
                   <xsl:with-param name="fieldSuffix" select="'ForSource'"/>
@@ -1124,8 +1124,7 @@
             </xsl:if>
 
             <xsl:variable name="processors"
-                          select="gmd:processor/*[gmd:organisationName/gco:CharacterString != '']"/>
-
+                          select="gmd:processor/*[gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"/>
             <xsl:if test="count($processors) > 0">
               ,"processor": [
               <xsl:for-each select="$processors">
@@ -1145,8 +1144,8 @@
         </xsl:for-each>
 
         <xsl:for-each-group select="gmd:lineage/*/gmd:processStep/*/gmd:processor[
-                                    */gmd:organisationName/gco:CharacterString != '']"
-                            group-by="*/gmd:organisationName/gco:CharacterString">
+                                    */gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"
+                            group-by="*/gmd:organisationName/(gco:CharacterString|gmx:Anchor)">
           <xsl:apply-templates mode="index-contact"
                                select=".">
             <xsl:with-param name="fieldSuffix" select="'ForProcessing'"/>
