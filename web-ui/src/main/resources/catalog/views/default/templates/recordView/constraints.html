@@ -18,6 +18,13 @@
       data-gn-metadata-object-field="MD_LegalConstraintsUseLimitation"
       data-record="mdView.current.record"
     />
+
+    <!-- VL customisation: show resource constraints for services under accessAndUseConstraints -->
+    <p
+      data-ng-if="mdView.current.record.MD_ConstraintsUseLimitation && mdView.current.record.resourceType[0] === 'service'"
+      data-gn-metadata-object-field="MD_ConstraintsUseLimitation"
+      data-record="mdView.current.record"
+    />
   </div>
 </div>
 
@@ -38,8 +45,9 @@
   </div>
 </div>
 
+<!-- VL customisation: don't show the resourceConstraints for services, they are shown under accessAndUseConstraints -->
 <div
-  data-ng-if="mdView.current.record.MD_ConstraintsUseLimitation"
+  data-ng-if="mdView.current.record.MD_ConstraintsUseLimitation && mdView.current.record.resourceType[0] !== 'service'"
   class="flex-row gn-margin-bottom"
 >
   <span class="badge badge-rounded" title="{{'resourceConstraints' | translate}}">

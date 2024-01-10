@@ -37,6 +37,10 @@
 
   <!-- =================================================================-->
 
+  <xsl:include href="update-fixed-info-vl.xsl"/>
+
+  <!-- =================================================================-->
+
   <xsl:template match="/root">
     <xsl:apply-templates select="gfc:FC_FeatureCatalogue|gfc:FC_FeatureType"/>
   </xsl:template>

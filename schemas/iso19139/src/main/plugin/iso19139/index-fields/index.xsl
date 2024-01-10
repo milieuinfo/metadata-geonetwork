@@ -1018,6 +1018,11 @@
                 {
                   "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
                                                 'description', gmd:description, $allLanguages, true())"/>
+                  <xsl:variable name="dateTime"
+                              select="gmd:dateTime/gco:DateTime"/>
+                  <xsl:if test="$dateTime/text()">
+                    ,"date": "<xsl:value-of select="util:escapeForJson($dateTime/text())"/>"
+                  </xsl:if>
                   <xsl:variable name="processors"
                                 select="gmd:processor/*[gmd:organisationName/gco:CharacterString != '']"/>
                   <xsl:if test="count($processors) > 0">

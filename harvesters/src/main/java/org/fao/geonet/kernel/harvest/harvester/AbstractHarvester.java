@@ -1038,6 +1038,8 @@ public abstract class AbstractHarvester<T extends HarvestResult, P extends Abstr
                 result.deletedUuids.forEach(uuid -> add(deletedUuids, "uuid", uuid));
                 res.addContent(deletedUuids);
             }
+            // derived value, indicating "actual number of records harvested"
+            add(res, "retrievable", result.totalMetadata-result.unretrievable);
         } else if (this.loadedInfo != null) {
             return (Element) this.loadedInfo.clone();
         }

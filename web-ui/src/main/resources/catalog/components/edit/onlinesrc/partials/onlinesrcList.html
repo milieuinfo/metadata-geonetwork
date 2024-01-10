@@ -32,9 +32,9 @@
             </a>
           </li>
           <li class="dropdown-header" data-translate>linkMetadata</li>
-          <li data-ng-show="::isCategoryEnable('parent')">
+          <li data-ng-show="::isCategoryEnable('parent') && !gnCurrentEdit.isService">
             <a href="" data-ng-click="onlinesrcService.onOpenPopup('parent')">
-              <i class="fa gn-icon-series"></i>
+              <i class="fa gn-icon-source"></i>
               <i class="icon-external-link"></i>&nbsp;
               <span data-translate="">linkToParent</span>
             </a>
@@ -53,7 +53,7 @@
               <span data-translate="">linkToDataset</span>
             </a>
           </li>
-          <li data-ng-show="::isCategoryEnable('source')">
+          <li data-ng-show="::isCategoryEnable('source') && 'hide-for' === 'vlaanderen'">
             <a href="" data-ng-click="onlinesrcService.onOpenPopup('source')">
               <i class="fa gn-icon-source"></i>
               <i class="icon-external-link"></i>&nbsp;

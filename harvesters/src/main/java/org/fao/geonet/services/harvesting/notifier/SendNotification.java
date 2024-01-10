@@ -39,6 +39,11 @@ import jeeves.server.context.ServiceContext;
  */
 public class SendNotification {
 
+    // values to be replaced in the email templates
+    static String[] templateValues = new String[]{"total", "added", "updated",
+        "removed", "unchanged", "unretrievable",
+        "doesNotValidate", "retrievable"};
+
     /**
      * Launches the notification manager
      *
@@ -107,10 +112,7 @@ public class SendNotification {
 
                 htmlMessage = htmlMessage.replace("$$errorMsg$$", errorMsg);
 
-                String[] values = new String[]{"total", "added", "updated",
-                    "removed", "unchanged", "unretrievable", "doesNotValidate"};
-
-                for (String value : values) {
+                for (String value : templateValues) {
                     htmlMessage = replace(result, htmlMessage, value);
                     subject = replace(result, subject, value);
                 }
@@ -133,11 +135,7 @@ public class SendNotification {
 
                     htmlMessage = htmlMessage.replace("$$errorMsg$$", errorMsg);
 
-                    String[] values = new String[]{"total", "added", "updated",
-                        "removed", "unchanged", "unretrievable",
-                        "doesNotValidate"};
-
-                    for (String value : values) {
+                    for (String value : templateValues) {
                         htmlMessage = replace(result, htmlMessage, value);
                         subject = replace(result, subject, value);
                     }
@@ -147,11 +145,7 @@ public class SendNotification {
                         return;
                     }
 
-                    String[] values = new String[]{"total", "added", "updated",
-                        "removed", "unchanged", "unretrievable",
-                        "doesNotValidate"};
-
-                    for (String value : values) {
+                    for (String value : templateValues) {
                         htmlMessage = replace(result, htmlMessage, value);
                         subject = replace(result, subject, value);
                     }
