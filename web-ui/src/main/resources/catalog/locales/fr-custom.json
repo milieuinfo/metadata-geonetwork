@@ -39,6 +39,7 @@
   "mdStatus-submitted": "Soumis pour publication",
   "mdStatus-submitted_for_removed": "Soumis pour suppression",
   "mdStatus-submitted_for_retired": "Soumis pour retraite",
+  "measureUnit": "Unité",
   "notManagedByDp": "<b>Warning</b><br/>By selecting <i>{{groupName}}</i>, you agree to manage the new record yourself. If you want to have support by the DataPublicatie team, select a DataPublicatie group instead.",
   "onlyMyRecord": "Mon Metadata Records",
   "pinAction": "Pin to list",

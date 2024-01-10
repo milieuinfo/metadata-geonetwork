@@ -6,13 +6,13 @@
       <td data-ng-if="columnVisibility['description']">
         {{(columnVisibility['name'] ? 'measureDescription' : 'measureName') | translate}}
       </td>
-      <td data-ng-if="columnVisibility['value']" data-translate="">measureValue</td>
+      <td data-ng-if="columnVisibility['value']"><span data-translate="">measureValue</span> / <span data-translate="">measureUnit</span></td>
       <td data-ng-if="columnVisibility['date']" data-translate="">measureDate</td>
     </tr>
   </thead>
   <tbody>
     <tr data-ng-repeat="m in measures">
-      <td data-ng-if="columnVisibility['type']">{{m.type | translate}}</td>
+      <td data-ng-if="columnVisibility['type']">{{m.reportType | translate}}: {{m.type | translate}}</td>
       <td data-ng-if="columnVisibility['name']">{{m.name}}</td>
       <td data-ng-if="columnVisibility['description']">{{m.description}}</td>
       <td data-ng-if="columnVisibility['value']">

@@ -44,6 +44,7 @@
   "mdStatus-submitted": "Submitted for publication",
   "mdStatus-submitted_for_removed": "Submitted for removal",
   "mdStatus-submitted_for_retired": "Submitted for retirement",
+  "measureUnit": "Unit",
   "notManagedByDp": "<b>Warning</b><br/>By selecting <i>{{groupName}}</i>, you agree to manage the new record yourself. If you want to have support by the DataPublicatie team, select a DataPublicatie group instead.",
   "onlyMyRecord": "My Metadata Records",
   "pinAction": "Pin to list",

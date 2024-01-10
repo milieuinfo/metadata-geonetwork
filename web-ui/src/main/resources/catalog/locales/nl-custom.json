@@ -45,6 +45,7 @@
   "mdStatus-submitted": "Ingediend voor publicatie",
   "mdStatus-submitted_for_removed": "Ingediend voor verwijdering",
   "mdStatus-submitted_for_retired": "Ingediend voor depublicatie",
+  "measureUnit": "Eenheid",
   "notManagedByDp": "<b>Opgelet</b><br/>Door <i>{{groupName}}</i> te selecteren zal je het nieuwe record volledig zelf beheren. Als je support van het DataPublicatie team wil moet je een DataPublicatie groep selecteren.",
   "onlyMyRecord": "Mijn Metadatarecords",
   "pinAction": "Aan lijst pinnen",

@@ -39,6 +39,7 @@
   "mdStatus-submitted": "Zur Veröffentlichung eingereicht",
   "mdStatus-submitted_for_removed": "Zur Entfernung eingereicht",
   "mdStatus-submitted_for_retired": "Zur Veröffentlichung eingereicht",
+  "measureUnit": "Einheit",
   "notManagedByDp": "<b>Warning</b><br/>By selecting <i>{{groupName}}</i>, you agree to manage the new record yourself. If you want to have support by the DataPublicatie team, select a DataPublicatie group instead.",
   "onlyMyRecord": "Meine Metadatensätze",
   "pinAction": "An Liste anpinnen",
