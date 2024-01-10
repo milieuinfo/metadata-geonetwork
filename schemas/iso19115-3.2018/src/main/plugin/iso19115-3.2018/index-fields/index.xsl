@@ -953,10 +953,10 @@
           </xsl:if>
 
           <crsDetails type="object">{
-            "code": "<xsl:value-of select="gn-fn-index:json-escape($crs)"/>",
-            "codeSpace": "<xsl:value-of select="gn-fn-index:json-escape(mcc:codeSpace/*/text())"/>",
-            "name": "<xsl:value-of select="gn-fn-index:json-escape($crsLabel)"/>",
-            "url": "<xsl:value-of select="gn-fn-index:json-escape(mcc:code/*/@xlink:href)"/>"
+            "code": "<xsl:value-of select="util:escapeForJson($crs)"/>",
+            "codeSpace": "<xsl:value-of select="util:escapeForJson(mcc:codeSpace/*/text())"/>",
+            "name": "<xsl:value-of select="util:escapeForJson($crsLabel)"/>",
+            "url": "<xsl:value-of select="util:escapeForJson(mcc:code/*/@xlink:href)"/>"
             }</crsDetails>
         </xsl:for-each>
       </xsl:for-each>
@@ -987,7 +987,7 @@
 
         <xsl:if test="string($title)">
           <specificationConformance type="object">{
-            "title": "<xsl:value-of select="gn-fn-index:json-escape($title)" />",
+            "title": "<xsl:value-of select="util:escapeForJson($title)" />",
             <xsl:if test="gn-fn-index:is-isoDate((*/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:Date)[1])">
               "date": "<xsl:value-of select="(*/mdq:specification/cit:CI_Citation/cit:date/cit:CI_Date/cit:date/gco:Date)[1]" />",
             </xsl:if>
@@ -995,7 +995,7 @@
               "link": "<xsl:value-of select="*/mdq:specification/*/cit:title/*/@xlink:href"/>",
             </xsl:if>
             <xsl:if test="*/mdq:explanation/*/text() != ''">
-              "explanation": "<xsl:value-of select="gn-fn-index:json-escape((*/mdq:explanation/*/text())[1])" />",
+              "explanation": "<xsl:value-of select="util:escapeForJson((*/mdq:explanation/*/text())[1])" />",
             </xsl:if>
             "pass": "<xsl:value-of select="$pass" />"
             }
@@ -1035,11 +1035,11 @@
       <xsl:variable name="jsonFeatureTypes">[
         <xsl:for-each select="mdb:contentInfo//gfc:FC_FeatureCatalogue/gfc:featureType">{
 
-          "typeName" : "<xsl:value-of select="gn-fn-index:json-escape(gfc:FC_FeatureType/gfc:typeName/text())"/>",
-          "definition" :"<xsl:value-of select="gn-fn-index:json-escape(gfc:FC_FeatureType/gfc:definition/*/text())"/>",
-          "code" :"<xsl:value-of select="gn-fn-index:json-escape(gfc:FC_FeatureType/gfc:code/*/text())"/>",
+          "typeName" : "<xsl:value-of select="util:escapeForJson(gfc:FC_FeatureType/gfc:typeName/text())"/>",
+          "definition" :"<xsl:value-of select="util:escapeForJson(gfc:FC_FeatureType/gfc:definition/*/text())"/>",
+          "code" :"<xsl:value-of select="util:escapeForJson(gfc:FC_FeatureType/gfc:code/*/text())"/>",
           "isAbstract" :"<xsl:value-of select="gfc:FC_FeatureType/gfc:isAbstract/*/text()"/>",
-          "aliases" : "<xsl:value-of select="gn-fn-index:json-escape(gfc:FC_FeatureType/gfc:aliases/*/text())"/>"
+          "aliases" : "<xsl:value-of select="util:escapeForJson(gfc:FC_FeatureType/gfc:aliases/*/text())"/>"
           <!--"inheritsFrom" : "<xsl:value-of select="gfc:FC_FeatureType/gfc:inheritsFrom/*/text()"/>",
           "inheritsTo" : "<xsl:value-of select="gfc:FC_FeatureType/gfc:inheritsTo/*/text()"/>",
           "constrainedBy" : "<xsl:value-of select="gfc:FC_FeatureType/gfc:constrainedBy/*/text()"/>",
@@ -1051,22 +1051,22 @@
             ,"attributeTable" : [
             <xsl:for-each select="$attributes">
               <!-- TODO: Add multilingual support-->
-              {"name": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:memberName/text())"/>",
-              "definition": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:definition/gco:CharacterString/text())"/>",
-              "code": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:code/*/text())"/>",
+              {"name": "<xsl:value-of select="util:escapeForJson(*/gfc:memberName/text())"/>",
+              "definition": "<xsl:value-of select="util:escapeForJson(*/gfc:definition/gco:CharacterString/text())"/>",
+              "code": "<xsl:value-of select="util:escapeForJson(*/gfc:code/*/text())"/>",
               "link": "<xsl:value-of select="*/gfc:code/*/@xlink:href"/>",
               "type": "<xsl:value-of select="*/gfc:valueType/gco:TypeName/gco:aName/*/text()"/>"
               <xsl:if test="*/gfc:cardinality">
-                ,"cardinality": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:cardinality/*/text())"/>"
+                ,"cardinality": "<xsl:value-of select="util:escapeForJson(*/gfc:cardinality/*/text())"/>"
               </xsl:if>
               <xsl:variable name="codeList"
                             select="*/gfc:listedValue[normalize-space(*) != '']"/>
               <xsl:if test="$codeList">
                 ,"values": [
                 <xsl:for-each select="$codeList">{
-                  "label": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:label/gco:CharacterString/text())"/>",
-                  "code": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:code/*/text())"/>",
-                  "definition": "<xsl:value-of select="gn-fn-index:json-escape(*/gfc:definition/gco:CharacterString/text())"/>"}
+                  "label": "<xsl:value-of select="util:escapeForJson(*/gfc:label/gco:CharacterString/text())"/>",
+                  "code": "<xsl:value-of select="util:escapeForJson(*/gfc:code/*/text())"/>",
+                  "definition": "<xsl:value-of select="util:escapeForJson(*/gfc:definition/gco:CharacterString/text())"/>"}
                   <xsl:if test="position() != last()">,</xsl:if>
                 </xsl:for-each>
                 ]
@@ -1102,9 +1102,9 @@
 
       <xsl:for-each select="$additionalDocuments">
         <link type="object">{
-          "protocol": "<xsl:value-of select="gn-fn-index:json-escape(
+          "protocol": "<xsl:value-of select="util:escapeForJson(
                                         protocol/text())"/>",
-          "function": "<xsl:value-of select="gn-fn-index:json-escape(
+          "function": "<xsl:value-of select="util:escapeForJson(
                                         function/text())"/>",
           <xsl:if test="normalize-space(url) != ''">
             "urlObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
@@ -1121,7 +1121,7 @@
           <xsl:if test="nilReason">
             "nilReason": "<xsl:value-of select="nilReason"/>",
           </xsl:if>
-          "applicationProfile": "<xsl:value-of select="gn-fn-index:json-escape(
+          "applicationProfile": "<xsl:value-of select="util:escapeForJson(
                                         applicationProfile/text())"/>"
           }
         </link>
@@ -1180,7 +1180,7 @@
                                             'description', .//cit:CI_Organisation/cit:name,
                                              $allLanguages, true())"/>
                 <xsl:if test="$individualName != ''">
-                  ,"individual":"<xsl:value-of select="gn-fn-index:json-escape($individualName)"/>"
+                  ,"individual":"<xsl:value-of select="util:escapeForJson($individualName)"/>"
                 </xsl:if>
                 }
                 <xsl:if test="position() != last()">,</xsl:if>
@@ -1220,17 +1220,17 @@
                         select="mdq:dateTime/gco:DateTime"/>
 
           <measure type="object">{
-            "name": "<xsl:value-of select="gn-fn-index:json-escape($name)"/>",
+            "name": "<xsl:value-of select="util:escapeForJson($name)"/>",
             <xsl:if test="$description != ''">
-              "description": "<xsl:value-of select="gn-fn-index:json-escape($description)"/>",
+              "description": "<xsl:value-of select="util:escapeForJson($description)"/>",
             </xsl:if>
             <xsl:if test="$measureDate != ''">
-              "date": "<xsl:value-of select="gn-fn-index:json-escape($measureDate)"/>",
+              "date": "<xsl:value-of select="util:escapeForJson($measureDate)"/>",
             </xsl:if>
             <!-- First value only. -->
-            "value": "<xsl:value-of select="gn-fn-index:json-escape($value/gco:Record[1])"/>",
+            "value": "<xsl:value-of select="util:escapeForJson($value/gco:Record[1])"/>",
             <xsl:if test="$unit != ''">
-              "unit": "<xsl:value-of select="gn-fn-index:json-escape($unit)"/>",
+              "unit": "<xsl:value-of select="util:escapeForJson($unit)"/>",
             </xsl:if>
             "type": "<xsl:value-of select="local-name(.)"/>"
             }
@@ -1282,11 +1282,11 @@
             <xsl:value-of select="cit:linkage/*/text()"/>
           </xsl:element>
           <link type="object">{
-            "protocol":"<xsl:value-of select="gn-fn-index:json-escape(cit:protocol/*/text())"/>",
+            "protocol":"<xsl:value-of select="util:escapeForJson(cit:protocol/*/text())"/>",
             "mimeType":"<xsl:value-of select="if (*/gcx:MimeFileType)
-                                              then gn-fn-index:json-escape(*/gcx:MimeFileType/@type)
+                                              then util:escapeForJson(*/gcx:MimeFileType/@type)
                                               else if (starts-with(cit:protocol/gco:CharacterString, 'WWW:DOWNLOAD:'))
-                                              then gn-fn-index:json-escape(replace(cit:protocol/gco:CharacterString, 'WWW:DOWNLOAD:', ''))
+                                              then util:escapeForJson(replace(cit:protocol/gco:CharacterString, 'WWW:DOWNLOAD:', ''))
                                               else ''"/>",
             <xsl:if test="normalize-space(cit:linkage) != ''">
               "urlObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
@@ -1304,7 +1304,7 @@
               "nilReason": "<xsl:value-of select="../@gco:nilReason"/>",
             </xsl:if>
             "function":"<xsl:value-of select="cit:function/cit:CI_OnLineFunctionCode/@codeListValue"/>",
-            "applicationProfile":"<xsl:value-of select="gn-fn-index:json-escape(cit:applicationProfile/gco:CharacterString/text())"/>",
+            "applicationProfile":"<xsl:value-of select="util:escapeForJson(cit:applicationProfile/gco:CharacterString/text())"/>",
             "group": <xsl:value-of select="$transferGroup"/>
             }
           </link>
@@ -1337,7 +1337,7 @@
             <xsl:copy-of select="gn-fn-index:build-record-link(@uuidref, @xlink:href, @xlink:title, 'parent')"/>
             <!--
             TODOES - Need more work with routing
-            <recordJoin type="object">{"name": "children", "parent": "<xsl:value-of select="gn-fn-index:json-escape(.)"/>"}</recordLink>-->
+            <recordJoin type="object">{"name": "children", "parent": "<xsl:value-of select="util:escapeForJson(.)"/>"}</recordLink>-->
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
@@ -1463,13 +1463,13 @@
                                 'organisation', $organisationName, $languages, true())"/>,
       </xsl:if>
       "role":"<xsl:value-of select="$role"/>",
-      "email":"<xsl:value-of select="gn-fn-index:json-escape($email)"/>",
-      "website":"<xsl:value-of select="$website"/>",
-      "logo":"<xsl:value-of select="$logo"/>",
-      "individual":"<xsl:value-of select="gn-fn-index:json-escape($individualName)"/>",
-      "position":"<xsl:value-of select="gn-fn-index:json-escape($positionName)"/>",
-      "phone":"<xsl:value-of select="gn-fn-index:json-escape($phone)"/>",
-      "address":"<xsl:value-of select="gn-fn-index:json-escape($address)"/>"
+      "email":"<xsl:value-of select="util:escapeForJson($email)"/>",
+      "website":"<xsl:value-of select="util:escapeForJson($website)"/>",
+      "logo":"<xsl:value-of select="util:escapeForJson($logo)"/>",
+      "individual":"<xsl:value-of select="util:escapeForJson($individualName)"/>",
+      "position":"<xsl:value-of select="util:escapeForJson($positionName)"/>",
+      "phone":"<xsl:value-of select="util:escapeForJson($phone)"/>",
+      "address":"<xsl:value-of select="util:escapeForJson($address)"/>"
       <xsl:if test="@gco:nilReason">
         ,"nilReason": "<xsl:value-of select="@gco:nilReason"/>"
       </xsl:if>
@@ -1477,7 +1477,7 @@
         ,"identifiers":[
         <xsl:for-each select="$identifiers">
           {
-            "code": "<xsl:value-of select="gn-fn-index:json-escape(mcc:code/(gco:CharacterString|gcx:Anchor))"/>",
+            "code": "<xsl:value-of select="util:escapeForJson(mcc:code/(gco:CharacterString|gcx:Anchor))"/>",
             "codeSpace": "<xsl:value-of select="(mcc:codeSpace/(gco:CharacterString|gcx:Anchor))[1]/normalize-space()"/>",
             "link": "<xsl:value-of select="mcc:code/gcx:Anchor/@xlink:href"/>"
           }
@@ -1582,7 +1582,7 @@
           </xsl:choose>
           <!--
             TODOES - Need more work with routing -->
-          <!--          <recordLink type="object">{"name": "dataset", "parent": "<xsl:value-of select="gn-fn-index:json-escape(.)"/>"}</recordLink>-->
+          <!--          <recordLink type="object">{"name": "dataset", "parent": "<xsl:value-of select="util:escapeForJson(.)"/>"}</recordLink>-->
         </xsl:if>
       </xsl:for-each>
 

@@ -4,7 +4,29 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [8.1.10-SNAPSHOT]
+## [8.1.11-SNAPSHOT]
+
+### vlaanderen
+- Quality section: header cleanup and added report type - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31460)
+
+### core-geonetwork
+- Merged 4.4.2-SNAPSHOT - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31500)
+- Fix for duplicates-check in validation of related records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31075) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7567)
+- Fix for cryptic error for ownerless harvesters - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7539)
+- Improved label for vertical extent - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31519) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7604)
+- Bug fix for iso19139 indexing error - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31512) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7605)
+
+
+## [8.1.10] - 2024-01-05
+- Clearing iso19110 title on duplication - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30873)
+- Translations iso19110 editor - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/30873)
+- Footer tweaks - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31200)
+
+### vlaanderen
+- Translations - [pr1](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31081) / [pr2](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31123)
+
+### core-geonetwork
+- Fixed minor UI bug when listing languages - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31081) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7568)
 
 ## [8.1.9] - 2023-12-14
 

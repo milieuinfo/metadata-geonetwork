@@ -1,0 +1,74 @@
+variables:
+  - name: mavenCacheFolder
+    value: $(Pipeline.Workspace)/.m2/repository
+  - name: mavenCacheOpts
+    value: '-Dmaven.repo.local=$(mavenCacheFolder)'
+
+stages:
+  - stage: e2e
+    pool: dv-dev-ubuntu2204
+    jobs:
+    - job: cypress
+      steps:
+      - checkout: self
+        displayName: Set up repository
+        submodules: recursive # needed for submodules
+      - task: Cache@2
+        inputs:
+          # bump 'versionx' to make sure the cache is cleared
+          key: 'version3 | maven | "$(Agent.OS)" | **/pom.xml'
+          restoreKeys: |
+            maven | "$(Agent.OS)"
+            maven
+          path: $(mavenCacheFolder)
+        displayName: Cache Maven local repo
+      - task: Maven@3
+        displayName: Build project artifacts
+        inputs:
+          mavenPomFile: 'pom.xml'
+          mavenOptions: '-Xmx3072m $(mavenCacheOpts)'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          jdkArchitectureOption: 'x64'
+          publishJUnitResults: true
+          testResultsFiles: '**/surefire-reports/TEST-*.xml'
+          goals: 'clean install'
+          options: ' -Pwar -Dmaven.artifact.threads=30 -Dwro4j-prebuild-cache '
+      - task: Bash@3
+        displayName: Set up liquibase properties
+        inputs:
+          workingDirectory: liquibase
+          targetType: inline
+          script: |
+            cp liquibase.properties.example liquibase.properties
+      - task: Bash@3
+        displayName: Run cypress tests
+        inputs:
+          workingDirectory: vlaanderen/cypress-e2e
+          targetType: inline
+          script: |
+            # make the folders to make sure they're not created by root
+            mkdir -p cypress/downloads
+            mkdir -p cypress/results
+            mkdir -p cypress/screenshots
+            mkdir -p cypress/videos
+
+            # for some weird reason, just upping e2e doesn't work and geonetwork fails with unhealthy state
+            # first get geonetwork 'warm', then launch e2e
+            docker compose up -d --wait geonetwork-reindexer
+            docker compose up e2e
+            docker compose down -v
+
+            ls -lsa cypress
+            ls -lsa cypress/downloads
+            echo "done"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          searchFolder: 'vlaanderen/cypress-e2e/cypress/results'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          searchFolder: 'web/target/surefire-reports'

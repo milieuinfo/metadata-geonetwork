@@ -1,0 +1,135 @@
+parameters:
+  - name: subscription
+  - name: clusterRg
+  - name: clusterName
+  - name: namespace
+
+stages:
+  - stage: skipcheck
+    pool: dv-dev-ubuntu2204
+    jobs:
+      # check whether we can/should skip this pipeline, e.g., for comment-only fixes
+      - job: skipcheck
+        steps:
+          - bash: |
+              echo "Testing whether we need to skip the pipeline."
+              substring='skipci'
+              echo "> substring: $substring"
+              echo "> commit message: $COMMIT_MESSAGE"
+              if [[ "$COMMIT_MESSAGE" == *"$substring"* ]];
+              then
+                echo "> '$substring' was found in the commit message."
+                echo "##vso[task.setvariable variable=skip;isoutput=true]true"
+              else
+                echo "##vso[task.setvariable variable=skip;isoutput=true]false"
+              fi
+            name: skipcheck
+            env:
+              COMMIT_MESSAGE: $(Build.SourceVersionMessage)
+  # environment specific deployment steps, repeatable on each env/namespace
+  - stage: ${{ parameters.namespace }}
+    pool: dv-dev-ubuntu2204
+    dependsOn: skipcheck
+    condition: and(succeeded('skipcheck'),eq(dependencies.skipcheck.outputs['skipcheck.skipcheck.skip'], 'false'))
+    jobs:
+    - deployment: deploy
+      environment: ${{ parameters.namespace }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+              displayName: Set up repository
+              submodules: recursive # needed for submodules
+            - task: Bash@3
+              displayName: Set git commit sha as env var
+              inputs:
+                targetType: 'inline'
+                script: |
+                  GIT_COMMIT_SHA=$(git rev-parse HEAD)
+                  echo "GIT_COMMIT_SHA: ${GIT_COMMIT_SHA}"
+                  echo "##vso[task.setvariable variable=GIT_COMMIT_SHA]${GIT_COMMIT_SHA}"
+            - task: Bash@3
+              displayName: Retrieve project version
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'vlaanderen'
+                script: |
+                  VL_GEONETWORK_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                  echo "VL_GEONETWORK_VERSION: ${VL_GEONETWORK_VERSION}"
+                  echo "##vso[task.setvariable variable=VL_GEONETWORK_VERSION]${VL_GEONETWORK_VERSION}"
+            - task: AzureCLI@2
+              displayName: Configure access to aks cluster
+              inputs:
+                azureSubscription: 'dvl-dev-infocat-ARM'
+                addSpnToEnvironment: true
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  # download kubectl and kubelogin
+                  sudo az aks install-cli --subscription ${{ parameters.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
+
+                  # download ~/.kube/config file
+                  az aks get-credentials --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
+
+                  # convert ~/.kube/config to a format compatible with kubelogin
+                  kubelogin convert-kubeconfig --login spn
+
+                  # create secure azure devops variables for later steps
+                  echo "##vso[task.setvariable variable=spnId;isSecret=true]$servicePrincipalId"
+                  echo "##vso[task.setvariable variable=spnSecret;isSecret=true]$servicePrincipalKey"
+            - task: Docker@2
+              displayName: Login to ACR
+              inputs:
+                containerRegistry: 'premdacr'
+                repository: 'metadata/geonetwork'
+                command: 'login'
+            - task: Bash@3
+              displayName: Re-tag docker image
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'liquibase'
+                script: |
+                  image=premdacr.azurecr.io/metadata/geonetwork:$GIT_COMMIT_SHA
+                  newimage=premdacr.azurecr.io/metadata/geonetwork:$NAMESPACE
+                  echo "image: $image"
+                  echo "new image: $newimage"
+                  echo "gitcommitsha2: $GIT2"
+                  docker image ls premdacr.azurecr.io/metadata/geonetwork
+                  docker pull $image
+                  docker tag $image $newimage
+                  docker push $newimage
+              env:
+                NAMESPACE: ${{ parameters.namespace }}
+                GIT_COMMIT_SHA: $(GIT_COMMIT_SHA)
+            - task: Bash@3
+              displayName: Execute liquibase
+              env:
+                # get the pipeline variables into our task
+                LIQUIBASE_GN_SYSTEM_FEEDBACK_MAILSERVER_PASSWORD: $(liquibase.gn.system.feedback.mailserver.password)
+                LIQUIBASE_MDV_PASSWORDHASH: $(liquibase.mdv.passwordhash)
+                LIQUIBASE_MAILPIT_PORT: $(liquibase.mailpit.port)
+                LIQUIBASE_MAILPIT_HOST: $(liquibase.mailpit.host)
+                # get additional variables into our task
+                LIQUIBASE_GN_SYSTEM_VLAANDEREN_VERSION: $(VL_GEONETWORK_VERSION)
+                # needed for kube access
+                AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+                AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'liquibase'
+                script: |
+                  # create an empty liquibase.properties file
+                  touch liquibase.properties
+                  # necessary variables are found in environment
+                  bash execute-on-env.sh -n $(namespace)
+            - task: Bash@3
+              displayName: Rolling restart of geonetwork ($(namespace))
+              env:
+                AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
+                AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
+              inputs:
+                targetType: 'inline'
+                script: |
+                  kubectl rollout restart -n $(namespace) deployment/geonetwork
+                  kubectl rollout restart -n $(namespace) deployment/geonetwork-replica
