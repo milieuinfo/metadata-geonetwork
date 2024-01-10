@@ -5,12 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 ## [8.1.11-SNAPSHOT]
-- Fix DCAT `rdf:resource` attribute not correctly harvested by the simple URL harvester
 
 ### core-geonetwork
 - Merged 4.4.2-SNAPSHOT - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31500)
 - Fix for duplicates-check in validation of related records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31075) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7567)
 - Fix Linux specific file separator used for harvester transform option list - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31604) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7603)
+  - DCAT `rdf:resource` attribute now correctly harvested by the simple URL harvester
 
 
 ## [8.1.10] - 2024-01-05
