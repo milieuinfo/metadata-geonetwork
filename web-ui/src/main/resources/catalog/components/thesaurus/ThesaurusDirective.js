@@ -256,7 +256,7 @@
           // on keyword.
           maxTags: "@",
 
-          // Max number of tags searched in theusaurus
+          // Max number of tags searched in thesaurus
           maxSearched: "@",
           thesaurusTitle: "@",
           browsable: "@"
