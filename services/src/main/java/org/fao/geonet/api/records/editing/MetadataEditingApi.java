@@ -391,8 +391,9 @@ public class MetadataEditingApi {
                 try {
                     vlaanderenPostValidationProcess.addConformKeywords(metadata, true);
                 } catch(Exception e) {
-                    Log.debug("Error saving metadata during adding conform keywords to xml for metadata record with uuid '{}': '{}'.",
-                        new Object[]{metadataUuid, e.getMessage()});
+                    Log.error(Geonet.DATA_MANAGER,
+                        String.format("Error saving metadata during adding conform keywords to xml for metadata record with uuid '%s': '%s'.",
+                            metadataUuid, e.getMessage()));
                 }
                 reindex = true;
 
