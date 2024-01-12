@@ -2353,7 +2353,8 @@
         <field xpath="/gmd:MD_Metadata/gmd:language" or="language" in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:characterSet"/>
         <!-- AIVQUESTION : drop unused fields ?-->
-        <field xpath="/gmd:MD_Metadata/gmd:parentIdentifier" or="parentIdentifier"
+        <field xpath="/gmd:MD_Metadata/gmd:parentIdentifier[../gmd:hierarchyLevel/gmd:MD_ScopeCode[@codeListValue!='series']]"
+               or="parentIdentifier"
                in="/gmd:MD_Metadata"/>
         <field xpath="/gmd:MD_Metadata/gmd:hierarchyLevel"/>
         <field xpath="/gmd:MD_Metadata/gmd:hierarchyLevelName" or="hierarchyLevelName"
