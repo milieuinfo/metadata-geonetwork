@@ -539,7 +539,7 @@
     "rssFeed": "RSS feed",
     "esriCapabilitiesFailed": "Fout bij het ophalen van het ESRI Rest capabilities document.",
     "esriCapabilitiesNoValid": "Het antwoord is geen geldig ESRI Rest capabilities document.",
-    "seriesComposedOf": "Bestaande uit",
+    "seriesComposedOf": "Bestaat uit deze onderdelen",
     "seriesCoveringPeriod": "Dekkingsperiode",
     "approve": "Goedkeuren",
     "fieldRequired": "De waarde is vereist",
