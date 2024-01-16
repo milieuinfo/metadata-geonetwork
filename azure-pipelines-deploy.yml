@@ -61,7 +61,7 @@ stages:
             - task: AzureCLI@2
               displayName: Configure access to aks cluster
               inputs:
-                azureSubscription: 'dvl-dev-infocat-ARM'
+                azureSubscription: 'md-azuredevops-sc'
                 addSpnToEnvironment: true
                 scriptType: bash
                 scriptLocation: inlineScript
