@@ -282,7 +282,7 @@
 
       Exclude all thesaurus already used in the metadata:
       -->
-      <directiveAttributes data-include="xpath::string-join(('external.place.GDI-Vlaanderenregios,external.theme.httpinspireeceuropaeutheme-theme,external.theme.gemet,external.theme.httpinspireeceuropaeufeatureconcept-featureconcept,external.theme.GDI-Vlaanderen-trefwoorden,external.theme.GDI-Vlaanderen-service-types,external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory,external.theme.datatheme,external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope,external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset', *//gmd:thesaurusName/*/gmd:identifier/*/
+      <directiveAttributes data-include="xpath::string-join(('external.place.GDI-Vlaanderenregios,external.theme.inspire-theme,external.theme.gemet,external.theme.featureconcept,external.theme.GDI-Vlaanderen-trefwoorden,external.theme.GDI-Vlaanderen-service-types,external.theme.inspire-service-taxonomy,external.theme.datatheme,external.theme.SpatialScope,external.theme.PriorityDataset', *//gmd:thesaurusName/*/gmd:identifier/*/
                                             gmd:code/gmx:Anchor/
                                               concat('-', substring-after(text()[. != ''], 'geonetwork.thesaurus.'))), ',')"/>
     </for>
@@ -534,22 +534,19 @@
         <thesaurus key="external.place.GDI-Vlaanderenregios"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory-SpatialDataServiceCategory"
+        <thesaurus key="external.theme.inspire-service-taxonomy.rdf"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistPriorityDataset-PriorityDataset"
+        <thesaurus key="external.theme.PriorityDataset"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeufeatureconcept-featureconcept"
+        <thesaurus key="external.theme.featureconcept"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeutheme-theme"
+        <thesaurus key="external.theme.-theme"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialDataServiceCategory"
-                   fieldset="false"
-                   transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope"
+        <thesaurus key="external.theme.SpatialScope"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
         <thesaurus key="external.theme.gemet"
@@ -3339,8 +3336,8 @@
                           <gmd:MD_Identifier>
                             <gmd:code>
                               <gmx:Anchor
-                                xlink:href="http://localhost:8080/geonetwork/srv/api/registries/vocabularies/external.theme.httpinspireeceuropaeutheme-theme">
-                                geonetwork.thesaurus.external.theme.httpinspireeceuropaeutheme-theme
+                                xlink:href="http://localhost:8080/geonetwork/srv/api/registries/vocabularies/external.theme.inspire-theme">
+                                geonetwork.thesaurus.external.theme.inspire-theme
                               </gmx:Anchor>
                             </gmd:code>
                           </gmd:MD_Identifier>

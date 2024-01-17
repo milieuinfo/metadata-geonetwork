@@ -124,9 +124,9 @@
                   size: 20
                 }
               },
-              "th_httpinspireeceuropaeutheme-theme_tree.key": {
+              "th_inspire-theme_tree.key": {
                 terms: {
-                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
+                  field: "th_inspire-theme_tree.key",
                   size: 34
                   // "order" : { "_key" : "asc" }
                 },
@@ -570,9 +570,9 @@
                 }
               },
               // #13 INSPIRE THEMA
-              "th_httpinspireeceuropaeutheme-theme_tree.key": {
+              "th_inspire-theme_tree.key": {
                 terms: {
-                  field: "th_httpinspireeceuropaeutheme-theme_tree.key",
+                  field: "th_inspire-theme_tree.key",
                   size: 34
                   // "order" : { "_key" : "asc" }
                 },
@@ -1088,7 +1088,7 @@
             mainThesaurus: ["th_gemet", "th_gemet-theme"],
             locationThesaurus: [
               "th_regions",
-              "th_httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope"
+              "th_SpatialScope"
             ],
             internalThesaurus: [],
             collectionTableConfig: {

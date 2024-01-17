@@ -50,7 +50,7 @@ https://github.com/geonetwork/core-geonetwork/pull/3399
              select="'/data/dev/gn/master/web/src/main/webapp/WEB-INF/data/config/codelist'"/>
 
   <xsl:variable name="inspire-themes"
-                select="document(concat('file:///', $thesauriDir, '/external/thesauri/theme/httpinspireeceuropaeutheme-theme.rdf'))//skos:Concept"/>
+                select="document(concat('file:///', $thesauriDir, '/external/thesauri/theme/inspire-theme.rdf'))//skos:Concept"/>
 
 
   <!-- Remove ref to schema location. It is added when exporting the record. -->
@@ -90,7 +90,7 @@ https://github.com/geonetwork/core-geonetwork/pull/3399
                   select="gco:CharacterString"/>
     <xsl:variable name="themeInThesaurus"
                   select="$inspire-themes[skos:prefLabel = $theme]"/>
-    
+
     <xsl:choose>
       <xsl:when test="$theme != '' and
                       $themeInThesaurus">

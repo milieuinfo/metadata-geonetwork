@@ -650,9 +650,9 @@
     <xsl:variable name="oldFieldNameMapping" as="node()*">
       <!-- INSPIRE themes are loaded from INSPIRE registry. The thesaurus key changed. -->
       <thesaurus old="th_inspire-theme"
-                 new="th_httpinspireeceuropaeutheme-theme"/>
+                 new="th_inspire-theme"/>
       <thesaurus old="th_SpatialScope"
-                 new="th_httpinspireeceuropaeumetadatacodelistSpatialScope-SpatialScope"/>
+                 new="th_SpatialScope"/>
     </xsl:variable>
 
     <xsl:variable name="key">
