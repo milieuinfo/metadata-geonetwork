@@ -23,23 +23,14 @@
   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmd="http://www.isotc211.org/2005/gmd"
-                xmlns:gts="http://www.isotc211.org/2005/gts"
-                xmlns:gco="http://www.isotc211.org/2005/gco"
-                xmlns:gmx="http://www.isotc211.org/2005/gmx"
-                xmlns:gml="http://www.opengis.net/gml/3.2"
-                xmlns:gml320="http://www.opengis.net/gml"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:gn="http://www.fao.org/geonetwork"
-                xmlns:gn-fn-metadata="http://geonetwork-opensource.org/xsl/functions/metadata"
-                xmlns:java-xsl-util="java:org.fao.geonet.util.XslUtil"
                 xmlns:saxon="http://saxon.sf.net/"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
                 version="2.0"
                 extension-element-prefixes="saxon"
                 exclude-result-prefixes="#all">
 
   <!-- Do not display the keyword type code (http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#MD_KeywordTypeCode) -->
   <xsl:template mode="mode-iso19139" priority="9000"
-                match="gmd:type[gmd:MD_KeywordTypeCode]"/>
+                match="gmd:type[gmd:MD_KeywordTypeCode and $viewConfig/@name = 'vl']">
+  </xsl:template>
 
 </xsl:stylesheet>
