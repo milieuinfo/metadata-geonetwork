@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### vlaanderen
 - Increase number of results returned for `dct:language` thesaurus picker - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31686)
 - Added record purpose to default view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31883)
+- Rename thesauri identifier to fit old ones - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31915)
 
 ### core-geonetwork
 - Make size of returned results in `gnKeywordSelector` configurable - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31686) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7614) 
