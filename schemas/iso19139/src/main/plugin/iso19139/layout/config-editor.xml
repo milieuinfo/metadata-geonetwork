@@ -534,7 +534,7 @@
         <thesaurus key="external.place.GDI-Vlaanderenregios"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.inspire-service-taxonomy.rdf"
+        <thesaurus key="external.theme.inspire-service-taxonomy"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
         <thesaurus key="external.theme.PriorityDataset"
@@ -543,7 +543,7 @@
         <thesaurus key="external.theme.featureconcept"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
-        <thesaurus key="external.theme.-theme"
+        <thesaurus key="external.theme.inspire-theme"
                    fieldset="false"
                    transformations="to-iso19139-keyword-with-anchor"/>
         <thesaurus key="external.theme.SpatialScope"
