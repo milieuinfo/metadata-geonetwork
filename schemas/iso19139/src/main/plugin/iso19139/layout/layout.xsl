@@ -42,6 +42,7 @@
   <xsl:include href="layout-custom-fields.xsl"/>
   <xsl:include href="layout-custom-fields-date.xsl"/>
   <xsl:include href="layout-custom-tpl.xsl"/>
+  <xsl:include href="layout-custom-vl.xsl"/>
 
   <!-- Ignore all gn element -->
   <xsl:template mode="mode-iso19139"
