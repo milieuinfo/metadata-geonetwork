@@ -70,6 +70,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.fao.geonet.kernel.search.EsFilterBuilder.buildPermissionsFilter;
@@ -332,6 +333,7 @@ public class MetadataUtils {
 
                     JsonNode source = mapper.readTree(e.getSourceAsString());
                     computeDomain(source);
+                    computeAccessRights(source);
                     ObjectNode doc = mapper.createObjectNode();
                     doc.set("_source", source);
                     EsHTTPProxy.addUserInfo(doc, context);
@@ -948,5 +950,47 @@ public class MetadataUtils {
         }
         var newNode = (ObjectNode) source;
         newNode.set("domain", domain);
+    }
+
+    private static void computeAccessRights(JsonNode source) {
+        if (!source.has("resourceType")) {
+            return;
+        }
+        var factory = JsonNodeFactory.instance;
+        var accessRights = factory.arrayNode();
+        var resourceType = source.get("resourceType").get(0).textValue();
+
+        if (!source.has("MD_LegalConstraintsOtherConstraintsObject")) {
+            accessRights.add(resourceType.equals("dataset") ?
+                "Niet publiek" :
+                "Toegang met voorwaarden"
+            );
+        } else {
+            var constraints = (ArrayNode) source.get("MD_LegalConstraintsOtherConstraintsObject");
+            AtomicBoolean isPublic = new AtomicBoolean(false);
+            constraints.forEach(constraint -> {
+                if (constraint.has("link")) {
+                    var link = constraint.get("link").textValue();
+                    if ("http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations".equals(link)) {
+                        isPublic.set(true);
+                    }
+                }
+            });
+
+            if (resourceType.equals("dataset")) {
+                accessRights.add(isPublic.get() ?
+                    "Publiek" :
+                    "Niet publiek"
+                );
+            } else {
+                accessRights.add(isPublic.get() ?
+                    "Toegang zonder voorwaarden" :
+                    "Toegang met voorwaarden"
+                );
+            }
+        }
+
+        var newNode = (ObjectNode) source;
+        newNode.set("accessRights", accessRights);
     }
 }

@@ -154,6 +154,7 @@ public class EsSearchManager implements ISearchManager {
             .add("resourceIdentifier")
             .add("rdfResourceIdentifier")
             .add("th_GDI-Vlaanderen-trefwoorden")
+            .add("MD_LegalConstraintsOtherConstraintsObject")
             .build();
 
         FIELDLIST_RELATED_SCRIPTED = ImmutableMap.<String, String>builder()
