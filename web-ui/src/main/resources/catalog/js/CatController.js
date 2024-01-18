@@ -1086,10 +1086,7 @@
             },
             sortKeywordsAlphabetically: true,
             mainThesaurus: ["th_gemet", "th_gemet-theme"],
-            locationThesaurus: [
-              "th_regions",
-              "th_SpatialScope"
-            ],
+            locationThesaurus: ["th_regions", "th_SpatialScope"],
             internalThesaurus: [],
             collectionTableConfig: {
               labels: "title,cl_status,format,download,WMS,WFS,Atom,Links",
