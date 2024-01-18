@@ -45,6 +45,7 @@
   "notManagedByDp": "<b>Warning</b><br/>By selecting <i>{{groupName}}</i>, you agree to manage the new record yourself. If you want to have support by the DataPublicatie team, select a DataPublicatie group instead.",
   "onlyMyRecord": "Meine Metadatensätze",
   "pinAction": "An Liste anpinnen",
+  "purpose": "Zweck der Schöpfung",
   "resourceType-featureCatalog": "Feature-Catalog",
   "resourceUriPattern": "Muster des Ressourcen-URIs",
   "resourceUriPatternHelp": "Das Muster wird verwendet, um den URI von Ressourcen für den RDF-Export zu generieren. Beispielwert: https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}",
