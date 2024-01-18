@@ -35,6 +35,6 @@ cp -a "$SOURCE/theme/protocol.rdf" "$TARGET_DCAT/theme/protocol.rdf"
 cp -a "$SOURCE/theme/publisher-type.rdf" "$TARGET_DCAT/theme/publisher-type.rdf"
 cp -a "$SOURCE/theme/resource-type.rdf" "$TARGET_DCAT/theme/resource-type.rdf"
 cp -a "$SOURCE/theme/status.rdf" "$TARGET_DCAT/theme/status.rdf"
-cp -a "$SOURCE/theme/topic-category.rdf" "$TARGET_DCAT/theme/topic-category.rdf"
+cp -a "$SOURCE/theme/TopicCategory.rdf" "$TARGET_DCAT/theme/TopicCategory.rdf"
 # copy specific place files to dcat
 cp -a "$SOURCE/place/GDI-Vlaanderenregions.rdf" "$TARGET_DCAT/place/GDI-Vlaanderenregions.rdf"

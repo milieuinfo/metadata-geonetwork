@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added record purpose to default view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31883)
 - Hiding keyword type in the default editor view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31895)
 - Add missing accessRights information in related records response - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31922)
+- Rename thesauri identifier to fit old ones - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31915)
 
 ### core-geonetwork
 - Make size of returned results in `gnKeywordSelector` configurable - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/31686) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7614) 

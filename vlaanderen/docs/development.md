@@ -10,6 +10,15 @@ The following username / password combinations are provided through liquibase:
 - `editor` // `Editor$1` (editor account for digitaal vlaanderen)
 - `reviewer` // `Reviewer$1` (reviewer account for datapublicatie digitaal vlaanderen)
 
+# Maven
+
+Some tips and settings pertaining Maven can be found here.
+
+## env
+
+Pass `-Denv=dev` to make sure that:
+- XSL files are not cached and can be modified at runtime: faster debugging
+
 
 # Core upgrade
 
