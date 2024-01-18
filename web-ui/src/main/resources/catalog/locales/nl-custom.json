@@ -49,6 +49,7 @@
   "notManagedByDp": "<b>Opgelet</b><br/>Door <i>{{groupName}}</i> te selecteren zal je het nieuwe record volledig zelf beheren. Als je support van het DataPublicatie team wil moet je een DataPublicatie groep selecteren.",
   "onlyMyRecord": "Mijn Metadatarecords",
   "pinAction": "Aan lijst pinnen",
+  "purpose": "Doel van vervaardiging",
   "resourceType-featureCatalog": "Objectencatalogus",
   "resourceUriPattern": "Bron URI patroon",
   "resourceUriPatternHelp": "Patroon gebruikt om URI van de bronnen te genereren tijdens de RDF export, e.g., https://metadata.vlaanderen.be/srv/resources/{resourceType}/{resourceUuid}",

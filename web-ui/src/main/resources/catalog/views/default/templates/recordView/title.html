@@ -46,4 +46,9 @@
   ></div>
 
   <p data-ng-bind-html="(mdView.current.record.resourceAbstract) | linky | newlines"></p>
+
+  <p data-ng-if="mdView.current.record.purpose">
+    <b data-translate="">purpose</b>
+    <span data-ng-bind-html="(mdView.current.record.purpose) | linky | newlines"></span>
+  </p>
 </div>
