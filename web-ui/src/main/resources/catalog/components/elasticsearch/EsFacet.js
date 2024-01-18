@@ -235,20 +235,8 @@
             },
             indexingErrorMsg: {
               terms: {
-                field: "indexingErrorMsg",
-                size: 10,
-                exclude: "Warning.*"
-              }
-            },
-            indexingWarningMsg: {
-              terms: {
-                field: "indexingErrorMsg",
-                size: 10,
-                include: "Warning.*"
-              },
-              meta: {
-                displayFilter: false,
-                field: "indexingErrorMsg"
+                field: "indexingErrorMsg.string",
+                size: 10
               }
             }
           },

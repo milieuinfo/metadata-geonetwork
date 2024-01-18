@@ -310,8 +310,8 @@
                     "string": "indexingErrorMsg-invalidDateFormat",
                     "type": "warning",
                     "values": {
-                      "dateType": "<xsl:value-of select="$dateType"/>",
-                      "date": "<xsl:value-of select="$date"/>"
+                      "dateType": "<xsl:value-of select="util:escapeForJson($dateType)"/>",
+                      "date": "<xsl:value-of select="util:escapeForJson($date)"/>"
                     }
                   }
                 </indexingErrorMsg>
@@ -565,8 +565,8 @@
                             "string": "indexingErrorMsg-keywordNotFoundInThesaurus",
                             "type": "warning",
                             "values": {
-                              "keyword": "<xsl:value-of select="(*/text())[1]"/>",
-                              "thesaurus": "<xsl:value-of select="$thesaurusId"/>"
+                              "keyword": "<xsl:value-of select="util:escapeForJson((*/text())[1])"/>",
+                              "thesaurus": "<xsl:value-of select="util:escapeForJson($thesaurusId)"/>"
                             }
                           }
                         </indexingErrorMsg>
@@ -832,8 +832,8 @@
                   "string": "indexingErrorMsg-temporalRangeLowerGreaterThanUpper",
                   "type": "warning",
                   "values": {
-                    "lowerBound": "<xsl:value-of select="$start"/>",
-                    "upperBound": "<xsl:value-of select="$end"/>"
+                    "lowerBound": "<xsl:value-of select="util:escapeForJson($start)"/>",
+                    "upperBound": "<xsl:value-of select="util:escapeForJson($end)"/>"
                   }
                 }
               </indexingErrorMsg>
