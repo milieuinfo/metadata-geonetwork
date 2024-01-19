@@ -326,8 +326,7 @@
     function () {
       return {
         templateUrl:
-          "../../catalog/components/search/mdview/partials/" +
-          "vlConstraintByType.html",
+          "../../catalog/components/search/mdview/partials/" + "vlConstraintByType.html",
         restrict: "A",
         scope: {
           type: "@gnVlConstraintByType",

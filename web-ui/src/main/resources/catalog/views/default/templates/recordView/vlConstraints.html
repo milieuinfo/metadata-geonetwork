@@ -1,23 +1,31 @@
-<div data-ng-if="mdView.current.record.MD_LegalConstraintsUseLimitation || mdView.current.record.MD_LegalConstraintsOtherConstraints"
-     class="gn-margin-bottom">
+<div
+  data-ng-if="mdView.current.record.MD_LegalConstraintsUseLimitation || mdView.current.record.MD_LegalConstraintsOtherConstraints"
+  class="gn-margin-bottom"
+>
   <span class="badge badge-rounded" title="{{'legalConstraints' | translate}}">
     <i class="fa fa-fw fa-gavel"></i>
   </span>
   <div>
     <h2 data-translate="">accessAndUseConstraints</h2>
-    <div data-gn-vl-constraint-by-type="MD_LegalConstraints"
-         data-record="mdView.current.record"></div>
+    <div
+      data-gn-vl-constraint-by-type="MD_LegalConstraints"
+      data-record="mdView.current.record"
+    ></div>
   </div>
 
   <div>
     <h2 data-translate="">securityConstraints</h2>
-    <div data-gn-vl-constraint-by-type="MD_SecurityConstraints"
-         data-record="mdView.current.record"></div>
+    <div
+      data-gn-vl-constraint-by-type="MD_SecurityConstraints"
+      data-record="mdView.current.record"
+    ></div>
   </div>
 
   <div>
     <h2 data-translate="">resourceConstraints</h2>
-    <div data-gn-vl-constraint-by-type="MD_Constraints"
-         data-record="mdView.current.record"></div>
+    <div
+      data-gn-vl-constraint-by-type="MD_Constraints"
+      data-record="mdView.current.record"
+    ></div>
   </div>
 </div>
