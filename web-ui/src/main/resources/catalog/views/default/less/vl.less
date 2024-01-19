@@ -142,7 +142,7 @@ td[data-ng-if="columnVisibility['date']"] {
       }
 
       ul {
-        li[gn-static-page-menu="menu"]{
+        li[gn-static-page-menu="menu"] {
           a {
             // fix for a static page link in the navbar
             padding: 0px;
@@ -152,7 +152,7 @@ td[data-ng-if="columnVisibility['date']"] {
 
       // a bit more space between the icon of a menu item and its text
       ul.dropdown-menu > li[role="menuitem"] > a > span:first-of-type {
-         margin-right: 10px;
+        margin-right: 10px;
       }
     }
 
@@ -769,9 +769,22 @@ td[data-ng-if="columnVisibility['date']"] {
   background-color: #e8ebee;
 }
 
-
 // probably needs to go when we go to the 'mijnburgerprofiel' integratie
 // fix for dialog that was semi-behind the header
 .modal-dialog {
   top: 30px;
+}
+
+// Overwrite of default color for distribution's protocol
+.gn-icontype-wms,
+.gn-icontype-sos,
+.gn-icontype-wps,
+.gn-icontype-wcs,
+.gn-icontype-atom,
+.gn-icontype-3dtiles,
+.gn-icontype-cog,
+.gn-icontype-esri-rest,
+.gn-icontype-wfs {
+  background-color: #777777 !important;
+  color: #fff !important;
 }

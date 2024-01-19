@@ -1067,13 +1067,14 @@
         restrict: "A",
         replace: true,
         template:
-          "<a class=\"{{::btnClass || 'btn btn-default btn-xs'}}\" " +
-          '           ng-click="copy()" ' +
-          '           href=""' +
-          '           title="{{::title | translate}}">' +
+          "<button class=\"{{::btnClass || 'btn btn-default btn-xs'}}\" " +
+          '        type="button" ' +
+          '        ng-click="copy()" ' +
+          '        href=""' +
+          '        title="{{::title | translate}}">' +
           '  <i class="fa fa-fw" ' +
           "   ng-class=\"{'fa-copy': !copied, 'fa-check': copied}\"/>" +
-          "</a>",
+          "</button>",
         scope: {
           btnClass: "@",
           getTextFn: "&?"

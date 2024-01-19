@@ -65,6 +65,7 @@
   "system/vlaanderen": "Vlaamse GeoNetwork fork",
   "system/vlaanderen/version": "Versie",
   "versionDetails": "versie <span class='gn-version'>{{vlversion}}</span>, met GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "priceInformation": "Prijsinformatie",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Goedgekeurd record",

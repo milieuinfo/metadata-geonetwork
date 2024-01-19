@@ -5,10 +5,15 @@
   data-related-config="::viewConfig.distributionConfig.sections"
 ></div>
 
-<div data-ng-if="mdView.current.record.orderingInstructions.length > 0">
+<div data-ng-if="mdView.current.record.orderingInstructions.length > 0 || mdView.current.record.orderingFees">
   <h2 data-translate="">orderingInstructions</h2>
   <p
+    data-ng-if="mdView.current.record.orderingInstructions.length > 0"
     data-ng-repeat="o in mdView.current.record.orderingInstructions"
     data-ng-bind-html="o | linky | newlines"
   />
+  <p data-ng-if="mdView.current.record.orderingFees">
+    <strong>{{'priceInformation' | translate}}:</strong>
+    <span data-ng-bind-html="mdView.current.record.orderingFees | linky | newlines"/>
+  </p>
 </div>
