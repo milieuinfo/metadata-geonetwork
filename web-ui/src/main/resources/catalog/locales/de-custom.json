@@ -59,6 +59,12 @@
   "system/vlaanderen": "Flämischer GeoNetwork fork",
   "system/vlaanderen/version": "Ausführung",
   "versionDetails": "version <span class='gn-version'>{{vlversion}}</span>, using GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "MD_LegalConstraints": "Rechtliche Einschränkungen",
+  "MD_SecurityConstraints": "Sicherheitseinschränkungen",
+  "MD_Constraints": "Inhaltliche Nutzungsbeschränkungen",
+  "accessConstraintCodelist": "(Juridische) Zugriffsbeschränkung",
+  "useConstraintCodelist": "(Juridische) Nutzungsbeschränkung",
+  "constraintDescription": "Beschreibung der Beschränkung",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Genehmigt record",

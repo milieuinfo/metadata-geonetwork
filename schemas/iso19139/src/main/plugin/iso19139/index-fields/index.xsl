@@ -1362,7 +1362,9 @@
       </xsl:if>
 
       <!-- Index more fields in this element -->
-      <xsl:apply-templates mode="index-extra-fields" select="."/>
+      <xsl:apply-templates mode="index-extra-fields" select=".">
+        <xsl:with-param name="allLanguages" select="$allLanguages"/>
+      </xsl:apply-templates>
     </doc>
 
     <!-- Index more documents for this element -->
@@ -1537,6 +1539,7 @@
   <!-- RDF URI functions -->
 
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
+    <xsl:param name="allLanguages"/>
     <xsl:variable name="uriPattern" select="util:getUriPattern(gmd:fileIdentifier/gco:CharacterString)"/>
     <uriPattern>
       <xsl:value-of select="$uriPattern"/>
@@ -1544,6 +1547,40 @@
     <rdfResourceIdentifier>
       <xsl:value-of select="geonet:getRDFResourceURI(., $uriPattern)"/>
     </rdfResourceIdentifier>
+
+    <xsl:for-each select="gmd:identificationInfo/*/gmd:resourceConstraints/*">
+      <xsl:variable name="constraints">
+        <xsl:for-each select="gmd:useLimitation">
+          <xsl:copy-of select="gn-fn-index:add-multilingual-field('useLimitation', ., $allLanguages)"/>
+        </xsl:for-each>
+        <xsl:for-each select="gmd:otherConstraints">
+          <xsl:copy-of select="gn-fn-index:add-multilingual-field('otherConstraints', ., $allLanguages)"/>
+        </xsl:for-each>
+        <xsl:for-each select="gmd:accessConstraints/*[@codeListValue != '']">
+          <xsl:copy-of select="gn-fn-index:add-codelist-field('accessConstraints', ., $allLanguages)"/>
+        </xsl:for-each>
+        <xsl:for-each select="gmd:useConstraints/*[@codeListValue != '']">
+          <xsl:copy-of select="gn-fn-index:add-codelist-field('useConstraints', ., $allLanguages)"/>
+        </xsl:for-each>
+      </xsl:variable>
+
+      <vlResourceConstraintsObject type="object">
+        {
+        "type": "<xsl:value-of select="local-name()"/>"
+        <xsl:for-each-group select="$constraints/*" group-by="name()">
+          ,
+          "<xsl:value-of select="current-grouping-key()"/>": [
+          <xsl:for-each select="current-group()">
+            <xsl:value-of select="string()"/>
+            <xsl:if test="position() != last()">,</xsl:if>
+          </xsl:for-each>
+          ]
+        </xsl:for-each-group>
+        }
+      </vlResourceConstraintsObject>
+
+    </xsl:for-each>
+
   </xsl:template>
 
   <xsl:function name="geonet:getRDFResourceURI">

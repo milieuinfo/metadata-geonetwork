@@ -322,6 +322,21 @@
     }
   ]);
 
+  module.directive("gnVlConstraintByType", [
+    function () {
+      return {
+        templateUrl:
+          "../../catalog/components/search/mdview/partials/" +
+          "vlConstraintByType.html",
+        restrict: "A",
+        scope: {
+          type: "@gnVlConstraintByType",
+          record: "="
+        }
+      };
+    }
+  ]);
+
   module.directive("gnMetadataRate", [
     "$http",
     "gnConfig",
