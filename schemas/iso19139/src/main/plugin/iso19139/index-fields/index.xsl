@@ -1173,9 +1173,11 @@
           </xsl:apply-templates>
         </xsl:for-each>
 
-        <xsl:for-each select="gmd:distributor/*
-                                  /gmd:distributionOrderProcess/*/gmd:orderingInstructions">
+        <xsl:for-each select="gmd:distributor/*/gmd:distributionOrderProcess/*/gmd:orderingInstructions">
           <xsl:copy-of select="gn-fn-index:add-multilingual-field('orderingInstructions', ., $allLanguages)"/>
+        </xsl:for-each>
+        <xsl:for-each select="gmd:distributor/*/gmd:distributionOrderProcess/*/gmd:fees">
+          <xsl:copy-of select="gn-fn-index:add-multilingual-field('orderingFees', ., $allLanguages)"/>
         </xsl:for-each>
 
         <xsl:for-each select="gmd:transferOptions/*/

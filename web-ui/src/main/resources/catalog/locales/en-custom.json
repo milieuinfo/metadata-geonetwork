@@ -70,6 +70,7 @@
   "accessConstraintCodelist": "(Legal) Access Constraint",
   "useConstraintCodelist": "(Legal) Use Constraint",
   "constraintDescription": "Constraint Description",
+  "priceInformation": "Price information",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Approved record",

@@ -65,6 +65,7 @@
   "accessConstraintCodelist": "Contraintes d'accès (juridiques)",
   "useConstraintCodelist": "Contraintes d'utilisation (juridiques)",
   "constraintDescription": "Description de la contrainte",
+  "priceInformation": "Information sur le prix",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Record approuvé",

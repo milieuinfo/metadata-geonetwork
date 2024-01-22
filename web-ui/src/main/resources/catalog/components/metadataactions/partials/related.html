@@ -18,7 +18,7 @@
                        badge = config.getBadgeLabel(mainType, r);
                        icon = config.getClassIcon(mainType);"
       class="row list-group-item gn-related-item gn-related-{{type}} gn-relation-type-{{mainType}}"
-      data-ng-repeat="r in items | orderBy:getOrderBy"
+      data-ng-repeat="r in items"
       gn-popover=""
     >
       <div
@@ -73,7 +73,7 @@
         <div data-ng-switch on="mainType">
           <div data-ng-switch-when="WFS">
             <div
-              data-ng-if="::isLayerProtocol(r)"
+              data-ng-if="::isLayerProtocol(r) && 'hide-for' == 'vlaanderen'"
               data-gn-wfs-download=""
               data-typename="{{::isLayerProtocol(r) ? r.locTitle : ''}}"
               data-url="{{::r.locUrl}}"
@@ -130,6 +130,7 @@
         <div class="row">
           <div class="col-md-8 gn-nopadding-left gn-nopadding-right">
             <div
+              ng-if="'hide-for' === 'vlaanderen'"
               data-gn-record-links-button="[r]"
               data-type="type"
               data-icon-mode="none"
@@ -142,7 +143,7 @@
               data-btn-class="btn btn-default btn-sm"
               gn-copy-to-clipboard-button=""
               data-text="{{::r.locUrl}}"
-              data-tooltip="copyUrlToClipboard"
+              data-tooltip="{{copyUrlToClipboard | translate}}"
             ></div>
           </div>
         </div>
