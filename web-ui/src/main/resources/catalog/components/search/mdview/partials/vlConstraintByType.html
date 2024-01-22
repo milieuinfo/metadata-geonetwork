@@ -1,0 +1,73 @@
+<fieldset
+  data-ng-repeat="constraint in record.vlResourceConstraintsObject | filter: {type: type}"
+>
+  <legend>{{constraint.type | translate}}</legend>
+
+  <div class="gn-margin-bottom flex-row" data-ng-if="constraint.useLimitationObject">
+    <strong class="constraint-section-title"
+      >{{'constraintDescription' | translate}}:
+    </strong>
+    <ul>
+      <li data-ng-repeat="useLimitation in constraint.useLimitationObject">
+        <span
+          data-ng-if="!useLimitation.link"
+          data-ng-bind-html="useLimitation.default | capitalize | linky | newlines"
+        ></span>
+        <a
+          data-ng-if="useLimitation.link"
+          data-ng-href="{{useLimitation.link}}"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {{useLimitation.default | capitalize}}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="gn-margin-bottom flex-row" data-ng-if="constraint.accessConstraints">
+    <strong class="constraint-section-title"
+      >{{'accessConstraintCodelist' | translate}}:</strong
+    >
+    <ul>
+      <li data-ng-repeat="accessConstraint in constraint.accessConstraints">
+        <a data-ng-href="{{accessConstraint.link}}" target="_blank"
+          >{{accessConstraint.default}}</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="gn-margin-bottom flex-row" data-ng-if="constraint.useConstraints">
+    <strong class="constraint-section-title"
+      >{{'useConstraintCodelist' | translate}}:</strong
+    >
+    <ul>
+      <li data-ng-repeat="useConstraint in constraint.useConstraints">
+        <a data-ng-href="{{useConstraint.link}}" target="_blank"
+          >{{useConstraint.default}}</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="gn-margin-bottom flex-row" data-ng-if="constraint.otherConstraintsObject">
+    <strong class="constraint-section-title">{{'otherConstraints' | translate}}: </strong>
+    <ul>
+      <li data-ng-repeat="otherConstraint in constraint.otherConstraintsObject">
+        <span
+          data-ng-if="!otherConstraint.link"
+          data-ng-bind-html="otherConstraint.default | capitalize | linky | newlines"
+        ></span>
+        <a
+          data-ng-if="otherConstraint.link"
+          data-ng-href="{{otherConstraint.link}}"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {{otherConstraint.default | capitalize}}
+        </a>
+      </li>
+    </ul>
+  </div>
+</fieldset>
