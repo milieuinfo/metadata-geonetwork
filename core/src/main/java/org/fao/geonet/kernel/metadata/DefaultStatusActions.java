@@ -805,9 +805,6 @@ public class DefaultStatusActions implements StatusActions {
                 StatusValue.Status.SUBMITTED,
                 StatusValue.Status.REJECTED,
                 StatusValue.Status.APPROVED,
-                StatusValue.Status.SUBMITTED_FOR_RETIRED,
-                StatusValue.Status.RETIRED,
-                StatusValue.Status.SUBMITTED_FOR_REMOVED,
                 StatusValue.Status.REMOVED
         ));
         result.get(StatusValue.Status.APPROVED).addAll(Sets.newHashSet(
