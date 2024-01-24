@@ -5,7 +5,7 @@
   <span class="badge badge-rounded" title="{{'legalConstraints' | translate}}">
     <i class="fa fa-fw fa-gavel"></i>
   </span>
-  <div>
+  <div data-ng-if="hasConstraintType(mdView.current.record, 'MD_LegalConstraints')">
     <h2 data-translate="">accessAndUseConstraints</h2>
     <div
       data-gn-vl-constraint-by-type="MD_LegalConstraints"
@@ -13,7 +13,7 @@
     ></div>
   </div>
 
-  <div>
+  <div data-ng-if="hasConstraintType(mdView.current.record, 'MD_SecurityConstraints')">
     <h2 data-translate="">securityConstraints</h2>
     <div
       data-gn-vl-constraint-by-type="MD_SecurityConstraints"
@@ -21,7 +21,7 @@
     ></div>
   </div>
 
-  <div>
+  <div data-ng-if="hasConstraintType(mdView.current.record, 'MD_Constraints')">
     <h2 data-translate="">resourceConstraints</h2>
     <div
       data-gn-vl-constraint-by-type="MD_Constraints"

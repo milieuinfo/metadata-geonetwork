@@ -373,6 +373,13 @@
       $scope.$watch("gnMdViewObj.from", function (v) {
         $scope.fromView = v ? v.substring(1) : v;
       });
+
+      // VL Specific
+      $scope.hasConstraintType = function(record, type) {
+        return record.vlResourceConstraintsObject.some(function(constraint) {
+          return constraint.type === type;
+        });
+      }
     }
   ]);
 })();
