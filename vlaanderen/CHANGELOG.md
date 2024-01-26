@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [8.1.13-SNAPSHOT]
 
+### vlaanderen
+- Workflow and ui fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32106)
+
+### core-geonetwork
+- Additional fixes for the indexingErrorMsg translation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32218) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7531)
+
+
 ## [8.1.12] - 2024-01-22
 
 ### vlaanderen
