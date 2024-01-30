@@ -78,6 +78,11 @@
     <property name="authenticationManager" ref="openidconnectProviderManager"/>
   </bean>
 
+  <bean id="acmidmApiLoginAuthenticationFilter" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMApiLoginAuthenticationFilter">
+    <constructor-arg value="/**/*"/>
+    <property name="authenticationManager" ref="openidconnectProviderManager"/>
+  </bean>
+
   <bean id="openidconnectDefaultAuthorizationCodeTokenResponseClient" class="org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient"/>
 
   <bean id ="openidconnectOIDCRoleProcessor" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMRoleProcessor"/>
@@ -148,6 +153,7 @@
         <ref bean="csrfFilter" />
         <!-- To disable csrf security (not recommended) comment the upper line -->
 
+        <ref bean="acmidmApiLoginAuthenticationFilter"/>
         <ref bean="openidconnectOAuth2AuthorizationRequestRedirectFilter"/>
         <ref bean="openidconnectOAuth2LoginAuthenticationFilter"/>
         <ref bean="logoutFilter"/>
