@@ -3,6 +3,7 @@ package be.vlaanderen.geonet.kernel.security.openidconnect;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ public class ACMIDMTokenCache {
     static final Object lockobj = new Object();
     Map<String, BearerTokenAuthentication> cache = new HashMap<>();
 
-    public Authentication getItem(String bearerToken) {
+    public BearerTokenAuthentication getItem(String bearerToken) {
         synchronized (lockobj) {
             removeExpiredTokens();
             if (!cache.containsKey(bearerToken))

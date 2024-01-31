@@ -9,8 +9,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.security.openidconnect.OidcUser2GeonetworkUser;
 import org.fao.geonet.utils.GeonetHttpRequestFactory;
+import org.fao.geonet.utils.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
@@ -62,21 +64,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException {
-//        if (authResult == null) {
-//            throw new IOException("authresult is null!"); // this shouldn't happen
-//        }
-//        if (!(authResult instanceof BearerTokenAuthentication)) {
-//            return;
-//        }
-//        var tokenAuthentication = (BearerTokenAuthentication) authResult;
-//        if ((tokenAuthentication.getPrincipal() == null) || (!(tokenAuthentication.getPrincipal() instanceof OidcUser))) {
-//            throw new IOException("problem with principle - null or incorrect type"); // this shouldn't happen
-//        }
-//        SecurityContextHolder.getContext().setAuthentication(authResult);
-//        // Doing this
-//        if (this.eventPublisher != null) {
-//            eventPublisher.publishEvent(new AuthenticationSuccessEvent(authResult));
-//        }
+        // all logic is handled in `attemptAuthentication`, as we want to be authenticated _before_ the rest of the chain finishes.
     }
 
     @Override
@@ -85,8 +73,10 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
 
         // if we can return the Authentication straight from the cache, do it
         // this avoids having to introspect the token at ACM/IDM
-        Authentication item = cache.getItem(bearerToken);
+        BearerTokenAuthentication item = cache.getItem(bearerToken);
         if(item!=null) {
+            Log.debug(Geonet.SECURITY, "Bearer token found in cache, not introspecting.");
+            saveAuthentication(item);
             return item;
         }
 
@@ -105,10 +95,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
                 BearerTokenAuthentication authentication = new BearerTokenAuthentication(principal, oAuth2AccessToken, authorities);
 
                 // setting the authentication already here, instead of in 'successfulAuthentication', as we want it to be available in the following Filters
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                if (this.eventPublisher != null) {
-                    eventPublisher.publishEvent(new AuthenticationSuccessEvent(authentication));
-                }
+                saveAuthentication(authentication);
 
                 // keep the authentication result in the cache
                 cache.putItem(bearerToken, authentication);
@@ -122,6 +109,13 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
         }
     }
 
+    private void saveAuthentication(BearerTokenAuthentication authentication) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (this.eventPublisher != null) {
+            eventPublisher.publishEvent(new AuthenticationSuccessEvent(authentication));
+        }
+    }
+
     /**
      * Introspect the bearer token with ACM/IDM, thereby validating it and retrieving the necessary client information.
      *
@@ -130,6 +124,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
      */
     private IntrospectedToken introspectToken(String bearerToken) {
         try {
+            Log.debug(Geonet.SECURITY, "Introspecting bearertoken at url "+introspectUrl);
             HttpPost introspectRequest = new HttpPost(introspectUrl);
             JSONObject json = new JSONObject();
             List<NameValuePair> nvps = new ArrayList<>();
@@ -149,6 +144,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
                 return new IntrospectedToken(tokenValidation);
             }
         } catch (Exception e) {
+            Log.error(Geonet.SECURITY, "Could not introspect bearer token url "+introspectUrl+": "+e.getMessage());
             throw new InvalidBearerTokenException("Could not introspect the bearer token: " + e);
         }
     }
