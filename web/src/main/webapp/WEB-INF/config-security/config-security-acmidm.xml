@@ -79,8 +79,10 @@
   </bean>
 
   <bean id="acmidmApiLoginAuthenticationFilter" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMApiLoginAuthenticationFilter">
-    <constructor-arg value="/**/*"/>
     <property name="authenticationManager" ref="openidconnectProviderManager"/>
+    <property name="introspectUrl" value="${ACMIDM_CLIENT_INTROSPECTURL:#{''}}"/>
+    <property name="clientId" value="${ACMIDM_CLIENT_CLIENTID:#{''}}"/>
+    <property name="clientSecret" value="${ACMIDM_CLIENT_CLIENTSECRET:#{''}}"/>
   </bean>
 
   <bean id="openidconnectDefaultAuthorizationCodeTokenResponseClient" class="org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient"/>
@@ -157,7 +159,6 @@
         <ref bean="openidconnectOAuth2AuthorizationRequestRedirectFilter"/>
         <ref bean="openidconnectOAuth2LoginAuthenticationFilter"/>
         <ref bean="logoutFilter"/>
-
 
         <ref bean="requestCacheFilter"/>
         <ref bean="anonymousFilter"/>
