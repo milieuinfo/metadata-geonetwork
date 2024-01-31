@@ -13,10 +13,17 @@ import org.fao.geonet.kernel.security.openidconnect.OidcUser2GeonetworkUser;
 import org.fao.geonet.utils.GeonetHttpRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.FilterChain;
@@ -24,14 +31,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
-    // TODO
-    // static UserInfoCache userInfoCache = new UserInfoCache();
 
     @Autowired
     protected GeonetHttpRequestFactory requestFactory;
@@ -42,6 +44,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
     private String introspectUrl;
     private String clientId;
     private String clientSecret;
+    private final ACMIDMTokenCache cache = new ACMIDMTokenCache();
 
     protected ACMIDMApiLoginAuthenticationFilter() {
         super("we don't use this parameter");
@@ -51,7 +54,6 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response, AuthenticationException failed)
         throws IOException, ServletException {
-        System.out.println("ACMIDMApiLoginAuthenticationFilter unsuccessfulAuthentication.");
         super.unsuccessfulAuthentication(request, response, failed);
     }
 
@@ -59,28 +61,65 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) {
-        System.out.println("ACMIDMApiLoginAuthenticationFilter successfulAuthentication.");
+                                            Authentication authResult) throws IOException {
+//        if (authResult == null) {
+//            throw new IOException("authresult is null!"); // this shouldn't happen
+//        }
+//        if (!(authResult instanceof BearerTokenAuthentication)) {
+//            return;
+//        }
+//        var tokenAuthentication = (BearerTokenAuthentication) authResult;
+//        if ((tokenAuthentication.getPrincipal() == null) || (!(tokenAuthentication.getPrincipal() instanceof OidcUser))) {
+//            throw new IOException("problem with principle - null or incorrect type"); // this shouldn't happen
+//        }
+//        SecurityContextHolder.getContext().setAuthentication(authResult);
+//        // Doing this
+//        if (this.eventPublisher != null) {
+//            eventPublisher.publishEvent(new AuthenticationSuccessEvent(authResult));
+//        }
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String bearerToken = getBearerToken(request).orElseThrow(() -> new InvalidBearerTokenException("No bearer token supplied."));
+
+        // if we can return the Authentication straight from the cache, do it
+        // this avoids having to introspect the token at ACM/IDM
+        Authentication item = cache.getItem(bearerToken);
+        if(item!=null) {
+            return item;
+        }
+
+        // validate the token at ACM/IDM
         IntrospectedToken validationToken = introspectToken(bearerToken);
         if (validationToken.isActive) {
-            if(validationToken.scopes.stream().noneMatch(s -> s != null && s.startsWith("dv_metadata"))) {
+            OAuth2AccessToken oAuth2AccessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, validationToken.jwt, validationToken.issuedAt, validationToken.expiresAt, new HashSet<>(validationToken.scopes));
+            if (validationToken.scopes.stream().noneMatch(s -> s != null && s.startsWith("dv_metadata"))) {
                 throw new InvalidBearerTokenException("Did not find a metadata scope for this client.");
             }
             OidcIdToken oidcIdToken = new OidcIdToken(validationToken.jwt, validationToken.issuedAt, validationToken.expiresAt, validationToken.toMap());
             try {
-                oidcUser2GeonetworkUser.getUserDetails(oidcIdToken, validationToken.toMap(), true);
+                UserDetails userDetails = oidcUser2GeonetworkUser.getUserDetails(oidcIdToken, validationToken.toMap(), true);
+                Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) userDetails.getAuthorities();
+                DefaultOidcUser principal = new DefaultOidcUser(authorities, oidcIdToken);
+                BearerTokenAuthentication authentication = new BearerTokenAuthentication(principal, oAuth2AccessToken, authorities);
+
+                // setting the authentication already here, instead of in 'successfulAuthentication', as we want it to be available in the following Filters
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (this.eventPublisher != null) {
+                    eventPublisher.publishEvent(new AuthenticationSuccessEvent(authentication));
+                }
+
+                // keep the authentication result in the cache
+                cache.putItem(bearerToken, authentication);
+
+                return authentication;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else {
             throw new InvalidBearerTokenException("Invalid token.");
         }
-        return null;
     }
 
     /**
@@ -121,12 +160,12 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
      * @return
      */
     private Optional<String> getBearerToken(HttpServletRequest request) {
-        String authentication = request.getHeader("Authorization");
-        String bearerPrefix = "bearer ";
-        if (authentication != null && !authentication.toLowerCase().startsWith(bearerPrefix)) {
-            return Optional.empty();
+        Optional<String> authorization = Optional.ofNullable(request.getHeader("Authorization"));
+        String bearerPrefix = "bearer ".toLowerCase();
+        if(authorization.isPresent() && authorization.get().toLowerCase().startsWith(bearerPrefix)) {
+            return Optional.of(authorization.get().substring(bearerPrefix.length()));
         } else {
-            return Optional.of(authentication.substring(bearerPrefix.length()));
+            return Optional.empty();
         }
     }
 
@@ -140,8 +179,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
      */
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String authorization = request.getHeader("Authorization");
-        return authorization != null && authorization.startsWith("Bearer");
+        return getBearerToken(request).isPresent();
     }
 
     public void setIntrospectUrl(String introspectUrl) {

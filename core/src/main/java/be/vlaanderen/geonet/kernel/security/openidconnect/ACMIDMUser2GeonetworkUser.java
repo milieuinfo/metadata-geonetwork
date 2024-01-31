@@ -15,43 +15,6 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * {
- * "cot": "vo",
- * "dv_metadatavlaanderen_rol_3d": [
- * "DVMetadataVlaanderenGebruiker-hoofdeditor:OVO002949",
- * "DVMetadataVlaanderenGebruiker-admin:OVO002949"
- * ],
- * "family_name": "Nielandt",
- * "given_name": "Joachim",
- * "sub": "2102c8e2fee953a5ccb2b10d6e13204886c1fddb",
- * "vo_doelgroepcode": "GID",
- * "vo_doelgroepnaam": "VO-medewerkers",
- * "vo_email": "joachim.nielandt@vlaanderen.be",
- * "vo_id": "4d6636e0-2252-4ec5-95b7-503325abebab",
- * "vo_orgcode": "OVO002949",
- * "vo_orgnaam": "Digitaal Vlaanderen"
- * }
- */
-
-/**
- * {
- *     "active": true,
- *     "aud": "0c9574e1-b35a-467a-a66d-3c6781447fd7",
- *     "client_id": "0c9574e1-b35a-467a-a66d-3c6781447fd7",
- *     "exp": 1706630693,
- *     "iat": 1706627093,
- *     "iss": "https://authenticatie-ti.vlaanderen.be/op",
- *     "jwt": "eyJhbGciOiJSUzI1NiIsImtpZCI6IkxRRUlSV0pNOERnZ1FsbEFMYURhNFp5Nkg1dnFCYnNVYWZpQ0ZWZjN2ZEkiLCJ0eXAiOiJKV1QifQ.eyJhY3RpdmUiOnRydWUsImF1ZCI6IjBjOTU3NGUxLWIzNWEtNDY3YS1hNjZkLTNjNjc4MTQ0N2ZkNyIsImNsaWVudF9pZCI6IjBjOTU3NGUxLWIzNWEtNDY3YS1hNjZkLTNjNjc4MTQ0N2ZkNyIsImV4cCI6MTcwNjYzMDY5MywiaWF0IjoxNzA2NjI3MDkzLCJpc3MiOiJodHRwczovL2F1dGhlbnRpY2F0aWUtdGkudmxhYW5kZXJlbi5iZS9vcCIsInNjb3BlIjoiZHZfbWV0YWRhdGFfcmVhZCBkdl9tZXRhZGF0YV93cml0ZSB2b19pbmZvIiwic2V0YnlhcGlfY3VzdG9tYXBpbmFtZSI6ImN1c3RvbWFwaXZhbHVlIiwic3ViIjoiMGM5NTc0ZTEtYjM1YS00NjdhLWE2NmQtM2M2NzgxNDQ3ZmQ3IiwidG9rZW5fdHlwZSI6ImJlYXJlciIsInZvX2FwcGxpY2F0aWVuYWFtIjoiRGlnaXRhYWwgVmxhYW5kZXJlbiBNZXRhZGF0YSBEZXYgQ2xpZW50Iiwidm9fb3JnY29kZSI6Ik9WTzAwMjk0OSIsInZvX29yZ25hYW0iOiJhZ2VudHNjaGFwIERpZ2l0YWFsIFZsYWFuZGVyZW4ifQ.mS0WtJg271sDnzwpK8TLbEpEPNuH8p7xLMMZaRyzCsqi05CNZ6WVg4l5HKw9JoTvK0RYBZ-fAKE4PdIsP08Qpwdf4-YuBBcjHOjIQNwA0KHXgV6jHn812N14abQ0njNIe0gQPMvZsXZTgJ75v6y5yTXD44IKG7csogKbYFSYkIV9J_bIcGoeFK4BGDqKMO_a167wLtvaQ6-SkWITBzXrADnpLK40oJG2lo4i50C5WPhO9-taVjH9MxdjoEdorLgwUvOivx855JZO9CT--OdBHycY1ZzTNWIT6lRRHTDb_qP6MeKmrMypS4lzp9729Yd4T-3KvHvQWAio9cI8unaTOg",
- *     "scope": "dv_metadata_read dv_metadata_write vo_info",
- *     "setbyapi_customapiname": "customapivalue",
- *     "sub": "0c9574e1-b35a-467a-a66d-3c6781447fd7",
- *     "token_type": "bearer",
- *     "vo_applicatienaam": "Digitaal Vlaanderen Metadata Dev Client",
- *     "vo_orgcode": "OVO002949",
- *     "vo_orgnaam": "agentschap Digitaal Vlaanderen"
- * }
- */
 public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
 
     private String dpPrefix = "DataPublicatie ";
@@ -93,8 +56,10 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
             Profile profile = getClientProfile(scopes);
             user.setProfile(profile);
             // save changes to database
-            userRepository.save(user);
-            updateUserGroupsForClient(user, profile);
+            if (withDbUpdate) {
+                userRepository.save(user);
+                updateUserGroupsForClient(user, profile);
+            }
         } else {
             // profiles are handled by the default oidc setup, modified to our liking
             Map<Profile, List<String>> profileGroups = oidcRoleProcessor.getProfileGroups(idToken);
@@ -117,7 +82,7 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
     /**
      * Set the user-group profile for a specific user, for _all_ groups. To be used for API clients.
      *
-     * @param user the service account user
+     * @param user    the service account user
      * @param profile the desired profile
      */
     private void updateUserGroupsForClient(User user, Profile profile) {
@@ -127,28 +92,26 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
             profile = Profile.UserAdmin;
         }
         Profile finalProfile = profile;
-        groupRepository.findAll().forEach(g -> {
-            UserGroup usergroup = new UserGroup();
-            usergroup.setGroup(g);
-            usergroup.setUser(user);
-            usergroup.setProfile(finalProfile);
-            userGroupRepository.save(usergroup);
-        });
+        groupRepository.findAll().stream()
+            .filter(g -> g.getId() >= 100)
+            .forEach(g -> {
+                UserGroup usergroup = new UserGroup();
+                usergroup.setGroup(g);
+                usergroup.setUser(user);
+                usergroup.setProfile(finalProfile);
+                userGroupRepository.save(usergroup);
+            });
     }
 
     private Profile getClientProfile(Set<String> scopes) {
-        if(scopes.contains("dv_metadata_write")) {
+        if (scopes.contains("dv_metadata_write")) {
             return Profile.Reviewer;
-        } else if(scopes.contains("dv_metadata_read")){
+        } else if (scopes.contains("dv_metadata_read")) {
             return Profile.Guest;
         } else {
             // This should not occur here, as we check in ACMIDMApiLoginAuthenticationFilter as well. Can't hurt to test twice though.
             throw new InvalidBearerTokenException("Could not find one of the expected metadata client scopes.");
         }
-    }
-
-    private Map<Profile, List<String>> profileGroupsForClient(Set<String> scopes, List<Group> groups) {
-        return new HashMap<Profile, List<String>>();
     }
 
     private Set<String> clientScopes(OidcIdToken idToken) {
