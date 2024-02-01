@@ -1,0 +1,17 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="00045-inspirevalidator-url-pre" author="joachim" contextFilter="loc,dev,bet">
+    <update tableName="settings">
+      <column name="value" value="https://metadata.dev-vlaanderen.be/inspirevalidator"/>
+      <where>name='system/inspire/remotevalidation/url'</where>
+    </update>
+  </changeSet>
+  <changeSet id="00045-inspirevalidator-url-prd" author="joachim" contextFilter="prd">
+    <update tableName="settings">
+      <column name="value" value="https://metadata.vlaanderen.be/inspirevalidator"/>
+      <where>name='system/inspire/remotevalidation/url'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>
