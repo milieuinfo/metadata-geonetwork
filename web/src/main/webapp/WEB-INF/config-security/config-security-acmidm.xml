@@ -78,6 +78,15 @@
     <property name="authenticationManager" ref="openidconnectProviderManager"/>
   </bean>
 
+  <bean id="acmidmApiLoginAuthenticationFilter" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMApiLoginAuthenticationFilter">
+    <property name="authenticationManager" ref="openidconnectProviderManager"/>
+    <!-- necessary, otherwise we stop the chain after authenticating an API -->
+    <property name="continueChainBeforeSuccessfulAuthentication" value="true"/>
+    <property name="introspectUrl" value="${ACMIDM_CLIENT_INTROSPECTURL:#{''}}"/>
+    <property name="clientId" value="${ACMIDM_CLIENT_CLIENTID:#{''}}"/>
+    <property name="clientSecret" value="${ACMIDM_CLIENT_CLIENTSECRET:#{''}}"/>
+  </bean>
+
   <bean id="openidconnectDefaultAuthorizationCodeTokenResponseClient" class="org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient"/>
 
   <bean id ="openidconnectOIDCRoleProcessor" class="be.vlaanderen.geonet.kernel.security.openidconnect.ACMIDMRoleProcessor"/>
@@ -86,10 +95,10 @@
   </bean>
 
    <bean id="openidconnectAuthorizationProvider" class="org.fao.geonet.kernel.security.openidconnect.LoggingOidcAuthorizationCodeAuthenticationProvider">
-      <constructor-arg ref="openidconnectDefaultAuthorizationCodeTokenResponseClient"/>
-      <constructor-arg ref="openidconnectUserService"/>
+     <constructor-arg ref="openidconnectDefaultAuthorizationCodeTokenResponseClient"/>
+     <constructor-arg ref="openidconnectUserService"/>
      <constructor-arg ref="openidconnectConfiguration"/>
-    </bean>
+   </bean>
 
 <!--  <bean id="openidconnectAuthorizationProvider" class="org.springframework.security.oauth2.client.oidc.authentication.OidcAuthorizationCodeAuthenticationProvider">-->
 <!--    <constructor-arg ref="openidconnectDefaultAuthorizationCodeTokenResponseClient"/>-->
@@ -148,10 +157,10 @@
         <ref bean="csrfFilter" />
         <!-- To disable csrf security (not recommended) comment the upper line -->
 
+        <ref bean="acmidmApiLoginAuthenticationFilter"/>
         <ref bean="openidconnectOAuth2AuthorizationRequestRedirectFilter"/>
         <ref bean="openidconnectOAuth2LoginAuthenticationFilter"/>
         <ref bean="logoutFilter"/>
-
 
         <ref bean="requestCacheFilter"/>
         <ref bean="anonymousFilter"/>

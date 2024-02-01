@@ -9,47 +9,129 @@ import org.fao.geonet.utils.Log;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
 
     private String dpPrefix = "DataPublicatie ";
+    private static String applicationNameAttribute = "vo_applicatienaam";
+    private static String clientIdAttribute = "client_id";
 
+    @Override
     public UserDetails getUserDetails(OidcIdToken idToken, Map attributes, boolean withDbUpdate) throws Exception {
         SimpleOidcUser simpleUser = simpleOidcUserFactory.create(idToken, attributes);
         if (!StringUtils.hasText(simpleUser.getUsername()))
             return null;
 
+        // it seems like vo_email is equal to sub (a uuid) for API clients, but let's not take any chances
+        String userName;
+        if (isClient(idToken)) {
+            userName = idToken.getClaimAsString("sub");
+        } else {
+            userName = simpleUser.getUsername();
+        }
+
         User user;
         boolean newUserFlag = false;
         try {
-            user = (User) geonetworkAuthenticationProvider.loadUserByUsername(simpleUser.getUsername());
+            user = (User) geonetworkAuthenticationProvider.loadUserByUsername(userName);
         } catch (UsernameNotFoundException e) {
             user = new User();
-            user.setUsername(simpleUser.getUsername());
+            user.setUsername(userName);
             newUserFlag = true;
             Log.debug(Geonet.SECURITY, "Adding a new user: " + user);
         }
 
         simpleUser.updateUser(user); // copy attributes from the IDToken to the GN user
 
-        Map<Profile, List<String>> profileGroups = oidcRoleProcessor.getProfileGroups(idToken);
-        user.setProfile(oidcRoleProcessor.getProfile(idToken));
-
-        //Apply changes to database is required.
-        if (withDbUpdate) {
-            if (newUserFlag || oidcConfiguration.isUpdateProfile()) {
+        if (isClient(idToken)) {
+            // name is missing in the case of clients > use vo_applicatienaam instead. for regular clients, the name is already set
+            user.setName(idToken.getClaimAsString(applicationNameAttribute));
+            // handle profiles for clients in a custom way, can't use the oidcRoleProcessor as that would conflict with the default user setup
+            Set<String> scopes = clientScopes(idToken);
+            Profile profile = getClientProfile(scopes);
+            user.setProfile(profile);
+            // save changes to database
+            if (withDbUpdate) {
                 userRepository.save(user);
+                updateUserGroupsForClient(user, profile);
             }
-            if (newUserFlag || oidcConfiguration.isUpdateGroup()) {
-                // ACM/IDM specific modification: pass the idtoken
-                updateGroups(profileGroups, user, idToken);
+        } else {
+            // profiles are handled by the default oidc setup, modified to our liking
+            Map<Profile, List<String>> profileGroups = oidcRoleProcessor.getProfileGroups(idToken);
+            user.setProfile(oidcRoleProcessor.getProfile(idToken));
+            //Apply changes to database is required.
+            if (withDbUpdate) {
+                if (newUserFlag || oidcConfiguration.isUpdateProfile()) {
+                    userRepository.save(user);
+                }
+                if (newUserFlag || oidcConfiguration.isUpdateGroup()) {
+                    // ACM/IDM specific modification: pass the idtoken
+                    updateGroups(profileGroups, user, idToken);
+                }
             }
         }
+
         return user;
+    }
+
+    /**
+     * Set the user-group profile for a specific user, for _all_ groups. To be used for API clients.
+     *
+     * @param user    the service account user
+     * @param profile the desired profile
+     */
+    private void updateUserGroupsForClient(User user, Profile profile) {
+        userGroupRepository.deleteAll(UserGroupSpecs.hasUserId(user.getId()));
+        if (profile.equals(Profile.Administrator)) {
+            // As we are assigning to a group, it is UserAdmin instead
+            profile = Profile.UserAdmin;
+        }
+        Profile finalProfile = profile;
+        groupRepository.findAll().stream()
+            .filter(g -> g.getId() >= 100)
+            .forEach(g -> {
+                UserGroup usergroup = new UserGroup();
+                usergroup.setGroup(g);
+                usergroup.setUser(user);
+                usergroup.setProfile(finalProfile);
+                userGroupRepository.save(usergroup);
+            });
+    }
+
+    private Profile getClientProfile(Set<String> scopes) {
+        if (scopes.contains("dv_metadata_write")) {
+            return Profile.Reviewer;
+        } else if (scopes.contains("dv_metadata_read")) {
+            return Profile.Guest;
+        } else {
+            // This should not occur here, as we check in ACMIDMApiLoginAuthenticationFilter as well. Can't hurt to test twice though.
+            throw new InvalidBearerTokenException("Could not find one of the expected metadata client scopes.");
+        }
+    }
+
+    private Set<String> clientScopes(OidcIdToken idToken) {
+        return Arrays.stream(idToken.getClaimAsString("scope").split(" "))
+            .filter(s -> !s.isEmpty())
+            .filter(s -> s.startsWith("dv_metadata"))
+            .collect(Collectors.toSet());
+    }
+
+    /**
+     * Check whether the token indicates we are dealing with an API Client or a regular end user.
+     *
+     * @param idToken
+     * @return
+     */
+    private boolean isClient(OidcIdToken idToken) {
+        return idToken.hasClaim("token_type") &&
+            idToken.getClaimAsString("token_type").equalsIgnoreCase("bearer") &&
+            idToken.hasClaim(applicationNameAttribute) &&
+            idToken.hasClaim(clientIdAttribute);
     }
 
     protected void updateGroups(Map<Profile, List<String>> profileGroups, User user, OidcIdToken idToken) {
@@ -57,8 +139,8 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
         userGroupRepository.deleteAll(UserGroupSpecs.hasUserId(user.getId()));
 
         // ACM/IDM specific claims
-        String userOrgCode = idToken.getClaim("vo_orgcode").toString();
-        String userOrgName = idToken.getClaim("vo_orgnaam").toString();
+        String userOrgCode = idToken.getClaimAsString("vo_orgcode");
+        String userOrgName = idToken.getClaimAsString("vo_orgnaam");
 
         // Now we add the groups
         for (Profile p : profileGroups.keySet()) {
@@ -69,10 +151,9 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                 boolean isDp = technicalGroupName.startsWith("dp-");
                 // figure out the 'groupOwner' type, eventually used as a filter for the geonetwork portals
                 String vlType = null;
-                if(technicalGroupName.startsWith("mdv-")) {
+                if (technicalGroupName.startsWith("mdv-")) {
                     vlType = "metadatavlaanderen";
-                }
-                else if(technicalGroupName.startsWith("dp-")) {
+                } else if (technicalGroupName.startsWith("dp-")) {
                     vlType = "datapublicatie";
                 }
 
@@ -135,11 +216,13 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                                     boolean isDp) {
         String dpPrefix = this.dpPrefix;
         String result = "";
-        if(roleOrgCode.equals(userOrgCode)) {
+        if (roleOrgCode.equals(userOrgCode)) {
             result = (isDp ? dpPrefix + userOrgName : userOrgName);
         } else {
             result = (isDp ? dpPrefix + roleOrgCode : roleOrgCode);
         }
         return result;
     }
+
+
 }
