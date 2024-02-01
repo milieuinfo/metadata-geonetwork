@@ -1,0 +1,37 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="00046-downloadtoepassing-portal" author="joachim">
+    <insert tableName="sources">
+      <column name="uuid">downloadtoepassing</column>
+      <column name="creationdate">2024-02-01T09:55:24.498326Z</column>
+      <column name="filter">((+groupOwnerVlType:"datapublicatie") OR (+groupOwnerName:"Digitaal Vlaanderen"))</column>
+      <column name="islistableinheaderselector">n</column>
+      <column name="logo"/>
+      <column name="name">downloadtoepassing</column>
+      <column name="type">subportal</column>
+      <column name="uiconfig"/>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes">downloadtoepassing</column>
+      <column name="label">Downloadtoepassing</column>
+      <column name="langid">fre</column>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes">downloadtoepassing</column>
+      <column name="label">Downloadtoepassing</column>
+      <column name="langid">dut</column>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes">downloadtoepassing</column>
+      <column name="label">Downloadtoepassing</column>
+      <column name="langid">ger</column>
+    </insert>
+    <insert tableName="sourcesdes">
+      <column name="iddes">downloadtoepassing</column>
+      <column name="label">Downloadtoepassing</column>
+      <column name="langid">eng</column>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
