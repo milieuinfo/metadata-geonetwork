@@ -126,7 +126,6 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
         try {
             Log.debug(Geonet.SECURITY, "Introspecting bearertoken at url "+introspectUrl);
             HttpPost introspectRequest = new HttpPost(introspectUrl);
-            JSONObject json = new JSONObject();
             List<NameValuePair> nvps = new ArrayList<>();
             nvps.add(new BasicNameValuePair("client_id", clientId));
             nvps.add(new BasicNameValuePair("client_secret", clientSecret));
@@ -138,10 +137,7 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
             try (ClientHttpResponse introspectResponse = requestFactory.execute(introspectRequest)) {
                 System.out.println("response = " + introspectResponse);
                 ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode tokenValidation = objectMapper.readTree(introspectResponse.getBody());
-                Map<String, Object> result = objectMapper.convertValue(tokenValidation, new TypeReference<>() {
-                });
-                return new IntrospectedToken(tokenValidation);
+                return new IntrospectedToken(objectMapper.readTree(introspectResponse.getBody()));
             }
         } catch (Exception e) {
             Log.error(Geonet.SECURITY, "Could not introspect bearer token url "+introspectUrl+": "+e.getMessage());

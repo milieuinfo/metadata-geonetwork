@@ -1,9 +1,7 @@
 package be.vlaanderen.geonet.kernel.security.openidconnect;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 
 import java.time.Instant;
 import java.util.HashMap;
