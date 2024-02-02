@@ -206,11 +206,11 @@ public class RDFUtils {
                 params.put("recordUUID", baseRecordUUID);
 
                 // TODO: Update record only if modified is more recent than local
-//                Literal modifiedLiteral = solution.getLiteral("modified");
-//                String modified;
-//                if (modifiedLiteral != null) {
-//                    modified = DateUtil.convertToISOZuluDateTime(modifiedLiteral.getString());
-//                }
+                //                Literal modifiedLiteral = solution.getLiteral("modified");
+                //                String modified;
+                //                if (modifiedLiteral != null) {
+                //                    modified = DateUtil.convertToISOZuluDateTime(modifiedLiteral.getString());
+                //                }
 
                 return Pair.read(baseRecordUUID, sparqlResults);
             } else {
