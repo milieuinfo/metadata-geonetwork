@@ -1169,6 +1169,8 @@ public final class Xml {
                     .toLowerCase();
                 retBool = firstTag.matches("<.*:(rdf|catalog|catalogrecord)\\n?");
             }
+        } else {
+            retBool = inXMLStr.contains("@prefix ") && inXMLStr.contains("<http://www.w3.org/ns/dcat#>");
         }
         return retBool;
     }

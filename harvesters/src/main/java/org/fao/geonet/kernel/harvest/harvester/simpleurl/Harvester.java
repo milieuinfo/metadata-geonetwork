@@ -123,7 +123,10 @@ class Harvester implements IHarvester<HarvestResult> {
             Element xmlObj = null;
             SimpleUrlResourceType type;
 
-            if (isRDFLike(content)) type = SimpleUrlResourceType.RDFXML;
+            if (isRDFLike(content)) {
+                type = SimpleUrlResourceType.RDFXML;
+                content = RDFUtils.convertToRDFXML(content);
+            }
             else if (isXMLLike(content)) type = SimpleUrlResourceType.XML;
             else type = SimpleUrlResourceType.JSON;
 

@@ -4,8 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.*;
 import org.fao.geonet.Constants;
 import org.fao.geonet.domain.ISODate;
 import org.fao.geonet.domain.Pair;
@@ -103,6 +102,33 @@ public class RDFUtils {
         qe.close();
         model.close();
         return records;
+    }
+
+    public static String convertToRDFXML(String rdfData) {
+        Lang lang = getLang(rdfData);
+        if (Lang.RDFXML.equals(lang)) {
+            return rdfData;
+        }
+
+        Model model = ModelFactory.createMemModelMaker().createDefaultModel();
+        RDFDataMgr.read(model,
+            IOUtils.toInputStream(rdfData, StandardCharsets.UTF_8),
+            lang);
+
+        // Serialize the model to RDF/XML format
+        StringWriter out = new StringWriter();
+        RDFDataMgr.write(out, model, Lang.RDFXML);
+        return out.toString();
+    }
+
+    private static Lang getLang(String rdfData) {
+        if (rdfData.contains("@prefix")) {
+            return Lang.TTL;
+        } else if (rdfData.contains("<http://")) {
+            return Lang.NTRIPLES;
+        } else {
+            return Lang.RDFXML;
+        }
     }
 
 
