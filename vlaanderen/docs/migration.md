@@ -1,152 +1,179 @@
 # Migration Geonetwork 3 to Geonetwork 4
 
-The following actions need to be taken when migrating to Geonetwork 4.
+See the [migration sql file](./assets/gn3-migration.sql) for details of the migration. There, a step-by-step description
+is made of the whole
+process.
 
-## languageCode codeList
+Below, an overview is given of the steps and other necessities.
 
-Make sure the languageCode is defined by the right codeList. [Related PR](https://agiv.visualstudio.com/Metadata/_workitems/edit/178751/).
-
-Database updates:
-```sql
-update metadata set
-  data = replace(data, '<gmd:LanguageCode codeListValue="dut" codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#LanguageCode">Nederlands</gmd:LanguageCode>', '<gmd:LanguageCode codeList="https://www.loc.gov/standards/iso639-2/" codeListValue="dut">Nederlands</gmd:LanguageCode>')
-where data like '%<gmd:LanguageCode codeListValue="dut" codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#LanguageCode">Nederlands</gmd:LanguageCode>%';
-update metadata set
-  data = replace(data, '<gmd:LanguageCode codeListValue="dut" codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#LanguageCode">Nederlands; Vlaams</gmd:LanguageCode>', '<gmd:LanguageCode codeList="https://www.loc.gov/standards/iso639-2/" codeListValue="dut">Nederlands; Vlaams</gmd:LanguageCode>')
-where data like '%<gmd:LanguageCode codeListValue="dut" codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#LanguageCode">Nederlands; Vlaams</gmd:LanguageCode>%';
-
--- check other faulty occurrences?
-select * from metadata where data like '%codeList="http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#LanguageCode"%';
-```
-
-## Tools needed for the migration
+# Tools needed for the migration
 
 - DBeaver
 - kubectl
 
-## Migration steps
+# Migration steps
 
-### 1. Copy raw data from old node to a new schema in GN 4 database
+Data are copied to `migration` schemas. This way, mdc and mdv original data is always available in the new database.
+These data are used for the migration process itself, but can later also be referenced to check for potential errors.
 
-- Create 2 new schemas `migrationgn3mdc` and `migrationgn3mdv` and `migration` in the GN 4 database
-- In both of these schema, imports the tables `email`, `groups`, `metadata`, `metadatastatus`, `statusvalues`, `usergroups`, `user` using the export functionality of DBeaver
-- Create a new table `geosecure` from the [Organizaties.xsls](assets/Organisaties.xlsx) document, containing the mapping between PROD Geosecure ID's and OVO codes
+## Groups
 
-```SQL
--- prep temporary schema
-create schema migrationgn3mdc;
-create schema migrationgn3mdv;
-create schema migration;
-```
-### 2. Pre-create the groups
+Groups are mapped from mdc and mdv to a fresh table. Each group gets a new id, and is looked up in the geosecure
+table to enrich it with ovo code etc. The original id is stored in `mdcid` and `mdvid`. New group ids start from 100.
 
-Create a unique list of all groups with their OVO code, Geosecure ID, technical ID in MDC and technical ID in MDV.  
-For groups without Geosecure ID or OVO code, augment them using the `geosecure` filtered on organization name.  
+For each group, create a new DataPublicatie variant of the group. Based on the CSV document attached to the
+ticket [#186360](https://agiv.visualstudio.com/Metadata/_workitems/edit/186360), assign each metadata to the correct
+group variant.
 
-Insert that list into a new table `geosecuremapped`.
+## Users
 
-```SQL
--- migrate: email / groups / metadata / metadatastatus / statusvalues / usergroups / users
--- > mdc:groups > gn3mdcgroups
--- > mdv:groups > gn3mdvgroups
+Users are migrated in a similar fashion. They are precreated so they can be allocated to the right records and
+groups. The original id of a user can be retrieved based on their email and the original `emails` table. Multiple
+users with the same email address are present in GN3. Since we now rely on the mail address to map users
+together from old to new, these users will be merged in the process. Technical users's ID is re-generated based on an
+incrementing number starting from 100.
 
--- open issues
--- > what about groups that could not be found in geosecure?
-
-select count(*) from migrationgn3mdc.metadata gm;
-
--- group migration - create a table that has a mapping of geosecure groups to their original mdc and mdv groups
-with geo as (
-    select split_part("Unieke identifier", ':', 2) ovo, "Organisatie Contact Id"::integer geosecureid, "Naam organisatie" orgname, *
-    from migration.geosecure g where "Organisatie Contact Id"::integer >= 0 and split_part("Unieke identifier", ':', 1) = 'ovo'
-), geoplus as (
-    select geo.geosecureid, geo.orgname, ovo,
-           (select id from migrationgn3mdc.groups gm where gm.referrer = geo.geosecureid and gm.referrer is not null) mdcid,
-           (select id from migrationgn3mdv.groups gm where gm.referrer = geo.geosecureid and gm.referrer is not null) mdvid
-    from geo)
-select * into migration.geosecuremapped from geoplus where mdcid is not null or mdvid is not null;
-
--- are there groups with the same referrer? geosecureid?
--- select referrer from migrationgn3mdv.groups group by referrer having count(*) > 1;
--- select referrer from migrationgn3mdc.groups group by referrer having count(*) > 1;
-
--- add groups that were not in the geosecure list, but were in our instances, with records
-with mdvmissing as (
-    select g.id mdvid, g."name" orgname
-    from migrationgn3mdv."groups" g
-    where
-        not exists (select mdvid from migration.geosecuremapped g2 where g2.mdvid = g.id) and
-        exists (select * from migrationgn3mdv.metadata m where m.groupowner = g.id)
-      and g.id > 1
-) insert into migration.geosecuremapped (mdvid, orgname) select mdvid, orgname from mdvmissing;
-with mdcmissing as (
-    select g.id mdcid, g."name" orgname
-    from migrationgn3mdc."groups" g
-    where
-        not exists (select mdcid from migration.geosecuremapped g2 where g2.mdcid = g.id) and
-        exists (select * from migrationgn3mdc.metadata m where m.groupowner = g.id)
-      and g.id > 1
-) insert into migration.geosecuremapped (mdcid, orgname) select mdcid, orgname from mdcmissing;
-
--- check that there's no overlapping groups
--- select * from migration.geosecuremapped g where mdcid is not null and mdvid is not null and geosecureid is null;
-
--- select g."Organisatie Contact Id" geosecureid, split_part(g."Unieke identifier", ':', 2) ovo, g."Naam organisatie" orgname, *
--- from migration.geosecure g inner join migration.geosecuremapped g2 on g."Naam organisatie" = g2.orgname and g2.ovo is null and g2.geosecureid is null and g."Status" = 'Actief';
-
--- update previously found groups that did not yet have an ovo code, but were mentioned in the geosecure table
-with pre as (
-    select g."Organisatie Contact Id" geosecureid, max(split_part(g."Unieke identifier", ':', 2)) ovo, g."Naam organisatie" orgname
-    from migration.geosecure g inner join migration.geosecuremapped g2 on g."Naam organisatie" = g2.orgname and g2.ovo is null and g2.geosecureid is null and g."Status" = 'Actief'
-    group by g."Organisatie Contact Id", g."Naam organisatie"
-)
-update migration.geosecuremapped m set geosecureid = pre.geosecureid::integer, ovo = pre.ovo
-from pre
-where pre.orgname = m.orgname and m.geosecureid is null and m.ovo isnull;
-
--- one group that was empty, no ovo code, ... clean up
-delete from migration.geosecuremapped where orgname = 'GDI-MercatorNet' and mdvid = 290;
-update migration.geosecuremapped set mdcid = (select mdcid from migration.geosecuremapped where ovo = '0454064819' and mdcid is not null) where ovo = '0454064819' and mdcid is null;
-delete from migration.geosecuremapped where ovo = '0454064819' and mdvid is null;
-```
-
-### 3. Pre-create users
-
-With ACM/IDM, users are identified based on their email address (to be later modified for stable ID ideally provided by ACM/IDM).  
+With ACM/IDM, users are identified based on their email address (to be later modified for stable ID ideally provided by
+ACM/IDM).  
 Create a `migrations.users` tables with an added `mdvid` and `mdcid` column.  
-Based on email address, merged users from MDC & MDV and insert them with their corresponding ID into the `migration.users` tables, making sure the username is modified to now be the email address.  
-Users with no metadata owned are skipped for the sake of reducing eventual manual fix as much as possible, they should be recreated automatically at first login.  
+Based on email address, merged users from MDC & MDV and insert them with their corresponding ID into
+the `migration.users` tables, making sure the username is modified to now be the email address.  
+Users with no metadata owned are skipped for the sake of reducing eventual manual fix as much as possible, they should
+be recreated automatically at first login.
 
-Multiple users with the same email address are present in GN3. Since we now rely on the mail address to map users together from old to new, these users will be merged in the process.
-Technical users's ID is re-generated based on an incrementing number starting from 100.
+## Metadata
 
-```SQL
-
-```
-
-### 4. Pre-create metadata
-
-Create a `migration.metadata` table and insert all metadata from both environments filtering out the harvested and template records.  
+Create a `migration.metadata` table and insert all metadata from both environments filtering out the harvested and
+template records.  
 Metadata `owner` and `groupowner` are mapped to their corresponding new ID's.
-At this stage, all metadata are assigned to the "DV" group. We don't have a split just yet.  
+At this stage, all metadata are assigned to the "DV" group. We don't have a split just yet.
 
-For the status, since GN3 MDV & GN3 MDC and GN4 all uses a different set of workflow status, we must map every old status to new ones.  
-To simplify the process, only 3 possible mapping will be possible: 
+For the status, since GN3 MDV & GN3 MDC and GN4 all uses a different set of workflow status, we must map every old
+status to new ones.  
+To simplify the process, only 3 possible mapping will be possible:
 
 - All status before the "approved and published" should be set to "draft" and non-public
-- The "approved and published" and all submission or rejection for status changes is mapped to "approved and published" and the record is published
+- The "approved and published" and all submission or rejection for status changes is mapped to "approved and published"
+  and the record is published
 - The "un-published" records are mapped to "un-published" and are non-public
 
-### 5. Import all the pre-created data
+## Upload the migrated data
 
-TODO
+Now, the `migration` schema tables are converted into the actual geonetwork tables. The SQL script copies various
+tables,
+cross-matching mdc and mdv original tables.
 
-### 6. DP & non-DP groups
+### Thumbnails
 
-- For each group, create a new DP variant of the group
-- Based on the CSV document attached to the ticket [#186360](https://agiv.visualstudio.com/Metadata/_workitems/edit/186360), assigne each metadata to the correct group variant
+Updating the metadata XML content is performed in two steps. See `MetadataDbOps` and the `186360-x` tasks where
+script-based actions are executed.
 
-### Thumbnail
+1. the `metadata_data` folders of both `mdc` and `mdv` (gn3) environments are merged into one
+2. the metadata is updated to point to the right hostname
+3. the `metadata_thumbs` static folders are converted into actual gn4 attachments
 
-- TODO
-- Update metadata XML content to fix thumbnail URL based on target environment
+# Post processing steps
+
+Various fixes are performed to clean up the data, ranging from erroneous references to codelist to urls that do not
+function properly in GeoNetwork4 anymore. See script for details.
+
+# Identified issues
+
+Also see issue https://agiv.visualstudio.com/Metadata/_workitems/edit/187226.
+
+## Broken resources.get attachments url
+
+Links to thumbnail urls that were functional in GN3 might not be functional anymore in GN4. Examples are shown below,
+fixes should have been deployed during the migration process.
+
+Examples:
+
+- https://metadata.vlaanderen.be/srv/dut/resources.get?uuid=288be5c6-d70d-45d3-a31d-265c86cc9202/attachments/VHA_zones_metadata_1406814837398.jpg
+
+Instead, the intended format should be:
+
+- https://metadata.dev-vlaanderen.be/srv/api/records/288be5c6-d70d-45d3-a31d-265c86cc9202/attachments/VHA_zones_metadata_1406814837398.jpg
+
+## Keyword rdf reference
+
+old: https://metadata.vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/KOSTELOOS
+broken: https://metadata.dev-vlaanderen.be/id/GDI-Vlaanderen-Trefwoorden/KOSTELOOS
+
+to be solved
+
+## broken attachment
+
+https://metadata.vlaanderen.be/srv/api/records/1ECA5D6F-1D62-4A4D-A7F4-46615DEAD10D/attachments/BE3VLBNK.png
+file is present, but cannot be displayed?
+https://metadata.dev-vlaanderen.be/srv/api/records/1ECA5D6F-1D62-4A4D-A7F4-46615DEAD10D/attachments/BE3VLBNK.png
+
+https://metadata.vlaanderen.be/srv/api/records/2c70e1cf-48e3-458f-b213-09dcba89e5a9/attachments/voorbeeldweergave_pluviaal.jpg
+https://metadata.dev-vlaanderen.be/srv/api/records/2c70e1cf-48e3-458f-b213-09dcba89e5a9/attachments/voorbeeldweergave_pluviaal.jpg
+
+## originally broken links
+
+not functioning in prod either
+https://metadata.vlaanderen.be/srv/dut/resources.get?uuid=33ced40c-973f-4395-941b-39e89f0ecf0b&amp;fname=Brownfieldconvenanten_1486135916908.JPG
+got to migrate to another format:
+https://metadata.dev-vlaanderen.be/srv/api/records/33ced40c-973f-4395-941b-39e89f0ecf0b/attachments/Brownfieldconvenanten_1486135916908.JPG
+
+## another broken type
+
+https://metadata.vlaanderen.be/srv/dut/resources.get?uuid=288be5c6-d70d-45d3-a31d-265c86cc9202/attachments/VHA_zones_metadata_1406814837398.jpg
+
+## metadatacenter references
+
+### csw
+
+https://metadata.vlaanderen.be/metadatacenter/srv/dut/csw?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=2B178D0C-7898-47B9-B134-29AC8C268287
+https://metadata.dev-vlaanderen.be/srv/dut/csw?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=2B178D0C-7898-47B9-B134-29AC8C268287
+
+```xml
+
+<ows:ExceptionReport version="1.2.0"
+                     xsi:schemaLocation="http://www.opengis.net/ows http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>
+      org.fao.geonet.csw.common.exceptions.InvalidParameterValueEx: code=InvalidParameterValue, locator=OutputSchema,
+      message=OutputSchema 'gmd' not supported for metadata with '849' (iso19110). Corresponding XSL transformation
+      'gmd-full.xsl' does not exist for this schema. The record will not be returned in response.
+    </ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport>
+```
+
+> That one make sense, we are trying to export a iso19110 metadata by casting it into a iso19139 metadata.
+> We likely need to set the output format to the namespace "xmlns:gfc="http://standards.iso.org/iso/19110/gfc/1.1"" for
+> feature catalogs.
+
+### thesaurus
+
+https://metadata.vlaanderen.be/metadatacenter/srv/eng/thesaurus.download?ref=external.theme.gemet
+https://metadata.dev-vlaanderen.be/srv/eng/thesaurus.download?ref=external.theme.gemet
+
+```json
+{
+  "error": {
+    "message": "Service not found",
+    "class": "ServiceNotFoundEx",
+    "request": {}
+  }
+} 
+```
+
+Should be:
+https://metadata.dev-vlaanderen.be/srv/api/registries/vocabularies/external.theme.GDI-Vlaanderen-trefwoorden
+Instead of
+https://metadata.dev-vlaanderen.be/srv/eng/thesaurus.download?ref=external.theme.GDI-Vlaanderen-trefwoorden
+
+### metadata url
+
+https://metadata.vlaanderen.be/metadatacenter/srv/dut/catalog.search#/metadata/54877caf-3024-42b6-ad98-91d8434b9cda
+this could be just replaced with the right url
+https://metadata.dev-vlaanderen.be/srv/dut/catalog.search#/metadata/b8e76bbd-8fa0-4804-a3a2-8cdeeed88896
+
+### thumbnail with old syntax, but real &
+
+https://metadata.dev-vlaanderen.be/srv/dut/resources.get?uuid=33ced40c-973f-4395-941b-39e89f0ecf0b&fname=Brownfieldconvenanten_1486135916908.JPG
+https://metadata.dev-vlaanderen.be/srv/api/records/33ced40c-973f-4395-941b-39e89f0ecf0b/attachments/Brownfieldconvenanten_1486135916908.JPG
+fixed in script
