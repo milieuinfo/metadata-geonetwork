@@ -29,6 +29,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.CharStreams;
 import jeeves.server.context.ServiceContext;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.fao.geonet.ApplicationContextHolder;
@@ -52,6 +53,7 @@ import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -121,7 +123,10 @@ class Harvester implements IHarvester<HarvestResult> {
             Element xmlObj = null;
             SimpleUrlResourceType type;
 
-            if (isRDFLike(content)) type = SimpleUrlResourceType.RDFXML;
+            if (isRDFLike(content)) {
+                type = SimpleUrlResourceType.RDFXML;
+                content = RDFUtils.convertToRDFXML(content);
+            }
             else if (isXMLLike(content)) type = SimpleUrlResourceType.XML;
             else type = SimpleUrlResourceType.JSON;
 
@@ -418,7 +423,8 @@ class Harvester implements IHarvester<HarvestResult> {
             httpResponse = requestFactory.execute(httpMethod);
             int status = httpResponse.getRawStatusCode();
             Log.debug(LOGGER_NAME, "Request status code: " + status);
-            return CharStreams.toString(new InputStreamReader(httpResponse.getBody()));
+            BOMInputStream stream = new BOMInputStream(httpResponse.getBody());
+            return CharStreams.toString(new InputStreamReader(stream));
         } finally {
             if (httpMethod != null) {
                 httpMethod.releaseConnection();

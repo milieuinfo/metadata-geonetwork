@@ -1160,11 +1160,17 @@ public final class Xml {
     public static boolean isRDFLike(String inXMLStr) {
         boolean retBool = false;
         if (isXMLLike(inXMLStr)) {
-            String xml = inXMLStr.replaceFirst(XML_VERSION_HEADER, ""),
-            firstTag = xml
-                .substring(0, xml.indexOf(" "))
-                .toLowerCase();
-            retBool = firstTag.matches("<.*:(rdf|catalog|catalogrecord)\\n?");
+            String xml = inXMLStr.replaceFirst(XML_VERSION_HEADER, "");
+            Pattern xmlTagEnd = Pattern.compile("[ \\n\\r]");
+            Matcher xmlTagEndMatcher = xmlTagEnd.matcher(xml);
+            if (xmlTagEndMatcher.find()) {
+                String firstTag = xml
+                    .substring(0, xmlTagEndMatcher.start())
+                    .toLowerCase();
+                retBool = firstTag.matches("<.*:(rdf|catalog|catalogrecord)\\n?");
+            }
+        } else {
+            retBool = inXMLStr.contains("@prefix ") && inXMLStr.contains("<http://www.w3.org/ns/dcat#>");
         }
         return retBool;
     }
