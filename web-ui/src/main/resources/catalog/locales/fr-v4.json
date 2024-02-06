@@ -31,6 +31,7 @@
   "language.id": "Identifiant",
   "language.remove": "Supprimer la langue",
   "layerName": "Couche",
+  "layerNameTooltip": "A layer name from the GetCapabilities document",
   "ogcServiceUrl": "URL du service",
   "translation.addFor": "Ajouter une nouvelle traduction pour",
   "translation.add": "Créer",
@@ -293,8 +294,8 @@
   "pageContent": "Contenu",
   "pageContentFile": "Fichier",
   "pageLabel": "Libellé",
-  "pageIcon": "Page icon",
-  "pageIcon-help": "Optionally, define a <a target='_blank' href='https://fontawesome.com/v4/icons/'>font-awesome icon</a>. Example: 'fa-wrench'.",
+  "pageIcon": "Icône",
+  "pageIcon-help": "En option, définir une icône <a target='_blank' href='https://fontawesome.com/v4/icons/'>font-awesome</a>. Exemple: 'fa-wrench'.",
   "pageSection": "Section",
   "pageApiLink": "API link",
   "uiRestorePrevious": "Restaurer la dernière sauvegarde",
@@ -418,5 +419,8 @@
   "associationType": "Type d'association",
   "initiativeType": "Type d'initiative",
   "associatedTo": "Ressources associées",
-  "filterHelp": "Please click on one of the buttons below to activate the filter"
+  "overviewDescription": "Overview description",
+  "overviewUrl": "Overview URL",
+  "restApiUrl": "REST API URL",
+  "filterHelp": "Veuillez cliquer sur l'un des boutons ci-dessous pour activer le filtre"
 }

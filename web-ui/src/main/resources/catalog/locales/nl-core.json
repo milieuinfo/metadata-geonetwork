@@ -580,5 +580,9 @@
     "reviewerNotAllowedPublish": "Reviewer not allowed to publish the metadata",
     "reviewerNotAllowedUnpublish": "Reviewer not allowed to un-publish the metadata",
     "reviewerNotAllowedPublishUnpublish": "Reviewer not allowed to publish / un-publish the metadata",
-    "missingTitle": "Ontbrekende titel"
+    "missingTitle": "Ontbrekende titel",
+    "mapLegend": "Legende",
+    "quality": "Kwaliteit",
+    "download": "Download bestand",
+    "links": "Links"
 }
