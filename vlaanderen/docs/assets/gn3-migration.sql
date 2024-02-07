@@ -259,15 +259,17 @@ $$
                              (1, 1),
                              (2, 2),
                              (3, 3),
-                             (4, 1),
-                             (5, 1),
+                             (4, 4),
+                             (5, 5),
                              (6, 1),
-                             (7, 1),
+                             (7, 4),
                              (8, 8),
-                             (9, 1),
-                             (10, 3),
-                             (13, 1),
-                             (14, 1)) statusmapping (oldid, newid) on statusmapping.oldid = ls.maxstatusid
+                             (9, 5),
+                             (10, 2),
+                             (11, 2),
+                             (12, 2),
+                             (13, 2),
+                             (14, 2)) statusmapping (oldid, newid) on statusmapping.oldid = ls.maxstatusid
            left join migrationgn3mdc.statusvalues sv on ls.maxstatusid = sv.id
            left join public.statusvalues sv2 on statusmapping.newid = sv2.id;
 
@@ -298,7 +300,7 @@ $$
            false               mdc
     from laststatus ls
            inner join migration.metadata m on ls.metadataid = m.mdvid
-           left join (values (0, 1), (1, 1), (2, 2), (3, 3), (4, 1), (5, 1), (6, 1)) statusmapping (oldid, newid)
+           left join (values (0, 1), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 1)) statusmapping (oldid, newid)
                      on statusmapping.oldid = ls.maxstatusid
            left join migrationgn3mdv.statusvalues sv on ls.maxstatusid = sv.id
            left join public.statusvalues sv2 on statusmapping.newid = sv2.id;
@@ -604,10 +606,10 @@ $$
                               'g')
     where isharvested = 'n';
     raise notice ' > Remaining matches: %',(select count(*)
-                                         from metadata
-                                         where isharvested = 'n'
-                                           and regexp_like(data,
-                                                           '.*<gco:CharacterString>https://([^/]+?)/srv/dut/resources.get\?uuid=([^&]+?)&amp;fname[^<]+?</gco:CharacterString>.*'));
+                                            from metadata
+                                            where isharvested = 'n'
+                                              and regexp_like(data,
+                                                              '.*<gco:CharacterString>https://([^/]+?)/srv/dut/resources.get\?uuid=([^&]+?)&amp;fname[^<]+?</gco:CharacterString>.*'));
 
     -- do MDC initially, perhaps there's some native ones as well?
     -- > old https://metadata.vlaanderen.be/metadatacenter/srv/eng/thesaurus.download?ref=external.theme.gemet
@@ -620,10 +622,10 @@ $$
                               'g')
     where isharvested = 'n';
     raise notice ' > Remaining matches: %',(select count(*)
-                                         from metadata
-                                         where isharvested = 'n'
-                                           and regexp_like(data,
-                                                           '.*xlink:href="https://metadata.vlaanderen.be/metadatacenter/srv/[a-z]{3}/thesaurus.download\?ref=([^"]+?)".*'));
+                                            from metadata
+                                            where isharvested = 'n'
+                                              and regexp_like(data,
+                                                              '.*xlink:href="https://metadata.vlaanderen.be/metadatacenter/srv/[a-z]{3}/thesaurus.download\?ref=([^"]+?)".*'));
 
 
     -- catalog.search wrong urls
@@ -649,7 +651,7 @@ $$
     set data = regexp_replace(
       data,
       'https://metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?request=GetRecordById&amp;service=CSW&amp;constraintLanguage=CQL_TEXT&amp;version=2.0.2&amp;resultType=results&amp;ElementSetName=full&amp;typenames=csw:Record&amp;id=[^&]+&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd)',
-      'https://'||_hostname||'\1',
+      'https://' || _hostname || '\1',
       'g')
     where isharvested = 'n';
     raise notice ' > Remaining matches: %',(select count(*)
@@ -664,7 +666,7 @@ $$
     update metadata
     set data = regexp_replace(data,
                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?">)',
-                              '\1'||_hostname||'\2http://www.isotc211.org/2005/gfc\3',
+                              '\1' || _hostname || '\2http://www.isotc211.org/2005/gfc\3',
                               'g')
     where isharvested = 'n';
     raise notice ' > Remaining matches: %',(select count(*)
@@ -676,7 +678,7 @@ $$
     update metadata
     set data = regexp_replace(data,
                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?"\s*/>)',
-                              '\1'||_hostname||'\2http://www.isotc211.org/2005/gfc\3',
+                              '\1' || _hostname || '\2http://www.isotc211.org/2005/gfc\3',
                               'g')
     where isharvested = 'n';
     -- orig 27 leftovers: {50134be3-f0cd-47c5-8f6e-4a0936287947,889a8851-a366-4487-b61c-4778356e4cec,a8ea3875-e233-4d3c-8c15-f39c960fb938,db0dca59-1838-4a5a-b9bd-9e2b943e6cf7,74b2534d-a8e6-4e4b-99d7-987b4829ff8d,fa7ee6f6-940a-4995-801a-7f40a445172e,8ad91579-8807-47ef-8c1e-e13706db4015,748e1c89-7f0d-4d2f-ab03-7989ad98e4bd,5f6ec1f9-97e9-4a48-91b7-2146b428ce86,a61ddb05-7a72-4115-b9ce-8276b4674d6d,dd399003-7fde-4c95-9d0c-237f5ff198ad,8bd65b06-8f35-4506-9e73-1ba480878e40,0c3aa132-8b95-4ed0-9457-85f1a5b9663b,e3fdf3a5-aae7-4db6-b212-690b377f31d7,b850e91e-c024-49a6-85e9-fcd006072e38,6d09cff0-fb56-4e66-ad6d-15b7a019da32,a1d60920-ed59-4546-808a-e13fd0f754d7,4a5369f9-0d53-4f4e-8e53-eb30cbceec35,1bff5f22-a81b-407f-9df7-cb0dbf81e1c3,6631ea6e-7958-4f0e-a83f-593010313b2d,96d40e2d-ee0e-4ddb-8619-abe1c3f5693d,c8488765-f84a-4ad3-99bd-e16cbd105516,bb3ef134-407a-4aa0-9390-4948cc53957b,f7342071-e411-48a6-b338-fba8f97dbb3f,ed53f693-fc9c-432d-ad8f-f84625f06bb0,eccd774f-83b0-488c-9ba5-97efa724e13e,e1461107-9b15-4775-bdf5-7c92baa99ed0}
@@ -711,24 +713,30 @@ $$
     where name = 'ownerGroup';
 
     update harvestersettings set encrypted = 'y' where name = 'password';
-    
+
     -- update validate only for ogcwxs harvesters
-    
+
     update harvestersettings h
     set value = 'COMPUTE_VALIDATION_AFTER_HARVEST'
     from harvestersettings h1
-    join harvestersettings h2 on h1.id = h2.parentid
-    join harvestersettings h3 on h2.id = h3.parentid
-    where h1.name = 'node' and h1.value = 'ogcwxs' and h3.name = 'validate' and h.id = h3.id
- 
+           join harvestersettings h2 on h1.id = h2.parentid
+           join harvestersettings h3 on h2.id = h3.parentid
+    where h1.name = 'node'
+      and h1.value = 'ogcwxs'
+      and h3.name = 'validate'
+      and h.id = h3.id
+
     -- update importxslt only for ogcwxs harvesters
 
     update harvestersettings h
     set value = 'none'
     from harvestersettings h1
-    join harvestersettings h2 on h1.id = h2.parentid
-    join harvestersettings h3 on h2.id = h3.parentid
-    where h1.name = 'node' and h1.value = 'ogcwxs' and h3.name = 'importxslt' and h.id = h3.id
+           join harvestersettings h2 on h1.id = h2.parentid
+           join harvestersettings h3 on h2.id = h3.parentid
+    where h1.name = 'node'
+      and h1.value = 'ogcwxs'
+      and h3.name = 'importxslt'
+      and h.id = h3.id
 
     -- update logo only for ogcwxs harvesters
     -- TODO: replace newval with correct value
@@ -736,9 +744,12 @@ $$
     update harvestersettings h
     set value = 'newval'
     from harvestersettings h1
-    join harvestersettings h2 on h1.id = h2.parentid
-    join harvestersettings h3 on h2.id = h3.parentid
-    where h1.name = 'node' and h1.value = 'ogcwxs' and h3.name = 'icon' and h.id = h3.id
+           join harvestersettings h2 on h1.id = h2.parentid
+           join harvestersettings h3 on h2.id = h3.parentid
+    where h1.name = 'node'
+      and h1.value = 'ogcwxs'
+      and h3.name = 'icon'
+      and h.id = h3.id
 
 
     -- beta modified run time harvesters (only ogcwxs)
@@ -750,7 +761,7 @@ $$
                      '0 ',
                      mod(row_number() over (order by (select 1)), 60), -- minutes
                      ' ',
-                     (row_number() over (order by (select 1))) / 60 + 17, -- hours (starts with 17 UTC time) 
+                     (row_number() over (order by (select 1))) / 60 + 17, -- hours (starts with 17 UTC time)
                      ' ? * *'
                    )                                       as newValue,
                    row_number() over (order by (select 1)) as rownNr
