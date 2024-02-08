@@ -140,7 +140,8 @@ public class ACMIDMApiLoginAuthenticationFilter extends AbstractAuthenticationPr
                 return new IntrospectedToken(objectMapper.readTree(introspectResponse.getBody()));
             }
         } catch (Exception e) {
-            Log.error(Geonet.SECURITY, "Could not introspect bearer token url "+introspectUrl+": "+e.getMessage());
+            Log.error(Geonet.SECURITY, "Could not introspect bearer token url " + introspectUrl + ": " + e);
+            e.printStackTrace();
             throw new InvalidBearerTokenException("Could not introspect the bearer token: " + e);
         }
     }
