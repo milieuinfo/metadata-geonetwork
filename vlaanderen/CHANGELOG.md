@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fix FC to DS linking process - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
 - Create `nonOgcwxsSourceCatalog` index field to contain the source catalog information, excluding harvested metadata originating from a `OGCWXS` harvester. Instead assigning them to the local catalog - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
 - Implement possibility to export draft copy via CSW GetRecords operation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32596)
+- DCAT indexing fix:  - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32596)
+  - Add missing `th_<thesaurus key>_tree`
+  - Fix wrong usage of 2 characters lang code instead of 3 char
+  - Fix empty keywords and theme 
+  - Fix invalid JSON generation
 
 ### core-geonetwork
 - Additional fixes for the indexingErrorMsg translation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32218) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7531)
