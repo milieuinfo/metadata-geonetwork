@@ -24,7 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Move related dataset series information to under the related object catalogs section in the metadata view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
 - Fix full view tab management - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
 - Fix FC to DS linking process - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
-- Create `nonOgcwxsSourceCatalog` index field to contain the source catalog information, excluding harvested metadata originating from a `OGCWXS` harvester. Instead assigning them to the local catalog - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514) 
+- Create `nonOgcwxsSourceCatalog` index field to contain the source catalog information, excluding harvested metadata originating from a `OGCWXS` harvester. Instead assigning them to the local catalog - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Implement possibility to export draft copy via CSW GetRecords operation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32596)
 
 ### core-geonetwork
 - Additional fixes for the indexingErrorMsg translation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32218) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7531)
