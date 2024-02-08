@@ -57,7 +57,7 @@
                                'resourceTitleObject', $resourceTitleObject)"/>
       </xsl:for-each>
 
-     
+
       <resourceAbstract>
         <xsl:value-of select="/gfc:FC_FeatureType/gfc:definition/gco:CharacterString"/>
       </resourceAbstract>
@@ -101,10 +101,13 @@
                            |/gfc:FC_FeatureCatalogue/gfc:versionDate/(gco:Date|gco:DateTime)">
         <xsl:variable name="dateStamp"
                       select="date-util:convertToISOZuluDateTime(string(.))"/>
+        <xsl:if test="normalize-space($dateStamp) != ''">
         <resourceDate type="object">
           {"type": "revision", "date": "<xsl:value-of select="$dateStamp"/>"}
         </resourceDate>
         <dateStamp><xsl:value-of select="$dateStamp"/></dateStamp>
+        <referenceDate><xsl:value-of select="$dateStamp"/></referenceDate>
+        </xsl:if>
       </xsl:for-each>
 
       <xsl:variable name="jsonFeatureTypes">[

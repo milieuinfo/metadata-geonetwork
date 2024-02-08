@@ -28,7 +28,7 @@
       <div class="panel panel-default dynamic-list">
         <div class="panel-heading">
           <span data-translate="">createA</span>
-          <strong>{{(activeType || '...') | translate}}</strong>
+          <strong>{{(activeType || '...') | translate | lowercase}}</strong>
         </div>
         <div class="panel-body">
           <div class="list-group gn-record-type">
@@ -40,7 +40,11 @@
               data-ng-class="{'active': type.key == activeType}"
             >
               <i class="fa {{getTypeIcon(type.key)}} fa-3x"></i>
-              <p>{{type.label}}</p>
+              <!-- specific to VL: quick hack to make sure objectencatalogus is properly positioned in the left menu -->
+              <p>
+                {{(type.label | translate | lowercase).replace('objectencatalogus',
+                'objecten-catalogus')}}
+              </p>
             </a>
           </div>
         </div>

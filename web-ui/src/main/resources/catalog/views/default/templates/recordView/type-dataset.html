@@ -150,6 +150,23 @@
 </div>
 
 <div
+  class="row gn-section gn-section-{{mdView.current.record.resourceType[0]}}"
+  data-ng-if="mdView.current.record.related.parent.length > 0"
+>
+  <div class="col-md-12 gn-record">
+    <div
+      data-ng-if="mdView.current.record.related.uuids"
+      data-gn-related="mdView.current.record"
+      data-user="user"
+      data-alt-title="{{'partOfSeries' | translate}}"
+      data-title="{{'partOfSeries' | translate}}"
+      data-layout="card"
+      data-types="parent"
+    ></div>
+  </div>
+</div>
+
+<div
   class="row"
   data-ng-if="mdView.current.record.lineage
                  || mdView.current.record.sourceDescription

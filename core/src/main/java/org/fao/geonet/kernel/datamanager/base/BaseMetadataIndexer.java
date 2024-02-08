@@ -87,6 +87,8 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
     private SourceRepository sourceRepository;
     @Autowired
     protected MetadataStatusRepository statusRepository;
+    @Autowired(required = false)
+    private HarvestInfoProvider harvestInfoProvider;
     @Autowired
     MonitorManager monitorManager;
     private IMetadataUtils metadataUtils;
@@ -384,6 +386,17 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
             final String displayOrder = fullMd.getDataInfo().getDisplayOrder() == null ? null
                 : String.valueOf(fullMd.getDataInfo().getDisplayOrder());
 
+            String nonOgcwxsSource = source;
+            if (fullMd.getHarvestInfo().isHarvested()) {
+                Element info = harvestInfoProvider.getHarvestInfo(source, metadataId, uuid);
+                if (info != null) {
+                    String type = info.getChildText("type");
+                    if (type != null && type.equals("ogcwxs")) {
+                        nonOgcwxsSource = settingManager.getSiteId();
+                    }
+                }
+            }
+
             if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
                 Log.debug(Geonet.DATA_MANAGER, "record schema (" + schema + ")"); // DEBUG
                 Log.debug(Geonet.DATA_MANAGER, "record createDate (" + createDate + ")"); // DEBUG
@@ -394,6 +407,7 @@ public class BaseMetadataIndexer implements IMetadataIndexer, ApplicationEventPu
             fields.put(Geonet.IndexFieldNames.DATABASE_CREATE_DATE, createDate);
             fields.put(Geonet.IndexFieldNames.DATABASE_CHANGE_DATE, changeDate);
             fields.put(Geonet.IndexFieldNames.SOURCE, source);
+            fields.put(Geonet.IndexFieldNames.NON_OGCWXS_SOURCE_CATALOG, nonOgcwxsSource);
             fields.put(Geonet.IndexFieldNames.IS_TEMPLATE, metadataType.codeString);
             fields.put(Geonet.IndexFieldNames.UUID, uuid);
             fields.put(Geonet.IndexFieldNames.ID, metadataId);

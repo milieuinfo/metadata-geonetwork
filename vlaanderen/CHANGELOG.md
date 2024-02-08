@@ -15,9 +15,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Correctly link feature catalogue using gfx outputSchema - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32462)
 - Fix RDF format detection not working in some cases - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32445)
 - Add support for turtle format to RDF harvester - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32445)
+- Remove empty intervals for `creationYear` facet - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Made full view the default view for DCAT records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Fix DCAT full view missing labels - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Add XSL transformation to add Vlaamse Open data keywords during DCAT harvesting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Add reference date index field for all metadata standard and add sort option in the UI - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Fix FC template indexing error - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Move related dataset series information to under the related object catalogs section in the metadata view - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Fix full view tab management - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Fix FC to DS linking process - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514)
+- Create `nonOgcwxsSourceCatalog` index field to contain the source catalog information, excluding harvested metadata originating from a `OGCWXS` harvester. Instead assigning them to the local catalog - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514) 
 
 ### core-geonetwork
 - Additional fixes for the indexingErrorMsg translation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32218) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7531)
+- Using consistent icons in metadata creation page - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32514) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7721)
 
 
 ## [8.1.12] - 2024-01-22

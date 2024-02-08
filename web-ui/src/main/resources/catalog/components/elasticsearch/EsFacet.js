@@ -523,7 +523,9 @@
                   upperBound = onlyOneBucket
                     ? lowerBound + Number(reqAgg.histogram.interval)
                     : entries[p + 1]
-                    ? entries[p + 1][1].key
+                    ? // entries[p + 1][1].key :
+                      // VL custom
+                      lowerBound + Number(reqAgg.histogram.interval)
                     : "*";
 
                 facetModel.items.push({

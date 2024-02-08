@@ -307,12 +307,12 @@
               <xsl:otherwise>
                 <indexingErrorMsg type="object">
                   {
-                    "string": "indexingErrorMsg-invalidDateFormat",
-                    "type": "warning",
-                    "values": {
-                      "dateType": "<xsl:value-of select="util:escapeForJson($dateType)"/>",
-                      "date": "<xsl:value-of select="util:escapeForJson($date)"/>"
-                    }
+                  "string": "indexingErrorMsg-invalidDateFormat",
+                  "type": "warning",
+                  "values": {
+                  "dateType": "<xsl:value-of select="util:escapeForJson($dateType)"/>",
+                  "date": "<xsl:value-of select="util:escapeForJson($date)"/>"
+                  }
                   }
                 </indexingErrorMsg>
               </xsl:otherwise>
@@ -562,12 +562,12 @@
                       <errors>
                         <indexingErrorMsg type="object">
                           {
-                            "string": "indexingErrorMsg-keywordNotFoundInThesaurus",
-                            "type": "warning",
-                            "values": {
-                              "keyword": "<xsl:value-of select="util:escapeForJson((*/text())[1])"/>",
-                              "thesaurus": "<xsl:value-of select="util:escapeForJson($thesaurusId)"/>"
-                            }
+                          "string": "indexingErrorMsg-keywordNotFoundInThesaurus",
+                          "type": "warning",
+                          "values": {
+                          "keyword": "<xsl:value-of select="util:escapeForJson((*/text())[1])"/>",
+                          "thesaurus": "<xsl:value-of select="util:escapeForJson($thesaurusId)"/>"
+                          }
                           }
                         </indexingErrorMsg>
                       </errors>
@@ -816,9 +816,9 @@
               <xsl:otherwise>
                 <indexingErrorMsg type="object">
                   {
-                    "string": "indexingErrorMsg-invalidBounds",
-                    "type": "warning",
-                    "values": { }
+                  "string": "indexingErrorMsg-invalidBounds",
+                  "type": "warning",
+                  "values": { }
                   }
                 </indexingErrorMsg>
               </xsl:otherwise>
@@ -829,12 +829,12 @@
                           and $start &gt; $end">
               <indexingErrorMsg type="object">
                 {
-                  "string": "indexingErrorMsg-temporalRangeLowerGreaterThanUpper",
-                  "type": "warning",
-                  "values": {
-                    "lowerBound": "<xsl:value-of select="util:escapeForJson($start)"/>",
-                    "upperBound": "<xsl:value-of select="util:escapeForJson($end)"/>"
-                  }
+                "string": "indexingErrorMsg-temporalRangeLowerGreaterThanUpper",
+                "type": "warning",
+                "values": {
+                "lowerBound": "<xsl:value-of select="util:escapeForJson($start)"/>",
+                "upperBound": "<xsl:value-of select="util:escapeForJson($end)"/>"
+                }
                 }
               </indexingErrorMsg>
             </xsl:if>
@@ -1014,35 +1014,35 @@
             "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
                                 'description', gmd:description, $allLanguages, true())"/>
             ,"sourceSteps": [
-              <xsl:for-each select="gmd:sourceStep/gmd:LI_ProcessStep">
-                {
-                  "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
+            <xsl:for-each select="gmd:sourceStep/gmd:LI_ProcessStep">
+              {
+              "descriptionObject": <xsl:value-of select="gn-fn-index:add-multilingual-field(
                                                 'description', gmd:description, $allLanguages, true())"/>
-                  <xsl:variable name="dateTime"
-                              select="gmd:dateTime/gco:DateTime"/>
-                  <xsl:if test="$dateTime/text()">
-                    ,"date": "<xsl:value-of select="util:escapeForJson($dateTime/text())"/>"
-                  </xsl:if>
-                  <xsl:variable name="processors"
-                                select="gmd:processor/*[gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"/>
-                  <xsl:if test="count($processors) > 0">
-                    ,"processor": [
-                    <xsl:for-each select="$processors">
-                      {
-                      "organisationObject": <xsl:value-of
-                      select="gn-fn-index:add-multilingual-field(
+              <xsl:variable name="dateTime"
+                            select="gmd:dateTime/gco:DateTime"/>
+              <xsl:if test="$dateTime/text()">
+                ,"date": "<xsl:value-of select="util:escapeForJson($dateTime/text())"/>"
+              </xsl:if>
+              <xsl:variable name="processors"
+                            select="gmd:processor/*[gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"/>
+              <xsl:if test="count($processors) > 0">
+                ,"processor": [
+                <xsl:for-each select="$processors">
+                  {
+                  "organisationObject": <xsl:value-of
+                  select="gn-fn-index:add-multilingual-field(
                                                 'description', gmd:organisationName, $allLanguages, true())"/>
-                      <xsl:if test="gmd:individualName/gco:CharacterString/text()">
-                        ,"individual":"<xsl:value-of select="util:escapeForJson(gmd:individualName/gco:CharacterString/text())"/>"
-                      </xsl:if>
-                      }
-                      <xsl:if test="position() != last()">,</xsl:if>
-                    </xsl:for-each>
-                    ]
+                  <xsl:if test="gmd:individualName/gco:CharacterString/text()">
+                    ,"individual":"<xsl:value-of select="util:escapeForJson(gmd:individualName/gco:CharacterString/text())"/>"
                   </xsl:if>
-                }
-                <xsl:if test="position() != last()">,</xsl:if>
-              </xsl:for-each>
+                  }
+                  <xsl:if test="position() != last()">,</xsl:if>
+                </xsl:for-each>
+                ]
+              </xsl:if>
+              }
+              <xsl:if test="position() != last()">,</xsl:if>
+            </xsl:for-each>
             ]
             <xsl:variable name="sourceContact">
               <xsl:for-each-group select="gmd:sourceStep/gmd:LI_ProcessStep/gmd:processor[*/gmd:organisationName/(gco:CharacterString|gmx:Anchor) != '']"
@@ -1059,7 +1059,7 @@
               <xsl:if test="position() != last()">,</xsl:if>
             </xsl:for-each>
             ]
-          }</sources>
+            }</sources>
         </xsl:for-each>
 
         <xsl:for-each select="gmd:report/*[gmd:nameOfMeasure/gco:CharacterString != ''
@@ -1114,8 +1114,8 @@
               ,"source": [
               <xsl:for-each select="gmd:source/*[gmd:description/gco:CharacterString != '']">
                 {
-                  "descriptionObject": <xsl:value-of
-                                          select="gn-fn-index:add-multilingual-field(
+                "descriptionObject": <xsl:value-of
+                select="gn-fn-index:add-multilingual-field(
                                             'description', gmd:description, $allLanguages, true())"/>
                 }
                 <xsl:if test="position() != last()">,</xsl:if>
@@ -1129,12 +1129,12 @@
               ,"processor": [
               <xsl:for-each select="$processors">
                 {
-                  "organisationObject": <xsl:value-of
-                                          select="gn-fn-index:add-multilingual-field(
+                "organisationObject": <xsl:value-of
+                select="gn-fn-index:add-multilingual-field(
                                             'description', gmd:organisationName, $allLanguages, true())"/>
-                  <xsl:if test="gmd:individualName/gco:CharacterString/text()">
-                    ,"individual":"<xsl:value-of select="util:escapeForJson(gmd:individualName/gco:CharacterString/text())"/>"
-                  </xsl:if>
+                <xsl:if test="gmd:individualName/gco:CharacterString/text()">
+                  ,"individual":"<xsl:value-of select="util:escapeForJson(gmd:individualName/gco:CharacterString/text())"/>"
+                </xsl:if>
                 }
                 <xsl:if test="position() != last()">,</xsl:if>
               </xsl:for-each>
@@ -1583,6 +1583,25 @@
 
     </xsl:for-each>
 
+
+    <xsl:variable name="refDate">
+      <xsl:for-each select="gmd:identificationInfo/*/gmd:citation/*/gmd:date/gmd:CI_Date[gmd:dateType/gmd:CI_DateTypeCode/@codeListValue=('publication','revision','creation')]/gmd:date[(gco:Date|gco:DateTime)!='' and not(contains(gco:Date|gco:DateTime,'1900') or contains(gco:Date|gco:DateTime,'1753'))]">
+        <xsl:sort select="date-util:convertToISOZuluDateTime(string(gco:Date|gco:DateTime))" order="descending"/>
+        <xsl:if test="position()=1">
+          <xsl:value-of select="date-util:convertToISOZuluDateTime(string(gco:Date|gco:DateTime))"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <referenceDate>
+      <xsl:choose>
+        <xsl:when test="string-length(normalize-space($refDate)) > 0">
+          <xsl:value-of select="$refDate"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'0000-01-01T00:00:00.000Z'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </referenceDate>
   </xsl:template>
 
   <xsl:function name="geonet:getRDFResourceURI">

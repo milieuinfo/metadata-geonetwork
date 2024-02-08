@@ -59,6 +59,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -423,8 +425,19 @@ class Harvester implements IHarvester<HarvestResult> {
             httpResponse = requestFactory.execute(httpMethod);
             int status = httpResponse.getRawStatusCode();
             Log.debug(LOGGER_NAME, "Request status code: " + status);
+
             BOMInputStream stream = new BOMInputStream(httpResponse.getBody());
-            return CharStreams.toString(new InputStreamReader(stream));
+            var charset = StandardCharsets.UTF_8;
+            if (stream.hasBOM()) {
+                charset = Charset.forName(stream.getBOMCharsetName());
+            } else {
+                var contentType = httpResponse.getHeaders().getContentType();
+                if (contentType != null && contentType.getCharset() != null) {
+                    charset = contentType.getCharset();
+                }
+            }
+
+            return CharStreams.toString(new InputStreamReader(stream, charset));
         } finally {
             if (httpMethod != null) {
                 httpMethod.releaseConnection();

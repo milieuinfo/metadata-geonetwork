@@ -167,7 +167,8 @@
     ["isTemplate", "recordType"],
     ["groupOwner", "group"],
     ["groupPublishedId", "group"],
-    ["sourceCatalogue", "source"]
+    ["sourceCatalogue", "source"],
+    ["nonOgcwxsSourceCatalog.keyword", "source"]
   ]);
 
   module.service("gnFacetSorter", [

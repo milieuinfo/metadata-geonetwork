@@ -62,11 +62,13 @@
   "serviceType-download": "Herunterladbar",
   "serviceType-view": "Sichtbar",
   "sortBy-changeDateDesc": "letzte Aktualisierung",
+  "sortBy-referenceDateDesc": "Referenzdatum",
   "sources": "Quellen",
   "system/vlaanderen": "Flämischer GeoNetwork fork",
   "system/vlaanderen/version": "Ausführung",
   "useConstraintCodelist": "(Juridische) Nutzungsbeschränkung",
   "versionDetails": "version <span class='gn-version'>{{vlversion}}</span>, using GeoNetwork <span class='gn-version'>{{platform}} {{version}}.{{subversion}}</span>",
+  "partOfSeries": "Teil der Reihe Datensätze",
 
   "---below-to-be-transifexed---": "all labels are pending to be either incorporated into the core or to be deleted at some point",
   "approvedRecord": "Genehmigt record",

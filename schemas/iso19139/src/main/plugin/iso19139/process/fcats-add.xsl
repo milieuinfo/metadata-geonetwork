@@ -70,8 +70,7 @@ attached it to the metadata for data.
                     select="gmd:contentInfo/*/gmd:featureCatalogueCitation[@uuidref = $uuidref]"/>
       <xsl:choose>
         <!-- Check if featureCatalogueCitation for uuidref -->
-        <xsl:when
-          test="$citationWithRef">
+        <xsl:when test="$citationWithRef">
           <gmd:contentInfo>
             <gmd:MD_FeatureCatalogueDescription>
               <xsl:copy-of select="$citationWithRef/../gmd:complianceCode|
@@ -85,7 +84,10 @@ attached it to the metadata for data.
           </gmd:contentInfo>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:copy-of select="gmd:contentInfo"/>
+          <xsl:copy-of select="gmd:contentInfo[
+                                 count(*/gmd:featureCatalogueCitation) > 0 and
+                                 normalize-space(*/gmd:featureCatalogueCitation/@uuidref) != ''
+                               ]"/>
           <gmd:contentInfo>
             <gmd:MD_FeatureCatalogueDescription>
               <gmd:includedWithDataset>

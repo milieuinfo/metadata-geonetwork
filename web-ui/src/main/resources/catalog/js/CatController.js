@@ -409,7 +409,7 @@
               // #4 CATALOGUS
               sourceCatalogue: {
                 terms: {
-                  field: "sourceCatalogue",
+                  field: "nonOgcwxsSourceCatalog.keyword",
                   size: 100,
                   include: ".*"
                 },
@@ -738,7 +738,7 @@
                   field: "creationYearForResource",
                   interval: 5,
                   keyed: true,
-                  min_doc_count: 0
+                  min_doc_count: 1
                 },
                 meta: {
                   collapsed: true
@@ -848,6 +848,10 @@
                 sortOrder: ""
               },
               {
+                sortBy: "referenceDate",
+                sortOrder: "desc"
+              },
+              {
                 sortBy: "changeDate", // VL: use changeDate instead of dateStamp, to enable timestamp-granularity
                 sortOrder: "desc"
               },
@@ -906,7 +910,6 @@
             formatter: {
               list: [
                 {
-                  label: "defaultView",
                   // Conditional views can be used to configure custom
                   // formatter to use depending on metadata properties.
                   // 'views': [{
@@ -923,11 +926,23 @@
                   //   'if': {'documentStandard': 'iso19115-3.2018'},
                   //   'url' : '/dada'
                   // }],
-                  url: ""
+                  label: "defaultView",
+                  views: [
+                    {
+                      if: { documentStandard: "dcat2" },
+                      url: "/formatters/xsl-view?root=div&view=advanced"
+                    }
+                  ],
+                  url: "" // Else
                 },
                 {
                   label: "full",
-                  url: "/formatters/xsl-view?root=div&view=advanced"
+                  views: [
+                    {
+                      if: { documentStandard: ["iso19139", "iso19110"] },
+                      url: "/formatters/xsl-view?root=div&view=advanced"
+                    }
+                  ]
                 }
               ]
             },
@@ -1335,7 +1350,7 @@
               },
               sourceCatalogue: {
                 terms: {
-                  field: "sourceCatalogue",
+                  field: "nonOgcwxsSourceCatalog.keyword",
                   size: 100,
                   include: ".*"
                 },
@@ -1452,6 +1467,10 @@
               {
                 sortBy: "relevance",
                 sortOrder: ""
+              },
+              {
+                sortBy: "referenceDate",
+                sortOrder: "desc"
               },
               {
                 sortBy: "dateStamp",

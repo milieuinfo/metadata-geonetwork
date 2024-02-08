@@ -356,8 +356,9 @@
                     select="gn-fn-render:get-schema-strings($schemaStrings, @id)"/>
 
       <div id="gn-tab-{@id}">
-        <xsl:if test="count(following-sibling::tab) > 0">
-          <xsl:attribute name="class" select="'tab-pane'"/>
+        <xsl:attribute name="class" select="'tab-pane'"/>
+        <xsl:if test="count(preceding-sibling::tab) = 0">
+          <xsl:attribute name="class" select="'tab-pane active'"/>
         </xsl:if>
         <h1 class="view-header">
           <!-- If in tab mode, do not repeat the tab name as header
