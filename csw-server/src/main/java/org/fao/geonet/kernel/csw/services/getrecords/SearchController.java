@@ -448,7 +448,8 @@ public class SearchController {
         JsonNode esJsonQuery;
 
         try {
-            String filterQueryString = esFilterBuilder.build(context, "metadata", false, node);
+            boolean hasDraftFilter = !Xml.selectNodes(filterExpr, "*//ogc:PropertyName[string() = 'draft']", List.of(Csw.NAMESPACE_OGC)).isEmpty();
+            String filterQueryString = esFilterBuilder.build(context, "metadata", hasDraftFilter, node);
             String jsonQuery = String.format(elasticSearchQuery, filterQueryString);
 
             ObjectMapper objectMapper = new ObjectMapper();
