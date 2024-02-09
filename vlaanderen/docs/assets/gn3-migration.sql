@@ -13,7 +13,8 @@ $$;
 -- === DBEAVER ===
 -- 1. import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
 -- 2. import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
--- 3. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
+-- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar'
+-- 4. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
 -- See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
 
@@ -699,13 +700,41 @@ $$
     insert into harvestersettings (id, encrypted, name, value, parentid)
       (select id, 'n', name, value, parentid from migrationgn3mdc.harvestersettings);
 
+    -- below is the procedure that we used to do the export of the harvestersettings, for the non-ogcwxs configs that were manually set up by Stijn in beta gn4
+    -- create table migration.harvestersettingscopy as (select * from migrationgn3mdv.harvestersettings h);
+    -- delete from migration.harvestersettingscopy h where parentid = 1 and value = 'ogcwxs' and name = 'node';
+    -- delete from migration.harvestersettingscopy where id = 191753; -- 'Joachim Test'
+    -- keep doing this till nothing remains
+    -- delete from migration.harvestersettingscopy where parentid is not null and parentid not in (select id from migration.harvestersettingscopy);
+    -- now export the copy table to a csv for use in the migration
+    -- select * from migration.harvestersettingscopy h;
+
+    -- now take mdv harvestersettings as well, but bump the ids
+    insert into harvestersettings (id, encrypted, name, value, parentid)
+      (select id + (select max(id) from migration.harvestersettingsmdv),
+              'n',
+              name,
+              value,
+              parentid + (select max(id) from migration.harvestersettingsmdv)
+       from migration.harvestersettingsmdv h);
+    -- reassign the top level node for the other settings
+    update harvestersettings set parentid = 1 where parentid = 1 + (select max(id) from migration.harvestersettingsmdv);
+    -- remove the mdv top level node
+    delete
+    from harvestersettings
+    where id = 1 + (select max(id) from migration.harvestersettingsmdv) and name = 'harvesting';
+    -- update the dcat xslt
+    update harvestersettings
+    set value = 'schema:dcat2:convert/fromSPARQL-DCAT-with-open-keywords'
+    where value = 'schema:dcat2:convert/fromSPARQL-DCAT';
+
     -- now apply modifications
     update harvestersettings
-    set value = (select id from migration.users where username = 'geraldine.nolf@vlaanderen.be')
+    set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerUser';
 
     update harvestersettings
-    set value = (select id from migration.users where username = 'geraldine.nolf@vlaanderen.be')
+    set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerId';
 
     update harvestersettings
@@ -715,7 +744,6 @@ $$
     update harvestersettings set encrypted = 'y' where name = 'password';
 
     -- update validate only for ogcwxs harvesters
-
     update harvestersettings h
     set value = 'COMPUTE_VALIDATION_AFTER_HARVEST'
     from harvestersettings h1
@@ -724,10 +752,9 @@ $$
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'validate'
-      and h.id = h3.id
+      and h.id = h3.id;
 
     -- update importxslt only for ogcwxs harvesters
-
     update harvestersettings h
     set value = 'none'
     from harvestersettings h1
@@ -736,20 +763,18 @@ $$
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'importxslt'
-      and h.id = h3.id
+      and h.id = h3.id;
 
     -- update logo only for ogcwxs harvesters
-    -- TODO: replace newval with correct value
-
     update harvestersettings h
-    set value = 'newval'
+    set value = 'MD_VL_Klein.png'
     from harvestersettings h1
            join harvestersettings h2 on h1.id = h2.parentid
            join harvestersettings h3 on h2.id = h3.parentid
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'icon'
-      and h.id = h3.id
+      and h.id = h3.id;
 
 
     -- beta modified run time harvesters (only ogcwxs)
@@ -776,6 +801,9 @@ $$
     set value = newValue
     from cte
     where h.id = cte.id;
+
+    perform setval('harvest_history_id_seq', (SELECT max(id) + 1 FROM harvesthistory));
+    perform setval('harvester_setting_id_seq', (SELECT max(id) + 1 FROM harvestersettings));
   end
 $$;
 

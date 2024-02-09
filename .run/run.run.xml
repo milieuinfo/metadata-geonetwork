@@ -41,7 +41,6 @@
               <option value="-Ddb.name=geonetwork" />
               <option value="-Dgeonetwork.webapp.contextpath=/" />
               <option value="-Dharvester.scheduler.enabled=true" />
-              <option value="-Denv=dev" />
             </list>
           </option>
           <option name="multimoduleDir" />
