@@ -774,16 +774,16 @@
                 priority="9000">
     <xsl:variable name="value" select="gco:Date|gco:DateTime" />
     <xsl:choose>
-      <xsl:when test="normalize-space($value) != ''">
+      <xsl:when test="normalize-space($value) = '' or starts-with(normalize-space($value), 'null')">
         <xsl:copy>
-          <gco:DateTime>
-            <xsl:value-of select="$value" /><xsl:if test="string-length($value) = 10">T00:00:00</xsl:if>
-          </gco:DateTime>
+          <xsl:attribute name="gco:nilReason" select="'missing'"/>
         </xsl:copy>
       </xsl:when>
       <xsl:otherwise>
         <xsl:copy>
-          <xsl:attribute name="gco:nilReason" select="'missing'"/>
+          <gco:DateTime>
+            <xsl:value-of select="$value" /><xsl:if test="string-length($value) = 10">T00:00:00</xsl:if>
+          </gco:DateTime>
         </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
