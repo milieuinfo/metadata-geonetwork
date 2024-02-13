@@ -177,7 +177,7 @@
   <!-- Commit ref: 32ecb677b27ebfdfd709364acfc0e4cee4d57dd0 -->
   <!-- TODO: Check with François dataset-add.xsl "TODO" => issue to fix in the core ? -->
   <xsl:template match="srv:operatesOn|gmd:featureCatalogueCitation" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*[name() != 'xlink:href']"/>
       <xsl:choose>
         <xsl:when test="@uuidref or @xlink:href">
@@ -188,7 +188,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:for-each select="gmd:CI_Citation">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="node()"/>
         </xsl:copy>
       </xsl:for-each>
@@ -196,7 +196,7 @@
   </xsl:template>
 
   <xsl:template match="gmd:pass" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:choose>
         <xsl:when test="not(gco:Boolean) or normalize-space(gco:Boolean) = ''">
           <xsl:attribute name="gco:nilReason" select="'unknown'"/>
@@ -215,7 +215,7 @@
   <xsl:template match="gmd:dateStamp" priority="9000">
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <gco:Date>
             <xsl:value-of select="format-dateTime(/root/env/changeDate,'[Y0001]-[M01]-[D01]')"/>
           </gco:Date>
@@ -316,7 +316,7 @@
 
   <xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']|gmd:metadataStandardVersion[@gco:nilReason='missing' or gco:CharacterString='']" priority="9000">
     <!-- Equivalent of commenting the core template by re-applying the default logic for unmatched elements -->
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
@@ -332,7 +332,7 @@
 
 
   <xsl:template match="gmd:*[@codeListValue]" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of select="concat('http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#', local-name(.))"/>
