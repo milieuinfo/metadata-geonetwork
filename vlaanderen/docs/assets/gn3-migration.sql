@@ -734,9 +734,19 @@ $$
     set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerId';
 
-    update harvestersettings
-    set value = (select id from groups where name = 'DataPublicatie Digitaal Vlaanderen')
-    where name = 'ownerGroup';
+ -- update ownerGroup only for ogcwxs harvesters
+
+    update harvestersettings h
+    set value = (select id from groups where name = 'Digitaal Vlaanderen')
+    from harvestersettings h1
+           join harvestersettings h2 on h1.id = h2.parentid
+           join harvestersettings h3 on h2.id = h3.parentid
+    where h1.name = 'node'
+      and h1.value = 'ogcwxs'
+      and h3.name = 'ownerGroup'
+      and h.id = h3.id
+      
+
 
     update harvestersettings set encrypted = 'y' where name = 'password';
 
