@@ -13,10 +13,21 @@ $$;
 -- === DBEAVER ===
 -- 1. import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
 -- 2. import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
--- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar'
+-- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
 -- 4. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
 -- See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
+
+-- fill up the migration folder (M=~/workdata/metadata/migration.gn3)
+-- > copy the mdc/mdv metadata_data folders to local (mkdir -p $M/datadir/{new,mdc,mdv})
+-- > copy the harvesting images (mkdir -p images/harvesting/{mdc,mdv}) 
+-- > copy the static folder to the migration folder ($M/static)
+-- before proceeding with the files, need to have run the migration SQL
+
+
+-- check whether we are finished before proceeding
+select count(*) from migrationgn3mdc.metadata; -- 1862 (12/02/2024)
+select count(*) from migrationgn3mdv.metadata; -- 10413 (12/02/2024)
 
 do
 $$
@@ -520,30 +531,16 @@ $$
 $$;
 
 
--- MANUAL
--- > copy the mdc/mdv metadata_data folders to local
--- > execute 186360-gn4-thumbnail-migration.kt
--- > remove the folder from the target pod (rm -rf /geonetwork-data/data)
--- > copy the generated `new` folder to the target pod, execute in metadata_data folder
---   > kubectl --cluster pre-md-cluster-aks get pod -n bet | grep geonetwork
---   > kubectl -n bet cp . $gnpod:/geonetwork-data/data
--- > copy the harvester logos from two folders (~/workdata/metadata/migration.gn3/images/harvesting/mdv)
---   > kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/harvesting/
 
-
--- post-processing, env-specific
--- TODO migrate prod mdv to bet/dev as well, before we process mdc
 -- =========
 -- =========
 -- WARNING: SET ENVIRONMENT
 -- =========
 -- =========
-
-
 do
 $$
   declare
-    _env      varchar := 'dev'; -- dev/bet/prd
+    _env      varchar := 'bet'; -- dev/bet/prd
     _hostname varchar := (select case
                                    when _env = 'prd' then 'metadata.vlaanderen.be'
                                    when _env = 'bet' then 'metadata.beta-vlaanderen.be'
@@ -864,7 +861,17 @@ $$;
 
 
 -- MANUAL
--- > import templates in geonetwork
+-- 1. execute 186360-gn4-thumbnail-migration.kt
+-- 2. copy the new folder
+--   - remove the folder from the target pod (rm -rf /geonetwork-data/data)
+--   - copy the generated `new` folder to the target pod, execute in metadata_data folder
+--     - kubectl --cluster pre-md-cluster-aks get pod -n bet | grep geonetwork
+--     - kubectl -n bet cp . $gnpod:/geonetwork-data/data
+-- 3. copy the harvester logos from two folders (~/workdata/metadata/migration.gn3/images/harvesting/mdv)
+--   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/harvesting/
+-- 4. copy the logos folder
+--   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/logos/
+-- 5. import templates in geonetwork
 
 -- TODO
 -- > figure out records that are 'draft' but publicly available, these should be put to 'published / approved'
