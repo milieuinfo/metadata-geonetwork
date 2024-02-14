@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Fix wrong usage of 2 characters lang code instead of 3 char
   - Fix empty keywords and theme 
   - Fix invalid JSON generation
+- ACM/IDM production integration - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32753)
 
 ### core-geonetwork
 - Additional fixes for the indexingErrorMsg translation - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32218) / [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7531)
