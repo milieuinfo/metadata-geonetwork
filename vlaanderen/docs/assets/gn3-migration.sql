@@ -20,14 +20,16 @@ $$;
 
 -- fill up the migration folder (M=~/workdata/metadata/migration.gn3)
 -- > copy the mdc/mdv metadata_data folders to local (mkdir -p $M/datadir/{new,mdc,mdv})
--- > copy the harvesting images (mkdir -p images/harvesting/{mdc,mdv}) 
+-- > copy the harvesting images (mkdir -p images/harvesting/{mdc,mdv})
 -- > copy the static folder to the migration folder ($M/static)
 -- before proceeding with the files, need to have run the migration SQL
 
 
 -- check whether we are finished before proceeding
-select count(*) from migrationgn3mdc.metadata; -- 1862 (12/02/2024)
-select count(*) from migrationgn3mdv.metadata; -- 10413 (12/02/2024)
+select count(*)
+from migrationgn3mdc.metadata; -- 1862 (12/02/2024)
+select count(*)
+from migrationgn3mdv.metadata; -- 10413 (12/02/2024)
 
 do
 $$
@@ -374,6 +376,10 @@ $$
 $$;
 -- 3. now run liquibase to get a fresh GN4 db (execute-on-env.sh)
 
+
+
+
+
 do
 $$
   declare
@@ -451,6 +457,10 @@ $$
   end
 $$;
 
+
+
+
+
 --raise notice 'Copy metadatastatus.';
 with thedata as (select metadataid,
                         newstatus,
@@ -505,6 +515,10 @@ $$
 $$;
 
 
+
+
+
+
 -- post-process cleanup
 do
 $$
@@ -529,6 +543,8 @@ $$
        where not exists (select * from public.metadatastatus ms where ms.metadataid = m.id));
   end
 $$;
+
+
 
 
 
@@ -689,13 +705,23 @@ $$
 $$;
 
 
+
+
 -- harvester settings
 do
 $$
   begin
+	-- clean slate
+	delete from harvestersettings h;
+	delete from harvesthistory h;
+	delete from harvesterdata h;
+
     -- first copy the mdc harvestersettings as they are
     insert into harvestersettings (id, encrypted, name, value, parentid)
       (select id, 'n', name, value, parentid from migrationgn3mdc.harvestersettings);
+
+    -- make sure the geraldine user is an admin, otherwise harvesters with that user as owner cannot be run
+    update users set profile = 0 where username = 'geraldine.nolf@vlaanderen.be';
 
     -- below is the procedure that we used to do the export of the harvestersettings, for the non-ogcwxs configs that were manually set up by Stijn in beta gn4
     -- create table migration.harvestersettingscopy as (select * from migrationgn3mdv.harvestersettings h);
@@ -719,23 +745,24 @@ $$
     -- remove the mdv top level node
     delete
     from harvestersettings
-    where id = 1 + (select max(id) from migration.harvestersettingsmdv) and name = 'harvesting';
+    where id = 1 + (select max(id) from migration.harvestersettingsmdv)
+      and name = 'harvesting';
     -- update the dcat xslt
     update harvestersettings
     set value = 'schema:dcat2:convert/fromSPARQL-DCAT-with-open-keywords'
     where value = 'schema:dcat2:convert/fromSPARQL-DCAT';
 
-    -- now apply modifications
+    -- set the owneruser
     update harvestersettings
     set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerUser';
 
+    -- set the ownerid
     update harvestersettings
     set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerId';
 
- -- update ownerGroup only for ogcwxs harvesters
-
+    -- update ownerGroup only for ogcwxs harvesters
     update harvestersettings h
     set value = (select id from groups where name = 'Digitaal Vlaanderen')
     from harvestersettings h1
@@ -744,11 +771,10 @@ $$
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'ownerGroup'
-      and h.id = h3.id
-      
+      and h.id = h3.id;
 
-
-    update harvestersettings set encrypted = 'y' where name = 'password';
+    -- don't use encrypted fields, they result in errors when reading the configs (we don't have any password fields)
+    update harvestersettings set encrypted = 'n' where true;
 
     -- update validate only for ogcwxs harvesters
     update harvestersettings h
@@ -783,7 +809,6 @@ $$
       and h3.name = 'icon'
       and h.id = h3.id;
 
-
     -- beta modified run time harvesters (only ogcwxs)
     -- start 17:00, every minute
     with cte as
@@ -814,6 +839,9 @@ $$
   end
 $$;
 
+
+
+
 -- fix language code, necessary fix
 do
 $$
@@ -834,6 +862,10 @@ $$
       and isharvested = 'n';
   end
 $$;
+
+
+
+
 
 -- reset sequences, execute after all modifications were performed
 do
