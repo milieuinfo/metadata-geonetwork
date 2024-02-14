@@ -13,9 +13,23 @@ $$;
 -- === DBEAVER ===
 -- 1. import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
 -- 2. import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
--- 3. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
+-- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
+-- 4. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
 -- See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
+
+-- fill up the migration folder (M=~/workdata/metadata/migration.gn3)
+-- > copy the mdc/mdv metadata_data folders to local (mkdir -p $M/datadir/{new,mdc,mdv})
+-- > copy the harvesting images (mkdir -p images/harvesting/{mdc,mdv})
+-- > copy the static folder to the migration folder ($M/static)
+-- before proceeding with the files, need to have run the migration SQL
+
+
+-- check whether we are finished before proceeding
+select count(*)
+from migrationgn3mdc.metadata; -- 1862 (12/02/2024)
+select count(*)
+from migrationgn3mdv.metadata; -- 10413 (12/02/2024)
 
 do
 $$
@@ -362,6 +376,10 @@ $$
 $$;
 -- 3. now run liquibase to get a fresh GN4 db (execute-on-env.sh)
 
+
+
+
+
 do
 $$
   declare
@@ -439,6 +457,10 @@ $$
   end
 $$;
 
+
+
+
+
 --raise notice 'Copy metadatastatus.';
 with thedata as (select metadataid,
                         newstatus,
@@ -493,6 +515,10 @@ $$
 $$;
 
 
+
+
+
+
 -- post-process cleanup
 do
 $$
@@ -519,30 +545,18 @@ $$
 $$;
 
 
--- MANUAL
--- > copy the mdc/mdv metadata_data folders to local
--- > execute 186360-gn4-thumbnail-migration.kt
--- > remove the folder from the target pod (rm -rf /geonetwork-data/data)
--- > copy the generated `new` folder to the target pod, execute in metadata_data folder
---   > kubectl --cluster pre-md-cluster-aks get pod -n bet | grep geonetwork
---   > kubectl -n bet cp . $gnpod:/geonetwork-data/data
--- > copy the harvester logos from two folders (~/workdata/metadata/migration.gn3/images/harvesting/mdv)
---   > kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/harvesting/
 
 
--- post-processing, env-specific
--- TODO migrate prod mdv to bet/dev as well, before we process mdc
+
 -- =========
 -- =========
 -- WARNING: SET ENVIRONMENT
 -- =========
 -- =========
-
-
 do
 $$
   declare
-    _env      varchar := 'dev'; -- dev/bet/prd
+    _env      varchar := 'bet'; -- dev/bet/prd
     _hostname varchar := (select case
                                    when _env = 'prd' then 'metadata.vlaanderen.be'
                                    when _env = 'bet' then 'metadata.beta-vlaanderen.be'
@@ -691,31 +705,78 @@ $$
 $$;
 
 
+
+
 -- harvester settings
 do
 $$
   begin
+	-- clean slate
+	delete from harvestersettings h;
+	delete from harvesthistory h;
+	delete from harvesterdata h;
+
     -- first copy the mdc harvestersettings as they are
     insert into harvestersettings (id, encrypted, name, value, parentid)
       (select id, 'n', name, value, parentid from migrationgn3mdc.harvestersettings);
 
-    -- now apply modifications
+    -- make sure the geraldine user is an admin, otherwise harvesters with that user as owner cannot be run
+    update users set profile = 0 where username = 'geraldine.nolf@vlaanderen.be';
+
+    -- below is the procedure that we used to do the export of the harvestersettings, for the non-ogcwxs configs that were manually set up by Stijn in beta gn4
+    -- create table migration.harvestersettingscopy as (select * from migrationgn3mdv.harvestersettings h);
+    -- delete from migration.harvestersettingscopy h where parentid = 1 and value = 'ogcwxs' and name = 'node';
+    -- delete from migration.harvestersettingscopy where id = 191753; -- 'Joachim Test'
+    -- keep doing this till nothing remains
+    -- delete from migration.harvestersettingscopy where parentid is not null and parentid not in (select id from migration.harvestersettingscopy);
+    -- now export the copy table to a csv for use in the migration
+    -- select * from migration.harvestersettingscopy h;
+
+    -- now take mdv harvestersettings as well, but bump the ids
+    insert into harvestersettings (id, encrypted, name, value, parentid)
+      (select id + (select max(id) from migration.harvestersettingsmdv),
+              'n',
+              name,
+              value,
+              parentid + (select max(id) from migration.harvestersettingsmdv)
+       from migration.harvestersettingsmdv h);
+    -- reassign the top level node for the other settings
+    update harvestersettings set parentid = 1 where parentid = 1 + (select max(id) from migration.harvestersettingsmdv);
+    -- remove the mdv top level node
+    delete
+    from harvestersettings
+    where id = 1 + (select max(id) from migration.harvestersettingsmdv)
+      and name = 'harvesting';
+    -- update the dcat xslt
     update harvestersettings
-    set value = (select id from migration.users where username = 'geraldine.nolf@vlaanderen.be')
+    set value = 'schema:dcat2:convert/fromSPARQL-DCAT-with-open-keywords'
+    where value = 'schema:dcat2:convert/fromSPARQL-DCAT';
+
+    -- set the owneruser
+    update harvestersettings
+    set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerUser';
 
+    -- set the ownerid
     update harvestersettings
-    set value = (select id from migration.users where username = 'geraldine.nolf@vlaanderen.be')
+    set value = (select id from users where username = 'geraldine.nolf@vlaanderen.be')
     where name = 'ownerId';
 
-    update harvestersettings
-    set value = (select id from groups where name = 'DataPublicatie Digitaal Vlaanderen')
-    where name = 'ownerGroup';
+    -- update ownerGroup only for ogcwxs harvesters
+    update harvestersettings h
+    set value = (select id from groups where name = 'Digitaal Vlaanderen')
+    from harvestersettings h1
+           join harvestersettings h2 on h1.id = h2.parentid
+           join harvestersettings h3 on h2.id = h3.parentid
+    where h1.name = 'node'
+      and h1.value = 'ogcwxs'
+      and h3.name = 'ownerGroup'
+      and h.id = h3.id;
 
-    update harvestersettings set encrypted = 'y' where name = 'password';
+    -- don't use encrypted fields, they result in errors when reading the configs (we don't have any password fields)
+    update harvestersettings set encrypted = 'n' where true;
 
     -- update validate only for ogcwxs harvesters
-
     update harvestersettings h
     set value = 'COMPUTE_VALIDATION_AFTER_HARVEST'
     from harvestersettings h1
@@ -724,10 +785,9 @@ $$
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'validate'
-      and h.id = h3.id
+      and h.id = h3.id;
 
     -- update importxslt only for ogcwxs harvesters
-
     update harvestersettings h
     set value = 'none'
     from harvestersettings h1
@@ -736,21 +796,18 @@ $$
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'importxslt'
-      and h.id = h3.id
+      and h.id = h3.id;
 
     -- update logo only for ogcwxs harvesters
-    -- TODO: replace newval with correct value
-
     update harvestersettings h
-    set value = 'newval'
+    set value = 'MD_VL_Klein.png'
     from harvestersettings h1
            join harvestersettings h2 on h1.id = h2.parentid
            join harvestersettings h3 on h2.id = h3.parentid
     where h1.name = 'node'
       and h1.value = 'ogcwxs'
       and h3.name = 'icon'
-      and h.id = h3.id
-
+      and h.id = h3.id;
 
     -- beta modified run time harvesters (only ogcwxs)
     -- start 17:00, every minute
@@ -776,8 +833,14 @@ $$
     set value = newValue
     from cte
     where h.id = cte.id;
+
+    perform setval('harvest_history_id_seq', (SELECT max(id) + 1 FROM harvesthistory));
+    perform setval('harvester_setting_id_seq', (SELECT max(id) + 1 FROM harvestersettings));
   end
 $$;
+
+
+
 
 -- fix language code, necessary fix
 do
@@ -799,6 +862,10 @@ $$
       and isharvested = 'n';
   end
 $$;
+
+
+
+
 
 -- reset sequences, execute after all modifications were performed
 do
@@ -836,7 +903,17 @@ $$;
 
 
 -- MANUAL
--- > import templates in geonetwork
+-- 1. execute 186360-gn4-thumbnail-migration.kt
+-- 2. copy the new folder
+--   - remove the folder from the target pod (rm -rf /geonetwork-data/data)
+--   - copy the generated `new` folder to the target pod, execute in metadata_data folder
+--     - kubectl --cluster pre-md-cluster-aks get pod -n bet | grep geonetwork
+--     - kubectl -n bet cp . $gnpod:/geonetwork-data/data
+-- 3. copy the harvester logos from two folders (~/workdata/metadata/migration.gn3/images/harvesting/mdv)
+--   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/harvesting/
+-- 4. copy the logos folder
+--   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/logos/
+-- 5. import templates in geonetwork
 
 -- TODO
 -- > figure out records that are 'draft' but publicly available, these should be put to 'published / approved'
