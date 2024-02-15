@@ -940,10 +940,11 @@ public class MetadataUtils {
                 if (gdiKeyword.get("default") == null) {
                     return;
                 }
-                if ("Vlaamse Open data".equals(gdiKeyword.get("default").asText())) {
+                String keyword = gdiKeyword.get("default").asText();
+                if ("Vlaamse Open data".equals(keyword) || "Vlaamse Open data Service".equals(keyword)) {
                     domain.add("Open data");
                 }
-                if ("Geografische gegevens".equals(gdiKeyword.get("default").asText())) {
+                if ("Geografische gegevens".equals(keyword)) {
                     domain.add("Geografisch");
                 }
             });

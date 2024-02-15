@@ -384,7 +384,7 @@
                     "Open data": {
                       query_string: {
                         query:
-                          '+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data"'
+                          '(+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data") OR (+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data Service")'
                       }
                     },
                     Geografisch: {
