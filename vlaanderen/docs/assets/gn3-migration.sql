@@ -462,7 +462,8 @@ $$
     from public.metadata
     where uuid in (select uuid
                    from migrationgn3mdc.metadata mm
-                   where mm.isharvested = 'n' and mm.data like '%srv:SV_ServiceIdentification%');
+                   where mm.isharvested = 'n'
+                     and mm.data like '%srv:SV_ServiceIdentification%');
   end
 $$;
 
@@ -893,6 +894,93 @@ $$
   end
 $$;
 
+
+
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- apply the group owner / privileges fixes as supplied in the csv file
+do
+$$
+  begin
+	-- make sure we have clean values in the migration table
+	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='privileges';
+	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='niet uniek weer, privileges vs owner';
+	update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
+	update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
+	update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
+	  
+    -- map mdv records to new group owners
+    with nodpmapping as (select m.id,
+                                m.uuid,
+                                g.id    oldgroup,
+                                g.name  oldgroupname,
+                                oop.code,
+                                oop.organisatie,
+                                g2.id   newgroup,
+                                g2.name newgroupname
+                         from metadata m
+                                inner join migration.ownergroup_operationallowed_prod oop
+                                           on m.uuid = oop.uuid and oop.opmerking is null and oop.dpnodp = 'nodp'
+                                inner join groups g on m.groupowner = g.id
+                                inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'metadatavlaanderen'
+                         where g.id <> g2.id
+                           and g.id is not null
+                           and g2.id is not null)
+    update metadata m
+    set groupowner = x.newgroup
+    from nodpmapping x
+    where m.groupowner = x.oldgroup
+      and m.uuid = x.uuid;
+
+    -- map dp record to new group owners
+    with dpmapping as (select m.id,
+                              m.uuid,
+                              g.id    oldgroup,
+                              g.name  oldgroupname,
+                              oop.code,
+                              oop.organisatie,
+                              g2.id   newgroup,
+                              g2.name newgroupname
+                       from metadata m
+                              inner join migration.ownergroup_operationallowed_prod oop
+                                         on m.uuid = oop.uuid and oop.opmerking is null and oop.dpnodp = 'dp'
+                              inner join groups g on m.groupowner = g.id
+                              inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'datapublicatie'
+                       where g.id <> g2.id
+                         and g.id is not null
+                         and g2.id is not null)
+    update metadata m
+    set groupowner = x.newgroup
+    from dpmapping x
+    where m.groupowner = x.oldgroup
+      and m.uuid = x.uuid;
+
+    -- add privileges for mdv groups
+    with themapping as (select m.id metadataid, g2.id groupid, *
+                        from metadata m
+                               inner join migration.ownergroup_operationallowed_prod oop
+                                          on m.uuid = oop.uuid and oop.opmerking = 'privileges' and oop.dpnodp = 'nodp'
+                               inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'metadatavlaanderen')
+    insert
+    into operationallowed(metadataid, groupid, operationid)
+      (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
+    on conflict do nothing;
+
+    -- add privileges for dp groups
+    with themapping as (select m.id metadataid, g2.id groupid
+                        from metadata m
+                               inner join migration.ownergroup_operationallowed_prod oop
+                                          on m.uuid = oop.uuid and oop.opmerking = 'privileges' and oop.dpnodp = 'dp'
+                               inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'datapublicatie')
+    insert
+    into operationallowed(metadataid, groupid, operationid)
+      (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
+    on conflict do nothing;
+  end
+$$;
 
 
 -- ====================================================================================================
