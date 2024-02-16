@@ -3,6 +3,7 @@ parameters:
   - name: clusterRg
   - name: clusterName
   - name: namespace
+  - name: acr
 
 stages:
   - stage: skipcheck
@@ -81,7 +82,7 @@ stages:
             - task: Docker@2
               displayName: Login to ACR
               inputs:
-                containerRegistry: 'premdacr'
+                containerRegistry: {{ parameters.acr }}
                 repository: 'metadata/geonetwork'
                 command: 'login'
             - task: Bash@3
@@ -90,18 +91,20 @@ stages:
                 targetType: 'inline'
                 workingDirectory: 'liquibase'
                 script: |
-                  image=premdacr.azurecr.io/metadata/geonetwork:$GIT_COMMIT_SHA
-                  newimage=premdacr.azurecr.io/metadata/geonetwork:$NAMESPACE
+                  image=$ACR.azurecr.io/metadata/geonetwork:$GIT_COMMIT_SHA
+                  newimage=$ACR.azurecr.io/metadata/geonetwork:$NAMESPACE
+                  echo "acr: $acr"
                   echo "image: $image"
                   echo "new image: $newimage"
                   echo "gitcommitsha2: $GIT2"
-                  docker image ls premdacr.azurecr.io/metadata/geonetwork
+                  docker image ls $ACR.azurecr.io/metadata/geonetwork
                   docker pull $image
                   docker tag $image $newimage
                   docker push $newimage
               env:
                 NAMESPACE: ${{ parameters.namespace }}
                 GIT_COMMIT_SHA: $(GIT_COMMIT_SHA)
+                ACR: ${{ parameters.acr }}
             - task: Bash@3
               displayName: Execute liquibase
               env:
@@ -131,5 +134,5 @@ stages:
               inputs:
                 targetType: 'inline'
                 script: |
-                  kubectl rollout restart -n $(namespace) deployment/geonetwork
-                  kubectl rollout restart -n $(namespace) deployment/geonetwork-replica
+                  kubectl rollout restart --cluster $(clusterName) -n $(namespace) deployment/geonetwork
+                  kubectl rollout restart --cluster $(clusterName) -n $(namespace) deployment/geonetwork-replica

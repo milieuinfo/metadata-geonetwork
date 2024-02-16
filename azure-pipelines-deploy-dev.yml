@@ -5,3 +5,4 @@ stages:
     clusterRg: pre-md-cluster-rg
     clusterName: pre-md-cluster-aks
     namespace: dev
+    acr: premdacr
