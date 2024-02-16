@@ -384,7 +384,7 @@
                     "Open data": {
                       query_string: {
                         query:
-                          '+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data"'
+                          '(+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data") OR (+th_GDI-Vlaanderen-trefwoorden.default:"Vlaamse Open data Service")'
                       }
                     },
                     Geografisch: {
@@ -684,25 +684,37 @@
                     Publiek: {
                       query_string: {
                         query:
-                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                          "((+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " OR (+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (-resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Toegang zonder voorwaarden": {
                       query_string: {
                         query:
-                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                          "((+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " OR (+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (+resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Niet publiek": {
                       query_string: {
                         query:
-                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                          "((-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " AND (-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (-resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Toegang met voorwaarden": {
                       query_string: {
                         query:
-                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                          "((-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " AND (-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (+resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     }
                   }
@@ -1265,25 +1277,37 @@
                     Publiek: {
                       query_string: {
                         query:
-                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                          "((+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " OR (+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (-resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Toegang zonder voorwaarden": {
                       query_string: {
                         query:
-                          "+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                          "((+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " OR (+MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (+resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Niet publiek": {
                       query_string: {
                         query:
-                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ -resourceType:service"
+                          "((-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " AND (-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (-resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     },
                     "Toegang met voorwaarden": {
                       query_string: {
                         query:
-                          "-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/ +resourceType:service"
+                          "((-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/inspire.ec.europa.eu\\/metadata-codelist\\/LimitationsOnPublicAccess\\/noLimitations/)" +
+                          " AND (-MD_LegalConstraintsOtherConstraintsObject.link:/.*:\\/\\/publications.europa.eu\\/resource\\/authority\\/access-right\\/PUBLIC/))" +
+                          " AND (+resourceType:service)" +
+                          " AND (+documentStandard:/(iso19139|dcat2)/)"
                       }
                     }
                   }

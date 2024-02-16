@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [8.1.13-SNAPSHOT]
+## [8.1.14-SNAPSHOT] 2024-02-12
+
+### vlaanderen
+- Fix empty `gco:DateTime` kept by `update-fixed-info`. Now removed and `gco:nilReason` added to parent - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32717)
+- Ensure correct ISO-19139 namespaces and GML version is enforced when editing a record - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32717)
+- Fix "Domain" facet to include missing "Vlaamse Open data Service" - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32717)
+- Fix accessRight facet for DCAT records - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32717)
+
+## [8.1.13] 2024-02-12
 
 ### vlaanderen
 - Workflow and ui fixes - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32106)

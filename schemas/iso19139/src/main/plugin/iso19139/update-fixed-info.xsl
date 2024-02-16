@@ -219,7 +219,7 @@
   <xsl:template match="gmd:dateStamp">
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <gco:DateTime>
             <xsl:value-of select="/root/env/changeDate"/>
           </gco:DateTime>
@@ -237,7 +237,7 @@
     if not set. -->
   <xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']"
                 priority="10">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <gco:CharacterString>ISO 19115:2003/19139</gco:CharacterString>
     </xsl:copy>
   </xsl:template>
@@ -245,7 +245,7 @@
   <xsl:template
     match="gmd:metadataStandardVersion[@gco:nilReason='missing' or gco:CharacterString='']"
     priority="10">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <gco:CharacterString>1.0</gco:CharacterString>
     </xsl:copy>
   </xsl:template>
@@ -341,7 +341,7 @@
 
 
   <xsl:template match="*[gco:CharacterString|gmx:Anchor|gmd:PT_FreeText]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*[not(name() = 'gco:nilReason') and not(name() = 'xsi:type')]"/>
 
       <!-- Add nileason if text is empty -->
@@ -507,7 +507,7 @@
 
 
   <xsl:template match="gmd:*[@codeListValue]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
@@ -519,7 +519,7 @@
   <!-- can't find the location of the 19119 codelists - so we make one up -->
 
   <xsl:template match="srv:*[@codeListValue]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="codeList">
         <xsl:value-of
@@ -536,7 +536,7 @@
         error on XSD validation. -->
 
   <xsl:template match="srv:operatesOn|gmd:featureCatalogueCitation">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*[name() != 'xlink:href']"/>
       <xsl:choose>
         <!-- Do not expand operatesOn sub-elements when using uuidref
@@ -655,7 +655,7 @@
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
       </xsl:otherwise>
@@ -666,15 +666,14 @@
     <xsl:param name="element"/>
     <xsl:param name="prefix"/>
     <xsl:param name="namespace"/>
-
     <xsl:choose>
-      <xsl:when test="local-name($element)=name($element) and $prefix != '' ">
+     <xsl:when test="$prefix != '' ">
         <xsl:element name="{$prefix}:{local-name($element)}" namespace="{$namespace}">
           <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
       </xsl:otherwise>
@@ -721,7 +720,7 @@
 
   <!-- DCP codelist -->
   <xsl:template match="srv:DCP[$isSDS]/srv:DCPList[@codeListValue]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="codeList">
         <xsl:value-of select="'http://inspire.ec.europa.eu/metadata-codelist/DCPList'"/>
@@ -740,7 +739,7 @@
 
   <!-- Remove empty boolean  and set gco:nilReason='unknown' -->
   <xsl:template match="*[gco:Boolean and not(string(gco:Boolean))]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*[name() != 'gco:nilReason']" />
       <xsl:attribute name="gco:nilReason">unknown</xsl:attribute>
     </xsl:copy>
@@ -748,7 +747,7 @@
 
   <!-- Remove gco:nilReason if not empty boolean -->
   <xsl:template match="*[string(gco:Boolean)]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*[name() != 'gco:nilReason']" />
       <xsl:apply-templates select="*" />
     </xsl:copy>
@@ -758,7 +757,7 @@
   <!-- copy everything else as is -->
 
   <xsl:template match="@*|node()">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
@@ -773,7 +772,7 @@
   <xsl:template match="gmd:dateTime|gmd:plannedAvailableDateTime|gmd:usageDateTime"
                 priority="9000">
     <xsl:variable name="value" select="gco:Date|gco:DateTime" />
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <gco:DateTime>
         <xsl:value-of select="$value" /><xsl:if test="string-length($value) = 10">T00:00:00</xsl:if>
       </gco:DateTime>

@@ -940,10 +940,11 @@ public class MetadataUtils {
                 if (gdiKeyword.get("default") == null) {
                     return;
                 }
-                if ("Vlaamse Open data".equals(gdiKeyword.get("default").asText())) {
+                String keyword = gdiKeyword.get("default").asText();
+                if ("Vlaamse Open data".equals(keyword) || "Vlaamse Open data Service".equals(keyword)) {
                     domain.add("Open data");
                 }
-                if ("Geografische gegevens".equals(gdiKeyword.get("default").asText())) {
+                if ("Geografische gegevens".equals(keyword)) {
                     domain.add("Geografisch");
                 }
             });
@@ -960,34 +961,29 @@ public class MetadataUtils {
         var accessRights = factory.arrayNode();
         var resourceType = source.get("resourceType").get(0).textValue();
 
-        if (!source.has("MD_LegalConstraintsOtherConstraintsObject")) {
-            accessRights.add(resourceType.equals("dataset") ?
-                "Niet publiek" :
-                "Toegang met voorwaarden"
-            );
-        } else {
+        AtomicBoolean isPublic = new AtomicBoolean(false);
+        if (source.has("MD_LegalConstraintsOtherConstraintsObject")) {
             var constraints = (ArrayNode) source.get("MD_LegalConstraintsOtherConstraintsObject");
-            AtomicBoolean isPublic = new AtomicBoolean(false);
             constraints.forEach(constraint -> {
                 if (constraint.has("link")) {
                     var link = constraint.get("link").textValue();
-                    if ("http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations".equals(link)) {
+                    if ("http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations".equals(link) ||
+                        "http://publications.europa.eu/resource/authority/access-right/PUBLIC".equals(link)) {
                         isPublic.set(true);
                     }
                 }
             });
-
-            if (resourceType.equals("dataset")) {
-                accessRights.add(isPublic.get() ?
-                    "Publiek" :
-                    "Niet publiek"
-                );
-            } else {
-                accessRights.add(isPublic.get() ?
-                    "Toegang zonder voorwaarden" :
-                    "Toegang met voorwaarden"
-                );
-            }
+        }
+        if (resourceType.equals("dataset")) {
+            accessRights.add(isPublic.get() ?
+                "Publiek" :
+                "Niet publiek"
+            );
+        } else {
+            accessRights.add(isPublic.get() ?
+                "Toegang zonder voorwaarden" :
+                "Toegang met voorwaarden"
+            );
         }
 
         var newNode = (ObjectNode) source;

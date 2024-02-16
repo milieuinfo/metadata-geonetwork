@@ -19,24 +19,7 @@
   <xsl:template match="gmd:MD_Metadata" priority="9000">
     <xsl:copy copy-namespaces="no">
       <xsl:call-template name="add-namespaces"/>
-
-      <xsl:choose>
-        <xsl:when test="$isUsing2005Schema">
-          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
-          <xsl:attribute name="xsi:schemaLocation"
-                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd'"/>
-        </xsl:when>
-        <xsl:when test="$isUsing2007Schema">
-          <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
-          <xsl:attribute name="xsi:schemaLocation"
-                         select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20070417/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20070417/srv/1.0/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd'"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="@*"/>
-        </xsl:otherwise>
-      </xsl:choose>
-
-      <xsl:apply-templates select="@*"/>
+      <xsl:call-template name="handle-root-attributes"/>
 
       <gmd:fileIdentifier>
         <gco:CharacterString>
@@ -177,7 +160,7 @@
   <!-- Commit ref: 32ecb677b27ebfdfd709364acfc0e4cee4d57dd0 -->
   <!-- TODO: Check with François dataset-add.xsl "TODO" => issue to fix in the core ? -->
   <xsl:template match="srv:operatesOn|gmd:featureCatalogueCitation" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:copy-of select="@*[name() != 'xlink:href']"/>
       <xsl:choose>
         <xsl:when test="@uuidref or @xlink:href">
@@ -188,7 +171,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:for-each select="gmd:CI_Citation">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="node()"/>
         </xsl:copy>
       </xsl:for-each>
@@ -196,7 +179,7 @@
   </xsl:template>
 
   <xsl:template match="gmd:pass" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:choose>
         <xsl:when test="not(gco:Boolean) or normalize-space(gco:Boolean) = ''">
           <xsl:attribute name="gco:nilReason" select="'unknown'"/>
@@ -215,7 +198,7 @@
   <xsl:template match="gmd:dateStamp" priority="9000">
     <xsl:choose>
       <xsl:when test="/root/env/changeDate">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <gco:Date>
             <xsl:value-of select="format-dateTime(/root/env/changeDate,'[Y0001]-[M01]-[D01]')"/>
           </gco:Date>
@@ -316,7 +299,7 @@
 
   <xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']|gmd:metadataStandardVersion[@gco:nilReason='missing' or gco:CharacterString='']" priority="9000">
     <!-- Equivalent of commenting the core template by re-applying the default logic for unmatched elements -->
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
@@ -332,7 +315,7 @@
 
 
   <xsl:template match="gmd:*[@codeListValue]" priority="9000">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*[name(.)!='codeList']"/>
       <xsl:attribute name="codeList">
         <xsl:value-of select="concat('http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#', local-name(.))"/>
@@ -342,20 +325,14 @@
     </xsl:copy>
   </xsl:template>
 
-
-  <!-- TODO: Check françois: Should we keep the logic here and always rename the gml alias to "gml" or should we follow the core -->
   <xsl:template match="@gml:id|@gml320:id" priority="9000">
-    <xsl:attribute name="gml:id"
-                   namespace="{if($isUsing2005Schema) then 'http://www.opengis.net/gml' else 'http://www.opengis.net/gml/3.2'}">
-      <xsl:choose>
-        <xsl:when test="normalize-space(.) = ''">
-          <xsl:value-of select="generate-id(.)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+
+    <xsl:variable name="value" select="if (normalize-space(.) = '') then generate-id(.) else normalize-space()"/>
+    <xsl:variable name="namespace"
+                  select="if($isUsing2005Schema)
+                          then 'http://www.opengis.net/gml'
+                          else 'http://www.opengis.net/gml/3.2'"/>
+    <xsl:attribute name="gml:id" namespace="{$namespace}" select="$value"/>
   </xsl:template>
 
 
@@ -395,5 +372,53 @@
     <xsl:attribute name="{name()}" select="replace(., 'https://inspire.ec.europa.eu', 'http://inspire.ec.europa.eu')"/>
   </xsl:template>
 
-  <!-- TODO: Continue incrementatl check on update-fixed-info diff: http://gitlab.gim.be/gim-geonetwork/core-geonetwork/-/commits/clients/aiv/main/schemas/iso19139/src/main/plugin/iso19139/update-fixed-info.xsl   -->
+
+  <xsl:template match="gmd:dateTime|gmd:plannedAvailableDateTime|gmd:usageDateTime"
+                priority="9001">
+    <xsl:variable name="value" select="gco:Date|gco:DateTime" />
+    <xsl:choose>
+      <xsl:when test="normalize-space($value) = '' or starts-with(normalize-space($value), 'null')">
+        <xsl:copy copy-namespaces="no">
+          <xsl:attribute name="gco:nilReason" select="'missing'"/>
+        </xsl:copy>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy copy-namespaces="no">
+          <gco:DateTime>
+            <xsl:value-of select="$value" /><xsl:if test="string-length($value) = 10">T00:00:00</xsl:if>
+          </gco:DateTime>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+  <xsl:template name="handle-root-attributes">
+    <xsl:choose>
+      <xsl:when test="java:getSettingValue('system/metadata/validation/removeSchemaLocation') = 'false'">
+        <xsl:choose>
+          <xsl:when test="$isUsing2005Schema">
+            <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
+            <xsl:attribute name="xsi:schemaLocation"
+                           select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd'"/>
+          </xsl:when>
+          <xsl:when test="$isUsing2007Schema">
+            <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
+            <xsl:attribute name="xsi:schemaLocation"
+                           select="'http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20070417/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20070417/srv/1.0/srv.xsd http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd'"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="@*"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="@*[name() != 'xsi:schemaLocation']"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+
+  <!-- TODO: Continue incremental check on update-fixed-info diff: http://gitlab.gim.be/gim-geonetwork/core-geonetwork/-/commits/clients/aiv/main/schemas/iso19139/src/main/plugin/iso19139/update-fixed-info.xsl   -->
 </xsl:stylesheet>

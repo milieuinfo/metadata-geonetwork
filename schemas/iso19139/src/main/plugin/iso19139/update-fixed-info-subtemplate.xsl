@@ -45,7 +45,7 @@
 
   <xsl:template match="/root">
     <xsl:for-each select="gmd:*|*[@gco:isoType]">
-      <xsl:copy>
+      <xsl:copy copy-namespaces="no">
         <xsl:attribute name="uuid" select="/root/env/uuid"/>
         <xsl:apply-templates select="@*|*"/>
       </xsl:copy>
@@ -62,7 +62,7 @@
     <xsl:variable name="polygons"
                   select="gmd:geographicElement/gmd:EX_BoundingPolygon/
                             gmd:polygon"/>
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="gmd:description"/>
       <xsl:apply-templates select="gmd:geographicElement[gmd:EX_GeographicDescription]"/>
@@ -84,7 +84,7 @@
     <xsl:variable name="polygons"
                   select="*/gmd:EX_BoundingPolygon/
                             gmd:polygon"/>
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="gmd:extent"/>
       <xsl:apply-templates select="gmd:spatialExtent[gmd:EX_GeographicDescription]"/>
@@ -137,7 +137,7 @@
 
   <!-- Add gmd:id attribute to all gml elements which required one. -->
   <xsl:template match="gml:MultiSurface[not(@gml:id)]|gml:Polygon[not(@gml:id)]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:attribute name="gml:id">
         <xsl:value-of select="generate-id(.)"/>
       </xsl:attribute>
@@ -159,7 +159,7 @@
   </xsl:template>
 
   <xsl:template match="gml320:MultiSurface[not(@gml320:id)]|gml320:Polygon[not(@gml320:id)]">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:attribute name="gml320:id">
         <xsl:value-of select="generate-id(.)"/>
       </xsl:attribute>
@@ -192,7 +192,7 @@
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
       </xsl:otherwise>
@@ -228,7 +228,7 @@
   </xsl:template>
 
   <xsl:template match="@*|node()">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>

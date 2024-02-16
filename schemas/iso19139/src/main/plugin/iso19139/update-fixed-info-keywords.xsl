@@ -183,7 +183,7 @@
                   <!-- All free text keywords are combined in same block -->
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:copy>
+                  <xsl:copy copy-namespaces="no">
                     <xsl:apply-templates select="@*"/>
                     <gmd:MD_Keywords>
                       <xsl:apply-templates select="*/gmd:keyword"/>

@@ -188,8 +188,10 @@
                   select="gn:element/@ref"/>
 
     <xsl:variable name="isRequired" select="gn:element/@min = 1"/>
+    <xsl:variable name="name" select="name()"/>
+    <xsl:variable name="isFirst" select="count(preceding-sibling::*[name() = $name]) = 0"/>
 
-    <div class="form-group gn-field gn-date {if ($isRequired) then 'gn-required' else ''}"
+    <div class="form-group gn-field gn-date {if ($isRequired) then 'gn-required' else ''} {if ($isFirst) then '' else 'gn-extra-field'}"
          id="gn-el-{$dateTypeElementRef}"
          data-gn-field-highlight="">
       <label class="col-sm-2 control-label">
@@ -236,4 +238,63 @@
     </div>
   </xsl:template>
 
+  <xsl:template mode="mode-iso19139" match="*[name() = ('gmd:dateTime', 'gmd:plannedAvailableDateTime', 'gmd:usageDateTime') and @gco:nilReason='missing']"
+                priority="2000">
+    <xsl:param name="schema" select="$schema" required="no"/>
+    <xsl:param name="labels" select="$labels" required="no"/>
+    <xsl:param name="overrideLabel" select="''" required="no"/>
+
+    <xsl:variable name="xpath" select="gn-fn-metadata:getXPath(.)"/>
+    <xsl:variable name="tooltip" select="concat($schema, '|', name(.), '|', name(..), '|', $xpath)"/>
+    <xsl:variable name="isoType" select="if (../@gco:isoType) then ../@gco:isoType else ''"/>
+    <xsl:variable name="labelConfig" select="gn-fn-metadata:getLabel($schema, name(), $labels, name(..), $isoType, $xpath)"/>
+    <xsl:variable name="dateTypeElementRef" select="gn:element/@ref"/>
+    <xsl:variable name="isRequired" select="gn:element/@min = 1"/>
+    <xsl:variable name="name" select="name()"/>
+    <xsl:variable name="isFirst" select="count(preceding-sibling::*[name() = $name]) = 0"/>
+
+    <div class="form-group gn-field gn-date {if ($isRequired) then 'gn-required' else ''} {if ($isFirst) then '' else 'gn-extra-field'}"
+         id="gn-el-{$dateTypeElementRef}"
+         data-gn-field-highlight="">
+      <label class="col-sm-2 control-label">
+        <xsl:choose>
+          <xsl:when test="$overrideLabel != ''">
+            <xsl:value-of select="$overrideLabel"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$labelConfig/label"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </label>
+      <div class="col-sm-9 col-xs-11 gn-value nopadding-in-table">
+        <div data-gn-date-picker="{gco:DateTime}"
+             data-gn-field-tooltip="{$tooltip}"
+             data-label=""
+             data-element-name="{'gco:DateTime'}"
+             data-element-ref="{concat('_X', gn:element/@ref)}"
+             data-hide-time="{if ($viewConfig/@hideTimeInCalendar = 'true') then 'true' else 'false'}">
+        </div>
+
+
+        <!-- Create form for all existing attribute (not in gn namespace)
+         and all non existing attributes not already present. -->
+        <div class="well well-sm gn-attr {if ($isDisplayingAttributes = true()) then '' else 'hidden'}">
+          <xsl:apply-templates mode="render-for-field-for-attribute"
+                               select="../../@*|../../gn:attribute[not(@name = parent::node()/@*/name())]">
+            <xsl:with-param name="ref" select="../../gn:element/@ref"/>
+            <xsl:with-param name="insertRef" select="../gn:element/@ref"/>
+          </xsl:apply-templates>
+        </div>
+      </div>
+      <div class="col-sm-1 col-xs-1 gn-control">
+        <xsl:call-template name="render-form-field-control-remove">
+          <xsl:with-param name="editInfo" select="gn:element"/>
+        </xsl:call-template>
+      </div>
+
+      <div class="col-sm-offset-2 col-sm-9">
+        <xsl:call-template name="get-errors"/>
+      </div>
+    </div>
+  </xsl:template>
 </xsl:stylesheet>
