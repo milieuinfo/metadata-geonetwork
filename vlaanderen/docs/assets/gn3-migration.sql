@@ -377,9 +377,11 @@ $$;
 -- 3. now run liquibase to get a fresh GN4 db (execute-on-env.sh)
 
 
-
-
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 do
 $$
   declare
@@ -454,13 +456,24 @@ $$
               source,
               uuid
        from migration.metadata);
+
+    -- remove the services that originate from MDC, they're not welcome
+    delete
+    from public.metadata
+    where uuid in (select uuid
+                   from migrationgn3mdc.metadata mm
+                   where mm.isharvested = 'n'
+                     and mm.data like '%srv:SV_ServiceIdentification%');
   end
 $$;
 
 
 
-
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 --raise notice 'Copy metadatastatus.';
 with thedata as (select metadataid,
                         newstatus,
@@ -492,6 +505,13 @@ into public.metadatastatus (metadataid, statusid, changedate, userid, changemess
           (select uuid from migration.metadata m where m.id = thedata.metadataid)
    from thedata);
 
+
+
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 do
 $$
   declare
@@ -516,9 +536,11 @@ $$;
 
 
 
-
-
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- post-process cleanup
 do
 $$
@@ -545,9 +567,11 @@ $$
 $$;
 
 
-
-
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- =========
 -- =========
 -- WARNING: SET ENVIRONMENT
@@ -557,10 +581,11 @@ do
 $$
   declare
     _env      varchar := 'bet'; -- dev/bet/prd
-    _hostname varchar := (select case
-                                   when _env = 'prd' then 'metadata.vlaanderen.be'
-                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
-                                   when _env = 'dev' then 'metadata.dev-vlaanderen.be' end);
+--    _hostname varchar := (select case
+--                                   when _env = 'prd' then 'metadata.vlaanderen.be'
+--                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
+--                                   when _env = 'dev' then 'metadata.dev-vlaanderen.be' end);
+    _hostname varchar := 'metadata.vlaanderen.be'; -- the records should never contain env-specific refs, decided with Geraldine / Bert
   begin
     raise notice 'Executing change on environment %, hostname %', _env, _hostname;
 
@@ -701,20 +726,26 @@ $$
                                             where isharvested = 'n'
                                               and regexp_like(data,
                                                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?"\s*/>)'));
+                                                             
+	-- remove beta.metadata.vlaanderen.be references in native records
+	update metadata set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be') where data like '%beta.metadata.vlaanderen.be%' and isharvested = 'n';
   end
 $$;
 
 
-
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- harvester settings
 do
 $$
   begin
-	-- clean slate
-	delete from harvestersettings h;
-	delete from harvesthistory h;
-	delete from harvesterdata h;
+    -- clean slate
+    delete from harvestersettings h;
+    delete from harvesthistory h;
+    delete from harvesterdata h;
 
     -- first copy the mdc harvestersettings as they are
     insert into harvestersettings (id, encrypted, name, value, parentid)
@@ -841,7 +872,11 @@ $$;
 
 
 
-
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- fix language code, necessary fix
 do
 $$
@@ -865,8 +900,98 @@ $$;
 
 
 
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- apply the group owner / privileges fixes as supplied in the csv file
+do
+$$
+  begin
+	-- make sure we have clean values in the migration table
+	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='privileges';
+	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='niet uniek weer, privileges vs owner';
+	update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
+	update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
+	update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
+	  
+    -- map mdv records to new group owners
+    with nodpmapping as (select m.id,
+                                m.uuid,
+                                g.id    oldgroup,
+                                g.name  oldgroupname,
+                                oop.code,
+                                oop.organisatie,
+                                g2.id   newgroup,
+                                g2.name newgroupname
+                         from metadata m
+                                inner join migration.ownergroup_operationallowed_prod oop
+                                           on m.uuid = oop.uuid and oop.opmerking is null and oop.dpnodp = 'nodp'
+                                inner join groups g on m.groupowner = g.id
+                                inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'metadatavlaanderen'
+                         where g.id <> g2.id
+                           and g.id is not null
+                           and g2.id is not null)
+    update metadata m
+    set groupowner = x.newgroup
+    from nodpmapping x
+    where m.groupowner = x.oldgroup
+      and m.uuid = x.uuid;
+
+    -- map dp record to new group owners
+    with dpmapping as (select m.id,
+                              m.uuid,
+                              g.id    oldgroup,
+                              g.name  oldgroupname,
+                              oop.code,
+                              oop.organisatie,
+                              g2.id   newgroup,
+                              g2.name newgroupname
+                       from metadata m
+                              inner join migration.ownergroup_operationallowed_prod oop
+                                         on m.uuid = oop.uuid and oop.opmerking is null and oop.dpnodp = 'dp'
+                              inner join groups g on m.groupowner = g.id
+                              inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'datapublicatie'
+                       where g.id <> g2.id
+                         and g.id is not null
+                         and g2.id is not null)
+    update metadata m
+    set groupowner = x.newgroup
+    from dpmapping x
+    where m.groupowner = x.oldgroup
+      and m.uuid = x.uuid;
+
+    -- add privileges for mdv groups
+    with themapping as (select m.id metadataid, g2.id groupid, *
+                        from metadata m
+                               inner join migration.ownergroup_operationallowed_prod oop
+                                          on m.uuid = oop.uuid and oop.opmerking = 'privileges' and oop.dpnodp = 'nodp'
+                               inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'metadatavlaanderen')
+    insert
+    into operationallowed(metadataid, groupid, operationid)
+      (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
+    on conflict do nothing;
+
+    -- add privileges for dp groups
+    with themapping as (select m.id metadataid, g2.id groupid
+                        from metadata m
+                               inner join migration.ownergroup_operationallowed_prod oop
+                                          on m.uuid = oop.uuid and oop.opmerking = 'privileges' and oop.dpnodp = 'dp'
+                               inner join groups g2 on oop.code = g2.orgcode and g2.vltype = 'datapublicatie')
+    insert
+    into operationallowed(metadataid, groupid, operationid)
+      (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
+    on conflict do nothing;
+  end
+$$;
 
 
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- reset sequences, execute after all modifications were performed
 do
 $$
@@ -902,6 +1027,11 @@ $$;
 
 
 
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- MANUAL
 -- 1. execute 186360-gn4-thumbnail-migration.kt
 -- 2. copy the new folder
@@ -915,6 +1045,12 @@ $$;
 --   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/logos/
 -- 5. import templates in geonetwork
 
+
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
 -- TODO
 -- > figure out records that are 'draft' but publicly available, these should be put to 'published / approved'
 -- > is thesaurus correctly migrated?
