@@ -581,10 +581,11 @@ do
 $$
   declare
     _env      varchar := 'bet'; -- dev/bet/prd
-    _hostname varchar := (select case
-                                   when _env = 'prd' then 'metadata.vlaanderen.be'
-                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
-                                   when _env = 'dev' then 'metadata.dev-vlaanderen.be' end);
+--    _hostname varchar := (select case
+--                                   when _env = 'prd' then 'metadata.vlaanderen.be'
+--                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
+--                                   when _env = 'dev' then 'metadata.dev-vlaanderen.be' end);
+    _hostname varchar := 'metadata.vlaanderen.be'; -- the records should never contain env-specific refs, decided with Geraldine / Bert
   begin
     raise notice 'Executing change on environment %, hostname %', _env, _hostname;
 
@@ -725,6 +726,9 @@ $$
                                             where isharvested = 'n'
                                               and regexp_like(data,
                                                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?"\s*/>)'));
+                                                             
+	-- remove beta.metadata.vlaanderen.be references in native records
+	update metadata set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be') where data like '%beta.metadata.vlaanderen.be%' and isharvested = 'n';
   end
 $$;
 
