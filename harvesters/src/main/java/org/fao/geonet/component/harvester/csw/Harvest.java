@@ -191,7 +191,7 @@ public class Harvest extends AbstractOperation implements CatalogService {
             throw x;
         } catch (Exception x) {
             Log.error(Geonet.CSW_HARVEST, x.getMessage(), x);
-            throw new NoApplicableCodeEx("ERROR: " + x.getMessage());
+            throw new NoApplicableCodeEx("ERROR (CSW_HARVEST): " + x.getMessage());
         }
     }
 

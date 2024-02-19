@@ -107,7 +107,8 @@ public class CatalogDispatcher {
         } catch (Exception e) {
             context.info("Exception stack trace : \n" + Util.getStackTrace(e));
             // TODO what's this ?
-            exc = new NoApplicableCodeEx(e.toString());
+            Log.error(Geonet.CSW, e.getMessage(), e);
+            exc = new NoApplicableCodeEx("CatalogDispatcher: "+ e);
         }
 
         Element response = CatalogException.marshal(exc);
