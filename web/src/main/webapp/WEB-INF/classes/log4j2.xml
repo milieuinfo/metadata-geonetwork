@@ -44,6 +44,7 @@
     <Logger name="geonetwork.tasks" level="error"/>
     <Logger name="geonetwork.csw" level="error"/>
     <Logger name="geonetwork.csw.search" level="error"/>
+    <Logger name="geonetwork.csw.harvest" level="error"/>
     <Logger name="geonetwork.data.directory" level="error"/>
     <Logger name="geonetwork.database" level="error"/>
     <Logger name="geonetwork.databasemigration" level="info"/>

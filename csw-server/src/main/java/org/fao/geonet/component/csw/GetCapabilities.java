@@ -164,7 +164,9 @@ public class GetCapabilities extends AbstractOperation implements CatalogService
         }
 
         if (capabilities == null) {
-            throw new NoApplicableCodeEx("Failed to load capabilities from configuration files or from record. Check the CSW configuration.");
+            String msg = "Failed to load capabilities from configuration files or from record. Check the CSW configuration.";
+            Log.error(Geonet.CSW, msg);
+            throw new NoApplicableCodeEx(msg);
         }
 
         try {
