@@ -483,16 +483,20 @@ public class SearchController {
 
                 AbstractMetadata metadata = metadataUtils.findOne(mdId);
 
-                String displayLanguage = context.getLanguage();
-                Element resultMD = retrieveMetadata(context, metadata.getId() + "",
-                    setName, outSchema, elemNames, typeName, resultType, strategy, displayLanguage);
+                if(metadata != null) {
+                    String displayLanguage = context.getLanguage();
+                    Element resultMD = retrieveMetadata(context, metadata.getId() + "",
+                        setName, outSchema, elemNames, typeName, resultType, strategy, displayLanguage);
 
-                if (resultMD != null) {
-                    if (resultType == ResultType.RESULTS) {
-                        results.addContent(resultMD);
+                    if (resultMD != null) {
+                        if (resultType == ResultType.RESULTS) {
+                            results.addContent(resultMD);
+                        }
+
+                        counter++;
                     }
-
-                    counter++;
+                } else {
+                    Log.warning(Geonet.CSW_SEARCH, "Could not find metadata in database, id: "+mdId);
                 }
 
             }
