@@ -1,5 +1,5 @@
 {
-    "featureCatReplace": "Bestehenden Feature Katalog ersetzen",
+    "featureCatReplace": "Soll der bestehenden Feature Katalog ersetzt werden?",
     "add-extent-from-geokeywords": "Ausdehnung anhand der Schlagwörter berechnen",
     "add-extent-from-geokeywords-help": "Alle Schlagwörter vom Typ \"Ort\" im Thesaurus suchen und entsprechenden Extent anfügen.",
     "addCRS-help": "neues Projektionssystem hinzufügen",
