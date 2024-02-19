@@ -70,6 +70,9 @@ stages:
                   # download kubectl and kubelogin
                   sudo az aks install-cli --subscription ${{ parameters.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
 
+                  # set the right subscription
+                  az account set --subscription ${{ parameters.subscription }}
+
                   # download ~/.kube/config file
                   az aks get-credentials --subscription ${{ parameters.subscription }} --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
 
