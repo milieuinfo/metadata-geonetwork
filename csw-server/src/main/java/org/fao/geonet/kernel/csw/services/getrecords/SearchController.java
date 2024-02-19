@@ -495,6 +495,8 @@ public class SearchController {
 
                         counter++;
                     }
+                } else {
+                    Log.warning(Geonet.CSW_SEARCH, "Could not find metadata in database, id: "+mdId);
                 }
 
             }
