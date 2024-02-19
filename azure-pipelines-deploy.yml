@@ -71,7 +71,7 @@ stages:
                   sudo az aks install-cli --subscription ${{ parameters.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
 
                   # download ~/.kube/config file
-                  az aks get-credentials --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
+                  az aks get-credentials --subscription ${{ parameters.subscription }} --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
 
                   # convert ~/.kube/config to a format compatible with kubelogin
                   kubelogin convert-kubeconfig --login spn
@@ -125,14 +125,14 @@ stages:
                   # create an empty liquibase.properties file
                   touch liquibase.properties
                   # necessary variables are found in environment
-                  bash execute-on-env.sh -n $(namespace)
+                  bash execute-on-env.sh -n ${{ parameters.namespace }}
             - task: Bash@3
-              displayName: Rolling restart of geonetwork ($(namespace))
+              displayName: Rolling restart of geonetwork (${{ parameters.namespace }})
               env:
                 AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
                 AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
               inputs:
                 targetType: 'inline'
                 script: |
-                  kubectl rollout restart --cluster $(clusterName) -n $(namespace) deployment/geonetwork
-                  kubectl rollout restart --cluster $(clusterName) -n $(namespace) deployment/geonetwork-replica
+                  kubectl rollout restart --cluster ${{ parameters.clusterName }} -n ${{ parameters.namespace }} deployment/geonetwork
+                  kubectl rollout restart --cluster ${{ parameters.clusterName }} -n ${{ parameters.namespace }} deployment/geonetwork-replica
