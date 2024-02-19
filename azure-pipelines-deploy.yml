@@ -3,6 +3,7 @@ parameters:
   - name: clusterRg
   - name: clusterName
   - name: namespace
+  - name: acr
 
 stages:
   - stage: skipcheck
@@ -69,8 +70,11 @@ stages:
                   # download kubectl and kubelogin
                   sudo az aks install-cli --subscription ${{ parameters.subscription }} --client-version latest --kubelogin-version latest --only-show-errors
 
+                  # set the right subscription
+                  az account set --subscription ${{ parameters.subscription }}
+
                   # download ~/.kube/config file
-                  az aks get-credentials --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
+                  az aks get-credentials --subscription ${{ parameters.subscription }} --resource-group ${{ parameters.clusterRg }} --name ${{ parameters.clusterName }} --only-show-errors
 
                   # convert ~/.kube/config to a format compatible with kubelogin
                   kubelogin convert-kubeconfig --login spn
@@ -81,7 +85,7 @@ stages:
             - task: Docker@2
               displayName: Login to ACR
               inputs:
-                containerRegistry: 'premdacr'
+                containerRegistry: ${{ parameters.acr }}
                 repository: 'metadata/geonetwork'
                 command: 'login'
             - task: Bash@3
@@ -90,18 +94,20 @@ stages:
                 targetType: 'inline'
                 workingDirectory: 'liquibase'
                 script: |
-                  image=premdacr.azurecr.io/metadata/geonetwork:$GIT_COMMIT_SHA
-                  newimage=premdacr.azurecr.io/metadata/geonetwork:$NAMESPACE
+                  image=$ACR.azurecr.io/metadata/geonetwork:$GIT_COMMIT_SHA
+                  newimage=$ACR.azurecr.io/metadata/geonetwork:$NAMESPACE
+                  echo "acr: $acr"
                   echo "image: $image"
                   echo "new image: $newimage"
                   echo "gitcommitsha2: $GIT2"
-                  docker image ls premdacr.azurecr.io/metadata/geonetwork
+                  docker image ls $ACR.azurecr.io/metadata/geonetwork
                   docker pull $image
                   docker tag $image $newimage
                   docker push $newimage
               env:
                 NAMESPACE: ${{ parameters.namespace }}
                 GIT_COMMIT_SHA: $(GIT_COMMIT_SHA)
+                ACR: ${{ parameters.acr }}
             - task: Bash@3
               displayName: Execute liquibase
               env:
@@ -122,14 +128,14 @@ stages:
                   # create an empty liquibase.properties file
                   touch liquibase.properties
                   # necessary variables are found in environment
-                  bash execute-on-env.sh -n $(namespace)
+                  bash execute-on-env.sh -n ${{ parameters.namespace }}
             - task: Bash@3
-              displayName: Rolling restart of geonetwork ($(namespace))
+              displayName: Rolling restart of geonetwork (${{ parameters.namespace }})
               env:
                 AAD_SERVICE_PRINCIPAL_CLIENT_ID: $(spnId)
                 AAD_SERVICE_PRINCIPAL_CLIENT_SECRET: $(spnSecret)
               inputs:
                 targetType: 'inline'
                 script: |
-                  kubectl rollout restart -n $(namespace) deployment/geonetwork
-                  kubectl rollout restart -n $(namespace) deployment/geonetwork-replica
+                  kubectl rollout restart --cluster ${{ parameters.clusterName }} -n ${{ parameters.namespace }} deployment/geonetwork
+                  kubectl rollout restart --cluster ${{ parameters.clusterName }} -n ${{ parameters.namespace }} deployment/geonetwork-replica
