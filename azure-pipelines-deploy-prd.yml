@@ -5,4 +5,4 @@ stages:
     clusterRg: prd-md-cluster-rg
     clusterName: prd-md-cluster-aks
     namespace: prd
-    acr: 'prdmdacr'
+    acr: prdmdacr

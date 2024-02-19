@@ -82,7 +82,7 @@ stages:
             - task: Docker@2
               displayName: Login to ACR
               inputs:
-                containerRegistry: {{ parameters.acr }}
+                containerRegistry: ${{ parameters.acr }}
                 repository: 'metadata/geonetwork'
                 command: 'login'
             - task: Bash@3
