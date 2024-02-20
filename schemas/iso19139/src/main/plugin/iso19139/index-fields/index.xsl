@@ -47,6 +47,7 @@
   <xsl:import href="fn.xsl"/>
   <xsl:import href="common/inspire-constant.xsl"/>
   <xsl:import href="common/index-utils.xsl"/>
+  <xsl:import href="TopicCatToDataGov.xsl"/>
 
   <xsl:output name="default-serialize-mode"
               indent="no"
@@ -1538,8 +1539,6 @@
   </xsl:template>
 
 
-  <!-- RDF URI functions -->
-
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
     <xsl:param name="allLanguages"/>
     <xsl:variable name="uriPattern" select="util:getUriPattern(gmd:fileIdentifier/gco:CharacterString)"/>
@@ -1580,7 +1579,6 @@
         </xsl:for-each-group>
         }
       </vlResourceConstraintsObject>
-
     </xsl:for-each>
 
 
