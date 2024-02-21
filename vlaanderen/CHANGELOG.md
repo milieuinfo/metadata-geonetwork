@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [8.1.14-SNAPSHOT] 2024-02-12
+## [8.1.15-SNAPSHOT]
+
+### vlaanderen
+
+- Fix RDF output XML formatting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetworkMicroservices/pullrequest/32889)
+- Fix DCAT indexing issues - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Add DCAT full view missing endpointURL label - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Change default "Blade per" facet for home page - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Implement mapping from Topic category to Data.gov themes in ISO19139 indexing - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+
+## [8.1.14] - 2024-02-21
 
 ### vlaanderen
 - Fix empty `gco:DateTime` kept by `update-fixed-info`. Now removed and `gco:nilReason` added to parent - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32717)

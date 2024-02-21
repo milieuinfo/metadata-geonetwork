@@ -47,6 +47,7 @@
   <xsl:import href="fn.xsl"/>
   <xsl:import href="common/inspire-constant.xsl"/>
   <xsl:import href="common/index-utils.xsl"/>
+  <xsl:import href="TopicCatToDataGov.xsl"/>
 
   <xsl:output name="default-serialize-mode"
               indent="no"
@@ -78,6 +79,7 @@
 
 
   <xsl:variable name="protocolConcepts" select="document('./thesauri/protocol.rdf')/rdf:RDF"/>
+  <xsl:variable name="topicCategories" select="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="index"/>
@@ -495,113 +497,144 @@
           </hasInspireTheme>
         </xsl:if>
 
+        <xsl:variable name="mappedTopic">
+          <xsl:call-template name="mapTopicCatToKeywordElement">
+            <xsl:with-param name="topicCategories" select="$topicCategories"/>
+          </xsl:call-template>
+        </xsl:variable>
+
         <xsl:variable name="allKeywords">
-          <xsl:for-each-group select="*/gmd:MD_Keywords"
-                              group-by="concat(gmd:thesaurusName/*/gmd:title/(gco:CharacterString|gmx:Anchor)/text(), '-', gmd:type/*/@codeListValue[. != ''])">
-            <xsl:sort select="current-grouping-key()"/>
+          <xsl:variable name="thesaurus">
+            <xsl:for-each-group select="*/gmd:MD_Keywords"
+                                group-by="concat(gmd:thesaurusName/*/gmd:title/(gco:CharacterString|gmx:Anchor)/text(), '-', gmd:type/*/@codeListValue[. != ''])">
+              <xsl:sort select="current-grouping-key()"/>
 
-            <xsl:variable name="thesaurusType"
-                          select="gmd:type/*/@codeListValue[. != '']"/>
+              <xsl:variable name="thesaurusType"
+                            select="gmd:type/*/@codeListValue[. != '']"/>
 
-            <xsl:variable name="thesaurusTitle"
-                          select="if (starts-with(current-grouping-key(), '-'))
+              <xsl:variable name="thesaurusTitle"
+                            select="if (starts-with(current-grouping-key(), '-'))
                                   then concat('otherKeywords', current-grouping-key())
                                   else gmd:thesaurusName/*/gmd:title/(gco:CharacterString|gmx:Anchor)/text()"/>
 
-            <xsl:variable name="thesaurusRef"
-                          select="gmd:thesaurusName/gmd:CI_Citation/
+              <xsl:variable name="thesaurusRef"
+                            select="gmd:thesaurusName/gmd:CI_Citation/
                                         gmd:identifier[position() = 1]/gmd:MD_Identifier/
                                           gmd:code/(gco:CharacterString|gmx:Anchor)"/>
 
-            <xsl:variable name="thesaurusId"
-                          select="if ($thesaurusRef != '')
+              <xsl:variable name="thesaurusId"
+                            select="if ($thesaurusRef != '')
                                   then normalize-space($thesaurusRef/text())
                                   else util:getThesaurusIdByTitle($thesaurusTitle)"/>
 
-            <xsl:variable name="thesaurusUri"
-                          select="$thesaurusRef/@xlink:href"/>
+              <xsl:variable name="thesaurusUri"
+                            select="$thesaurusRef/@xlink:href"/>
 
-            <xsl:variable name="thesaurusFieldName"
-                          select="gn-fn-index:build-thesaurus-index-field-name($thesaurusId, $thesaurusTitle)"/>
+              <xsl:variable name="thesaurusFieldName"
+                            select="gn-fn-index:build-thesaurus-index-field-name($thesaurusId, $thesaurusTitle)"/>
 
-            <xsl:variable name="keywords"
-                          select="gmd:keyword[*/normalize-space() != '']"/>
+              <xsl:variable name="keywords"
+                            select="gmd:keyword[*/normalize-space() != '']"/>
 
-            <thesaurus>
-              <info type="{$thesaurusType}"
-                    field="{$thesaurusFieldName}"
-                    id="{$thesaurusId}"
-                    uri="{$thesaurusUri}"
-                    title="{$thesaurusTitle}">
-              </info>
-              <keywords>
-                <xsl:for-each select="$keywords">
-                  <keyword>
-                    <xsl:variable name="keywordUri"
-                                  select="if (gmx:Anchor/@xlink:href[. != ''])
+              <thesaurus>
+                <info type="{$thesaurusType}"
+                      field="{$thesaurusFieldName}"
+                      id="{$thesaurusId}"
+                      uri="{$thesaurusUri}"
+                      title="{$thesaurusTitle}">
+                </info>
+                <keywords>
+                  <xsl:for-each select="$keywords">
+                    <keyword>
+                      <xsl:variable name="keywordUri"
+                                    select="if (gmx:Anchor/@xlink:href[. != ''])
                                           then gmx:Anchor/@xlink:href
                                           else util:getKeywordUri(
                                                 (*/text())[1],
                                                 $thesaurusId,
                                                 $allLanguages/lang[@id = 'default']/@value)"/>
-                    <xsl:attribute name="uri"
-                                   select="$keywordUri"/>
-                    <values>
-                      <xsl:copy-of select="gn-fn-index:add-multilingual-field('keyword',
+                      <xsl:attribute name="uri"
+                                     select="$keywordUri"/>
+                      <values>
+                        <xsl:copy-of select="gn-fn-index:add-multilingual-field('keyword',
                           ., $allLanguages, false(), true())"/>
-                    </values>
+                      </values>
 
-                    <!--  If keyword is related to a thesaurus available
-                    in current catalogue, checked the keyword exists in the thesaurus.
-                    If not, report an error in indexingErrorMsg field.
+                      <!--  If keyword is related to a thesaurus available
+                      in current catalogue, checked the keyword exists in the thesaurus.
+                      If not, report an error in indexingErrorMsg field.
 
-                    This case may trigger editor warning message when a keyword is not
-                     found in the thesaurus. Try to anticipate this and advertise those
-                     records in the admin. -->
-                    <xsl:if test="$thesaurusId != '' and $keywordUri = ''">
-                      <errors>
-                        <indexingErrorMsg type="object">
-                          {
-                          "string": "indexingErrorMsg-keywordNotFoundInThesaurus",
-                          "type": "warning",
-                          "values": {
-                          "keyword": "<xsl:value-of select="util:escapeForJson((*/text())[1])"/>",
-                          "thesaurus": "<xsl:value-of select="util:escapeForJson($thesaurusId)"/>"
-                          }
-                          }
-                        </indexingErrorMsg>
-                      </errors>
-                    </xsl:if>
+                      This case may trigger editor warning message when a keyword is not
+                       found in the thesaurus. Try to anticipate this and advertise those
+                       records in the admin. -->
+                      <xsl:if test="$thesaurusId != '' and $keywordUri = ''">
+                        <errors>
+                          <indexingErrorMsg type="object">
+                            {
+                            "string": "indexingErrorMsg-keywordNotFoundInThesaurus",
+                            "type": "warning",
+                            "values": {
+                            "keyword": "<xsl:value-of select="util:escapeForJson((*/text())[1])"/>",
+                            "thesaurus": "<xsl:value-of select="util:escapeForJson($thesaurusId)"/>"
+                            }
+                            }
+                          </indexingErrorMsg>
+                        </errors>
+                      </xsl:if>
 
-                    <tree>
-                      <defaults>
-                        <xsl:call-template name="get-keyword-tree-values">
-                          <xsl:with-param name="keyword"
-                                          select="(*/text())[1]"/>
-                          <xsl:with-param name="thesaurus"
-                                          select="$thesaurusId"/>
-                          <xsl:with-param name="language"
-                                          select="$allLanguages/lang[@id = 'default']/@value"/>
-                        </xsl:call-template>
-                      </defaults>
-                      <xsl:if test="$keywordUri != ''">
-                        <keys>
+                      <tree>
+                        <defaults>
                           <xsl:call-template name="get-keyword-tree-values">
                             <xsl:with-param name="keyword"
-                                            select="$keywordUri"/>
+                                            select="(*/text())[1]"/>
                             <xsl:with-param name="thesaurus"
                                             select="$thesaurusId"/>
                             <xsl:with-param name="language"
                                             select="$allLanguages/lang[@id = 'default']/@value"/>
                           </xsl:call-template>
-                        </keys>
+                        </defaults>
+                        <xsl:if test="$keywordUri != ''">
+                          <keys>
+                            <xsl:call-template name="get-keyword-tree-values">
+                              <xsl:with-param name="keyword"
+                                              select="$keywordUri"/>
+                              <xsl:with-param name="thesaurus"
+                                              select="$thesaurusId"/>
+                              <xsl:with-param name="language"
+                                              select="$allLanguages/lang[@id = 'default']/@value"/>
+                            </xsl:call-template>
+                          </keys>
+                        </xsl:if>
+                      </tree>
+                    </keyword>
+                  </xsl:for-each>
+
+                  <xsl:if test="$thesaurusId = 'geonetwork.thesaurus.external.theme.datatheme'">
+                    <xsl:for-each select="$mappedTopic/keyword">
+                      <xsl:variable name="themeURI" select="string(@uri)"/>
+                      <xsl:if test="count($keywords/gmx:Anchor[@xlink:href = $themeURI]) = 0">
+                        <xsl:copy-of select="."/>
                       </xsl:if>
-                    </tree>
-                  </keyword>
-                </xsl:for-each>
+                    </xsl:for-each>
+                    <xsl:copy-of select="$mappedTopic"/>
+                  </xsl:if>
+                </keywords>
+              </thesaurus>
+            </xsl:for-each-group>
+          </xsl:variable>
+          <xsl:copy-of select="$thesaurus"/>
+
+          <xsl:if test="not($thesaurus//info[@id = 'geonetwork.thesaurus.external.theme.datatheme'])">
+            <thesaurus>
+              <info type="theme" field="th_datatheme"
+                    id="geonetwork.thesaurus.external.theme.datatheme"
+                    uri=""
+                    title="Data.gov.be themes"/>
+              <keywords>
+                <xsl:copy-of select="$mappedTopic"/>
               </keywords>
             </thesaurus>
-          </xsl:for-each-group>
+          </xsl:if>
 
           <xsl:variable name="geoDescription"
                         select="//gmd:geographicElement/*/gmd:geographicIdentifier/
@@ -1538,8 +1571,6 @@
   </xsl:template>
 
 
-  <!-- RDF URI functions -->
-
   <xsl:template mode="index-extra-fields" match="gmd:MD_Metadata">
     <xsl:param name="allLanguages"/>
     <xsl:variable name="uriPattern" select="util:getUriPattern(gmd:fileIdentifier/gco:CharacterString)"/>
@@ -1580,7 +1611,6 @@
         </xsl:for-each-group>
         }
       </vlResourceConstraintsObject>
-
     </xsl:for-each>
 
 
