@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [8.1.15-SNAPSHOT]
 
+### vlaanderen
+
+- Fix RDF output XML formatting - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetworkMicroservices/pullrequest/32889)
+- Fix DCAT indexing issues - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Add DCAT full view missing endpointURL label - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Change default "Blade per" facet for home page - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Implement mapping from Topic category to Data.gov themes in ISO19139 indexing - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+
 ## [8.1.14] - 2024-02-21
 
 ### vlaanderen
