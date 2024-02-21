@@ -76,6 +76,40 @@
   <xsl:variable name="childrenAssociatedResourceType" select="'isComposedOf'"/>
 
   <xsl:variable name="uuidRegex" select="'([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}'"/>
+  <xsl:variable name="modelLicencieKeywords">
+    <license>
+      <title>Modellicentie voor gratis hergebruik</title>
+      <link>https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0</link>
+      <keyword>modellicentie-gratis-hergebruik</keyword>
+      <keyword>modellicentie_gratis_hergebruik</keyword>
+    </license>
+    <license>
+      <title>Onvoorwaardelijk hergebruik</title>
+      <link>https://data.vlaanderen.be/id/licentie/onvoorwaardelijk-hergebruik/v1.0</link>
+      <keyword>onvoorwaardelijk-hergebruik</keyword>
+      <keyword>onvoorwaardelijk_hergebruik</keyword>
+    </license>
+    <license>
+      <title>Modellicentie voor hergebruik tegen vergoeding</title>
+      <link>https://data.vlaanderen.be/id/licentie/modellicentie-hergebruik-tegen-vergoeding/v1.0</link>
+      <keyword>modellicentie-hergebruik-tegen-vergoeding</keyword>
+      <keyword>modellicentie_hergebruik_tegen_vergoeding</keyword>
+    </license>
+    <license>
+      <title>Creative Commons Zero verklaring</title>
+      <link>https://data.vlaanderen.be/id/licentie/creative-commons-zero-verklaring/v1.0</link>
+      <keyword>creative-commons-zero-verklaring</keyword>
+      <keyword>creative_commons_zero_verklaring</keyword>
+      <keyword>cc0</keyword>
+    </license>
+    <license>
+      <title>Gebruiksrecht en privacyverklaring geografische webdiensten</title>
+      <keyword>Webdiensten-Gebruiksrecht</keyword>
+      <keyword>webdiensten-gebruiksrecht</keyword>
+    </license>
+  </xsl:variable>
+  <xsl:variable name="lowercase">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+  <xsl:variable name="uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
 
   <xsl:variable name="protocolConcepts" select="document('./thesauri/protocol.rdf')/rdf:RDF"/>
@@ -1632,6 +1666,46 @@
         </xsl:otherwise>
       </xsl:choose>
     </referenceDate>
+
+    <!-- Model license -->
+    <xsl:variable name="licensesConstraintsAnchor" select="gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:otherConstraints[../gmd:useConstraints or ../gmd:accessConstraints]/gmx:Anchor|
+                                                             gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:useLimitation/gmx:Anchor"/>
+    <xsl:variable name="licensesConstraintsCharacterString" select="gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:otherConstraints[../gmd:useConstraints or ../gmd:accessConstraints]/gco:CharacterString|
+                                                                      gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:useLimitation/gco:CharacterString"/>
+    <xsl:variable name="modelLicencie">
+      <xsl:for-each select="$licensesConstraintsAnchor">
+        <xsl:variable name="currentUrl" select="translate(@xlink:href, $uppercase, $lowercase)"/>
+        <xsl:for-each select="$modelLicencieKeywords/license/keyword">
+          <xsl:if test="contains($currentUrl, string())">
+            <xsl:copy-of select=".."/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$modelLicencie and count($modelLicencie/license) > 0">
+        <modelLicentieObject>
+          <xsl:attribute name="type" select="'object'"/>
+          {
+          "default": "<xsl:value-of select="$modelLicencie/license[1]/title"/>",
+          "langdut": "<xsl:value-of select="$modelLicencie/license[1]/title"/>",
+          "link": "<xsl:value-of select="$modelLicencie/license[1]/link"/>"
+          }
+        </modelLicentieObject>
+      </xsl:when>
+      <xsl:when test="$licensesConstraintsCharacterString[contains(., 'Gratis Open Data licentie')]">
+        <modelLicentieObject>
+          <xsl:attribute name="type" select="'object'"/>
+          {
+          "default": "Modellicentie voor gratis hergebruik",
+          "langdut": "Modellicentie voor gratis hergebruik",
+          "link": "https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0"
+          }
+        </modelLicentieObject>
+      </xsl:when>
+    </xsl:choose>
+
   </xsl:template>
 
   <xsl:function name="geonet:getRDFResourceURI">
