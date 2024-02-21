@@ -16,10 +16,9 @@ import org.jdom.JDOMException;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * RDF utilities to query and process DCAT feeds.
@@ -209,6 +208,7 @@ public class RDFUtils {
 
     private static Pair<String, Element> getRecordInfo(QuerySolution solution, Model model) {
         try {
+            String catalogId = solution.get("catalogId").toString();
             String recordId = solution.get("recordId").toString();
             String resourceId = solution.get("resourceId").toString();
             String baseRecordUUID = solution.get("baseRecordUUID").toString();
@@ -228,9 +228,6 @@ public class RDFUtils {
                     new ByteArrayInputStream(outxml.toByteArray()));
                 qe.close();
 
-                Map<String, Object> params = new HashMap<>();
-                params.put("recordUUID", baseRecordUUID);
-
                 // TODO: Update record only if modified is more recent than local
                 //                Literal modifiedLiteral = solution.getLiteral("modified");
                 //                String modified;
@@ -238,7 +235,8 @@ public class RDFUtils {
                 //                    modified = DateUtil.convertToISOZuluDateTime(modifiedLiteral.getString());
                 //                }
 
-                return Pair.read(baseRecordUUID, sparqlResults);
+                String recordUUID = transformUUID(baseRecordUUID, catalogId);
+                return Pair.read(recordUUID, sparqlResults);
             } else {
                 qe.close();
             }
@@ -250,5 +248,15 @@ public class RDFUtils {
 
         // we get here if we couldn't get the UUID or date modified
         return null;
+    }
+
+    private static String transformUUID(String str, String catalogId) {
+        var identifierPattern = Pattern.compile("([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}");
+        Matcher matcher = identifierPattern.matcher(str);
+        if (matcher.find()) {
+            return str.substring(matcher.start(), matcher.end());
+        } else {
+            return UUID.nameUUIDFromBytes((catalogId + "-" + str).getBytes()).toString();
+        }
     }
 }
