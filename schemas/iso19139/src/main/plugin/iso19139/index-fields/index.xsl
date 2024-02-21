@@ -1488,7 +1488,7 @@
             <xsl:analyze-string select="@xlink:href"
                                 regex=".*[i|I][d|D]=([_\w\-\.\{{\}}]*).*">
               <xsl:matching-substring>
-                <xsl:value-of select="regex-group(1)"/>
+                <xsl:value-of select="tokenize(regex-group(1), '&amp;')[1]"/>
               </xsl:matching-substring>
             </xsl:analyze-string>
           </xsl:if>
