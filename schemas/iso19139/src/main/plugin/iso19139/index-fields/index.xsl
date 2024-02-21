@@ -1486,10 +1486,9 @@
         <xsl:variable name="getRecordByIdId">
           <xsl:if test="@xlink:href != ''">
             <xsl:analyze-string select="@xlink:href"
-                                regex=".*[i|I][d|D]=([_\w\-\.\{{\}}]*).*">
+                                regex=".*[i|I][d|D]=([a-zA-Z0-9\-\.\{{\}}]*).*">
               <xsl:matching-substring>
-                <!-- TODO: Improve URL processing to avoid using tokenize and instead fix regex (prior to CORE submission) -->
-                <xsl:value-of select="tokenize(regex-group(1), '&amp;')[1]"/>
+                <xsl:value-of select="regex-group(1)"/>
               </xsl:matching-substring>
             </xsl:analyze-string>
           </xsl:if>
