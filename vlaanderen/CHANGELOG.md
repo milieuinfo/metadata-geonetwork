@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add DCAT full view missing endpointURL label - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
 - Change default "Blade per" facet for home page - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
 - Implement mapping from Topic category to Data.gov themes in ISO19139 indexing - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Fix srv:operatesOn indexing when dataset uuid is not last argument of URL => To improve for CORE fix - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32979)
 
 ## [8.1.14] - 2024-02-21
 
