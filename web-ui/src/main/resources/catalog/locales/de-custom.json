@@ -33,7 +33,7 @@
   "groupManagedByDataPublicatie": "Managed by DataPublicatie",
   "groupManagedByYourself": "Managed by yourself",
   "host.name": "Hostname",
-  "indexingErrorMsg-indexingStyleSheetError": "Index stylesheet contains errors: {{message}}.\nThe metadata was marked in the index with _indexingError=1.",
+  "indexingErrorMsg-indexingStyleSheetError": "Index stylesheet contains errors: \"{{message}}\". The metadata was marked in the index with _indexingError=1.",
   "indexingErrorMsg-invalidBounds": "Warning / Field resourceTemporalDateRange / Lower and upper bounds empty or not valid dates. Date range not indexed.",
   "indexingErrorMsg-invalidDateFormat": "Warning / Date {{dateType}} with value '{{date}}' was not a valid date format.",
   "indexingErrorMsg-keywordNotFoundInThesaurus": "Warning / Keyword {{keyword}} not found in {{thesaurus}}.",

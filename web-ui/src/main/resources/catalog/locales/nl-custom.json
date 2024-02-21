@@ -34,7 +34,7 @@
   "groupManagedByDataPublicatie": "Beheerd door DataPublicatie",
   "groupManagedByYourself": "Beheerd door jezelf",
   "host.name": "Hostnaam",
-  "indexingErrorMsg-indexingStyleSheetError": "Index stylesheet bevat fouten: {{message}}.\nDe metadata werd gemarkeerd in de index met _indexingError=1.",
+  "indexingErrorMsg-indexingStyleSheetError": "Index stylesheet bevat fouten: \"{{message}}\". De metadata werd gemarkeerd in de index met _indexingError=1.",
   "indexingErrorMsg-invalidBounds": "Waarschuwing / Veld resourceTemporalDateRange / Onder- en bovengrens leeg of ongeldige datum. Datum bereik niet geïndexeerd.",
   "indexingErrorMsg-invalidDateFormat": "Waarschuwing / Datum {{dateType}} met waarde '{{date}}' was geen geldig datum formaat.",
   "indexingErrorMsg-keywordNotFoundInThesaurus": "Waarschuwing / Sleutelwoord {{keyword}} niet gevonden in {{thesaurus}}.",
