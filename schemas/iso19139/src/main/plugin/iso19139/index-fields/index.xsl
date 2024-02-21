@@ -79,7 +79,7 @@
 
 
   <xsl:variable name="protocolConcepts" select="document('./thesauri/protocol.rdf')/rdf:RDF"/>
-  <xsl:variable name="topicCategory" select="string(/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory/gmd:MD_TopicCategoryCode)"/>
+  <xsl:variable name="topicCategories" select="/gmd:MD_Metadata/gmd:identificationInfo/*/gmd:topicCategory"/>
 
   <xsl:template match="/">
     <xsl:apply-templates mode="index"/>
@@ -499,7 +499,7 @@
 
         <xsl:variable name="mappedTopic">
           <xsl:call-template name="mapTopicCatToKeywordElement">
-            <xsl:with-param name="topicCategory" select="$topicCategory"/>
+            <xsl:with-param name="topicCategories" select="$topicCategories"/>
           </xsl:call-template>
         </xsl:variable>
 
@@ -609,7 +609,13 @@
                     </keyword>
                   </xsl:for-each>
 
-                  <xsl:if test="$thesaurusId = 'geonetwork.thesaurus.external.theme.datatheme' and count($keywords/gmx:Anchor[@xlink:href = geonet:mapTopicCatToDataGovThemeURI($topicCategory)]) = 0">
+                  <xsl:if test="$thesaurusId = 'geonetwork.thesaurus.external.theme.datatheme'">
+                    <xsl:for-each select="$mappedTopic/keyword">
+                      <xsl:variable name="themeURI" select="string(@uri)"/>
+                      <xsl:if test="count($keywords/gmx:Anchor[@xlink:href = $themeURI]) = 0">
+                        <xsl:copy-of select="."/>
+                      </xsl:if>
+                    </xsl:for-each>
                     <xsl:copy-of select="$mappedTopic"/>
                   </xsl:if>
                 </keywords>

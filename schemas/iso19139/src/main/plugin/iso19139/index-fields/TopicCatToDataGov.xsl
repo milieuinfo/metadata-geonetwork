@@ -12,33 +12,44 @@
   <xsl:variable name="dataTheme" select="document('./thesauri/datatheme.rdf')"/>
 
   <xsl:template name="mapTopicCatToKeywordElement">
-    <xsl:param name="topicCategory" as="xs:string"/>
-    <xsl:variable name="themeURI" select="geonet:mapTopicCatToDataGovThemeURI($topicCategory)"/>
-    <xsl:variable name="concept" select="$dataTheme/rdf:RDF/skos:Concept[@rdf:about = $themeURI]"/>
-    <xsl:if test="normalize-space($concept) != ''">
+    <xsl:param name="topicCategories" as="node()*"/>
+    <xsl:variable name="themeURIs">
+      <xsl:for-each select="$topicCategories/*/string()">
+        <uri>
+          <xsl:value-of select="geonet:mapTopicCatToDataGovThemeURI(.)"/>
+        </uri>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="concepts">
+      <xsl:for-each select="$themeURIs/uri[normalize-space() != '']">
+        <xsl:variable name="uri" select="string()"/>
+        <xsl:copy-of select="$dataTheme/rdf:RDF/skos:Concept[@rdf:about = $uri]"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:for-each select="$concepts/*">
       <keyword>
-        <xsl:attribute name="uri" select="string($concept/@rdf:about)"/>
+        <xsl:attribute name="uri" select="string(@rdf:about)"/>
         <values>
-          <value>"default":"<xsl:value-of select="$concept/skos:prefLabel[@xml:lang = 'nl']"/>"</value>
-          <xsl:for-each select="$concept/skos:prefLabel">
+          <value>"default":"<xsl:value-of select="skos:prefLabel[@xml:lang = 'nl']"/>"</value>
+          <xsl:for-each select="skos:prefLabel">
             <value>"<xsl:value-of select="concat('lang', geonet:twoCharToThreeCharLangCode(string(@xml:lang)))"/>":"<xsl:value-of select="normalize-space()"/>"</value>
           </xsl:for-each>
-          <value>"link":"<xsl:value-of select="util:escapeForJson(string($concept/@rdf:about))"/>"</value>
+          <value>"link":"<xsl:value-of select="util:escapeForJson(string(@rdf:about))"/>"</value>
         </values>
         <tree>
           <defaults>
             <value>
-              <xsl:value-of select="$concept/skos:prefLabel[@xml:lang = 'nl']"/>
+              <xsl:value-of select="skos:prefLabel[@xml:lang = 'nl']"/>
             </value>
           </defaults>
           <keys>
             <value>
-              <xsl:value-of select="string($concept/@rdf:about)"/>
+              <xsl:value-of select="string(@rdf:about)"/>
             </value>
           </keys>
         </tree>
       </keyword>
-    </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:function name="geonet:twoCharToThreeCharLangCode">
