@@ -11,12 +11,13 @@ $$;
 
 -- now do this manually:
 -- === DBEAVER ===
--- 1. import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
--- 2. import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
--- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
--- 4. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
+-- 1. import the CSV data - this is available in the 'migration' schema on MDC as tables
+--   - import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
+--   - import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
+--   - import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
+--   - See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
+-- 2. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
--- See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
 
 -- fill up the migration folder (M=~/workdata/metadata/migration.gn3)
 -- > copy the mdc/mdv metadata_data folders to local (mkdir -p $M/datadir/{new,mdc,mdv})
@@ -545,7 +546,7 @@ $$;
 do
 $$
   begin
-    raise notice 'Publish records with status 8';
+    raise notice 'Publish records with status 2';
     insert into public.operationallowed (groupid, metadataid, operationid)
       (select 1 groupid, m.metadataid, unnest(array [0,1,3,5,6]) operationid
        from public.metadatastatus m
@@ -580,7 +581,7 @@ $$;
 do
 $$
   declare
-    _env      varchar := 'bet'; -- dev/bet/prd
+    _env      varchar := 'prd'; -- dev/bet/prd
 --    _hostname varchar := (select case
 --                                   when _env = 'prd' then 'metadata.vlaanderen.be'
 --                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
@@ -726,9 +727,18 @@ $$
                                             where isharvested = 'n'
                                               and regexp_like(data,
                                                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?"\s*/>)'));
-                                                             
-	-- remove beta.metadata.vlaanderen.be references in native records
-	update metadata set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be') where data like '%beta.metadata.vlaanderen.be%' and isharvested = 'n';
+
+    -- replace metadatacenter csw references
+    update metadata
+    set data = replace(data, 'https://metadata.vlaanderen.be/metadatacenter/srv/dut/csw?',
+                       'https://metadata.vlaanderen.be/srv/dut/csw?')
+    where data like '%https://metadata.vlaanderen.be/metadatacenter/srv/dut/csw?%';
+
+    -- remove beta.metadata.vlaanderen.be references in native records
+    update metadata
+    set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be')
+    where data like '%beta.metadata.vlaanderen.be%'
+      and isharvested = 'n';
   end
 $$;
 
@@ -909,13 +919,17 @@ $$;
 do
 $$
   begin
-	-- make sure we have clean values in the migration table
-	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='privileges';
-	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='niet uniek weer, privileges vs owner';
-	update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
-	update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
-	update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
-	  
+    -- make sure we have clean values in the migration table
+    update migration.ownergroup_operationallowed_prod
+    set opmerking = 'privileges'
+    where lower(trim(opmerking)) = 'privileges';
+    update migration.ownergroup_operationallowed_prod
+    set opmerking = 'privileges'
+    where lower(trim(opmerking)) = 'niet uniek weer, privileges vs owner';
+    update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
+    update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
+    update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
+
     -- map mdv records to new group owners
     with nodpmapping as (select m.id,
                                 m.uuid,
