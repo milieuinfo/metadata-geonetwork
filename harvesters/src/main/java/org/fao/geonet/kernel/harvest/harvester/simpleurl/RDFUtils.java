@@ -208,7 +208,6 @@ public class RDFUtils {
 
     private static Pair<String, Element> getRecordInfo(QuerySolution solution, Model model) {
         try {
-            String catalogId = solution.get("catalogId").toString();
             String recordId = solution.get("recordId").toString();
             String resourceId = solution.get("resourceId").toString();
             String baseRecordUUID = solution.get("baseRecordUUID").toString();
@@ -235,6 +234,8 @@ public class RDFUtils {
                 //                    modified = DateUtil.convertToISOZuluDateTime(modifiedLiteral.getString());
                 //                }
 
+                var catalogIdNode = solution.get("catalogId");
+                String catalogId = catalogIdNode != null ? catalogIdNode.toString() : "";
                 String recordUUID = transformUUID(baseRecordUUID, catalogId);
                 return Pair.read(recordUUID, sparqlResults);
             } else {
