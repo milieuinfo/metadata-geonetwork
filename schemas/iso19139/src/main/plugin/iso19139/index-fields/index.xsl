@@ -76,7 +76,7 @@
   <xsl:variable name="childrenAssociatedResourceType" select="'isComposedOf'"/>
 
   <xsl:variable name="uuidRegex" select="'([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}'"/>
-  <xsl:variable name="modelLicencieKeywords">
+  <xsl:variable name="modelLicentieKeywords">
     <license>
       <title>Modellicentie voor gratis hergebruik</title>
       <link>https://data.vlaanderen.be/id/licentie/modellicentie-gratis-hergebruik/v1.0</link>
@@ -1672,10 +1672,10 @@
                                                              gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:useLimitation/gmx:Anchor"/>
     <xsl:variable name="licensesConstraintsCharacterString" select="gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:otherConstraints[../gmd:useConstraints or ../gmd:accessConstraints]/gco:CharacterString|
                                                                       gmd:identificationInfo[1]/*/gmd:resourceConstraints/*/gmd:useLimitation/gco:CharacterString"/>
-    <xsl:variable name="modelLicencie">
+    <xsl:variable name="modelLicentie">
       <xsl:for-each select="$licensesConstraintsAnchor">
         <xsl:variable name="currentUrl" select="translate(@xlink:href, $uppercase, $lowercase)"/>
-        <xsl:for-each select="$modelLicencieKeywords/license/keyword">
+        <xsl:for-each select="$modelLicentieKeywords/license/keyword">
           <xsl:if test="contains($currentUrl, string())">
             <xsl:copy-of select=".."/>
           </xsl:if>
@@ -1684,13 +1684,13 @@
     </xsl:variable>
 
     <xsl:choose>
-      <xsl:when test="$modelLicencie and count($modelLicencie/license) > 0">
+      <xsl:when test="$modelLicentie and count($modelLicentie/license) > 0">
         <modelLicentieObject>
           <xsl:attribute name="type" select="'object'"/>
           {
-          "default": "<xsl:value-of select="$modelLicencie/license[1]/title"/>",
-          "langdut": "<xsl:value-of select="$modelLicencie/license[1]/title"/>",
-          "link": "<xsl:value-of select="$modelLicencie/license[1]/link"/>"
+          "default": "<xsl:value-of select="$modelLicentie/license[1]/title"/>",
+          "langdut": "<xsl:value-of select="$modelLicentie/license[1]/title"/>",
+          "link": "<xsl:value-of select="$modelLicentie/license[1]/link"/>"
           }
         </modelLicentieObject>
       </xsl:when>
