@@ -724,9 +724,9 @@
                 }
               },
               // #23
-              "licenseObject.default.keyword": {
+              "modelLicentieObject.default.keyword": {
                 terms: {
-                  field: "licenseObject.default.keyword",
+                  field: "modelLicentieObject.default.keyword",
                   size: 15
                 },
                 meta: {

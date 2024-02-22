@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add DCAT full view missing endpointURL label - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
 - Change default "Blade per" facet for home page - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
 - Implement mapping from Topic category to Data.gov themes in ISO19139 indexing - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
+- Change DCAT harvester behavior to transform URI into normal UUID - [pr](agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32980)
+- Create `modelLicentieObject` index field to limit number of licenses in facet - [pr](agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32980)
 
 ### Core 
 - Fix srv:operatesOn indexing when dataset uuid is not last argument of URL - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32979) / [pr-core - TODO](TODO)

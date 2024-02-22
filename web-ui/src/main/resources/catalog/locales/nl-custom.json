@@ -18,6 +18,7 @@
   "facet-domain": "Domein",
   "facet-groupOwnerName": "Groep",
   "facet-licenseObject.default.keyword": "Licentie",
+  "facet-modelLicentieObject.default.keyword": "Licentie",
   "facet-ownerOrgForResource": "Eigenaar",
   "facet-pointOfContactOrgForResource": "Contactpunt",
   "facet-publisherOrgForResource": "Uitgever",

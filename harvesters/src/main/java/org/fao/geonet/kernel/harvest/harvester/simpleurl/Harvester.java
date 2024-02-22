@@ -256,7 +256,7 @@ class Harvester implements IHarvester<HarvestResult> {
             log.debug(String.format("%d records found in RDFXML response.", rdfNodes.size()));
 
             // TODO: Add param
-            boolean hashUuid = true;
+            boolean hashUuid = false;
             rdfNodes.forEach((uuid, xml) -> {
                 if (hashUuid) {
                     uuid = Sha1Encoder.encodeString(uuid);
