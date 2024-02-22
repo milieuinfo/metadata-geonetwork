@@ -1024,6 +1024,32 @@ $$
     end if;
     update metadata set groupowner = _dpdelijn where uuid = 'ce15a553-22f9-4809-b7e8-b64c26afbacd';
     update metadata set groupowner = _dpdelijn where uuid = '7a111765-3790-4edb-bb41-f40646ffa5f4';
+
+    -- in the following, fix the acm/idm group codes
+    -- first update groups with the exact name to use KBO code
+    with toupdate as (select alo.organisatiecode neworgcode, g.id groupid
+                      from migration.acmidm_lb_orgcodes alo
+                             inner join groups g on trim(alo.organisatienaam) = trim(g.name))
+    update groups
+    set orgcode = toupdate.neworgcode
+    from toupdate
+    where groups.id = toupdate.groupid;
+    -- now, bring in their datapublicatie counterparts
+    with mapping as (select g1.id      dpid,
+                            g1.name    dpname,
+                            g1.orgcode dporgcode,
+                            g2.id      nodpid,
+                            g2.name    nodpname,
+                            g2.orgcode nodporgcode
+                     from groups g1
+                            inner join groups g2
+                                       on g1.name = 'DataPublicatie ' || g2.name and g1.vltype = 'datapublicatie' and
+                                          g2.vltype = 'metadatavlaanderen'
+                     where g1.orgcode <> g2.orgcode)
+    update groups
+    set orgcode = mapping.nodporgcode
+    from mapping
+    where groups.id = mapping.dpid;
   end
 $$;
 
@@ -1065,6 +1091,12 @@ $$
     perform setval('user_search_id_seq', (SELECT max(id) + 1 FROM usersearch));
   end
 $$;
+
+
+-- PENDING
+-- perhaps add the non-null constraint on groupOwner? this needs to be done in liquibase at some point
+ALTER TABLE public.metadata
+  ALTER COLUMN groupowner SET NOT NULL;
 
 
 
