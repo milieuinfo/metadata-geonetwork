@@ -997,6 +997,10 @@ $$
     into operationallowed(metadataid, groupid, operationid)
       (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
     on conflict do nothing;
+
+    -- remove the sample group
+    delete from groupsdes where iddes = (SELECT id FROM groups WHERE name = 'sample');
+    delete from groups where id = (SELECT id FROM groups WHERE name = 'sample');
   end
 $$;
 
