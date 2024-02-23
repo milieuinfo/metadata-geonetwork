@@ -11,12 +11,13 @@ $$;
 
 -- now do this manually:
 -- === DBEAVER ===
--- 1. import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
--- 2. import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
--- 3. import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
--- 4. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
+-- 1. import the CSV data - this is available in the 'migration' schema on MDC as tables
+--   - import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
+--   - import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
+--   - import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
+--   - See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
+-- 2. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
--- See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
 
 -- fill up the migration folder (M=~/workdata/metadata/migration.gn3)
 -- > copy the mdc/mdv metadata_data folders to local (mkdir -p $M/datadir/{new,mdc,mdv})
@@ -545,7 +546,7 @@ $$;
 do
 $$
   begin
-    raise notice 'Publish records with status 8';
+    raise notice 'Publish records with status 2';
     insert into public.operationallowed (groupid, metadataid, operationid)
       (select 1 groupid, m.metadataid, unnest(array [0,1,3,5,6]) operationid
        from public.metadatastatus m
@@ -580,7 +581,7 @@ $$;
 do
 $$
   declare
-    _env      varchar := 'bet'; -- dev/bet/prd
+    _env      varchar := 'prd'; -- dev/bet/prd
 --    _hostname varchar := (select case
 --                                   when _env = 'prd' then 'metadata.vlaanderen.be'
 --                                   when _env = 'bet' then 'metadata.beta-vlaanderen.be'
@@ -726,9 +727,18 @@ $$
                                             where isharvested = 'n'
                                               and regexp_like(data,
                                                               '(<gmd:featureCatalogueCitation uuidref="[^">]+?" xlink:href="https://)metadata.vlaanderen.be/metadatacenter(/srv/dut/csw\?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=)http://www.isotc211.org/2005/gmd(&amp;elementSetName=full&amp;id=[^">]+?"\s*/>)'));
-                                                             
-	-- remove beta.metadata.vlaanderen.be references in native records
-	update metadata set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be') where data like '%beta.metadata.vlaanderen.be%' and isharvested = 'n';
+
+    -- replace metadatacenter csw references
+    update metadata
+    set data = replace(data, 'https://metadata.vlaanderen.be/metadatacenter/srv/dut/csw?',
+                       'https://metadata.vlaanderen.be/srv/dut/csw?')
+    where data like '%https://metadata.vlaanderen.be/metadatacenter/srv/dut/csw?%';
+
+    -- remove beta.metadata.vlaanderen.be references in native records
+    update metadata
+    set data = REPLACE(data, 'beta.metadata.vlaanderen.be', 'metadata.vlaanderen.be')
+    where data like '%beta.metadata.vlaanderen.be%'
+      and isharvested = 'n';
   end
 $$;
 
@@ -909,13 +919,17 @@ $$;
 do
 $$
   begin
-	-- make sure we have clean values in the migration table
-	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='privileges';
-	update migration.ownergroup_operationallowed_prod set opmerking = 'privileges' where lower(trim(opmerking))='niet uniek weer, privileges vs owner';
-	update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
-	update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
-	update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
-	  
+    -- make sure we have clean values in the migration table
+    update migration.ownergroup_operationallowed_prod
+    set opmerking = 'privileges'
+    where lower(trim(opmerking)) = 'privileges';
+    update migration.ownergroup_operationallowed_prod
+    set opmerking = 'privileges'
+    where lower(trim(opmerking)) = 'niet uniek weer, privileges vs owner';
+    update migration.ownergroup_operationallowed_prod set opmerking = null where opmerking <> 'privileges';
+    update migration.ownergroup_operationallowed_prod set dpnodp = 'dp' where trim(lower(dpnodp)) = 'datapublicatie';
+    update migration.ownergroup_operationallowed_prod set dpnodp = 'nodp' where dpnodp <> 'dp';
+
     -- map mdv records to new group owners
     with nodpmapping as (select m.id,
                                 m.uuid,
@@ -983,6 +997,59 @@ $$
     into operationallowed(metadataid, groupid, operationid)
       (select metadataid, groupid, unnest(array [0,1,2,3,5,6]) operationid from themapping)
     on conflict do nothing;
+
+    -- remove the sample group
+    delete from groupsdes where iddes = (SELECT id FROM groups WHERE name = 'sample');
+    delete from groups where id = (SELECT id FROM groups WHERE name = 'sample');
+  end
+$$;
+
+
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- ====================================================================================================
+-- final group fixes
+do
+$$
+  declare
+    _dpdelijn integer := (select id
+                          from groups
+                          where name = 'DataPublicatie De Lijn'
+                            and vltype = 'datapublicatie');
+  begin
+    if _dpdelijn is null then
+      raise exception 'Should get an id here.';
+    end if;
+    update metadata set groupowner = _dpdelijn where uuid = 'ce15a553-22f9-4809-b7e8-b64c26afbacd';
+    update metadata set groupowner = _dpdelijn where uuid = '7a111765-3790-4edb-bb41-f40646ffa5f4';
+
+    -- in the following, fix the acm/idm group codes
+    -- first update groups with the exact name to use KBO code
+    with toupdate as (select alo.organisatiecode neworgcode, g.id groupid
+                      from migration.acmidm_lb_orgcodes alo
+                             inner join groups g on trim(alo.organisatienaam) = trim(g.name))
+    update groups
+    set orgcode = toupdate.neworgcode
+    from toupdate
+    where groups.id = toupdate.groupid;
+    -- now, bring in their datapublicatie counterparts
+    with mapping as (select g1.id      dpid,
+                            g1.name    dpname,
+                            g1.orgcode dporgcode,
+                            g2.id      nodpid,
+                            g2.name    nodpname,
+                            g2.orgcode nodporgcode
+                     from groups g1
+                            inner join groups g2
+                                       on g1.name = 'DataPublicatie ' || g2.name and g1.vltype = 'datapublicatie' and
+                                          g2.vltype = 'metadatavlaanderen'
+                     where g1.orgcode <> g2.orgcode)
+    update groups
+    set orgcode = mapping.nodporgcode
+    from mapping
+    where groups.id = mapping.dpid;
   end
 $$;
 
@@ -1024,6 +1091,12 @@ $$
     perform setval('user_search_id_seq', (SELECT max(id) + 1 FROM usersearch));
   end
 $$;
+
+
+-- PENDING
+-- perhaps add the non-null constraint on groupOwner? this needs to be done in liquibase at some point
+ALTER TABLE public.metadata
+  ALTER COLUMN groupowner SET NOT NULL;
 
 
 

@@ -201,7 +201,7 @@
     "db.driverVersion": "JDBC Driver Version",
     "db.username": "Nutzername",
     "db.schema": "Schema",
-    "db.name": "Vorname",
+    "db.name": "Name",
     "dbInformation": "Datenbank Informationen",
     "dbUrl": "Datenbank URL",
     "defineCatalogLogo": "Definieren Sie ein Logo für den Katalog",
