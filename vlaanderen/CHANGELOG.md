@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Implement mapping from Topic category to Data.gov themes in ISO19139 indexing - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32888)
 - Change DCAT harvester behavior to transform URI into normal UUID - [pr](agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32980)
 - Create `modelLicentieObject` index field to limit number of licenses in facet - [pr](agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32980)
+- Added `inspire` portal - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/33102)
 
 ### Core 
 - Fix srv:operatesOn indexing when dataset uuid is not last argument of URL - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/32979) / [pr-core - TODO](TODO)
