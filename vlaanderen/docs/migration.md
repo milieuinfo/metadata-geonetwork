@@ -177,3 +177,13 @@ https://metadata.dev-vlaanderen.be/srv/dut/catalog.search#/metadata/b8e76bbd-8fa
 https://metadata.dev-vlaanderen.be/srv/dut/resources.get?uuid=33ced40c-973f-4395-941b-39e89f0ecf0b&fname=Brownfieldconvenanten_1486135916908.JPG
 https://metadata.dev-vlaanderen.be/srv/api/records/33ced40c-973f-4395-941b-39e89f0ecf0b/attachments/Brownfieldconvenanten_1486135916908.JPG
 fixed in script
+
+
+
+
+# Differences between gn3 and gn4
+
+## pdf export links
+https://metadata.beta-vlaanderen.be/srv/api/records/72848a38-5db1-4705-8fb2-74e8353b1186/formatters/xsl-view-default?output=pdf&language=dut&approved=true
+becomes
+https://metadata.beta-vlaanderen.be/srv/api/records/72848a38-5db1-4705-8fb2-74e8353b1186/formatters/xsl-view?output=pdf&language=dut&approved=true
