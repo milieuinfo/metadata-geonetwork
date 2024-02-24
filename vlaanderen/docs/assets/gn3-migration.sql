@@ -15,6 +15,7 @@ $$;
 --   - import table migration.dp_nodp (DP/noDP.xslx), set all attribute types to 'varchar'
 --   - import table migration.geosecure (Organisaties.xslx), set all attribute types to 'varchar'
 --   - import table migration.harvestersettingsmdv (harvestersettings.csv), set all attribute types to 'varchar' (exclude the id columns)
+--   - import table migration.acmidm_lb_orgcodes (acmidm.lb.orgcodes.csv), set all attribute types to 'varchar'
 --   - See ticket https://agiv.visualstudio.com/Metadata/_workitems/edit/186586 (attachments) for the necessary files.
 -- 2. migrate all tables (excluding the metadataxml, organisationtocopy) to migrationgn3mdc and migrationgn3mdv respectively
 -- - take care to lower case the table names (see 'mapping rules' during export)
@@ -28,10 +29,35 @@ $$;
 
 -- check whether we are finished before proceeding
 select count(*)
-from migrationgn3mdc.metadata; -- 1862 (12/02/2024)
+from migrationgn3mdc.metadata; -- 1862 (12/02/2024) 1863 (23/02/2024) 1861 (final)
 select count(*)
-from migrationgn3mdv.metadata; -- 10413 (12/02/2024)
+from migrationgn3mdv.metadata; -- 10413 (12/02/2024) 10445 (23/02/2024) 10445 (final)
 
+
+
+
+-- ===== START =====
+-- prep target env
+-- 1. scale down geonetwork / apirecordsservice
+-- 2. drop schemas public / liquibase
+do
+$$
+  begin
+    raise notice 'Creating necessary schemas.';
+    create schema if not exists public;
+    create schema if not exists liquibase;
+  end
+$$;
+-- 3. now run liquibase to get a fresh GN4 db (execute-on-env.sh)
+
+
+
+
+-- ============================================================
+-- ============================================================
+-- ====================MIGRATE=================================
+-- ============================================================
+-- ============================================================
 do
 $$
   begin
@@ -363,19 +389,6 @@ $$
 $$;
 
 
--- ===== START =====
--- prep target env
--- 1. scale down geonetwork / apirecordsservice
--- 2. drop schemas public / liquibase
-do
-$$
-  begin
-    raise notice 'Creating necessary schemas.';
-    create schema if not exists public;
-    create schema if not exists liquibase;
-  end
-$$;
--- 3. now run liquibase to get a fresh GN4 db (execute-on-env.sh)
 
 
 -- ====================================================================================================
@@ -1108,14 +1121,17 @@ ALTER TABLE public.metadata
 -- MANUAL
 -- 1. execute 186360-gn4-thumbnail-migration.kt
 -- 2. copy the new folder
+--   - ns=dev
+--   - gnpod=$(kubectl get pods -n $ns -l=app=geonetwork -o jsonpath="{.items[0].metadata.name}")
 --   - remove the folder from the target pod (rm -rf /geonetwork-data/data)
 --   - copy the generated `new` folder to the target pod, execute in metadata_data folder
---     - kubectl --cluster pre-md-cluster-aks get pod -n bet | grep geonetwork
---     - kubectl -n bet cp . $gnpod:/geonetwork-data/data
+--     - kubectl --cluster pre-md-cluster-aks get pod -n $ns | grep geonetwork
+--     - kubectl -n $ns cp . $gnpod:/geonetwork-data/data
+-- DO NOT COPY FAVICON.*
 -- 3. copy the harvester logos from two folders (~/workdata/metadata/migration.gn3/images/harvesting/mdv)
---   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/harvesting/
+--   - kubectl -n $ns cp . $gnpod:/geonetwork-data/resources/images/harvesting/
 -- 4. copy the logos folder
---   - kubectl -n dev cp . $gnpod:/geonetwork-data/resources/images/logos/
+--   - kubectl -n $ns cp . $gnpod:/geonetwork-data/resources/images/logos/
 -- 5. import templates in geonetwork
 
 
@@ -1137,5 +1153,10 @@ ALTER TABLE public.metadata
 -- static thumbnails:
 -- >  https://metadata.dev-vlaanderen.be/srv/dut/catalog.search#/metadata/B4F95D00-67E7-488A-9B51-8A6EC8204A4A
 -- > check that there's no overlapping groups
---   - select * from migration.geosecuremapped g where mdcid is not null and mdvid is not null and geosecureid is null;
---   - select * from migration.geosecuremapped g;
+select * from migration.geosecuremapped g where mdcid is not null and mdvid is not null and geosecureid is null;
+select * from migration.geosecuremapped g;
+-- check for 'dev-vlaanderen' occurrences after migration
+-- check the groups, does Stad Gent have a KBO number?
+select * from groups where name ilike '%stad gent%'; -- OK
+select * from metadata where data ilike '%metadatacenter%'; -- 2 records, OK
+select uuid, data from metadata where data ilike '%metadata.dev-vlaanderen%' or data ilike '%metadata.beta-vlaanderen%'; -- none

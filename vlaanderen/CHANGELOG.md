@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file. These chang
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [R8] - 2024-02-26
+
+- Digitaal Vlaanderen implementeert een aanzienlijke administratieve vereenvoudiging door het aantal metadata-knooppunten te reduceren en door de publicatieprocesflow te optimaliseren
+    - Het metadatacenter wordt samengevoegd met Metadata Vlaanderen
+    - Het traject van een metadatarecord van ontwerp tot publicatie wordt aanzienlijk gestroomlijnd
+- Tegelijkertijd optimaliseert Digitaal Vlaanderen de achterliggende infrastructuur en technologie
+    - De infrastructuur wordt een beheerde Kubernetes cluster (AKS) in de Azure-cloud
+    - De software migreert van GeoNetwork 3.8 naar GeoNetwork 4.4, wat ons opnieuw aligneert met de laatste core versie van het Open Source Software pakket
+    - De gebruikte zoekindex wordt ElasticSearch in plaats van Lucene, wat de vindbaarheid van gegevens voor eindgebruikers sterk verbetert
+    - De nieuwe 'look and feel' verbetert de gebruiksvriendelijkheid van de toepassing
+- Tot slot wordt Metadata Vlaanderen nog veiliger door het inloggen van eindgebruikers én API clients via het Toegangs- (ACM) en Gebruikersbeheer (IDM) van de Vlaamse overheid te regelen
+
+
 ## [8.1.15] - 2024-02-23
 
 ### vlaanderen
@@ -313,7 +326,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Font-awesome library upgrade, minor icon changes
 - Fix issue in editor where reference to an element would be lost and recreated
 - Fix issue where `geonet` edit element where added multiple times
-- Fixed nullpointer bug in LocaleRedirects - [vlaanderen](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24802)
+- Fixed nullpointer bug in LocaleRedirects - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/24802)
 
 
 ## [8.0.0] - 2023-06-09
@@ -347,3 +360,248 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Index performance improved, related to thesaurus and thumbnails
 - Workflow / On Cancel / Properly remove draft from index - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7101)
 - Workflow improvements - [pr-core](https://github.com/geonetwork/core-geonetwork/pull/7011)
+
+
+## [R7] - 27/06/2023
+
+### Metadata-standaard & Metadata-inhoud
+- Fix en migratie voorzien voor links naar INSPIRE-URL's: deze zijn gemigreerd naar http-links in plaats van https-links, op aangeven van het INSPIRE-team
+- Fix en migratie voorzien voor links naar URI’s in de DCAT-metadatarecords voor ‘mdcat-properties': deze zijn gemigreerd naar https-linken in plaats van http-linken
+
+### Metadata-beheersysteem
+- Er zijn twee nieuwe nodes aangesloten op Metadata Vlaanderen: deze van het Departement Werk en Sociale Economie en deze van Departement Cultuur, Jeugd en Media
+- Hoofdzakelijk bugfixing en optimalisatie van kleine features op GeoNetwork 3.8, DCAT-AP plug-in en de Zoek-facets en indexing-mechanismen
+
+### Overzicht van alle verbeteringen sinds R6 in detail:
+- Fix voorzien voor het Sjabloon voor services: de invulvelden van de ‘ServiceOperations’ en de ‘OperatesOn’ zijn terug beschikbaar in de standaard editeeromgeving
+- Fix voorzien voor de datum-zoeker functionaliteit
+- Fix voorzien voor het exporteren van URI’s met een spatie naar RDF-output in de GeoDCAT mapping van de voorbeeldweergaven
+- Fix voorzien voor het exporteren van formaat XML naar RDF-output
+- Fix voorzien voor het exporteren van de OGC-API-Features protocol naar RDF-output in de GeoDCAT-mapping
+- Update van de Shacl Validator die geïntegreerd is in GeoNetwork: verbetering op de parsing, de behandeling van de ‘ranges’ en op validatie-boodschappen, vooral in het DCAT schematron
+- Fix voorzien voor het toevoegen van een ‘vrije’ beperking, die niet uit de suggestielijst komt
+- Fix voor de verkeerde elementnaam van `dcat:endpointURL` naar `dcat:endpointURL`
+- Fix voor het indexeren van het DCAT `dct:type` element
+
+
+## [R6] - 13/03/2023
+
+### Metadata-standaard
+- Geen wijzigingen
+
+### Metadata-inhoud
+- Geen wijzigingen
+
+### Metadata-beheersysteem
+- Hoofdzakelijk bugfixing en optimalisatie van kleine features op GeoNetwork 3.8, DCAT-AP plug-in en de Zoek-facets en indexing-mechanismen
+
+### Overzicht van alle verbeteringen sinds R5 in detail:
+- Toevoeging van een facet om te zoeken op ‘Protocol’ van een service
+- Fix voorzien voor de validatie op de datum-velden
+- Fix voorzien voor de relatieknop in de tegels Dataset en Objectencatalogus in de resultatentlijst
+- Fix voorzien voor het verkeerd linken van het element ‘gmd:contact’. Het element is verwijderd van de editeer-weergave
+- Toevoegen van een extra mapping voor het protocol ‘OGC-API-Feature-items’ als een ConformsTo-protocol in de GeoDCAT RDF output
+- Toevoegen van ‘mdcat:Statuut’ in de sjablonen van DCAT-AP VL en Metadata-DCAT
+- Toevoegen van ‘mdcat:Statuut’ in de default- en volledige weergave in de toepassing
+- Fix voorzien voor het tonen van de correcte wijzigingsdatum in de (Geo)DCAT RDF-output
+- Toepassen van dezelfde mapping van native DCAT-records, zoals voor de ISO-records naar GeoDCAT
+- Fix voorzien voor de mapping van distributieformaten
+- Fix voorzien voor het mapping van de organisatienaam in de RDF
+- Fix voorzien voor het importeren van een objectencatalogus, met een nieuwe UUID.
+- Fix voorzien voor WMTS harvest (GDI-Vlaanderen trefwoord 'Metadata INSPIRE-conform' is aanwezig)
+
+
+## [R5] - 11/01/2023
+
+### Metadata-standaard
+- Hoofdzakelijk verbeteringen aan de GeoDCAT-AP Vl mapping van de ISO-metadatarecords naar de RDF-output
+- Bugfixing in sjablonen van de overige applicatieprofielen
+
+### Metadata-inhoud
+- Aanpassing van het element ‘Formaat’ dat nu gevoed wordt door een codelijst in plaats van een vrij in te vullen tekstveld
+  - Bijhorend is het distributieblok aangepakt en opgeschoond
+
+### Metadata-beheersysteem
+- Bugfixing en optimalisatie van kleine features op GeoNetwork 3.8, DCAT-AP plug-in, en de Zoek-facets en indexing-mechanismen
+
+### Overzicht van alle verbeteringen sinds R4 in detail:
+- Inloggen via de tegel ‘Vlaamse Overheid’ kan nu op basis van een Trusted Relatie met ACM/IDM
+- Fix waarbij de eerste distributie kan verwijderd worden als er meerdere aanwezig zijn
+- Fix op het sjabloon voor Geografische Services
+- Fix op het wegschrijven van ISO-elementen richting GeoDCAT:
+  - ‘categorisaties’ zoals ISO-categorie, INSPIRE-thema, GEMET-concept, MAGDA-categorie, Statuut, ServiceType en ServiceCategorie
+  - ‘Spatial Coverage’, ‘Location’
+  - ‘Spatial Resolution’ voor ‘Afstand (Distance)’
+  - Relatie ‘Dataservice’ > ‘Dataset’ (OperatesOn)
+  - ‘Licenses & Rights’
+- Met extra default ‘dct:rights statement’ als er geen relatie tussen een dataset-distributie en een service record bestaat
+  - ‘versionDate’
+  - Fix op dubbel voorkomen van ‘rightsHolder’
+  - Fix op dubbel voorkomen van ‘Keywords’
+  - Versie toegevoegd aan de ConformsTo elementen voor de gebruikte applicatieprofielen
+  - CSW werd foutief als Dataset i.p.v. als Dataservice gecatalogeerd in GeoDCAT
+- Fix op verschillende elementen, codelijsten en thesauri die een Nederlandstalige vertaling misten (bv: Codelijst Organisatietypes in DCAT-sjablonen)
+- Fix in de doorvertaling van metadata naar de relation API
+- Bijwerkingen van de SHACL-validatie toegepast in de validaties in GeoNetwork, zowel voor de ISO- als de DCAT-profielen
+- Fix in het root element van native aangemaakte records
+- Update van de Header & Footer
+- Fix van de e-mails die worden uitgestuurd
+  - Ook de trigger vanuit het harvesting-proces
+- Fix in de harvest logging
+- Aanmaak van ‘formatters’ zodat de pagina’s van Toegangs-en gebruiksvoorwaarden en Bewerkingen apart te bereiken zijn met een URL vanuit andere toepassingen
+- Oplossing om met ‘blanc nodes’ om te gaan bij harvesten van DCAT-feeds
+- Verbeteren van de performantie
+  - Door verbeteringen in de RDF-export
+  - Door verbeteringen in de relation API
+- Fix in de edit-view waar bepaalde elementen in de DCAT-sjablonen nog ontbraken in de volledige weergave
+- Fix Licentie Picker
+- Fix harvester issues met DCAT-feed van Stad Antwerpen
+- Voorzien van facets voor
+  - Protocol
+  - Domein
+  - IsOpen
+  - IsGeo
+    - Met bijhorende migraties op metadata-inhoud van native aangemaakte records, waar nodig
+- Fix vCard-issue in de UI
+- Fix op het bewaren van een trefwoord uit de GDI-Vlaanderen thesaurus
+- Onderzoek naar TSL/SSL encryptie
+- Fix van een XML-schema fout
+- Onderzoek op te strenge INSPIRE-validatie op de gmd:useLimitation
+- Logica onderzoeken en uitschrijven waarom bepaalde datasets die bedoeld zijn als ‘Publiek’ toch als ‘Niet-publiek’ worden gepubliceerd >> bepaalde partijen al gecontacteerd om dit te corrigeren in hun metadata
+- Fix op de UI in styling waar lange URL’s ervoor zorgden dat die bovenop het rechter zijpaneel terecht kwamen
+
+
+## [R4] - 20/06/2022
+
+### Metadata-standaard
+- Hoofdzakelijk verbeteringen aan de GeoDCAT-AP Vl mapping van de ISO-metadatarecords naar de RDF-output
+- Bugfixing in sjablonen van de overige applicatieprofielen, waar nodig
+
+### Metadata-inhoud
+- Aanpassing van alle vormen van de organisatienaam van 'agentschap Informatie Vlaanderen' naar 'agentschap Digitaal Vlaanderen'
+
+### Metadata-beheersysteem
+- Bugfixing en optimaliseren van kleine features op GeoNetwork 3.8, de DCAT-AP plug-in, en de Zoek-facets en indexing-mechanismen
+
+### Overzicht van alle verbeteringen sinds R3 in detail (in chronologische volgorde)
+- Fix waar voorbeeldweergaven niet konden worden opgeladen of verwijderd
+- Fix crash bij de RDF-export van ISO-metadatarecords met meerdere objectencatalogi
+- Changelog voorzien per omgeving (DEV, BETA, PROD)
+- Toevoegen mapping van 'gmd:EX_GeographicBoundingBox' naar 'dct:spatial/dcat:bbox'
+- Fix verkeerde 'SpatialRepresentationType URL' voor 'adms:representationTechnique'
+- Enkel 'gmd:MD_LegalConstraints' and 'gmd:MD_SecurityConstraints' mappen naar 'dct:rights'
+- Correct gebruik maken van de oorspronkelijke dataset identificator (UUID) en URI als deze aanwezig zijn en de correcte syntax gebruiken
+- Fix 'dct:spatial' GML-encoding
+- Update 'dcat:Catalog contact' en 'publisher' informatie
+- Mapping van het originele metadatarecord (HTML-view weergave) naar 'mdcat:landingpageVoorBronMetadata' in plaats van naar de parent property 'dcat:landingPage'
+- Toevoegen mapping voor 'OGC:OGC-API-Features-landingpage' en 'OGC:OGC-API-Features-items protocols'
+- Toevoegen van protocol mapping voor services in het element 'conformsTo' gebaseerd op het distributie-element 'gmd:protocol'
+- Fix om niet te dupliceren van de mapping waar de overdracht niet via de download protocols gebeurt ('WWW:DOWNLOAD-1.0-ftp—download', 'WWW:DOWNLOAD-1.0-http—download', of 'LINK download-store')
+- Toevoeging mapping van de 'OGC:OGC-API-Features protocols' in de dataset-distributies
+- Fix ontbrekende referentie naar de 'dcat:CatalogRecord', 'dcat:Dataset' en 'dcat:DataService' in de RDF-output bij exporteren via the user interface ("/dut/rdf.metadata.get" API)
+- Verwijderen van de maximum kardinaliteit van de validatieregel voor het element 'statuut' voor 'DCAT-AP Vl'
+- Toevoegen van via de admin settings te configureren organisatie e-mail en URL van de catalogus
+- Fix niet-editeerbaar concept 'dct:rightsHolder/dct:type'
+- Fix Dataset en DataService geïndexeerd onder 'standardName'
+- Fix van het soms lege record onderdeel in de 'Metadata DCAT' view
+- Fix van het soms lege 'Standard name' en 'description' in de 'catalog record' van geharveste metadata
+- Fix gedupliceerde 'amds:identifier' in de RDF-output van bepaalde DCAT-native aangemaakte records
+- Fix zodat het distributie licentie-blok in de DCAT-sjablonen verwijderd kan worden
+- Toevoegen van de GeoNetwork homepage link aan 'dcat:Catalog/foaf:homepage/foaf:Document/@rdf:about attribute'
+- Aanmaken van 'dct:creator' van 'dcat:CatalogRecord/adms:identifier' dynamisch gebaseerd op de gebruikte node
+- Aanpassen van 'dcat:landingPage' naar 'mdcat:landingpageVoorBronMetadata'
+- Fix tikfout in licentietype
+- Fix 'hard line returns' in bepaalde licentie-beschrijvingen
+- Verplaatsen van alle 'element-namespaces' naar het 'root-element'
+- Fix character encoding in de hydra paging URL's query parameter
+- Fix van de niet-editeerbare service 'dct:license/dct:LicenseDocument/dct:type'-thesaurus value
+- Toevoegen van de mapping van 'status progress code' naar 'mdcat:status(sub-property of adms:status)'
+- Toevoegen van de mapping van trefwoorden naar de subproperties van dct:subject:
+  - http://vocab.belgif.be/auth/datatheme => `dcat:theme`
+  - https://inspire.ec.europa.eu/metadata-codelist/TopicCategory => `mdcat:ISO-categorie`
+  - https://inspire.ec.europa.eu/theme => `mdcat:INSPIRE-thema`
+  - http://www.eionet.europa.eu/gemet => `mdcat:GEMET-concept`
+  - https://data.vlaanderen.be/id/conceptscheme/MAGDA-categorie => `mdcat:MAGDA-categorie`
+  - Andere trefwoorden => `dct:subject`
+- Toevoegen mapping voor service types en service categorieën
+- Fix tikfout in `dct:creator/@rdf:resoure` attribuutnaame
+- Implementatie van caching mechanisme voor omgezette RDF-metadata voor betere performantie
+- Patch voor Taxonomy indexing memory leak
+- Toevoegen van de totale relation-count in het 'relation-API -antwoord' om efficiënte paginering toe te staan
+- Fix ontbrekend 'dct:Location' wrapper-element
+- Fix ontbrekende "root" property voor native metadata in de database
+- Fix 'dcat:endpointDescription' minimum kardinaliteit
+- Fix ontbrekende "*" tekens op de verplichte velden in de DCAT-sjablonen in het editeren
+- Toevoegen van de + knop voor verwijderde titel en beschrijving in DataService sjabloon in de editor
+- Update van het schematron met de meest recente SHACL specificatie
+- Update van de Header-informatie van "agentschap Information Vlaanderen" naar "Digitaal Vlaanderen"
+- Fix om dcat:distribution te verwijderen die niet het laatst zijn toegevoegd
+- Implementeren van fixes op de ATOM-feed functionaliteit
+- Toevoegen van dct:conformsTo in de distributie-tab in de native DCAT-sjablonen bij het editeren
+- Verbeteren van de harvester notification e-mails
+- Fix encoding-problemen bij het exporteren van het ISO-distributie-element naar het 'accessURL' RDF-element
+- Verbeteren van de DCAT-harvester bij het omgaan met 'blank nodes'
+- Toevoegen van een apart te bereiken 'Gebruiksvoorwaarden'-view in functie van de Downloadtoepassing
+- Toevoegen van de mapping voor 'spatialResolution'
+
+
+## [R3] - 15/03/2022
+
+Metadata Vlaanderen integreert API’s en voorziet een uitgebreid ecosysteem aan metadata-standaarden
+
+### Metadata-standaard: Vanaf nu kunnen alle soorten API’s beschreven worden. Het ecosysteem van metadata-standaarden in de ISO/INSPIRE- en DCAT-taal is hiervoor helemaal in GeoNetwork en de DCAT-AP plug-in voorzien. Hierdoor zijn telkens 3 sjablonen beschikbaar om gegevens (data en/of API’s) te beschrijven in Metadata Vlaanderen:
+- Open community: Sjabloon voor ‘DCAT-AP VL 1.2’ werd geüpgraded naar ‘DCAT-AP VL 2.0’
+  - Nu kunnen Open data volgens DCAT 2.0 beschreven worden, maar ook Open API’s vanaf nu beschreven worden
+- Geo community: Het sjabloon blijft de GDI-Vlaanderen Best Practices voor metadata volgen. Deze data en API’s blijven dus in de ISO/INSPIRE-taal beschreven worden. Maar er is vanaf nu ook een download-output voorzien in RDF, die deze beschrijvingen in de (Geo)DCAT-taal voorstelt
+  - Hiervoor werd de mapping-metadatastandaard ‘GeoDCAT-AP VL 2.0’ geïmplementeerd
+- Niet-open én niet-geo (closed) community: Vanaf R3 is er ook een sjabloon beschikbaar volgens het basis-profiel ‘Metadata DCAT 2.0’
+  - Vanaf nu kunnen ook de niet-open én niet-geo data en API’s worden beschreven
+
+### Metadata-inhoud
+- Alle native aangemaakte metadatarecords zijn ten gevolge van de upgrade naar DCAT2.0 zoveel als mogelijk gemigreerd
+- Voor DCAT-feeds werd zoveel als mogelijk backward-compatibility behouden om de DCAT-AP VL 1.2 feeds nog steeds te kunnen oogsten
+
+### Metadata-beheersysteem
+- GeoNetwork 3.8:
+  - Bugfixing en optimaliseren van kleine features
+  - Alle aanpassingen, hierboven vermeld in het blokje over de metadata-standaard
+- DCAT-AP plug-in:
+  - De DCAT-AP plug-in 1.2 is uitgefaseerd en vervangen door de DCAT-AP plug-in 2.0
+- Zoek-facets en indexing-mechanismen:
+  - De zoek-facets en indexing-mechanismen werden aangepast zodat ze zowel op ISO/INSPIRE- als op DCAT-metadata-talen correct indexeren, zoeken en vinden
+
+
+## [R2] - 31/05/2021
+
+### Metadata-standaard
+- Correctie van metadata wijzigingsdatum (dateStamp) van het type dateTime naar date; en dit voor dataset(serie)s en services
+- Correctie voor de wijzigingsdatum (versionDate) van Objectencatalogi
+    - Voor beide correcties volgen we nu de bepalingen in de standaard
+
+### Metadata-inhoud
+- Opschonen van metadata-inhoud ten gevolge van de INSPIRE Technical Guidelines 2.0; en vooral het verwijderen van INSPIRE-gerelateerde velden bij niet-INSPIRE dataset(serie)s en/of services
+
+### Metadata-beheersysteem
+- GeoNetwork 3.8: Bugfixing en optimaliseren van kleine features
+  - Indexering verbeteren
+  - Weergave verbeteren
+  - Sjablonen verbeteren
+  - Harvesting capabilities van diensten naar metadata verbeteren
+  - Rechten corrigeren
+  - Meerdere Objectencatalogi toevoegen kan nu ook
+  - PDF-export is terug mogelijk
+  - Hoofdlettergevoeligheid bij het oproepen van metadatarecords via hun identificatoren is opgelost
+
+
+## [R1] - 16/11/2020
+
+### De grootste verandering is dat metadata van Vlaamse Open data nu ook beschreven kunnen worden in het hoofdknooppunt, Metadata Vlaanderen
+- Metadata van Vlaamse Open data => volgens de DCAT-AP VL standaard
+  - Hiervoor is een 'DCAT-AP v1.2 plug-in voor GeoNetwork 3.8' gebouwd
+  - Het harvesten van DCAT-feeds en het editeren van metadata van Vlaamse Open data gebeurt niet meer in het Vlaams Open Data Portaal, maar in Metadata Vlaanderen
+
+### De andere veranderingen zijn grote moderniseringen
+- Upgrade van de infrastructuur => de 'cloud'
+- Upgrade van de technologie => metadata-beheersysteem 'GeoNetwork 3.8'
+- Upgrade van de metadata-standaard voor het Geografische domein => conform de 'INSPIRE Technical Guidelines 2.0'
+
