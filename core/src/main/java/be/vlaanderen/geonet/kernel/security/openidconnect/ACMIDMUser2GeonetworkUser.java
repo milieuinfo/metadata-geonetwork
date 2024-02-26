@@ -100,6 +100,15 @@ public class ACMIDMUser2GeonetworkUser extends OidcUser2GeonetworkUser {
                 usergroup.setUser(user);
                 usergroup.setProfile(finalProfile);
                 userGroupRepository.save(usergroup);
+
+                if(finalProfile.equals(Profile.Reviewer)) {
+                    // when you are a Reviewer, GeoNetwork expects you to have the Editor role as well
+                    UserGroup editorUserGroup = new UserGroup();
+                    editorUserGroup.setGroup(g);
+                    editorUserGroup.setUser(user);
+                    editorUserGroup.setProfile(Profile.Editor);
+                    userGroupRepository.save(editorUserGroup);
+                }
             });
     }
 
