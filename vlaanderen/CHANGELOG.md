@@ -605,3 +605,5 @@ Metadata Vlaanderen integreert API’s en voorziet een uitgebreid ecosysteem aan
 - Upgrade van de technologie => metadata-beheersysteem 'GeoNetwork 3.8'
 - Upgrade van de metadata-standaard voor het Geografische domein => conform de 'INSPIRE Technical Guidelines 2.0'
 
+
+
