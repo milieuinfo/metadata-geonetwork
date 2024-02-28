@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [8.1.16-SNAPSHOT]
 - Bugfix for service accounts, reviewers are now also assigned editor role - [pr](https://agiv.visualstudio.com/Metadata/_git/0a154993-bcec-4021-98e4-034a6161db36/pullrequest/33201)
 - Bugfix for CSW properties update request: fix gmd:dateStamps/gco:Date parsed as DateTime - [pr](https://agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/33223)
+- Enforce `gco:Date` for creation, publication, modification dates - [pr](agiv.visualstudio.com/Metadata/_git/MetadataGeonetwork/pullrequest/33243)
 
 ## [R8] - 2024-02-26
 
