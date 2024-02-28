@@ -399,6 +399,18 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="gmd:date/gco:DateTime|gmd:date/gco:Date" priority="9000">
+    <gco:Date>
+      <xsl:choose>
+        <xsl:when test="contains(string(), 'T')">
+          <xsl:value-of select="format-dateTime(., '[Y0001]-[M01]-[D01]')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="format-date(., '[Y0001]-[M01]-[D01]')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </gco:Date>
+  </xsl:template>
 
   <xsl:template name="handle-root-attributes">
     <xsl:choose>
