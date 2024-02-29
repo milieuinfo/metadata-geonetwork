@@ -1030,6 +1030,8 @@
     "GNIDX-GEO": "Fout bij indexeren geometrie",
     "GNIDX-BADNUMVALUE": "Fout bij omzetten Lucene indexwaarde naar een getal",
     "indexingErrors": "Indexeringsfouten",
+    "indexingError-warning": "Indexeringswaarschuwing",
+    "indexingError-error": "Indexeringsfout",
     "manageSources": "Bronnen",
     "threadStatus": "Thread Status",
     "doSaveConfirm": "Wilt u uw wijzigingen bewaren?",
