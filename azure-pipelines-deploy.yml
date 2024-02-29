@@ -7,7 +7,7 @@ parameters:
 
 stages:
   - stage: skipcheck
-    pool: dv-dev-ubuntu2204
+    pool: dv-prd-ubuntu2204
     jobs:
       # check whether we can/should skip this pipeline, e.g., for comment-only fixes
       - job: skipcheck
@@ -29,7 +29,7 @@ stages:
               COMMIT_MESSAGE: $(Build.SourceVersionMessage)
   # environment specific deployment steps, repeatable on each env/namespace
   - stage: ${{ parameters.namespace }}
-    pool: dv-dev-ubuntu2204
+    pool: dv-prd-ubuntu2204
     dependsOn: skipcheck
     condition: and(succeeded('skipcheck'),eq(dependencies.skipcheck.outputs['skipcheck.skipcheck.skip'], 'false'))
     jobs:
