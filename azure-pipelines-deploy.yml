@@ -59,6 +59,17 @@ stages:
                   VL_GEONETWORK_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
                   echo "VL_GEONETWORK_VERSION: ${VL_GEONETWORK_VERSION}"
                   echo "##vso[task.setvariable variable=VL_GEONETWORK_VERSION]${VL_GEONETWORK_VERSION}"
+            - task: Bash@3
+              displayName: Prepare public changelog
+              inputs:
+                targetType: 'inline'
+                workingDirectory: 'vlaanderen/scripts'
+                script: |
+                  bash public.changelog.sh
+                  echo "LS"
+                  ls ../../liquibase/changesets
+                  echo "quitting right here, just testing the pipeline"
+                  exit 1
             - task: AzureCLI@2
               displayName: Configure access to aks cluster
               inputs:
