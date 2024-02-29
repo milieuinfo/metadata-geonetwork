@@ -1030,6 +1030,8 @@
     "GNIDX-GEO": "Fehler bei Indexierung der Geometrie",
     "GNIDX-BADNUMVALUE": "Fehler bei der Konvertierung des Lucene-Index-Werts in eine Nummer",
     "indexingErrors": "Indexfehler",
+    "indexingError-warning": "Indexing Warning",
+    "indexingError-error": "Indexing Error",
     "manageSources": "Quellen",
     "threadStatus": "Thread Status",
     "doSaveConfirm": "Wollen Sie Ihre Änderungen speichern?",

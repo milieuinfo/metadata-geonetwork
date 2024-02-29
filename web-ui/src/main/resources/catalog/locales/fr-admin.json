@@ -1030,6 +1030,8 @@
     "GNIDX-GEO": "Erreur lors de l'indexation des géométries",
     "GNIDX-BADNUMVALUE": "Erreur lors de la conversion d'un champ de l'index en valeur numérique",
     "indexingErrors": "Erreurs d'indexation",
+    "indexingError-warning": "Indexing Warning",
+    "indexingError-error": "Indexing Error",
     "manageSources": "Catalogue sources",
     "threadStatus": "État des processus",
     "doSaveConfirm": "Avez-vous sauvé vos changements ?",
