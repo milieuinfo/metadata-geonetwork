@@ -1304,6 +1304,8 @@
   <!--     https://raw.githubusercontent.com/geonetwork/core-maven-repo/  -->
   <!--     http://maven.seasar.org/maven2                                 -->
   <!-- ================================================================== -->
+
+  <!-- DISABLE REMOTE REPOSTIORIES
   <repositories>
 
     <repository>
@@ -1328,8 +1330,9 @@
     </repository>
 
   </repositories>
+  -->
 
-
+  <!-- DISABLE REMOTE REPOSTIORIES
   <pluginRepositories>
     <pluginRepository>
       <name>oss.sonatype.org - github-releases</name>
@@ -1347,6 +1350,7 @@
       </releases>
     </pluginRepository>
   </pluginRepositories>
+  -->
 
   <!-- =========================================================== -->
   <!--     Modules for the build in approximate dependency order   -->
@@ -1438,15 +1442,13 @@
 
   <distributionManagement>
     <repository>
-      <id>osgeo</id>
-      <name>OSGeo GeoNetwork Release Repository</name>
-      <url>https://repo.osgeo.org/repository/geonetwork-releases/</url>
+      <id>release</id>
+      <url>${acd.repository.release.url}</url>
     </repository>
     <snapshotRepository>
-      <id>osgeo</id>
-      <name>OSGeo GeoNetwork Snapshot Repository</name>
-      <url>https://repo.osgeo.org/repository/geonetwork-snapshots/</url>
-     </snapshotRepository>
+      <id>snapshot</id>
+      <url>${acd.repository.snapshot.url}</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <!--
@@ -1625,5 +1627,11 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     <skipIT>true</skipIT> <!-- disable integration tests by default, use the "it" profile to run them which enables them -->
+
+    <acd.repository.url>https://repo.omgeving.vlaanderen.be/artifactory</acd.repository.url>
+    <acd.repository.snapshot.url>${acd.repository.url}/snapshot</acd.repository.snapshot.url>
+    <acd.repository.release.url>${acd.repository.url}/release</acd.repository.release.url>
+    <acd.scm.maven-url>scm:svn:https://svn.milieuinfo.be/productie/svn</acd.scm.maven-url>
+
   </properties>
 </project>
