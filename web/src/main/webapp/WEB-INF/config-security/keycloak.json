@@ -1,6 +1,7 @@
 {
   "realm": "${env.KEYCLOAK_REALM}",
   "auth-server-url": "${env.KEYCLOAK_AUTH_SERVER_URL}",
+  "proxy-url": "${env.KEYCLOAK_PROXY_URL}",
   "ssl-required": "${env.KEYCLOAK_SSL_REQUIRED:external}",
   "resource": "${env.KEYCLOAK_RESOURCE}",
   "credentials": {
