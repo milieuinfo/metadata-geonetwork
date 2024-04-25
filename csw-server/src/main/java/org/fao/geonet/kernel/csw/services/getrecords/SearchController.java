@@ -55,10 +55,7 @@ import org.fao.geonet.utils.Log;
 import org.fao.geonet.utils.Xml;
 import org.geotools.xsd.Configuration;
 import org.geotools.xsd.Parser;
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Element;
-import org.jdom.Namespace;
+import org.jdom.*;
 import org.geotools.api.filter.Filter;
 import org.geotools.api.filter.capability.FilterCapabilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -437,19 +434,18 @@ public class SearchController {
      * @return result
      * @throws CatalogException hmm
      */
-        public Element search(ServiceContext context, int startPos, int maxRecords,
-                                         ResultType resultType, String outSchema, ElementSetName setName,
-                                         Element filterExpr, String filterVersion, List<SortBuilder<FieldSortBuilder>> sort,
-                                         Set<String> elemNames, String typeName, int maxHitsFromSummary,
-                                         String strategy) throws CatalogException {
+    public Element search(ServiceContext context, int startPos, int maxRecords,
+                          ResultType resultType, String outSchema, ElementSetName setName,
+                          Element filterExpr, String filterVersion, List<SortBuilder<FieldSortBuilder>> sort,
+                          Set<String> elemNames, String typeName, int maxHitsFromSummary,
+                          String strategy) throws CatalogException {
 
         String elasticSearchQuery = convertCswFilterToEsQuery(filterExpr, filterVersion);
 
         JsonNode esJsonQuery;
 
         try {
-            boolean hasDraftFilter = !Xml.selectNodes(filterExpr, "*//ogc:PropertyName[string() = 'draft']", List.of(Csw.NAMESPACE_OGC)).isEmpty();
-            String filterQueryString = esFilterBuilder.build(context, "metadata", hasDraftFilter, node);
+            String filterQueryString = esFilterBuilder.build(context, "metadata", false, node);
             String jsonQuery = String.format(elasticSearchQuery, filterQueryString);
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -473,7 +469,7 @@ public class SearchController {
                 throw new InvalidParameterValueEx("startPosition", String.format(
                     "Start position (%d) can't be greater than number of matching records (%d for current search).",
                     startPos, numMatches
-            ));
+                ));
             }
 
             int counter = 0;
@@ -483,8 +479,8 @@ public class SearchController {
 
                 AbstractMetadata metadata = metadataUtils.findOne(mdId);
 
-                if(metadata != null) {
-                    String displayLanguage = context.getLanguage();
+                String displayLanguage = context.getLanguage();
+                try {
                     Element resultMD = retrieveMetadata(context, metadata.getId() + "",
                         setName, outSchema, elemNames, typeName, resultType, strategy, displayLanguage);
 
@@ -495,8 +491,8 @@ public class SearchController {
 
                         counter++;
                     }
-                } else {
-                    Log.warning(Geonet.CSW_SEARCH, "Could not find metadata in database, id: "+mdId);
+                } catch (InvalidParameterValueEx e) {
+                    results.addContent(new Comment(e.getMessage()));
                 }
 
             }
@@ -536,8 +532,8 @@ public class SearchController {
      * @throws InvalidParameterValueEx hmm
      */
     public Element applyElementSetName(ServiceContext context, SchemaManager schemaManager, String schema,
-                                              Element result, String outputSchema, ElementSetName elementSetName,
-                                              ResultType resultType, String id, String displayLanguage) throws InvalidParameterValueEx {
+                                       Element result, String outputSchema, ElementSetName elementSetName,
+                                       ResultType resultType, String id, String displayLanguage) throws InvalidParameterValueEx {
         Path schemaDir = schemaManager.getSchemaCSWPresentDir(schema);
         Path styleSheet = schemaDir.resolve(outputSchema + "-" + elementSetName + ".xsl");
 
@@ -576,10 +572,10 @@ public class SearchController {
      * 1) gmd-csw-postprocessing.xsl : Postprocessing xsl applied for CSW service when requesting iso (gmd) output
      * 2) csw-csw-postprocessing.xsl : Postprocessing xsl applied for CSW service when requesting ogc (csw) output
      *
-     * For a custom sub-portal named inspire
+     * For a custom CSW service named csw-inspire
      *
-     * 1) gmd-inspire-postprocessing.xsl : Postprocessing xsl applied for custom inspire sub-portal when requesting iso output
-     * 2) csw-inspire-postprocessing.xsl : Postprocessing xsl applied for custom inspire sub-portal when requesting ogc (csw) output
+     * 1) gmd-csw-inspire-postprocessing.xsl : Postprocessing xsl applied for custom CSW csw-inspire service when requesting iso output
+     * 2) csw-csw-inspire-postprocessing.xsl : Postprocessing xsl applied for custom CSW csw-inspire service when requesting ogc (csw) output
      *
      * @param context Service context
      * @param schemaManager schemamanager
