@@ -9,4 +9,4 @@
 	url = https://github.com/wenzhixin/bootstrap-table.git
 [submodule "schemas/dcat2"]
 	path = schemas/dcat2
-        url = https://github.com/Informatievlaanderen/metadata-dcatap.git
+        url = https://github.com/milieuinfo/metadata-dcatap.git

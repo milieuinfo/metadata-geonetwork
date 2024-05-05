@@ -32,7 +32,7 @@ services:
       - database
 
   elasticsearch:
-    image: elasticsearch:7.6.2
+    image: elasticsearch:7.17.15
     environment:
       discovery.type: single-node
 
