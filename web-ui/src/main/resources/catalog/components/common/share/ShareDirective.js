@@ -115,7 +115,7 @@
            * @returns {boolean|*}
            */
           scope.enabledReservedGroups = function (value) {
-            return false; // VL Specific : privileges are only managed by workflow.
+            // return false; // VL Specific : privileges are only managed by workflow.
             if (scope.batch) {
               return true;
             } else if (scope.user.isAdmin()) {
@@ -151,7 +151,7 @@
            * @returns {boolean}
            */
           scope.enabledReservedGroupsSelectAll = function () {
-            return false; // VL Specific : privileges are only managed by workflow.
+            // return false; // VL Specific : privileges are only managed by workflow.
             if (scope.batch) {
               return true;
             } else if (scope.user.isAdmin()) {
