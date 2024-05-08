@@ -42,14 +42,14 @@
   </organization>
   <scm>
     <connection>
-      scm:git:https://github.com/geonetwork/core-geonetwork
+      scm:git:https://github.com/milieuinfo/metadata-geonetwork
     </connection>
-    <url>https://github.com/geonetwork/core-geonetwork</url>
+    <url>https://github.com/milieuinfo/metadata-geonetwork</url>
   </scm>
   <inceptionYear>2003</inceptionYear>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/geonetwork/core-geonetwork/issues</url>
+    <url>https://github.com/milieuinfo/metadata-geonetwork/issues</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
