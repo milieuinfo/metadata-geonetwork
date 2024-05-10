@@ -21,15 +21,13 @@
   ~ Contact: Jeroen Ticheler - FAO - Viale delle Terme di Caracalla 2,
   ~ Rome - Italy. email: geonetwork@osgeo.org
   -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.geonetwork-opensource</groupId>
   <artifactId>geonetwork</artifactId>
   <packaging>pom</packaging>
-  <version>4.4.2.0-SNAPSHOT</version>
+  <version>4.4.2.0</version>
   <name>GeoNetwork opensource</name>
   <description>GeoNetwork opensource is a standards based, Free and
     Open Source catalog application to manage spatially referenced
@@ -45,6 +43,7 @@
       scm:git:https://github.com/milieuinfo/metadata-geonetwork
     </connection>
     <url>https://github.com/milieuinfo/metadata-geonetwork</url>
+    <tag>release-4.4.2.0</tag>
   </scm>
   <inceptionYear>2003</inceptionYear>
   <issueManagement>
@@ -1515,7 +1514,7 @@
      when watchlist notifier is triggered (Default 4AM) -->
     <savedselection.watchlist.frequency>0 0 4 * * ?</savedselection.watchlist.frequency>
 
-    <microservices.url/>
+    <microservices.url />
     <!--<microservices.url>http://localhost:9901</microservices.url>-->
 
     <!-- Proxy security configuration:
@@ -1529,7 +1528,7 @@
     <proxy.excludeHosts>^(localhost|127\..*|0\..*|255\.255\.255\.255|.*\.local|.*\.localhost|0:0:0:0:0:0:1|::1)$</proxy.excludeHosts>
 
     <!-- Additional ports (separated by | char) allowed to be access through the http proxy. 80 and 443 are always allowed -->
-    <proxy.allowPorts></proxy.allowPorts>
+    <proxy.allowPorts />
     <!--<proxy.allowPorts>8443|8080</proxy.allowPorts>-->
 
     <!-- Jetty plugin port configuration -->
@@ -1566,11 +1565,11 @@
 
     <!-- If elasticsearch security is on,
     add a read/write user for index features and records: -->
-    <es.username/>
-    <es.password/>
+    <es.username />
+    <es.password />
     <!-- and a readonly user for index features access. -->
-    <es.ro.username/>
-    <es.ro.password/>
+    <es.ro.username />
+    <es.ro.password />
 
     <kb.platform>linux-x86_64</kb.platform>
     <kb.installer.extension>tar.gz</kb.installer.extension>
