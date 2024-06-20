@@ -963,7 +963,7 @@ public class MetadataInsertDeleteApi {
         md.add(xmlElement);
 
         // vl-specific - do not keep thumbnails when importing a record
-        removeThumbnails(md.get(0), schema);
+        // removeThumbnails(md.get(0), schema);
 
         // Import record
         Map<String, String> sourceTranslations = Maps.newHashMap();
