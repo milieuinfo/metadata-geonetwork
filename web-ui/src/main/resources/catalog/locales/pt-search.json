@@ -369,7 +369,7 @@
     "shareOnLinkedIn": "Compartilhar no LinkedIn",
     "shareByEmail": "Compartilhar por e-mail",
     "zoomto": "Aproximar para",
-    "recordNotFound": "O registro com o identificador <strong>{{uuid}}</strong> não foi encontrado ou não foi compartilhado com você. Tente  efetuar <a href=\"catalog.signin?redirect={{url}}\">sign in</a> se você tiver uma conta.",
+    "recordNotFound": "O registro com o identificador <strong>{{uuid}}</strong> não foi encontrado ou não foi compartilhado com você. Tente  efetuar <a href=\"/signin?redirectUrl={{url}}\">sign in</a> se você tiver uma conta.",
     "intersectWith": "Intersecciona com",
     "fullyOutsideOf": "Totalmente fora de",
     "encloses": "Envolvente",

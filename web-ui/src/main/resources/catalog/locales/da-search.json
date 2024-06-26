@@ -369,7 +369,7 @@
     "shareOnLinkedIn": "Del på LinkedIn",
     "shareByEmail": "Del via e-mail",
     "zoomto": "Zoom til",
-    "recordNotFound": "Posten med idenfitikatoren <strong>{{uuid}}</strong> blev ikke fundet eller er ikke delt med dig. Forsøg at <a href=\"catalog.signin?redirect={{url}}\">logge ind</a>, hvis du har en bruger.",
+    "recordNotFound": "Posten med idenfitikatoren <strong>{{uuid}}</strong> blev ikke fundet eller er ikke delt med dig. Forsøg at <a href=\"/signin?redirectUrl={{url}}\">logge ind</a>, hvis du har en bruger.",
     "intersectWith": "gennemskærer med",
     "fullyOutsideOf": "Helt udenfor",
     "encloses": "Omslutter",

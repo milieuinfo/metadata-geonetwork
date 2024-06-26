@@ -369,7 +369,7 @@
     "shareOnLinkedIn": "Deila á LinkedIn",
     "shareByEmail": "Deila með tölvupósti",
     "zoomto": "Þysja að",
-    "recordNotFound": "Færslan með auðkennið <strong>{{uuid}}</strong> fannst ekki eða var ekki deilt með þér. Reyndu að <a href=\"catalog.signin?redirect={{url}}\">skrá þig inn</a> ef þú ert með reikning. ",
+    "recordNotFound": "Færslan með auðkennið <strong>{{uuid}}</strong> fannst ekki eða var ekki deilt með þér. Reyndu að <a href=\"/signin?redirectUrl={{url}}\">skrá þig inn</a> ef þú ert með reikning. ",
     "intersectWith": "skarast við",
     "fullyOutsideOf": "Alveg fyrir utan",
     "encloses": "Umlykur",

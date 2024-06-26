@@ -369,7 +369,7 @@
     "shareOnLinkedIn": "分享到LinkedIn",
     "shareByEmail": "通过电子邮件分享",
     "zoomto": "缩放到",
-    "recordNotFound": "该带有标识符<strong>{{uuid}}</strong> 的记录未找到或不与你分享。如果您有帐户，请尝试<a href=\"catalog.signin?redirect={{url}}\">登陆</a>。",
+    "recordNotFound": "该带有标识符<strong>{{uuid}}</strong> 的记录未找到或不与你分享。如果您有帐户，请尝试<a href=\"/signin?redirectUrl={{url}}\">登陆</a>。",
     "intersectWith": "相交",
     "fullyOutsideOf": "完全在外面",
     "encloses": "闭合",

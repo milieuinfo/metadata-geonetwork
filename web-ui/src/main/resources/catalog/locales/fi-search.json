@@ -369,7 +369,7 @@
     "shareOnLinkedIn": "Jaa LinkedIn:ssa",
     "shareByEmail": "Jaa sähköpostilla",
     "zoomto": "Kohdista",
-    "recordNotFound": "The record with identifier <strong>{{uuid}}</strong> was not found or is not shared with you. Try to <a href=\"catalog.signin?redirect={{url}}\">sign in</a> if you've an account.",
+    "recordNotFound": "The record with identifier <strong>{{uuid}}</strong> was not found or is not shared with you. Try to <a href=\"/signin?redirectUrl={{url}}\">sign in</a> if you've an account.",
     "intersectWith": "Leikkaa",
     "fullyOutsideOf": "Ulkopuolella",
     "encloses": "Ympäröi",
