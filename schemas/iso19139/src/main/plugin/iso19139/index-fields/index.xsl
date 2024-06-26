@@ -400,7 +400,10 @@
           </xsl:for-each>
         </xsl:for-each>
 
-        <xsl:copy-of select="gn-fn-index:add-multilingual-field('resourceAbstract', gmd:abstract, $allLanguages)"/>
+        <!--<xsl:copy-of select="gn-fn-index:add-multilingual-field('resourceAbstract', gmd:abstract, $allLanguages)"/>-->
+        <resourceAbstract>
+          <xsl:value-of select="gmd:abstract/gco:CharacterString"/>
+        </resourceAbstract>
 
         <xsl:for-each select="gmd:characterSet/*[@codeListValue != '']">
           <xsl:copy-of select="gn-fn-index:add-codelist-field(
